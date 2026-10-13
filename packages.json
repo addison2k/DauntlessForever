@@ -10,9 +10,9 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-13.2",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-13.2.zip",
-                         "sha256":  "6f3ac3fe4755a69d334da74d78f896152b8d14828abc3ccc0a6c649b5bdae5ba",
+                         "packageVersion":  "2026-10-13.3",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-13.3.zip",
+                         "sha256":  "a81667ff491ff49bc1d5501fe419f1fe954a2b7c5047d9a44d7fe752c19ad7f9",
                          "date":  "2026-10-13",
                          "note":  "Server copies silent and no longer grab the mouse"
                      }
