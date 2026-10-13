@@ -54,6 +54,17 @@ function Stop-AndFail([string]$Text) { Stop-Everything -Quiet; Save-ServerLogs; 
 
 # --- 1. backend (accounts, inventory, progression)
 Say '1/3 Starting the local backend...'
+# Ramsgate events (decorations): data\city_events.txt, lines "on=flag1,flag2" and "off=flag3" (feature flag class names,
+# e.g. on=city_event_Springtide_bpff_C). The deploy server adds them to the Ramsgate map URL.
+$env:CITY_EVENTS_ON = ''; $env:CITY_EVENTS_OFF = ''
+$eventsFile = Join-Path $DataDir 'city_events.txt'
+if (Test-Path -LiteralPath $eventsFile) {
+    foreach ($line in Get-Content -LiteralPath $eventsFile -ErrorAction SilentlyContinue) {
+        if ($line -match '^\s*on\s*=\s*([A-Za-z0-9_,/.\s]+)$') { $env:CITY_EVENTS_ON = ($Matches[1] -replace '\s', '') }
+        elseif ($line -match '^\s*off\s*=\s*([A-Za-z0-9_,/.\s]+)$') { $env:CITY_EVENTS_OFF = ($Matches[1] -replace '\s', '') }
+    }
+    if ($env:CITY_EVENTS_ON -or $env:CITY_EVENTS_OFF) { Say "    Ramsgate events: on [$($env:CITY_EVENTS_ON)] off [$($env:CITY_EVENTS_OFF)]" }
+}
 # Hunt Pass season: the launcher writes the chosen key to data\season.txt (Seasons page). Each season keeps its own save.
 $seasonsDir = Join-Path $Root 'seasons'
 if (Test-Path -LiteralPath (Join-Path $seasonsDir 'index.json')) {

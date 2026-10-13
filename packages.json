@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-13",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-13.zip",
-                         "sha256":  "64001f12765e106a2ad92fe6e6952c7352efe6736bd911031c0cd56594f034c8",
+                         "packageVersion":  "2026-10-13.2",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-13.2.zip",
+                         "sha256":  "6f3ac3fe4755a69d334da74d78f896152b8d14828abc3ccc0a6c649b5bdae5ba",
                          "date":  "2026-10-13",
-                         "note":  "Windows 11 25H2 fix"
+                         "note":  "Server copies silent and no longer grab the mouse"
                      }
                  ],
     "launcher":  {

@@ -22,7 +22,21 @@ const matchmaker_hunts_table_json_1 = __importDefault(require("../vendor/matchma
 const trials_hard_table_json_1 = __importDefault(require("../vendor/trials_hard_table.json"));
 const trials_elite_table_json_1 = __importDefault(require("../vendor/trials_elite_table.json"));
 const logger_1 = require("../logger");
-const RAMSGATE_MAP_PATH = "/Game/Maps/ramsgate/ramsgate_01_persistent";
+// Ramsgate event dressings (Springtide, Saint's Bond, each season's decorations) are feature flags the game reads
+// from its map URL: ?OverridenFeaturesOn=a,b ?OverridenFeaturesOff=c. Names are the flags' class names, for example
+// city_event_Springtide_bpff_C. start.ps1 sets CITY_EVENTS_ON / CITY_EVENTS_OFF from data\\city_events.txt.
+// The game finds each flag by its full object path; a short name (city_event_Springtide_bpff or ..._bpff_C) is
+// expanded to /Game/Features/HuntPass/<name>.<name>_C, where the city event and hunt pass flags live.
+const FlagPath = (s) => {
+    if (s.includes("/")) return s;
+    const b = s.replace(/_C$/, "");
+    return `/Game/Features/HuntPass/${b}.${b}_C`;
+};
+const FlagList = (v) => (v || "").split(",").map(s => s.trim()).filter(s => /^[A-Za-z0-9_\/.]+$/.test(s)).map(FlagPath).join(",");
+const CITY_EVENTS_ON = FlagList(process.env.CITY_EVENTS_ON);
+const CITY_EVENTS_OFF = FlagList(process.env.CITY_EVENTS_OFF);
+const RAMSGATE_MAP_PATH = "/Game/Maps/ramsgate/ramsgate_01_persistent" +
+    (CITY_EVENTS_ON ? `?OverridenFeaturesOn=${CITY_EVENTS_ON}` : "") + (CITY_EVENTS_OFF ? `?OverridenFeaturesOff=${CITY_EVENTS_OFF}` : "");
 const TRAINING_DOJO_MAP_PATH = "/Game/Maps/islands/dojo/training_dojo_persistent";
 const TRIALS_MAP_PATH = "/Game/Maps/islands/arenas/arena_ramsgate_00";
 exports.Gameservers = [];
