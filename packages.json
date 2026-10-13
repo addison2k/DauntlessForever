@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-13",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-13.zip",
-                         "sha256":  "bf27b2ce3cd0e36c7491b130952b5a1625bc44a16b2097df3c61ae59a0d25142",
+                         "packageVersion":  "2026-10-13.2",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-13.2.zip",
+                         "sha256":  "1bc8379a4d0e534480f2ac54f0322886c34100327665fdafec6a0b2e1435ae69",
                          "date":  "2026-10-13",
-                         "note":  "Ramsgate events"
+                         "note":  "Game Rules: weapon XP 2x by default, Hunt Pass XP, loot, free crafting"
                      },
                      {
                          "id":  "1.14.7",
@@ -18,9 +18,9 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.1.6",
-                     "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.1.6",
-                     "notes":  "Events, patch notes, 2.1.1 card, Questions button",
+                     "version":  "0.1.7",
+                     "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.1.7",
+                     "notes":  "Game Rules page: XP speed, loot, free crafting",
                      "date":  "2026-10-13"
                  }
 }

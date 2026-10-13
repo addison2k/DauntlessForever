@@ -289,3 +289,12 @@ dialog form { margin-top: 18px; display: flex; justify-content: flex-end; }
   .side-rule { margin: 6px 0 4px; }
   .side-meta { padding-top: 6px; }
 }
+
+/* Game Rules */
+.rule-row { grid-template-columns: minmax(0, 1fr) auto; align-items: center; }
+.rule-row .season-name { white-space: normal; display: flex; align-items: center; gap: 8px; }
+.rule-row .season-kind { margin-top: 2px; max-width: 60ch; }
+.rule-choices { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; max-width: 360px; }
+.rule-choice { padding: 4px 10px; border-color: var(--line); }
+.rule-choice[aria-pressed="true"] { border-color: var(--brass); color: var(--brass-2); background: var(--bg-3); }
+.rule-foot { display: flex; justify-content: flex-end; margin-top: 10px; }

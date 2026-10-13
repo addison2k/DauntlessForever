@@ -43,5 +43,7 @@ contextBridge.exposeInMainWorld('launcher', {
   openSeasonDoc: invoke('seasons:openDoc'),
   events: invoke('events:list'),
   setEvents: invoke('events:set'),
+  rules: invoke('rules:list'),
+  setRules: invoke('rules:set'),
   patchNotes: invoke('patchnotes:list'),
 });

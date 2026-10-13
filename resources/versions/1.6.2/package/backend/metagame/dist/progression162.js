@@ -25,6 +25,7 @@ const progression_config_json_1 = __importDefault(require("./vendor/progression_
 const logger_1 = require("./logger");
 const mastery_rewards_1 = require("./mastery-rewards");
 const huntpass162_1 = require("./huntpass162");
+const rules162_1 = require("./rules162");
 // Looked up at runtime so the metagame still builds without it (tsc doesn't copy unreferenced json to dist)
 const CONFIG_162_CANDIDATES = [
     path_1.default.join(__dirname, "vendor", "progression_config_162.json"),
@@ -179,17 +180,23 @@ function GrantTrackXp(accountId, trackId, amountRaw) {
     }
     if (exports.PROGRESSION_MODE !== "real")
         return;
+    // [rules] Weapon XP speed (Game Rules). Mastery tracks are left alone.
+    let added = amount;
+    if (trackId.startsWith("ExperienceTrack_Weapon_") && rules162_1.Rules.weaponXp !== 1) {
+        added = (0, rules162_1.ScaleXp)(amount, rules162_1.Rules.weaponXp);
+        logger_1.logger.info(`[rules] weapon XP x${rules162_1.Rules.weaponXp}: ${trackId} ${amount} -> ${added}`);
+    }
     const state = LoadState(accountId);
     const bonus = LoadBonus(accountId);
     const before = DeriveTotals(state, bonus.xp);
-    bonus.xp[trackId] = (bonus.xp[trackId] ?? 0) + amount;
+    bonus.xp[trackId] = (bonus.xp[trackId] ?? 0) + added;
     SaveBonus(accountId, bonus);
     const after = DeriveTotals(state, bonus.xp);
     if (trackId.startsWith("ExperienceTrack_Weapon_")) {
         const xp = after.weaponXp[trackId] ?? 0;
         const total = Object.values(after.weaponXp).reduce((a, v) => a + v, 0);
         const prevTotal = Object.values(before.weaponXp).reduce((a, v) => a + v, 0);
-        logger_1.logger.info(`Progression: granted ${trackId} +${amount} (total ${xp}, rank ${RankForXp(trackId, xp)}); ` +
+        logger_1.logger.info(`Progression: granted ${trackId} +${added} (total ${xp}, rank ${RankForXp(trackId, xp)}); ` +
             `Weapon Skill XP ${prevTotal} -> ${total}`);
     }
     else {

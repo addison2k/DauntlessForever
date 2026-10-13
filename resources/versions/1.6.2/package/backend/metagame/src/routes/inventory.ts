@@ -5,6 +5,7 @@
 import { Router } from "express";
 import { HasUndauntedMetagameAuth } from "../middleware/HasUndauntedMetagameAuth";
 import { logger } from "../logger";
+import { ApplyInventoryRules } from "../rules162";
 import { GetInventoryForUserIdAndCharacterId, InventoryError, RunInventoryTransaction, UpdateInstancedItem } from "../controllers/inventory";
 
 export const inventoryRouter = Router();
@@ -65,7 +66,28 @@ inventoryRouter.post("/inventory", HasUndauntedMetagameAuth, async (req: any, re
     const StackedItemsToRemove = req.body.removeStackedItems;
     const InstancedItemsToSave = req.body.saveInstancedItems;
 
-    const TransactionResult = await RunInventoryTransaction(UserId, CharacterId, TransactionId, InstancedItemsToAdd, StackedItemsToAdd, InstancedItemsToRemove, StackedItemsToRemove, InstancedItemsToSave);
+    // [rules] Game Rules: more loot, free crafting (rules162.ts). Kept = items whose removal was skipped.
+    const Tx = { instancedAdd: InstancedItemsToAdd ?? [], stackedAdd: StackedItemsToAdd ?? [], instancedRemove: InstancedItemsToRemove ?? [],
+        stackedRemove: StackedItemsToRemove ?? [], instancedSave: InstancedItemsToSave ?? [] };
+    let Kept: string[] = [];
+    try { Kept = ApplyInventoryRules(Tx, String(TransactionId), !!req.AuthData.IsGameserver); }
+    catch (error) { logger.error(error, `[rules] could not apply Game Rules to ${TransactionId}; stored unchanged`); }
+
+    const TransactionResult = await RunInventoryTransaction(UserId, CharacterId, TransactionId, InstancedItemsToAdd, Tx.stackedAdd, InstancedItemsToRemove, Tx.stackedRemove, InstancedItemsToSave);
+
+    // Free crafting: tell the game the real (unchanged) counts of what it thinks it just spent.
+    if (TransactionResult.success && Kept.length) {
+        const Inv = await GetInventoryForUserIdAndCharacterId(UserId, CharacterId);
+        const Reported: any[] = TransactionResult.data ?? [];
+        if (Inv.success && Inv.data) {
+            for (const Id of new Set(Kept)) {
+                if (Reported.some((i: any) => i?.catalogId === Id)) continue;
+                const Have = Inv.data.stackedItems.find((i: any) => i?.catalogId === Id);
+                if (Have) Reported.push(Have);
+            }
+        }
+        TransactionResult.data = Reported;
+    }
 
     if(TransactionResult.success){
         logger.info(`Ran transactionId ${TransactionId} for userId ${UserId} and characterId ${CharacterId}`);

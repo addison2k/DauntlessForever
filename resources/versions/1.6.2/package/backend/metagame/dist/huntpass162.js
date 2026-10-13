@@ -50,6 +50,7 @@ const db_1 = require("./db");
 const schema_1 = require("./db/schema");
 const inventory_1 = require("./controllers/inventory");
 const logger_1 = require("./logger");
+const rules162_1 = require("./rules162");
 const DEFAULTS = {
     pass_id: "season13a",
     levels: 50,
@@ -289,6 +290,13 @@ function RecordHuntPassPost(accountId, body, weaponXpGained) {
         gained = Math.round(weaponXpGained * cfg.weapon_xp_ratio);
         source = `${weaponXpGained} weapon XP x ${cfg.weapon_xp_ratio}`;
     }
+    if (gained > 0 && rules162_1.Rules.passXp !== 1) {
+        // [rules] Hunt Pass XP speed (Game Rules)
+        const scaled = (0, rules162_1.ScaleXp)(gained, rules162_1.Rules.passXp);
+        logger_1.logger.info(`[rules] Hunt Pass XP x${rules162_1.Rules.passXp}: ${gained} -> ${scaled}`);
+        gained = scaled;
+        source += ` x${rules162_1.Rules.passXp}`;
+    }
     if (gained > 0) {
         s.xp += gained;
         changed = true;
@@ -312,9 +320,16 @@ function RecordHuntPassPost(accountId, body, weaponXpGained) {
 // Pass XP from other sources the game doesn't pay itself (e.g. claimed bounties; see bounties162.ts)
 // fromGameServer = the game's own pass XP; it switches the weapon-XP fallback off for good (server_reports)
 function AddHuntPassXp(accountId, amount, source, fromGameServer = false) {
-    const add = Math.floor(Number(amount));
+    let add = Math.floor(Number(amount));
     if (!(add > 0))
         return;
+    if (rules162_1.Rules.passXp !== 1) {
+        // [rules] Hunt Pass XP speed (Game Rules)
+        const scaled = (0, rules162_1.ScaleXp)(add, rules162_1.Rules.passXp);
+        logger_1.logger.info(`[rules] Hunt Pass XP x${rules162_1.Rules.passXp}: ${add} -> ${scaled}`);
+        add = scaled;
+        source += ` x${rules162_1.Rules.passXp}`;
+    }
     const file = LoadStateFile(accountId);
     const s = { ...PassStateOf(file) };
     if (fromGameServer && !s.server_reports) {

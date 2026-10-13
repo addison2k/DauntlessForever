@@ -22,6 +22,7 @@
     <button class="nav-item selected" data-page="play"><span class="nav-ico">▶</span>Play</button>
     <button class="nav-item" data-page="seasons"><span class="nav-ico">✦</span>Seasons</button>
     <button class="nav-item" data-page="events"><span class="nav-ico">◆</span>Events</button>
+    <button class="nav-item" data-page="rules"><span class="nav-ico">±</span>Game Rules</button>
     <button class="nav-item" data-page="mods"><span class="nav-ico">⬡</span>Mods</button>
     <button class="nav-item" data-page="patches"><span class="nav-ico">≡</span>Patch notes</button>
     <button class="nav-item" data-page="settings"><span class="nav-ico">⚙</span>Settings</button>
@@ -146,6 +147,23 @@
     <h2 class="list-head">Season decorations</h2>
     <div class="season-list" id="dressing-list"></div>
     <p class="small">"Experimental" means the decorations are in the game files and switch on the same way as Springtide, but nobody has seen them in game yet. If one looks wrong or Ramsgate will not load, pick "No event" / "Time Strike" again. Frostfall's Ramsgate decorations are not in 1.6.2's files, so they cannot be offered here.</p>
+  </div>
+</section>
+
+<!-- ============================================================ Game Rules -->
+<section class="page" id="page-rules" hidden>
+  <h1 class="page-title">Game Rules</h1>
+  <p class="lead">Play it your way: level faster or slower, get more loot, craft for free. Your picks are kept and apply the next time you press Play. They never touch your save on their own, so you can change them any time.</p>
+  <div class="season-tabs" id="rule-vtabs" role="tablist"></div>
+  <div id="rule-none" class="card" hidden>
+    <div class="card-head"><h2>No Game Rules for this version yet</h2><span class="pill">Planned</span></div>
+    <p>Game Rules are ready for 1.6.2 first. Other versions get them through a server-file update.</p>
+  </div>
+  <div id="rule-body" hidden>
+    <p class="action-note" id="rule-note" aria-live="polite"></p>
+    <div class="season-list" id="rule-list"></div>
+    <div class="rule-foot"><button class="ghost" id="rule-reset">Back to the defaults</button></div>
+    <p class="small">"Experimental" means it works in the server files but has not been checked in a real hunt yet. If something looks wrong, set it back to Normal or Off. Whatever you earned while a rule was on stays earned.</p>
   </div>
 </section>
 

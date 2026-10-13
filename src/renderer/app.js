@@ -33,6 +33,7 @@ function showPage(name) {
   if (name === 'settings') fillSettings();
   if (name === 'seasons') renderSeasons();
   if (name === 'events') renderEvents();
+  if (name === 'rules') renderRules();
   if (name === 'patches') renderPatches();
   document.querySelector('.content').scrollTop = 0;
 }
@@ -229,6 +230,53 @@ async function renderEvents() {
   };
   fill($('event-list'), d.events, d.event, (x) => apply(x.key, d.dressing, x.title));
   fill($('dressing-list'), d.dressings, d.dressing, (x) => apply(d.event, x.key, x.title));
+}
+
+// ---------------------------------------------------------------- Game Rules
+let ruleVer = null, ruleNote = null;
+async function renderRules() {
+  const withRules = [];
+  for (const v of versions.filter(x => x.hasPackage)) {
+    let d = null; try { d = await L.rules(v.id); } catch {}
+    if (d && d.rules.length) withRules.push({ v, d });
+  }
+  if (!withRules.some(x => x.v.id === ruleVer)) ruleVer = (withRules.find(x => x.v.id === selected) || withRules[0] || {}).v?.id || null;
+  const tabs = $('rule-vtabs'); tabs.innerHTML = '';
+  for (const { v } of withRules) {
+    const b = document.createElement('button'); b.className = 'season-tab'; b.setAttribute('role', 'tab');
+    b.setAttribute('aria-selected', String(v.id === ruleVer)); b.textContent = v.name || v.id;
+    b.addEventListener('click', () => { ruleVer = v.id; ruleNote = null; renderRules(); });
+    tabs.appendChild(b);
+  }
+  tabs.hidden = withRules.length < 2;
+  const cur = withRules.find(x => x.v.id === ruleVer);
+  $('rule-none').hidden = !!cur; $('rule-body').hidden = !cur;
+  if (!cur) return;
+  const { d } = cur;
+  $('rule-note').textContent = ruleNote || '';
+  const apply = async (changes, what) => {
+    const r = await L.setRules(ruleVer, changes);
+    ruleNote = !r || !r.ok ? ((r && r.error) || 'Could not change it.')
+      : r.running ? `${what}: close the game and press Play again for it to apply.` : `${what}: applies the next time you press Play.`;
+    renderRules();
+  };
+  const list = $('rule-list'); list.innerHTML = '';
+  for (const x of d.rules) {
+    const row = document.createElement('div'); row.className = 'season-row rule-row' + (x.value !== x.default ? ' active' : '');
+    row.innerHTML = `
+      <div><div class="season-name">${esc(x.title)} ${x.tested ? '' : '<span class="tag exp">Experimental</span>'}</div><div class="season-kind">${esc(x.blurb)} <b>Default: ${esc((x.choices.find(c => String(c[0]) === x.default) || [, x.default])[1])}.</b></div></div>
+      <div class="rule-choices" role="group" aria-label="${esc(x.title)}"></div>`;
+    const host = row.querySelector('.rule-choices');
+    for (const [val, label] of x.choices) {
+      const b = document.createElement('button'); b.className = 'season-filter rule-choice';
+      b.setAttribute('aria-pressed', String(String(val) === x.value));
+      b.textContent = label;
+      if (String(val) !== x.value) b.addEventListener('click', () => apply({ [x.key]: String(val) }, `${x.title} ${label}`));
+      host.appendChild(b);
+    }
+    list.appendChild(row);
+  }
+  $('rule-reset').onclick = () => apply(Object.fromEntries(d.rules.map(x => [x.key, x.default])), 'Back to the defaults');
 }
 
 // ---------------------------------------------------------------- patch notes

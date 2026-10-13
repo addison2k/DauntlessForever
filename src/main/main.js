@@ -237,6 +237,46 @@ ipcMain.handle('events:set', (_e, id, eventKey, dressingKey) => {
   return { ok: true, running: R.isRunning(v.id) };
 });
 
+// ---------------------------------------------------------------- Game Rules (package file rules.json)
+// The picks are written to data/rules.txt as key=value lines; start.ps1 reads them (defaults come from rules.json).
+function readRuleDefs(v) {
+  try { return JSON.parse(fs.readFileSync(path.join(v.dataDir, 'rules.json'), 'utf8').replace(/^﻿/, '')).rules || []; } catch { return null; }
+}
+function readRulePicks(v) {
+  const picks = {};
+  try {
+    for (const line of fs.readFileSync(path.join(v.dataDir, 'data', 'rules.txt'), 'utf8').split(/\r?\n/)) {
+      const m = /^\s*([a-z_]+)\s*=\s*([0-9.]+)\s*$/.exec(line); if (m) picks[m[1]] = m[2];
+    }
+  } catch {}
+  return picks;
+}
+ipcMain.handle('rules:list', (_e, id) => {
+  const v = byId(id); if (!v || !v.package) return null;
+  const defs = readRuleDefs(v); if (!defs) return null;
+  const picks = readRulePicks(v);
+  const rules = defs.map(r => {
+    const ok = (r.choices || []).map(c => String(c[0]));
+    const value = ok.includes(picks[r.key]) ? picks[r.key] : String(r.default);
+    return { key: r.key, title: r.title, blurb: r.blurb || '', tested: !!r.tested, default: String(r.default), choices: r.choices || [], value };
+  });
+  return { rules, running: R.isRunning(v.id) };
+});
+ipcMain.handle('rules:set', (_e, id, changes) => {
+  const v = byId(id); if (!v) return { ok: false, error: 'Unknown version.' };
+  const defs = readRuleDefs(v); if (!defs) return { ok: false, error: 'This version has no Game Rules.' };
+  const picks = readRulePicks(v);
+  for (const [k, val] of Object.entries(changes || {})) {
+    const r = defs.find(x => x.key === k);
+    if (r && (r.choices || []).some(c => String(c[0]) === String(val))) picks[k] = String(val);
+  }
+  const lines = ['# Game Rules, written by the launcher (Game Rules page). Takes effect the next time you press Play.'];
+  for (const r of defs) if (picks[r.key] != null) lines.push(`${r.key}=${picks[r.key]}`);
+  fs.mkdirSync(path.join(v.dataDir, 'data'), { recursive: true });
+  fs.writeFileSync(path.join(v.dataDir, 'data', 'rules.txt'), lines.join('\r\n') + '\r\n');
+  return { ok: true, running: R.isRunning(v.id) };
+});
+
 // ---------------------------------------------------------------- patch notes (bundled, the repo's copy wins)
 ipcMain.handle('patchnotes:list', async () => {
   let notes = readJson(path.join(P.bundledRoot(), 'patchnotes.json'), { notes: [] });

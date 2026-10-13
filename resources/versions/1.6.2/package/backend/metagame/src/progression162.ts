@@ -11,6 +11,8 @@ import baseConfig from "./vendor/progression_config.json";
 import { logger } from "./logger";
 import { GrantMasteryRewards } from "./mastery-rewards";
 import { ActivePassId, AddHuntPassXp, HuntPassPath, HuntPassTrack, RecordHuntPassPost } from "./huntpass162";
+import { Rules, ScaleXp } from "./rules162";
+
 
 export type ProgressionPath = {
     progression_id: string;
@@ -208,10 +210,17 @@ export function GrantTrackXp(accountId: string, trackId: string, amountRaw: any)
     }
     if (PROGRESSION_MODE !== "real") return;
 
+    // [rules] Weapon XP speed (Game Rules). Mastery tracks are left alone.
+    let added = amount;
+    if (trackId.startsWith("ExperienceTrack_Weapon_") && Rules.weaponXp !== 1) {
+        added = ScaleXp(amount, Rules.weaponXp);
+        logger.info(`[rules] weapon XP x${Rules.weaponXp}: ${trackId} ${amount} -> ${added}`);
+    }
+
     const state = LoadState(accountId);
     const bonus = LoadBonus(accountId);
     const before = DeriveTotals(state, bonus.xp);
-    bonus.xp[trackId] = (bonus.xp[trackId] ?? 0) + amount;
+    bonus.xp[trackId] = (bonus.xp[trackId] ?? 0) + added;
     SaveBonus(accountId, bonus);
     const after = DeriveTotals(state, bonus.xp);
 
@@ -219,7 +228,7 @@ export function GrantTrackXp(accountId: string, trackId: string, amountRaw: any)
         const xp = after.weaponXp[trackId] ?? 0;
         const total = Object.values(after.weaponXp).reduce((a, v) => a + v, 0);
         const prevTotal = Object.values(before.weaponXp).reduce((a, v) => a + v, 0);
-        logger.info(`Progression: granted ${trackId} +${amount} (total ${xp}, rank ${RankForXp(trackId, xp)}); ` +
+        logger.info(`Progression: granted ${trackId} +${added} (total ${xp}, rank ${RankForXp(trackId, xp)}); ` +
             `Weapon Skill XP ${prevTotal} -> ${total}`);
     } else {
         const pts = after.tracks[trackId] ?? 0;

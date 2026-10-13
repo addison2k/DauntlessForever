@@ -3,6 +3,15 @@
   "notes": [
     {
       "date": "2026-10-13",
+      "title": "Game Rules (1.6.2)",
+      "items": [
+        "New Game Rules page: weapon XP speed, Hunt Pass XP speed, loot amount and free crafting. Your picks apply the next time you press Play.",
+        "Weapon XP is now 2x by default on 1.6.2. Set it back to Normal on the Game Rules page if you prefer the original pace.",
+        "Loot amount and free crafting are marked Experimental until they have been checked in real hunts."
+      ]
+    },
+    {
+      "date": "2026-10-13",
       "title": "Ramsgate events (1.6.2)",
       "items": [
         "New Events page: switch Ramsgate's event decorations on before you play. Springtide 2021 (spring/Easter) works; Saint's Bond, the event stall and older season decorations are there to try.",

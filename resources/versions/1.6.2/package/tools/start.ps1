@@ -79,6 +79,31 @@ if (Test-Path -LiteralPath (Join-Path $seasonsDir 'index.json')) {
     $env:HUNTPASS_SEASON = $seasonKey
     try { $st = (Get-Content -LiteralPath (Join-Path $seasonsDir 'index.json') -Raw -Encoding UTF8 | ConvertFrom-Json).seasons | Where-Object { $_.key -eq $seasonKey } | Select-Object -First 1; if ($st) { Say "    Hunt Pass season: $($st.title) ($($st.levels) levels)" } } catch {}
 }
+# Game Rules: defaults from rules.json, the player's picks from data\rules.txt (key=value lines, Game Rules page).
+# Each rule becomes the env variable rules.json names (RULE_WEAPON_XP, ...); the metagame reads them (rules162.ts).
+$rulesDef = Join-Path $Root 'rules.json'
+if (Test-Path -LiteralPath $rulesDef) {
+    try {
+        $picked = @{}
+        $rulesFile = Join-Path $DataDir 'rules.txt'
+        if (Test-Path -LiteralPath $rulesFile) {
+            foreach ($line in Get-Content -LiteralPath $rulesFile -ErrorAction SilentlyContinue) {
+                if ($line -match '^\s*([a-z_]+)\s*=\s*([0-9.]+)\s*$') { $picked[$Matches[1]] = $Matches[2] }
+            }
+        }
+        $shown = @()
+        foreach ($r in (Get-Content -LiteralPath $rulesDef -Raw -Encoding UTF8 | ConvertFrom-Json).rules) {
+            if ($r.env -notmatch '^RULE_[A-Z_]+$') { continue }
+            $val = [string]$r.default
+            $ok = @($r.choices | ForEach-Object { [string]$_[0] })
+            if ($picked.ContainsKey($r.key) -and ($ok -contains $picked[$r.key])) { $val = $picked[$r.key] }
+            Set-Item -Path "Env:$($r.env)" -Value $val
+            $label = ($r.choices | Where-Object { [string]$_[0] -eq $val } | Select-Object -First 1)
+            if ($val -ne '1' -or $r.key -eq 'free_crafting') { if ($val -ne '0') { $shown += "$($r.title) $(if ($label) { $label[1] } else { $val })" } }
+        }
+        if ($shown.Count) { Say "    Game Rules: $($shown -join ', ')" }
+    } catch { Say "    Could not read the Game Rules; playing with normal rules. ($($_.Exception.Message))" 'Yellow' }
+}
 $meta = Start-Process -FilePath $node -ArgumentList @('--env-file=.env', 'dist/server.js') -WorkingDirectory $MetaDir -WindowStyle Hidden `
     -RedirectStandardOutput $metaLog -RedirectStandardError $metaErr -PassThru
 [IO.File]::WriteAllText((Join-Path $DataDir 'metagame.pid'), "$($meta.Id)")
