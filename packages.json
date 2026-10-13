@@ -2,19 +2,19 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-12.10",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-12.10.zip",
-                         "sha256":  "22d23c166c7fb249fc3d2524128c95c79bfdae0f47f706b97540a1ed805204e9",
+                         "packageVersion":  "2026-10-12.11",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-12.11.zip",
+                         "sha256":  "ed64d188654a2c5f1b101feaef9966a75663d9da2cb1a0980abea93e04d05356",
                          "date":  "2026-10-12",
-                         "note":  "Hunt Pass seasons + QA fixes"
+                         "note":  "Set-up moves other projects\u0027 loaders out of the game folder"
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-12.4",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-12.4.zip",
-                         "sha256":  "115482d34c5ec0de4c6495b09c359d790a64f2c785e60d68a77cef0bb714a3fe",
+                         "packageVersion":  "2026-10-12.5",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-12.5.zip",
+                         "sha256":  "2865efa371fff34793da4ea3f461d5694fd25bca3f34890eb07c61bcf854edac",
                          "date":  "2026-10-12",
-                         "note":  "Fix crash on Windows 11 25H2"
+                         "note":  "Set-up moves other projects\u0027 loaders (Mystic Paradox) out of the game folder"
                      }
                  ],
     "launcher":  {

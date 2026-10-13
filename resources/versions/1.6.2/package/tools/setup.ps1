@@ -146,6 +146,29 @@ $dxgi = Join-Path $bin 'dxgi.dll'
 $srvDll = Join-Path $bin 'UndauntedInternalServer.dll'
 New-Item -ItemType Directory -Force $backup | Out-Null
 
+# ---------------------------------------------------------------- 1a. other projects' loaders in the game folder
+# Other tools load their own code into the game by putting a DLL with a Windows name beside the exe (Mystic Paradox
+# uses winmm.dll; mod loaders use version.dll, dinput8.dll or winhttp.dll). Made for other builds, they crash this
+# one at start ("unable to start correctly (0xc0000005)"). They are moved to backup\, nothing is deleted.
+# This package's own dxgi.dll is handled further down.
+$otherLoaders = @(Get-ChildItem -LiteralPath $bin -File -ErrorAction SilentlyContinue | Where-Object {
+    ($_.Name -in @('winmm.dll', 'version.dll', 'dinput8.dll', 'winhttp.dll')) -or ($_.Name -match 'mystic|paradox')
+})
+if ($otherLoaders.Count -gt 0) {
+    $parkDir = Join-Path $backup ('other-loaders_' + (Get-Date -Format 'yyyyMMdd_HHmmss'))
+    New-Item -ItemType Directory -Force $parkDir | Out-Null
+    foreach ($f in $otherLoaders) {
+        Move-Item -LiteralPath $f.FullName -Destination (Join-Path $parkDir $f.Name) -Force
+        Say "  Moved $($f.Name) out of the game folder: it loads another project's code into the game, which crashes this version." 'Yellow'
+    }
+    Say "  Kept in $parkDir. To use that other project again, move the files back into $bin." 'Yellow'
+}
+foreach ($gfx in @('d3d11.dll', 'd3d12.dll', 'dxgi.dll.reshade')) {
+    if (Test-Path -LiteralPath (Join-Path $bin $gfx)) {
+        Say "  Note: $gfx is in the game folder (ReShade or another graphics mod). Left in place; if the game crashes at start, move it out." 'Yellow'
+    }
+}
+
 
 # ---------------------------------------------------------------- 1b. game prerequisites (Visual C++ runtime, DirectX parts)
 # A game downloaded by the launcher never ran Epic's prerequisite installer, and the download has no copy of it.
