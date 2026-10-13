@@ -102,8 +102,20 @@ That is all. The launcher itself does not change.
 
 ## Releasing a new launcher
 
-1. Bump `version` in package.json, then `npm run dist`.
+1. Raise `version` in package.json, then `npm run dist`.
 2. `powershell -ExecutionPolicy Bypass -File tools\release-launcher.ps1 -Notes "what changed"` writes the `launcher` block in packages.json.
-3. Run the two commands it prints (`gh release create v<version> ...`, then commit + push).
+3. On GitHub, Releases > Draft a new release: tag `vX.Y.Z` (the new version), title `Dauntless Forever X.Y.Z`,
+   attach `dist\DauntlessForever-X.Y.Z-x64.zip` (and the `.exe` installer if you want), Publish.
+   (Or run the `gh release create ...` command the script prints.)
+4. `git add -A`, `git commit -m "Launcher X.Y.Z"`, `git push`.
 
-Every launcher reads packages.json on start; older ones show "Dauntless Forever <version> is out" with a Download button that opens the release page.
+Every launcher reads packages.json on start; older ones show "Dauntless Forever X.Y.Z is out" with a Download
+button that opens the release page.
+
+## Releasing new server files
+
+1. `powershell -ExecutionPolicy Bypass -File tools\pack-version.ps1 -Id 1.6.2 -From resources\versions\1.6.2\package -Note "what changed"`
+2. On GitHub, open the `packages` release, click the pencil, attach the new zip from `dist\packages`, Update release.
+3. `git add -A`, `git commit -m "1.6.2 server files"`, `git push`.
+
+Launchers download and apply it on their next start.
