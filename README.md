@@ -1,4 +1,6 @@
-# Dauntless Forever (launcher)
+<p align="center"><img src="build/icon.png" width="128" alt="Dauntless Forever"></p>
+
+<h1 align="center">Dauntless Forever</h1>
 
 One window to pick a Dauntless build, download it from Epic's own servers, set it up and play it offline.
 
