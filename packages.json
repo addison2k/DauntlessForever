@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-12.3",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-12.3.zip",
-                         "sha256":  "0660ed9e78ca9651219c57faad857f4a70e4ce89169425b94658e2b1a3a445b2",
+                         "packageVersion":  "2026-10-12.4",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-12.4.zip",
+                         "sha256":  "115482d34c5ec0de4c6495b09c359d790a64f2c785e60d68a77cef0bb714a3fe",
                          "date":  "2026-10-12",
-                         "note":  "QA fixes"
+                         "note":  "Fix crash on Windows 11 25H2"
                      }
                  ],
     "launcher":  {
