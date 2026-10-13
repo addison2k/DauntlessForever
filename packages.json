@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-12.5",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-12.5.zip",
-                         "sha256":  "2865efa371fff34793da4ea3f461d5694fd25bca3f34890eb07c61bcf854edac",
-                         "date":  "2026-10-12",
-                         "note":  "Set-up moves other projects\u0027 loaders (Mystic Paradox) out of the game folder"
+                         "packageVersion":  "2026-10-13",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-13.zip",
+                         "sha256":  "64001f12765e106a2ad92fe6e6952c7352efe6736bd911031c0cd56594f034c8",
+                         "date":  "2026-10-13",
+                         "note":  "Windows 11 25H2 fix"
                      }
                  ],
     "launcher":  {
