@@ -1,3 +1,6 @@
+# Dauntless Forever - launcher tools
+# Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+# Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 # release-launcher.ps1 - tell every player's launcher that a new launcher is out.
 #
 #   powershell -ExecutionPolicy Bypass -File tools\release-launcher.ps1 -Notes "Hunt Pass seasons"

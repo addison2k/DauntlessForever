@@ -1,3 +1,6 @@
+// Dauntless Forever - launcher
+// Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+// Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 'use strict';
 const L = window.launcher;
 const $ = (id) => document.getElementById(id);

@@ -1,3 +1,6 @@
+// Dauntless Forever - launcher
+// Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+// Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 // settings.js - launcher.json: the games folder and, per version, the game folder the player chose or downloaded.
 'use strict';
 const fs = require('fs');

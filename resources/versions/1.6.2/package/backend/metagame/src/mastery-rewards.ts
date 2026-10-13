@@ -1,3 +1,7 @@
+// Dauntless Forever - Dauntless 1.6.2 offline backend
+// Copyright (C) 2026 Addison2k (port to this Dauntless build and all changes). https://github.com/addison2k/DauntlessForever
+// Based on Undaunted, Copyright (C) gwog and contributors, https://github.com/SyST3MDeV/Undaunted
+// Licence: AGPL-3.0-only (LICENSE-AGPL-3.0.txt). Keep this notice: the licence requires it.
 // mastery-rewards.ts — grant 1.6.2 mastery rank rewards (Merits, cell cores, titles) on rank-up.
 // Rewards come from the game's own Gameplay/Mastery/mastery_track_table (FModel export),
 // saved as src/vendor/mastery_track_table_162.json. Ranks come from the same RankForXp the

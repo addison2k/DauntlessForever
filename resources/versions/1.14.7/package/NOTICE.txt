@@ -1,0 +1,16 @@
+DAUNTLESS 1.14.7 OFFLINE PACKAGE - NOTICE
+======================================
+Part of Dauntless Forever. Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+
+Made by Addison2k: the 1.14.7 server loader (bin\dxgi.dll, source\d1147_source.zip), the offline EOS stand-in
+(source\eos_offline_source.zip), the local backend stand-in (backend\) and the set-up and play scripts.
+The idea of running the retail game as its own server comes from Undaunted by gwog and contributors (AGPL-3.0),
+https://github.com/SyST3MDeV/Undaunted . MinHook by Tsuda Kageyu (BSD-2-Clause).
+
+WHAT THE LICENCE ASKS OF ANYONE WHO REUSES THIS
+  You may copy, change and share this work under the GNU Affero General Public License v3.0 (AGPL-3.0-only).
+  If you pass it on, changed or not, or run a changed version for other people over a network, you must:
+    - keep every copyright notice, including the ones at the top of the source files and this file;
+    - say that you changed it, and when;
+    - give everyone who gets it the complete source of your version, under the same licence.
+  Taking this work into a closed or source-less program, or removing the credits, is not allowed.

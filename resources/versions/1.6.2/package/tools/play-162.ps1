@@ -1,3 +1,6 @@
+# Dauntless Forever - Dauntless 1.6.2 offline package
+# Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+# Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 # play-162.ps1 - start the Dauntless 1.6.2 game itself, logged in to the local backend, with a private settings folder.
 # Normally started by "2 - PLAY.bat" (tools\start.ps1) after the backend and the game servers are up.
 # Waits until you close the game, then puts the logs into upload\client_logs.zip (PC name and user name blanked).

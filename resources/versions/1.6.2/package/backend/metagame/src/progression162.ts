@@ -1,3 +1,7 @@
+// Dauntless Forever - Dauntless 1.6.2 offline backend
+// Copyright (C) 2026 Addison2k (port to this Dauntless build and all changes). https://github.com/addison2k/DauntlessForever
+// Based on Undaunted, Copyright (C) gwog and contributors, https://github.com/SyST3MDeV/Undaunted
+// Licence: AGPL-3.0-only (LICENSE-AGPL-3.0.txt). Keep this notice: the licence requires it.
 // progression162.ts — shared progression config for 1.6.2
 // Merges vendor/progression_config.json (1.4.4 ids) with vendor/progression_config_162.json
 // (ExperienceTrack_* ids) so both /progression/config and /progression/:userId serve the same tracks.

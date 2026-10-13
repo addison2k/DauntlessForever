@@ -1,3 +1,6 @@
+# Dauntless Forever - Dauntless 1.14.7 offline package
+# Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+# Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 # play-1147.ps1 - start the Dauntless 1.14.7 game itself, with its own private settings folder and the offline sign-in.
 # Normally started by "2 - PLAY.bat" (tools\start.ps1) after the backend and the server are up.
 # Waits until you close the game, then puts the logs into upload\client_logs.zip (PC name and user name blanked).

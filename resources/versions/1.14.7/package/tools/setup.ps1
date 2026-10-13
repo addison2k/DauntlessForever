@@ -1,3 +1,6 @@
+# Dauntless Forever - Dauntless 1.14.7 offline package
+# Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+# Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 # setup.ps1 - one-time set-up for playing Dauntless 1.14.7 offline. Started by "1 - SETUP.bat".
 #   setup.ps1             set up (safe to run again at any time; it only fixes what is missing)
 #   setup.ps1 -Uninstall  put the game folder back the way Epic shipped it

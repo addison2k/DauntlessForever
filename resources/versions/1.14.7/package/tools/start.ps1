@@ -1,3 +1,6 @@
+# Dauntless Forever - Dauntless 1.14.7 offline package
+# Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+# Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 # start.ps1 - "2 - PLAY.bat": starts the local backend, then the game server, then the game, in that order.
 # When the game is closed, the server and the backend are shut down again.
 . (Join-Path $PSScriptRoot 'common.ps1')

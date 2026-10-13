@@ -1,3 +1,6 @@
+// Dauntless Forever - launcher
+// Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+// Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 // downloader.js - fetches a build from Epic's CDN with manifest.exe (meszmate/manifest, MIT, with the
 // uncompressed-chunk fix from the DauntlessManifestArchive repo). Progress is parsed from its progress bar.
 'use strict';

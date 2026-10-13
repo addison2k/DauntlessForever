@@ -1,3 +1,6 @@
+# Dauntless Forever - launcher tools
+# Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+# Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 # pack-version.ps1 - take a tested package folder and make it the launcher's copy of that version,
 # plus a small update zip players get without a new launcher build.
 #

@@ -1,3 +1,6 @@
+# Dauntless Forever - launcher tools
+# Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+# Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 # update-dll.ps1 - put a freshly built DLL into a version's package and record its hash.
 #
 #   tools\update-dll.ps1 -Id 1.6.2 -Dll "D:\Undaunted-main\Undaunted-main\UndauntedInternalServer\x64\Release\UndauntedInternalServer.dll"

@@ -1,0 +1,26 @@
+DAUNTLESS FOREVER - NOTICE
+==========================
+Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+
+Dauntless Forever (the launcher, its tools, and the offline packages for each Dauntless version) was made by
+Addison2k:
+  - the launcher (src\, tools\), the version registry and the server-file update system;
+  - the Dauntless 1.6.2 port of the Undaunted server DLL and backend, its set-up and play scripts, the Hunt Pass
+    seasons system, bounties, progression, cooldowns and mastery rewards;
+  - the Dauntless 1.14.7 server loader (d1147), the offline EOS stand-in (eos_offline), the 1.14.7 backend
+    stand-in and its scripts.
+
+Built on the work of others:
+  - Undaunted by gwog and contributors (AGPL-3.0), https://github.com/SyST3MDeV/Undaunted : the approach of running
+    the retail game as its own server, the original server DLL, loader and backend that the 1.6.2 port is based on.
+  - MinHook by Tsuda Kageyu (BSD-2-Clause).
+  - manifest by meszmate (MIT, see resources\tools\LICENSE.txt).
+  - Dauntless is a trademark of its owners. This project is not affiliated with them and includes no game files.
+
+WHAT THE LICENCE ASKS OF ANYONE WHO REUSES THIS
+  You may copy, change and share this work under the GNU Affero General Public License v3.0 (AGPL-3.0-only).
+  If you pass it on, changed or not, or run a changed version for other people over a network, you must:
+    - keep every copyright notice, including the ones at the top of the source files and this file;
+    - say that you changed it, and when;
+    - give everyone who gets it the complete source of your version, under the same licence.
+  Taking this work into a closed or source-less program, or removing the credits, is not allowed.

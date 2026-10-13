@@ -1,3 +1,7 @@
+// Dauntless Forever - Dauntless 1.6.2 offline backend
+// Copyright (C) 2026 Addison2k (port to this Dauntless build and all changes). https://github.com/addison2k/DauntlessForever
+// Based on Undaunted, Copyright (C) gwog and contributors, https://github.com/SyST3MDeV/Undaunted
+// Licence: AGPL-3.0-only (LICENSE-AGPL-3.0.txt). Keep this notice: the licence requires it.
 // bounties162.ts — remember each player's bounties (1.6.2)
 //
 // Upstream's /bounty/:userId routes were stubs: GET always returned no bounties and POST saved nothing, so drafted

@@ -1,3 +1,6 @@
+// Dauntless Forever - launcher
+// Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+// Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 // sky.js - the scene behind the pages: an aurora drifting in the launcher's own teal and gold, sparse snow,
 // a faint ridge line along the bottom. Quiet on purpose; the pages sit on top of it.
 // Pauses when the window is hidden, when a game is running, and stays still if the OS asks for reduced motion.

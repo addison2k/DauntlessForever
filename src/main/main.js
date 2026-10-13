@@ -1,3 +1,6 @@
+// Dauntless Forever - launcher
+// Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+// Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 // main.js - the launcher's main process: one window, and the bridge between the window and the
 // version packages (status, download, set-up, play, stop, uninstall).
 'use strict';

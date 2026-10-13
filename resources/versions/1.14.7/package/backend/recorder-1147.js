@@ -1,3 +1,6 @@
+// Dauntless Forever - Dauntless 1.14.7 offline package
+// Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+// Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 'use strict';
 /*
   recorder-1147.js - a small local stand-in backend for the Dauntless 1.14.7 client.

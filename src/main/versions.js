@@ -1,3 +1,6 @@
+// Dauntless Forever - launcher
+// Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+// Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 // versions.js - the version registry (resources/versions/<id>/version.json), the writable copy of each
 // package, and the status of each version: is the game there, is it the right build, was set-up done.
 'use strict';

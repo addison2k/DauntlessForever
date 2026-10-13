@@ -1,3 +1,6 @@
+// Dauntless Forever - launcher
+// Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+// Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 // runner.js - runs the package scripts exactly as the .bat files would, and reports what they print.
 //   setup / uninstall: a visible PowerShell window (set-up asks questions: player name, Node.js install).
 //   play:              hidden; every line it prints is sent to the launcher window; "STOPPED:" lines are errors.

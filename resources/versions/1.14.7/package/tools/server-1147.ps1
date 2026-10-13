@@ -1,3 +1,6 @@
+# Dauntless Forever - Dauntless 1.14.7 offline package
+# Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+# Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 <#
 server-1147.ps1 - the Dauntless 1.14.7 game server (a second copy of the game in server mode, hidden).
 Normally started for you by "2 - PLAY.bat" (tools\start.ps1). By hand, from the package folder:
