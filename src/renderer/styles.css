@@ -274,7 +274,18 @@ dialog form { margin-top: 18px; display: flex; justify-content: flex-end; }
 .build-flag { margin-left: 8px; vertical-align: middle; font-family: var(--font); font-size: 11px; font-weight: 500; color: var(--brass-2); border: 1px solid #6b5520; border-radius: 999px; padding: 1px 7px; }
 .side-link.ask { align-items: center; gap: 10px; border: 1px solid var(--line-2); background: var(--bg-3); color: var(--ink); margin-bottom: 2px; }
 .side-link.ask:hover { border-color: var(--ink-3); }
-.ask-ico { flex: 0 0 auto; color: var(--aether); }
+.ask-ico { flex: 0 0 auto; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--aether); color: var(--aether); font-weight: 700; font-size: 13px; line-height: 19px; text-align: center; }
 .ask-text { display: flex; flex-direction: column; line-height: 1.2; }
 .ask-title { font-weight: 600; font-size: 14px; }
 .ask-sub { color: var(--ink-2); font-size: 12px; }
+
+/* short windows: a more compact sidebar so it always fits (no scroller: a scrolling sidebar renders blurry on some PCs) */
+@media (max-height: 780px) {
+  .side { padding-top: 16px; }
+  .side-brand { padding-bottom: 12px; }
+  .nav-item { padding-top: 7px; padding-bottom: 7px; }
+  .side-link.ask { padding-top: 7px; padding-bottom: 7px; }
+  .ask-sub { display: none; }
+  .side-rule { margin: 6px 0 4px; }
+  .side-meta { padding-top: 6px; }
+}
