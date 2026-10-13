@@ -1,0 +1,99 @@
+{
+  "_notes": [
+    "Clear Skies: original (as shipped) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label.",
+    "8 reward(s) were entitlements or lootboxes and are not granted offline; they are listed per level under _not_granted."
+  ],
+  "season_key": "season10b",
+  "season_title": "Clear Skies",
+  "season_kind": "original (as shipped)",
+  "pass_id": "season13a",
+  "levels": 50,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "season10b",
+    "start_date": "2020-07-30T17:00:00+00:00",
+    "end_date": "2020-09-03T16:59:59+00:00",
+    "premium_gating_entitlement": "season10b_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        4
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Clear Skies", "premium": [["AR_HP10B_RAIDERS_HELM_00", 1], ["AR_HP10B_RAIDERS_LEGS_00", 1], ["AR_HP10B_RAIDERS_ARMS_00", 1], ["AR_HP10B_RAIDERS_CHEST_00", 1]], "free": [["TITLE_HP10B_RAIDERS_00", 1], ["EJ_HP10B_RAIDERS_02", 1]]},
+    "2": {"chapter": "Clear Skies", "premium": [["CURRENCY_PRESTIGE", 50]], "free": []},
+    "3": {"chapter": "Clear Skies", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 25]]},
+    "4": {"chapter": "Clear Skies", "premium": [["WP_EB_HP10B_RAIDERS_00", 1]], "free": [["Container_Core_Slayer_Silver", 1]]},
+    "5": {"chapter": "Clear Skies", "premium": [["EM_PLAYER_HP10B_RAIDERS_02", 1]], "free": [["COL_SEASON_S10B_PAGE_01", 1]]},
+    "6": {"chapter": "Clear Skies", "premium": [], "free": [["TOKEN_BOUNTY_DRAFT", 2]], "_not_granted": ["ent_cchd_HP10B_RAIDERS_00"]},
+    "7": {"chapter": "Clear Skies", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "8": {"chapter": "Clear Skies", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["QI_DAMAGE_BLOCK_POTION", 15]]},
+    "9": {"chapter": "Clear Skies", "premium": [["TOKEN_BOUNTY_DRAFT", 5]], "free": []},
+    "10": {"chapter": "Clear Skies", "premium": [["LT_HP10B_RAIDERS_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "11": {"chapter": "Clear Skies", "premium": [["DYE_HP10B_RAIDERS_00_DURABLE", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "12": {"chapter": "Clear Skies", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": []},
+    "13": {"chapter": "Clear Skies", "premium": [["BNC_FABRIC_EVENT_HP10B_RAIDERS_00", 1]], "free": [["QI_STAMINA_POTION_00", 25]]},
+    "14": {"chapter": "Clear Skies", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": []},
+    "15": {"chapter": "Clear Skies", "premium": [["WP_CB_HP10B_RAIDERS_00", 1]], "free": [["EJ_HP10B_RAIDERS_00", 1]]},
+    "16": {"chapter": "Clear Skies", "premium": [], "free": [["TOKEN_BOUNTY_DRAFT", 2]], "_not_granted": ["ent_hp10b_esc_boost_24h_01"]},
+    "17": {"chapter": "Clear Skies", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "18": {"chapter": "Clear Skies", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["QI_HEALING_PYLON_BIG", 10]]},
+    "19": {"chapter": "Clear Skies", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "20": {"chapter": "Clear Skies", "premium": [["WP_IH_HP10B_RAIDERS_00", 1]], "free": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 25]]},
+    "21": {"chapter": "Clear Skies", "premium": [["EM_PLAYER_HP10B_RAIDERS_01", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "22": {"chapter": "Clear Skies", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": []},
+    "23": {"chapter": "Clear Skies", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["QI_STAMINA_POTION_00", 25]]},
+    "24": {"chapter": "Clear Skies", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "25": {"chapter": "Clear Skies", "premium": [["WP_MS_HP10B_RAIDERS_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "26": {"chapter": "Clear Skies", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "27": {"chapter": "Clear Skies", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "28": {"chapter": "Clear Skies", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["COL_SEASON_S10B_PAGE_02", 1]]},
+    "29": {"chapter": "Clear Skies", "premium": [], "free": [], "_not_granted": ["ent_ccfp_hp10b_raiders_00"]},
+    "30": {"chapter": "Clear Skies", "premium": [["WP_GA_HP10B_RAIDERS_00", 1]], "free": [["QI_FLARE_HP10B_RAIDERS_00", 1]], "_not_granted": ["ent_hp10b_free_30"]},
+    "31": {"chapter": "Clear Skies", "premium": [["EM_PLAYER_HP10B_RAIDERS_03", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "32": {"chapter": "Clear Skies", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "33": {"chapter": "Clear Skies", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["EJ_HP10B_RAIDERS_01", 1]]},
+    "34": {"chapter": "Clear Skies", "premium": [["LT_HP10B_RAIDERS_01", 1]], "free": []},
+    "35": {"chapter": "Clear Skies", "premium": [["WP_DP_HP10B_RAIDERS_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "36": {"chapter": "Clear Skies", "premium": [["BNC_STANDARD_HP10B_RAIDERS_00", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "37": {"chapter": "Clear Skies", "premium": [["CURRENCY_PRESTIGE", 50]], "free": []},
+    "38": {"chapter": "Clear Skies", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["QI_DAMAGE_PYLON", 10]]},
+    "39": {"chapter": "Clear Skies", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "40": {"chapter": "Clear Skies", "premium": [["WP_AC_HP10B_RAIDERS_00", 1]], "free": [["BNC_SIGIL_HP10B_RAIDERS_00", 1]]},
+    "41": {"chapter": "Clear Skies", "premium": [["TOKEN_BOUNTY_DRAFT", 5]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "42": {"chapter": "Clear Skies", "premium": [], "free": [], "_not_granted": ["ent_hp10b_esc_boost_2h_01"]},
+    "43": {"chapter": "Clear Skies", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["EM_PLAYER_HP10B_RAIDERS_00", 1]]},
+    "44": {"chapter": "Clear Skies", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "45": {"chapter": "Clear Skies", "premium": [["EM_INTRO_HP10B_RAIDERS_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "46": {"chapter": "Clear Skies", "premium": [["TOKEN_BOUNTY_DRAFT", 5]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "47": {"chapter": "Clear Skies", "premium": [], "free": [], "_not_granted": ["ent_hp10b_esc_boost_2h_02"]},
+    "48": {"chapter": "Clear Skies", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": [["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "49": {"chapter": "Clear Skies", "premium": [["TOKEN_UNLOCK_EXOTIC_CROWBEAR_EBLADE", 1], ["WP_EB_CROWBEAR_EXOTIC", 1]], "free": [["CURRENCY_PRESTIGE", 50]]},
+    "50": {"chapter": "Clear Skies", "premium": [["AR_HP10B_RAIDERS_HELM_00_ULTRA", 1], ["AR_HP10B_RAIDERS_CHEST_00_ULTRA", 1], ["AR_HP10B_RAIDERS_ARMS_00_ULTRA", 1], ["AR_HP10B_RAIDERS_LEGS_00_ULTRA", 1]], "free": [["AR_HP10B_RAIDERS_HELM_00", 1], ["AR_HP10B_RAIDERS_LEGS_00", 1], ["AR_HP10B_RAIDERS_ARMS_00", 1], ["AR_HP10B_RAIDERS_CHEST_00", 1], ["TITLE_HP10B_RAIDERS_01", 1]], "_not_granted": ["ent_hp10b_free_50", "ent_hp10b_elite_50"]}
+  }
+}

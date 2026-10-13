@@ -1,0 +1,2828 @@
+{
+ "code": null,
+ "message": "OK",
+ "payload": {
+  "paths": [
+   {
+    "progression_id": "ExperienceTrack_PlayerLevel",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 2000
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 2260
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 2550
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 2880
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 3250
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 3670
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 4150
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 4690
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 5300
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 5990
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 6770
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 7650
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 8640
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 9760
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 11030
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 12460
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 14080
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 15910
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 17980
+     }
+    ]
+   },
+   {
+    "progression_id": "ExperienceTrack_Weapon_Axe",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 300
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 400
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 600
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 1000
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 1400
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 1800
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 2300
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 2800
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 3300
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 3800
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 4200
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 4600
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 4900
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 5100
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 5300
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 5500
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 5600
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 5700
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 5800
+     }
+    ]
+   },
+   {
+    "progression_id": "ExperienceTrack_Weapon_ChainBlades",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 300
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 400
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 600
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 1000
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 1400
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 1800
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 2300
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 2800
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 3300
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 3800
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 4200
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 4600
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 4900
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 5100
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 5300
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 5500
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 5600
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 5700
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 5800
+     }
+    ]
+   },
+   {
+    "progression_id": "ExperienceTrack_Weapon_Hammer",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 300
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 400
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 600
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 1000
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 1400
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 1800
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 2300
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 2800
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 3300
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 3800
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 4200
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 4600
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 4900
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 5100
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 5300
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 5500
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 5600
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 5700
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 5800
+     }
+    ]
+   },
+   {
+    "progression_id": "ExperienceTrack_Weapon_Repeaters",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 300
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 400
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 600
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 1000
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 1400
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 1800
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 2300
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 2800
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 3300
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 3800
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 4200
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 4600
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 4900
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 5100
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 5300
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 5500
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 5600
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 5700
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 5800
+     }
+    ]
+   },
+   {
+    "progression_id": "ExperienceTrack_Weapon_Spear",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 300
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 400
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 600
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 1000
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 1400
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 1800
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 2300
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 2800
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 3300
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 3800
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 4200
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 4600
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 4900
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 5100
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 5300
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 5500
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 5600
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 5700
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 5800
+     }
+    ]
+   },
+   {
+    "progression_id": "ExperienceTrack_Weapon_Sword",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 300
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 400
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 600
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 1000
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 1400
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 1800
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 2300
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 2800
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 3300
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 3800
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 4200
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 4600
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 4900
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 5100
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 5300
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 5500
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 5600
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 5700
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 5800
+     }
+    ]
+   },
+   {
+    "progression_id": "ExperienceTrack_Weapon_Strikers",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 300
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 400
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 600
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 1000
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 1400
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 1800
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 2300
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 2800
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 3300
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 3800
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 4200
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 4600
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 4900
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 5100
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 5300
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 5500
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 5600
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 5700
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 5800
+     }
+    ]
+   },
+   {
+    "progression_id": "frostfall_2018",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 21,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 22,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 23,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 24,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 25,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 26,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 27,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 28,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 29,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 30,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 31,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 32,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 33,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 34,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 35,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 36,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 37,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 38,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 39,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 40,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 41,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 42,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 43,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 44,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 45,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 46,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 47,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 48,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 49,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 50,
+      "xp_required": 5000
+     }
+    ]
+   },
+   {
+    "progression_id": "saintsbond_2019",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 21,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 22,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 23,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 24,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 25,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 26,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 27,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 28,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 29,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 30,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 31,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 32,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 33,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 34,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 35,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 36,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 37,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 38,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 39,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 40,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 41,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 42,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 43,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 44,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 45,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 46,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 47,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 48,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 49,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 50,
+      "xp_required": 5000
+     }
+    ]
+   },
+   {
+    "progression_id": "season03",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 21,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 22,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 23,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 24,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 25,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 26,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 27,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 28,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 29,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 30,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 31,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 32,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 33,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 34,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 35,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 36,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 37,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 38,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 39,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 40,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 41,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 42,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 43,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 44,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 45,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 46,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 47,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 48,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 49,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 50,
+      "xp_required": 5000
+     }
+    ]
+   },
+   {
+    "progression_id": "season04",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 21,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 22,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 23,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 24,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 25,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 26,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 27,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 28,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 29,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 30,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 31,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 32,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 33,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 34,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 35,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 36,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 37,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 38,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 39,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 40,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 41,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 42,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 43,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 44,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 45,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 46,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 47,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 48,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 49,
+      "xp_required": 5000
+     },
+     {
+      "rank_id": 50,
+      "xp_required": 5000
+     }
+    ]
+   },
+   {
+    "progression_id": "PrestigeTrack_Weapon_Axe",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     }
+    ]
+   },
+   {
+    "progression_id": "PrestigeTrack_Weapon_ChainBlades",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     }
+    ]
+   },
+   {
+    "progression_id": "PrestigeTrack_Weapon_Hammer",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     }
+    ]
+   },
+   {
+    "progression_id": "PrestigeTrack_Weapon_Repeaters",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     }
+    ]
+   },
+   {
+    "progression_id": "PrestigeTrack_Weapon_Spear",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     }
+    ]
+   },
+   {
+    "progression_id": "PrestigeTrack_Weapon_Strikers",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     }
+    ]
+   },
+   {
+    "progression_id": "PrestigeTrack_Weapon_Sword",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     }
+    ]
+   },
+   {
+    "progression_id": "MasteryTrack_Behemoth",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 6
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 6
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 6
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 21,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 22,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 23,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 24,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 25,
+      "xp_required": 9
+     },
+     {
+      "rank_id": 26,
+      "xp_required": 9
+     },
+     {
+      "rank_id": 27,
+      "xp_required": 9
+     },
+     {
+      "rank_id": 28,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 29,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 30,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 31,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 32,
+      "xp_required": 11
+     },
+     {
+      "rank_id": 33,
+      "xp_required": 11
+     },
+     {
+      "rank_id": 34,
+      "xp_required": 11
+     },
+     {
+      "rank_id": 35,
+      "xp_required": 12
+     },
+     {
+      "rank_id": 36,
+      "xp_required": 12
+     },
+     {
+      "rank_id": 37,
+      "xp_required": 12
+     },
+     {
+      "rank_id": 38,
+      "xp_required": 12
+     },
+     {
+      "rank_id": 39,
+      "xp_required": 12
+     },
+     {
+      "rank_id": 40,
+      "xp_required": 12
+     },
+     {
+      "rank_id": 41,
+      "xp_required": 12
+     },
+     {
+      "rank_id": 42,
+      "xp_required": 12
+     },
+     {
+      "rank_id": 43,
+      "xp_required": 12
+     },
+     {
+      "rank_id": 44,
+      "xp_required": 12
+     },
+     {
+      "rank_id": 45,
+      "xp_required": 12
+     },
+     {
+      "rank_id": 46,
+      "xp_required": 12
+     },
+     {
+      "rank_id": 47,
+      "xp_required": 12
+     },
+     {
+      "rank_id": 48,
+      "xp_required": 12
+     },
+     {
+      "rank_id": 49,
+      "xp_required": 12
+     },
+     {
+      "rank_id": 50,
+      "xp_required": 12
+     }
+    ]
+   },
+   {
+    "progression_id": "MasteryTrack_PlayerLevel",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 1
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 6
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 6
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 6
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 9
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 9
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 9
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 11
+     },
+     {
+      "rank_id": 21,
+      "xp_required": 12
+     },
+     {
+      "rank_id": 22,
+      "xp_required": 13
+     },
+     {
+      "rank_id": 23,
+      "xp_required": 14
+     },
+     {
+      "rank_id": 24,
+      "xp_required": 15
+     },
+     {
+      "rank_id": 25,
+      "xp_required": 16
+     },
+     {
+      "rank_id": 26,
+      "xp_required": 17
+     },
+     {
+      "rank_id": 27,
+      "xp_required": 18
+     },
+     {
+      "rank_id": 28,
+      "xp_required": 19
+     },
+     {
+      "rank_id": 29,
+      "xp_required": 20
+     },
+     {
+      "rank_id": 30,
+      "xp_required": 21
+     },
+     {
+      "rank_id": 31,
+      "xp_required": 22
+     },
+     {
+      "rank_id": 32,
+      "xp_required": 24
+     },
+     {
+      "rank_id": 33,
+      "xp_required": 26
+     },
+     {
+      "rank_id": 34,
+      "xp_required": 28
+     },
+     {
+      "rank_id": 35,
+      "xp_required": 30
+     },
+     {
+      "rank_id": 36,
+      "xp_required": 32
+     },
+     {
+      "rank_id": 37,
+      "xp_required": 34
+     },
+     {
+      "rank_id": 38,
+      "xp_required": 36
+     },
+     {
+      "rank_id": 39,
+      "xp_required": 38
+     },
+     {
+      "rank_id": 40,
+      "xp_required": 40
+     },
+     {
+      "rank_id": 41,
+      "xp_required": 42
+     },
+     {
+      "rank_id": 42,
+      "xp_required": 44
+     },
+     {
+      "rank_id": 43,
+      "xp_required": 46
+     },
+     {
+      "rank_id": 44,
+      "xp_required": 48
+     },
+     {
+      "rank_id": 45,
+      "xp_required": 50
+     },
+     {
+      "rank_id": 46,
+      "xp_required": 52
+     },
+     {
+      "rank_id": 47,
+      "xp_required": 54
+     },
+     {
+      "rank_id": 48,
+      "xp_required": 56
+     },
+     {
+      "rank_id": 49,
+      "xp_required": 58
+     },
+     {
+      "rank_id": 50,
+      "xp_required": 60
+     }
+    ]
+   },
+   {
+    "progression_id": "MasteryTrack_Weapon_Axe",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 6
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 10
+     }
+    ]
+   },
+   {
+    "progression_id": "MasteryTrack_Weapon_ChainBlades",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 6
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 10
+     }
+    ]
+   },
+   {
+    "progression_id": "MasteryTrack_Weapon_Hammer",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 6
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 10
+     }
+    ]
+   },
+   {
+    "progression_id": "MasteryTrack_Weapon_Repeaters",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 6
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 10
+     }
+    ]
+   },
+   {
+    "progression_id": "MasteryTrack_Weapon_Spear",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 6
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 10
+     }
+    ]
+   },
+   {
+    "progression_id": "MasteryTrack_Weapon_Sword",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 6
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 10
+     }
+    ]
+   },
+   {
+    "progression_id": "MasteryTrack_Weapon_Strikers",
+    "premium_gating_entitlement": "",
+    "progression_multiplier": 1,
+    "free_rewards": [],
+    "premium_rewards": [],
+    "start_date": "2019-01-01T14:00:00+00:00",
+    "end_date": "2099-01-01T14:00:00+00:00",
+    "requirements": [
+     {
+      "rank_id": 0,
+      "xp_required": 0
+     },
+     {
+      "rank_id": 1,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 2,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 3,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 4,
+      "xp_required": 2
+     },
+     {
+      "rank_id": 5,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 6,
+      "xp_required": 3
+     },
+     {
+      "rank_id": 7,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 8,
+      "xp_required": 4
+     },
+     {
+      "rank_id": 9,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 10,
+      "xp_required": 5
+     },
+     {
+      "rank_id": 11,
+      "xp_required": 6
+     },
+     {
+      "rank_id": 12,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 13,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 14,
+      "xp_required": 7
+     },
+     {
+      "rank_id": 15,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 16,
+      "xp_required": 8
+     },
+     {
+      "rank_id": 17,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 18,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 19,
+      "xp_required": 10
+     },
+     {
+      "rank_id": 20,
+      "xp_required": 10
+     }
+    ]
+   }
+  ]
+ }
+}

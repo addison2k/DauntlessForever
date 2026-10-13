@@ -1,0 +1,68 @@
+diff --git a/chunks/chunks.go b/chunks/chunks.go
+index 5b76483..d23ea9f 100644
+--- a/chunks/chunks.go
++++ b/chunks/chunks.go
+@@ -41,15 +41,45 @@ type ChunkHeader struct {
+ 	HashType           uint32
+ }
+ 
+-// Decompress decompresses a raw chunk downloaded from the CDN.
+-// The data layout is: header bytes followed by zlib-compressed payload.
+-// The byte at offset 8 indicates the start of the zlib stream unless it equals 120 (0x78),
+-// in which case the zlib data starts at offset 8 itself.
++// Decompress returns the payload of a raw chunk downloaded from the CDN.
++//
++// A chunk is a binary header followed by the payload. The header's StoredAs
++// byte says whether the payload is zlib-compressed or stored as plain bytes.
++// Data that does not compress well (already-compressed paks, audio, video) is
++// stored plain, so both cases must be handled.
++//
++// Header layout (little endian): magic u32, version u32, headerSize u32,
++// dataSizeCompressed u32, GUID 16 bytes, rollingHash u64, storedAs u8 at
++// offset 40.
+ func Decompress(data []byte) ([]byte, error) {
+ 	if len(data) < 9 {
+ 		return nil, errors.New("chunk data too short: need at least 9 bytes")
+ 	}
+ 
++	const storedAsOffset = 40
++	if len(data) > storedAsOffset && binary.LittleEndian.Uint32(data[0:4]) == ChunkHeaderMagic {
++		headerSize := binary.LittleEndian.Uint32(data[8:12])
++		if headerSize <= storedAsOffset || int64(headerSize) > int64(len(data)) {
++			return nil, fmt.Errorf("chunk header size %d is invalid for data length %d", headerSize, len(data))
++		}
++		storedAs := ChunkStoredAs(data[storedAsOffset])
++		payload := data[headerSize:]
++
++		if storedAs&ChunkStoredAsEncrypted != 0 {
++			return nil, errors.New("chunk is encrypted")
++		}
++		if storedAs&ChunkStoredAsCompressed == 0 {
++			// Stored as plain bytes: the payload is the chunk data.
++			out := make([]byte, len(payload))
++			copy(out, payload)
++			return out, nil
++		}
++		return inflate(payload)
++	}
++
++	// Fallback for data without a recognisable chunk header: the byte at
++	// offset 8 gives the start of the zlib stream unless it is 0x78, in which
++	// case the stream starts at offset 8 itself.
+ 	offset := data[8]
+ 
+ 	var slicedData []byte
+@@ -62,7 +92,12 @@ func Decompress(data []byte) ([]byte, error) {
+ 		slicedData = data[offset:]
+ 	}
+ 
+-	reader, err := zlib.NewReader(bytes.NewReader(slicedData))
++	return inflate(slicedData)
++}
++
++// inflate decompresses a zlib stream.
++func inflate(compressed []byte) ([]byte, error) {
++	reader, err := zlib.NewReader(bytes.NewReader(compressed))
+ 	if err != nil {
+ 		return nil, fmt.Errorf("zlib init: %w", err)
+ 	}

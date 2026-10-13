@@ -1,0 +1,93 @@
+{
+  "_notes": [
+    "Overgrowth: reimagined (50 levels, rebuilt from the season's items) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label.",
+    "No original level list survives for this season in full; rebuilt from its 43 items in the 1.6.2 catalogs. Elite: one emote at most per level, Ultra/finale set at level 50. Free: banners/flares/titles/emojis/dyes, Rams every level, cores, a Transmog Stone every 10."
+  ],
+  "season_key": "reimagined_hp03",
+  "season_title": "Overgrowth",
+  "season_kind": "reimagined (50 levels, rebuilt from the season's items)",
+  "pass_id": "season13a",
+  "levels": 50,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        5
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Overgrowth", "premium": [["EM_INTRO_HP03_VINE_00", 1]], "free": [["BNC_ANIMATION_HP03_VINE_00", 1], ["BNC_FABRIC_EVENT_HP03_00", 1], ["CURRENCY_NOTES", 100]]},
+    "2": {"chapter": "Overgrowth", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "3": {"chapter": "Overgrowth", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "4": {"chapter": "Overgrowth", "premium": [["EM_PLAYER_HP03_DANCE_00", 1]], "free": [["BNC_FABRIC_EVENT_HP03_01", 1], ["BNC_FABRIC_EVENT_HP03_02", 1], ["CURRENCY_NOTES", 100]]},
+    "5": {"chapter": "Overgrowth", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "6": {"chapter": "Overgrowth", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "7": {"chapter": "Overgrowth", "premium": [["EM_PLAYER_HP03_FIREFLY_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "8": {"chapter": "Overgrowth", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["BNC_SIGIL_EVENT_HP03_00", 1], ["BNC_SIGIL_EVENT_HP03_01", 1], ["CURRENCY_NOTES", 100]]},
+    "9": {"chapter": "Overgrowth", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "10": {"chapter": "Overgrowth", "premium": [["EM_PLAYER_HP03_FLUTE_00", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "11": {"chapter": "Overgrowth", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "12": {"chapter": "Overgrowth", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["BNC_SIGIL_EVENT_HP03_02", 1], ["BNC_SIGIL_EVENT_HP03_03", 1], ["CURRENCY_NOTES", 100]]},
+    "13": {"chapter": "Overgrowth", "premium": [["EM_PLAYER_HP03_THROW_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "14": {"chapter": "Overgrowth", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "15": {"chapter": "Overgrowth", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "16": {"chapter": "Overgrowth", "premium": [["LT_HP03_MOSSY_00", 1]], "free": [["BNC_SIGIL_EVENT_HP03_04", 1], ["BNC_SIGIL_EVENT_HP03_05", 1], ["CURRENCY_NOTES", 100]]},
+    "17": {"chapter": "Overgrowth", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "18": {"chapter": "Overgrowth", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "19": {"chapter": "Overgrowth", "premium": [["LT_HP03_MOSSY_01", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "20": {"chapter": "Overgrowth", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["BNC_SIGIL_EVENT_HP03_06", 1], ["BNC_STANDARD_HP03_MOSSY_00", 1], ["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "21": {"chapter": "Overgrowth", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "22": {"chapter": "Overgrowth", "premium": [["WP_CB_HP03_MOSSY", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "23": {"chapter": "Overgrowth", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "24": {"chapter": "Overgrowth", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["BNC_STANDARD_HP03_MOSSY_01", 1], ["QI_FLARE_HP03_00", 1], ["CURRENCY_NOTES", 100]]},
+    "25": {"chapter": "Overgrowth", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_GOLD_CELLCORE", 1]]},
+    "26": {"chapter": "Overgrowth", "premium": [["WP_DP_HP03_MOSSY", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "27": {"chapter": "Overgrowth", "premium": [["CURRENCY_NOTES", 250]], "free": [["QI_FLARE_HP03_01", 1], ["QI_FLARE_HP03_02", 1], ["CURRENCY_NOTES", 100]]},
+    "28": {"chapter": "Overgrowth", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "29": {"chapter": "Overgrowth", "premium": [["WP_EB_HP03_MOSSY", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "30": {"chapter": "Overgrowth", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "31": {"chapter": "Overgrowth", "premium": [["CURRENCY_NOTES", 250]], "free": [["QI_FLARE_HP03_03", 1], ["QI_FLARE_HP03_04", 1], ["CURRENCY_NOTES", 100]]},
+    "32": {"chapter": "Overgrowth", "premium": [["WP_GA_HP03_MOSSY", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "33": {"chapter": "Overgrowth", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "34": {"chapter": "Overgrowth", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "35": {"chapter": "Overgrowth", "premium": [["WP_IH_HP03_MOSSY", 1]], "free": [["QI_FLARE_HP03_05", 1], ["QI_FLARE_HP03_06", 1], ["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "36": {"chapter": "Overgrowth", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "37": {"chapter": "Overgrowth", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "38": {"chapter": "Overgrowth", "premium": [["WP_MS_HP03_MOSSY", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "39": {"chapter": "Overgrowth", "premium": [["CURRENCY_NOTES", 250]], "free": [["QI_FLARE_HP03_07", 1], ["TITLE_HP03_00", 1], ["CURRENCY_NOTES", 100]]},
+    "40": {"chapter": "Overgrowth", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "41": {"chapter": "Overgrowth", "premium": [["AR_HP03_MOSSY_HELM_01", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "42": {"chapter": "Overgrowth", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "43": {"chapter": "Overgrowth", "premium": [["CURRENCY_NOTES", 250]], "free": [["TITLE_HP03_01", 1], ["TITLE_HP03_02", 1], ["CURRENCY_NOTES", 100]]},
+    "44": {"chapter": "Overgrowth", "premium": [["AR_HP03_MOSSY_ARMS", 1], ["AR_HP03_MOSSY_LEGS", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "45": {"chapter": "Overgrowth", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "46": {"chapter": "Overgrowth", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "47": {"chapter": "Overgrowth", "premium": [["AR_HP03_MOSSY_CHEST", 1], ["AR_HP03_MOSSY_HELM_00", 1]], "free": [["TITLE_HP03_03", 1], ["CURRENCY_NOTES", 100]]},
+    "48": {"chapter": "Overgrowth", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "49": {"chapter": "Overgrowth", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "50": {"chapter": "Overgrowth", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1], ["CURRENCY_MARKS_STEEL", 50], ["CONTAINER_CORE_SILVER_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_GOLD_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]}
+  }
+}

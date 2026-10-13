@@ -1,0 +1,97 @@
+// updates.js - server-file (package) updates without a new launcher build.
+// On start the launcher reads packages.json from GitHub. For every version whose packageVersion there is
+// newer than the player's copy, it downloads that version's small package zip, checks its sha256, unzips it
+// with Windows' built-in tar.exe and applies it over the player's copy (saves, config, logs are never touched).
+// The installed DLL hashes in version.json come with the index too, so "Set-up needed" shows up by itself.
+'use strict';
+const fs = require('fs');
+const path = require('path');
+const https = require('https');
+const crypto = require('crypto');
+const { execFile } = require('child_process');
+const { IS_WIN, MOCK, dataRoot, bundledVersionsDir, ensureDir } = require('./paths');
+const V = require('./versions');
+
+const RAW = 'https://raw.githubusercontent.com/addison2k/DauntlessForever/main/';
+const INDEX_URL = RAW + 'packages.json';
+const SUPPORTERS_URL = RAW + 'supporters.json';
+const COMMUNITY_URL = RAW + 'resources/community.json';
+const TIMEOUT_MS = 15000;
+
+function fetch(url, toFile, redirects = 0) {
+  return new Promise((resolve, reject) => {
+    const req = https.get(url, { headers: { 'User-Agent': 'DauntlessForever' }, timeout: TIMEOUT_MS }, (res) => {
+      if ([301, 302, 303, 307, 308].includes(res.statusCode) && res.headers.location && redirects < 5) {
+        res.resume(); return resolve(fetch(res.headers.location, toFile, redirects + 1));
+      }
+      if (res.statusCode !== 200) { res.resume(); return reject(new Error('HTTP ' + res.statusCode + ' for ' + url)); }
+      if (toFile) {
+        const out = fs.createWriteStream(toFile);
+        res.pipe(out); out.on('finish', () => out.close(() => resolve(toFile))); out.on('error', reject);
+      } else {
+        let body = ''; res.setEncoding('utf8'); res.on('data', d => body += d); res.on('end', () => resolve(body));
+      }
+    });
+    req.on('timeout', () => req.destroy(new Error('timed out')));
+    req.on('error', reject);
+  });
+}
+function sha256File(f) { return crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex').toLowerCase(); }
+function unzip(zip, dir) {
+  return new Promise((resolve, reject) => {
+    ensureDir(dir);
+    // tar.exe ships with Windows 10 1803+ and reads zip files; no extra dependency
+    execFile(IS_WIN ? 'tar.exe' : 'tar', ['-xf', zip, '-C', dir], (e, _o, err) => e ? reject(new Error('unzip failed: ' + (err || e.message))) : resolve());
+  });
+}
+
+// Returns a list of { id, from, to, applied, error } ; onEvent(msg) for the log.
+// onLauncher(info) hears about packages.json's "launcher" block: { version, url, notes } of the newest launcher.
+async function checkAndApply(registry, onEvent, isBusy, onLauncher) {
+  const results = [];
+  if (MOCK) return results;
+  let index;
+  try { index = JSON.parse(await fetch(INDEX_URL)); }
+  catch (e) { onEvent('No package update check: ' + e.message); return results; }
+  if (index.launcher && onLauncher) { try { onLauncher(index.launcher); } catch {} }
+  const tmpRoot = ensureDir(path.join(dataRoot(), 'tmp'));
+  for (const entry of (index.packages || [])) {
+    const v = registry.find(x => x.id === entry.id);
+    if (!v || !v.package || !entry.packageVersion || !entry.url || !entry.sha256) continue;
+    const have = V.installedPackageVersion(v) || v.package.packageVersion;
+    if (V.cmpPackageVersion(entry.packageVersion, have) <= 0) continue;
+    if (isBusy(v.id)) { onEvent(`${v.id}: an update is available (${entry.packageVersion}) but the version is in use; next start.`); continue; }
+    const r = { id: v.id, from: have, to: entry.packageVersion, applied: false, error: '' };
+    results.push(r);
+    const zip = path.join(tmpRoot, `${v.id}-${entry.packageVersion}.zip`);
+    const dir = path.join(tmpRoot, `${v.id}-${entry.packageVersion}`);
+    try {
+      onEvent(`${v.id}: downloading server files ${entry.packageVersion}...`);
+      await fetch(entry.url, zip);
+      const h = sha256File(zip);
+      if (h !== entry.sha256.toLowerCase()) throw new Error('the downloaded file does not match its checksum');
+      fs.rmSync(dir, { recursive: true, force: true });
+      await unzip(zip, dir);
+      // the zip may hold the package at its root or in one top-level folder
+      let src = dir;
+      const kids = fs.readdirSync(dir);
+      if (kids.length === 1 && fs.statSync(path.join(dir, kids[0])).isDirectory()) src = path.join(dir, kids[0]);
+      if (!fs.existsSync(path.join(src, v.package.play))) throw new Error('the update does not look like a package (no ' + v.package.play + ')');
+      if (!fs.existsSync(path.join(src, 'version.json'))) throw new Error('the update has no version.json');
+      V.applyPackage(v, src, entry.packageVersion);
+      // the new version.json (new DLL hashes etc.) now sits in the data folder; use it from here on
+      const fresh = JSON.parse(fs.readFileSync(path.join(v.dataDir, 'version.json'), 'utf8'));
+      for (const k of Object.keys(fresh)) v[k] = fresh[k];
+      r.applied = true;
+      onEvent(`${v.id}: server files updated to ${entry.packageVersion}. Run Set up again to put them into the game folder.`);
+    } catch (e) {
+      r.error = e.message; onEvent(`${v.id}: update failed: ${e.message}`);
+    } finally {
+      try { fs.rmSync(zip, { force: true }); fs.rmSync(dir, { recursive: true, force: true }); } catch {}
+    }
+  }
+  return results;
+}
+
+async function fetchJson(url) { if (MOCK) return null; return JSON.parse(await fetch(url)); }
+module.exports = { checkAndApply, fetchJson, INDEX_URL, SUPPORTERS_URL, COMMUNITY_URL };

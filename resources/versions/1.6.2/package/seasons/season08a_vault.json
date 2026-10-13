@@ -1,0 +1,78 @@
+{
+  "_notes": [
+    "Myth & Legend: Vault re-release (as shipped, 30 levels) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label."
+  ],
+  "season_key": "season08a_vault",
+  "season_title": "Myth & Legend",
+  "season_kind": "Vault re-release (as shipped, 30 levels)",
+  "pass_id": "season13a",
+  "levels": 30,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "season08a_vault",
+    "start_date": "2021-09-14T17:59:59+00:00",
+    "end_date": "2024-12-03T18:00:00+00:00",
+    "premium_gating_entitlement": "season08a_vault_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        5
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Myth & Legend", "premium": [["EM_INTRO_HP08A_WARCRY_00", 1]], "free": []},
+    "2": {"chapter": "Myth & Legend", "premium": [["CURRENCY_NOTES", 10000]], "free": []},
+    "3": {"chapter": "Myth & Legend", "premium": [["AR_HP08A_HEROES_HELM_01", 1]], "free": []},
+    "4": {"chapter": "Myth & Legend", "premium": [["WP_EB_HP08A_HEROES_00", 1]], "free": []},
+    "5": {"chapter": "Myth & Legend", "premium": [["LT_HP08A_HEROES_00", 1]], "free": []},
+    "6": {"chapter": "Myth & Legend", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "7": {"chapter": "Myth & Legend", "premium": [["WP_IH_HP08A_HEROES_00", 1]], "free": []},
+    "8": {"chapter": "Myth & Legend", "premium": [["TOKEN_BOUNTY_DRAFT_PREMIUM", 5]], "free": []},
+    "9": {"chapter": "Myth & Legend", "premium": [["CURRENCY_PJM_PRESTIGE_EMPTY", 50]], "free": []},
+    "10": {"chapter": "Myth & Legend", "premium": [["EM_PLAYER_HP08A_SWORDFLOURISH_00", 1]], "free": []},
+    "11": {"chapter": "Myth & Legend", "premium": [["WP_DP_HP08A_HEROES_00", 1]], "free": []},
+    "12": {"chapter": "Myth & Legend", "premium": [["CURRENCY_PJM_WEAPON", 50]], "free": []},
+    "13": {"chapter": "Myth & Legend", "premium": [["WP_AC_HP08A_HEROES_00", 1]], "free": []},
+    "14": {"chapter": "Myth & Legend", "premium": [["CURRENCY_NOTES", 10000]], "free": []},
+    "15": {"chapter": "Myth & Legend", "premium": [["BNC_FABRIC_EVENT_HP08A_00", 1]], "free": []},
+    "16": {"chapter": "Myth & Legend", "premium": [["AR_HP08A_HEROES_LEGS_ULTRA", 1]], "free": []},
+    "17": {"chapter": "Myth & Legend", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "18": {"chapter": "Myth & Legend", "premium": [["WP_MS_HP08A_HEROES_00", 1]], "free": []},
+    "19": {"chapter": "Myth & Legend", "premium": [["TOKEN_BOUNTY_DRAFT_PREMIUM", 5]], "free": []},
+    "20": {"chapter": "Myth & Legend", "premium": [["BNC_ANIMATION_HP08A_HEROES_00", 1]], "free": []},
+    "21": {"chapter": "Myth & Legend", "premium": [["AR_HP08A_HEROES_ARMS_ULTRA", 1]], "free": []},
+    "22": {"chapter": "Myth & Legend", "premium": [["CURRENCY_PJM_PRESTIGE_EMPTY", 50]], "free": []},
+    "23": {"chapter": "Myth & Legend", "premium": [["EM_PLAYER_HP08A_SWORDINTHESTONE_00", 1]], "free": []},
+    "24": {"chapter": "Myth & Legend", "premium": [["CURRENCY_PJM_WEAPON", 200]], "free": []},
+    "25": {"chapter": "Myth & Legend", "premium": [["BNC_STANDARD_HP08A_HEROES_00", 1]], "free": []},
+    "26": {"chapter": "Myth & Legend", "premium": [["AR_HP08A_HEROES_CHEST_ULTRA", 1]], "free": []},
+    "27": {"chapter": "Myth & Legend", "premium": [["WP_CB_HP08A_HEROES_00", 1]], "free": []},
+    "28": {"chapter": "Myth & Legend", "premium": [["CURRENCY_NOTES", 10000]], "free": []},
+    "29": {"chapter": "Myth & Legend", "premium": [["WP_GA_HP08A_HEROES_00", 1]], "free": []},
+    "30": {"chapter": "Myth & Legend", "premium": [["AR_HP08A_HEROES_HELM_00_ULTRA", 1]], "free": []}
+  }
+}

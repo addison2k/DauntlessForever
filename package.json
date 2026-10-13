@@ -1,0 +1,89 @@
+{
+  "name": "dauntless-forever-launcher",
+  "productName": "Dauntless Forever",
+  "version": "0.1.5",
+  "description": "Pick a Dauntless version, download it from Epic's own servers, set it up and play it offline.",
+  "main": "src/main/main.js",
+  "author": "Addison2k",
+  "license": "AGPL-3.0",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "dev": "DL_MOCK=1 electron .",
+    "dist": "electron-builder --win --x64",
+    "dist:dir": "electron-builder --win --x64 --dir"
+  },
+  "devDependencies": {
+    "electron": "33.4.11",
+    "electron-builder": "25.1.8"
+  },
+  "build": {
+    "appId": "com.addison2k.dauntless-forever",
+    "productName": "Dauntless Forever",
+    "artifactName": "DauntlessForever-${version}-${arch}.${ext}",
+    "directories": {
+      "output": "dist",
+      "buildResources": "build"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "resources/versions",
+        "to": "versions"
+      },
+      {
+        "from": "resources/tools",
+        "to": "tools"
+      },
+      {
+        "from": "build/icon.png",
+        "to": "icon.png"
+      },
+      {
+        "from": "resources/credits.json",
+        "to": "credits.json"
+      },
+      {
+        "from": "resources/community.json",
+        "to": "community.json"
+      },
+      {
+        "from": "supporters.json",
+        "to": "supporters.json"
+      }
+    ],
+    "asar": true,
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false,
+      "shortcutName": "Dauntless Forever"
+    },
+    "publish": null
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/addison2k/DauntlessForever"
+  }
+}

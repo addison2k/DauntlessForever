@@ -1,0 +1,93 @@
+{
+  "_notes": [
+    "Fortune & Glory: reimagined (50 levels, rebuilt from the season's items) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label.",
+    "No original level list survives for this season in full; rebuilt from its 22 items in the 1.6.2 catalogs. Elite: one emote at most per level, Ultra/finale set at level 50. Free: banners/flares/titles/emojis/dyes, Rams every level, cores, a Transmog Stone every 10."
+  ],
+  "season_key": "reimagined_hp06",
+  "season_title": "Fortune & Glory",
+  "season_kind": "reimagined (50 levels, rebuilt from the season's items)",
+  "pass_id": "season13a",
+  "levels": 50,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        5
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Fortune & Glory", "premium": [["EM_INTRO_HP06_ANCHORDROP_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "2": {"chapter": "Fortune & Glory", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "3": {"chapter": "Fortune & Glory", "premium": [["EM_INTRO_HP06_BARRELSURF_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "4": {"chapter": "Fortune & Glory", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "5": {"chapter": "Fortune & Glory", "premium": [["EM_INTRO_HP06_CHESTDROP_00", 1]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "6": {"chapter": "Fortune & Glory", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "7": {"chapter": "Fortune & Glory", "premium": [["EM_PLAYER_HP06_CHUG_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "8": {"chapter": "Fortune & Glory", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "9": {"chapter": "Fortune & Glory", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "10": {"chapter": "Fortune & Glory", "premium": [["EM_PLAYER_HP06_DRUM_00", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "11": {"chapter": "Fortune & Glory", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "12": {"chapter": "Fortune & Glory", "premium": [["EM_PLAYER_HP06_EXHAUSTEDFISTFIGHT_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "13": {"chapter": "Fortune & Glory", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "14": {"chapter": "Fortune & Glory", "premium": [["EM_PLAYER_HP06_JUGGLE_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "15": {"chapter": "Fortune & Glory", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "16": {"chapter": "Fortune & Glory", "premium": [["EM_PLAYER_HP06_SAILORDANCE_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "17": {"chapter": "Fortune & Glory", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "18": {"chapter": "Fortune & Glory", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "19": {"chapter": "Fortune & Glory", "premium": [["LT_HP06_PIRATE_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "20": {"chapter": "Fortune & Glory", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "21": {"chapter": "Fortune & Glory", "premium": [["LT_HP06_PIRATE_01", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "22": {"chapter": "Fortune & Glory", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "23": {"chapter": "Fortune & Glory", "premium": [["WP_CB_HP06_PIRATE_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "24": {"chapter": "Fortune & Glory", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "25": {"chapter": "Fortune & Glory", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_GOLD_CELLCORE", 1]]},
+    "26": {"chapter": "Fortune & Glory", "premium": [["WP_CB_HP06_PIRATE_01", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "27": {"chapter": "Fortune & Glory", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "28": {"chapter": "Fortune & Glory", "premium": [["WP_DP_HP06_PIRATE_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "29": {"chapter": "Fortune & Glory", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "30": {"chapter": "Fortune & Glory", "premium": [["WP_DP_HP06_PIRATE_01", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "31": {"chapter": "Fortune & Glory", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "32": {"chapter": "Fortune & Glory", "premium": [["WP_EB_HP06_PIRATE_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "33": {"chapter": "Fortune & Glory", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "34": {"chapter": "Fortune & Glory", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "35": {"chapter": "Fortune & Glory", "premium": [["WP_EB_HP06_PIRATE_01", 1]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "36": {"chapter": "Fortune & Glory", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "37": {"chapter": "Fortune & Glory", "premium": [["WP_GA_HP06_PIRATE_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "38": {"chapter": "Fortune & Glory", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "39": {"chapter": "Fortune & Glory", "premium": [["WP_GA_HP06_PIRATE_01", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "40": {"chapter": "Fortune & Glory", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "41": {"chapter": "Fortune & Glory", "premium": [["WP_IH_HP06_PIRATE_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "42": {"chapter": "Fortune & Glory", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "43": {"chapter": "Fortune & Glory", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "44": {"chapter": "Fortune & Glory", "premium": [["WP_IH_HP06_PIRATE_01", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "45": {"chapter": "Fortune & Glory", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "46": {"chapter": "Fortune & Glory", "premium": [["WP_MS_HP06_PIRATE_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "47": {"chapter": "Fortune & Glory", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "48": {"chapter": "Fortune & Glory", "premium": [["WP_MS_HP06_PIRATE_01", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "49": {"chapter": "Fortune & Glory", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "50": {"chapter": "Fortune & Glory", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1], ["CURRENCY_MARKS_STEEL", 50], ["CONTAINER_CORE_SILVER_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_GOLD_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]}
+  }
+}

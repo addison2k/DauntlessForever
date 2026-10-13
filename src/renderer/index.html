@@ -1,0 +1,216 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+<title>Dauntless Forever</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+<aside class="side">
+  <div class="side-brand">
+    <img class="mark" src="mark.png" alt="" width="40" height="40">
+    <div><div class="brand-name">Dauntless Forever</div><div class="brand-sub">every build, offline</div></div>
+  </div>
+  <nav class="nav" id="nav">
+    <button class="nav-item selected" data-page="play"><span class="nav-ico">▶</span>Play</button>
+    <button class="nav-item" data-page="seasons"><span class="nav-ico">✦</span>Seasons</button>
+    <button class="nav-item" data-page="mods"><span class="nav-ico">⬡</span>Mods</button>
+    <button class="nav-item" data-page="settings"><span class="nav-ico">⚙</span>Settings</button>
+    <button class="nav-item" data-page="credits"><span class="nav-ico">♥</span>Credits</button>
+    <button class="nav-item" data-page="help"><span class="nav-ico">?</span>Help</button>
+  </nav>
+  <div class="side-foot">
+    <a class="side-link discord" id="lnk-discord" data-url="" hidden><span class="nav-ico">◉</span><span id="lnk-discord-text">Join the Discord</span></a>
+    <div class="side-rule"></div>
+    <a class="side-link" id="lnk-patreon" data-url="" hidden><span class="nav-ico">◆</span>Support on Patreon</a>
+    <div class="side-meta"><span id="side-ver">Dauntless Forever</span> · <a href="#" id="lnk-source" data-url="https://github.com/addison2k/DauntlessForever">source</a></div>
+  </div>
+</aside>
+
+<main class="content">
+<canvas class="sky" id="sky" aria-hidden="true"></canvas>
+<div class="banner launcher-up" id="banner-up" hidden><span id="banner-up-text"></span><span class="banner-acts"><button class="ghost" id="banner-up-get">Download</button><button class="link" id="banner-up-close">Later</button></span></div>
+<div class="banner" id="banner" hidden><span id="banner-text"></span><button class="link" id="banner-close">Dismiss</button></div>
+
+<!-- ============================================================ Play -->
+<section class="page" id="page-play">
+  <ol class="strip" id="shelf" aria-label="Versions"></ol>
+
+  <div class="detail-empty" id="detail-empty">Pick a build above.</div>
+  <div class="detail-body" id="detail-body" hidden>
+    <div class="title-block">
+      <div class="title-row">
+        <h1 class="ver" id="d-ver">1.14.7</h1>
+        <span class="pill" id="d-pill">Ready</span>
+      </div>
+      <p class="meta" id="d-meta"></p>
+      <p class="blurb" id="d-blurb"></p>
+    </div>
+
+    <ol class="path" id="path">
+      <li class="step" data-step="game"><span class="step-n">1</span><div><div class="step-name">Game files</div><div class="step-sub" id="s-game"></div></div></li>
+      <li class="step" data-step="setup"><span class="step-n">2</span><div><div class="step-name">Set-up</div><div class="step-sub" id="s-setup"></div></div></li>
+      <li class="step" data-step="play"><span class="step-n">3</span><div><div class="step-name">Play</div><div class="step-sub" id="s-play"></div></div></li>
+    </ol>
+
+    <div class="action-row">
+      <button class="primary" id="btn-primary">Play</button>
+      <div class="action-side">
+        <button class="ghost" id="btn-stop" hidden>Stop everything</button>
+        <button class="ghost" id="btn-cancel" hidden>Cancel download</button>
+        <button class="ghost" id="btn-more">More</button>
+      </div>
+    </div>
+    <p class="action-note" id="action-note"></p>
+
+    <div class="menu" id="more-menu" hidden>
+      <button data-act="pick">Use a game folder I already have</button>
+      <button data-act="setup">Run set-up again</button>
+      <button data-act="opengame">Open the game folder</button>
+      <button data-act="openver">Open this version's launcher folder (save, logs)</button>
+      <button data-act="logs">Get the logs for asking for help</button>
+      <button data-act="readme">Read this version's README</button>
+      <button data-act="uninstall" class="danger">Uninstall: put the game folder back</button>
+    </div>
+
+    <div class="progress" id="progress" hidden>
+      <div class="progress-head"><span id="p-label">Downloading</span><span id="p-right"></span></div>
+      <div class="bar"><div class="bar-fill" id="p-fill"></div></div>
+      <div class="progress-foot" id="p-foot"></div>
+    </div>
+
+    <div class="log" id="log" hidden>
+      <div class="log-head"><span id="log-title">What's happening</span><button class="link" id="btn-log-clear">Clear</button></div>
+      <pre class="log-body" id="log-body"></pre>
+    </div>
+
+    <div class="notes" id="notes">
+      <div class="note-col"><h3>Works so far</h3><ul id="d-works"></ul></div>
+      <div class="note-col"><h3>Not yet</h3><ul id="d-not"></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ Seasons & mods -->
+<section class="page" id="page-seasons" hidden>
+  <h1 class="page-title">Seasons</h1>
+  <p class="lead">Pick the Hunt Pass you want to play on. Every season keeps its own level, so you can switch and come back to where you were.</p>
+  <div class="season-tabs" id="season-vtabs" role="tablist"></div>
+  <div id="season-none" class="card" hidden>
+    <div class="card-head"><h2>No seasons for this version yet</h2><span class="pill">Planned</span></div>
+    <p>Seasons are ready for 1.6.2 first. Other versions get theirs through a server-file update, with no new launcher needed.</p>
+  </div>
+  <div id="season-body" hidden>
+    <div class="season-now">
+      <div class="season-now-text">
+        <div class="season-now-label">Playing on</div>
+        <div class="season-now-title" id="season-now-title"></div>
+        <div class="season-now-sub" id="season-now-sub"></div>
+      </div>
+      <div class="season-now-bar"><div class="bar"><div class="bar-fill" id="season-now-fill"></div></div></div>
+    </div>
+    <p class="action-note" id="season-note" aria-live="polite"></p>
+    <div class="season-filters" id="season-filters" role="group" aria-label="Show"></div>
+    <div class="season-list" id="season-list"></div>
+    <p class="small">The game's own Hunt Pass screen always says "Time Strike": 1.6.2 can only show its own pass. The levels and rewards are the season you picked here. A few original rewards (account unlocks, loot boxes) cannot be given offline; the rewards list marks them.</p>
+  </div>
+</section>
+
+<!-- ============================================================ Mods -->
+<section class="page" id="page-mods" hidden>
+  <h1 class="page-title">Mods</h1>
+  <p class="lead">Small, optional changes you switch on per build. Each one says exactly which files it touches, and switching it off puts them back.</p>
+  <div class="cards">
+    <div class="card">
+      <div class="card-head"><h2>Quality of life</h2><span class="pill">Planned</span></div>
+      <p>Skip the intro movie, faster Ramsgate loads, bigger text: the small fixes people asked for during the live years.</p>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Balance experiments</h2><span class="pill">Planned</span></div>
+      <p>Tweaks to behemoth and weapon tuning, each one a separate switch, so you can test an idea without committing to it.</p>
+    </div>
+    <div class="card">
+      <div class="card-head"><h2>Cosmetic swaps</h2><span class="pill">Planned</span></div>
+      <p>Alternate looks and dyes that never made it into a build, or ones from a different build than the one you are playing.</p>
+    </div>
+  </div>
+  <p class="small">Nothing to install yet. Mods will be listed here per build with an on/off switch; the launcher fetches them like server-file updates.</p>
+</section>
+
+<!-- ============================================================ Settings -->
+<section class="page" id="page-settings" hidden>
+  <h1 class="page-title">Settings</h1>
+  <div class="settings">
+    <div class="setting"><div><div class="setting-name">Downloaded games go to</div><div class="setting-sub" id="set-games"></div></div><button class="ghost" id="set-games-pick">Change folder</button></div>
+    <div class="setting"><div><div class="setting-name">Launcher data (saves, settings, logs)</div><div class="setting-sub" id="set-data"></div></div><button class="ghost" id="set-data-open">Open folder</button></div>
+    <div class="setting"><div><div class="setting-name">Node.js</div><div class="setting-sub" id="set-node"></div></div></div>
+    <div class="setting"><div><div class="setting-name">Download tool</div><div class="setting-sub" id="set-tool"></div></div></div>
+    <div class="setting"><div><div class="setting-name">Server files</div><div class="setting-sub" id="set-pkgs"></div></div><button class="ghost" id="set-pkgs-check">Check for updates</button></div>
+    <div class="setting"><div><div class="setting-name">Background</div><div class="setting-sub">Aurora and snow behind the pages. Paused while a game is running.</div></div><button class="ghost" id="set-sky">Turn off</button></div>
+    <div class="setting"><div><div class="setting-name">Launcher</div><div class="setting-sub"><span id="set-ver"></span> <span id="set-launcher"></span></div></div></div>
+  </div>
+  <p class="small">Each version keeps its own save, settings and logs in the launcher data folder. Nothing is written into your Windows Dauntless settings. Uninstalling the launcher does not delete that folder.</p>
+</section>
+
+<!-- ============================================================ Credits -->
+<section class="page" id="page-credits" hidden>
+  <h1 class="page-title">Credits</h1>
+  <p class="lead" id="credits-intro"></p>
+  <div id="credits-sections"></div>
+  <div class="credits-section" id="supporters-section" hidden>
+    <h2>Supporters</h2>
+    <p class="small" id="supporters-intro"></p>
+    <div class="supporters" id="supporters-list"></div>
+    <p class="small" id="supporters-anon" hidden></p>
+    <p class="small"><a href="#" id="lnk-patreon-2" data-url="" hidden>Support on Patreon</a></p>
+  </div>
+</section>
+
+<!-- ============================================================ Help -->
+<section class="page" id="page-help" hidden>
+  <h1 class="page-title">How this works</h1>
+  <ol class="help-steps">
+    <li><strong>Game files.</strong> Press Download and the launcher fetches that exact build from Epic's servers (11 to 15 GB; you need about twice that free while it runs). Already have the game? "More" lets you point at the folder instead.</li>
+    <li><strong>Set-up.</strong> A black window opens and asks one or two questions (press Enter for the defaults). It installs Node.js if needed, puts two files into the game folder (originals are kept, never deleted) and makes your offline account.</li>
+    <li><strong>Play.</strong> Starts the local backend and the hidden game servers (about a minute), then the game. Closing the game closes the rest.</li>
+  </ol>
+  <h2 class="h2">If something goes wrong</h2>
+  <ul class="help-list">
+    <li>Stuck, or "a Dauntless process is running": press "Stop everything", then Play again.</li>
+    <li>"The game folder is missing files": the game was repaired or updated. Press Set up again; it only fixes what is missing.</li>
+    <li>If Windows asks whether Node.js or Dauntless may use the network, click Cancel. Everything stays on your PC.</li>
+    <li>Windows SmartScreen on first start: "More info" then "Run anyway". The launcher is not signed; signing costs money the project does not spend.</li>
+    <li>Asking for help: "More" then "Get the logs", and send the two zips. Your PC name and user name are blanked out in them.</li>
+  </ul>
+  <p class="small">Fan project, solo play, unofficial. Built on <a href="#" data-url="https://github.com/SyST3MDeV/Undaunted">Undaunted</a> (AGPL-3.0). Download tool: <a href="#" data-url="https://github.com/meszmate/manifest">meszmate/manifest</a> (MIT). Dauntless belongs to its owners; this includes no game files.</p>
+</section>
+</main>
+</div>
+
+<dialog id="dlg-readme" class="wide">
+  <h2 id="readme-title">README</h2>
+  <pre class="readme" id="readme-body"></pre>
+  <form method="dialog"><button class="ghost">Close</button></form>
+</dialog>
+
+<dialog id="dlg-season" class="wide">
+  <h2 id="season-doc-title">Rewards</h2>
+  <div class="season-doc" id="season-doc-body"></div>
+  <form method="dialog"><button class="ghost">Close</button></form>
+</dialog>
+
+<dialog id="dlg-confirm">
+  <h2 id="confirm-title"></h2>
+  <p id="confirm-text"></p>
+  <div class="dlg-actions">
+    <button class="ghost" id="confirm-no">Cancel</button>
+    <button class="primary small-btn" id="confirm-yes">Continue</button>
+  </div>
+</dialog>
+
+<script src="sky.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+    "packages":  [
+                     {
+                         "id":  "1.6.2",
+                         "packageVersion":  "2026-10-12.10",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-12.10.zip",
+                         "sha256":  "22d23c166c7fb249fc3d2524128c95c79bfdae0f47f706b97540a1ed805204e9",
+                         "date":  "2026-10-12",
+                         "note":  "Hunt Pass seasons + QA fixes"
+                     },
+                     {
+                         "id":  "1.14.7",
+                         "packageVersion":  "2026-10-12.3",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-12.3.zip",
+                         "sha256":  "0660ed9e78ca9651219c57faad857f4a70e4ce89169425b94658e2b1a3a445b2",
+                         "date":  "2026-10-12",
+                         "note":  "QA fixes"
+                     }
+                 ],
+    "launcher":  {
+                     "version":  "0.1.5",
+                     "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.1.5",
+                     "notes":  "Hunt Pass seasons",
+                     "date":  "2026-10-12"
+                 }
+}

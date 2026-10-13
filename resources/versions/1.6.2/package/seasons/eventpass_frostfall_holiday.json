@@ -1,0 +1,63 @@
+{
+  "_notes": [
+    "Frostfall in Ramsgate: event pass (as shipped) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label."
+  ],
+  "season_key": "eventpass_frostfall_holiday",
+  "season_title": "Frostfall in Ramsgate",
+  "season_kind": "event pass (as shipped)",
+  "pass_id": "season13a",
+  "levels": 15,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "eventpass_frostfall_holiday",
+    "start_date": "2020-12-03T18:00:00+00:00",
+    "end_date": "2021-01-04T17:59:59+00:00",
+    "premium_gating_entitlement": "eventpass_frostfall_holiday_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        5
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Frostfall in Ramsgate", "premium": [["QI_FLARE_FROST18_02", 1]], "free": []},
+    "2": {"chapter": "Frostfall in Ramsgate", "premium": [["BNC_SIGIL_EVENT_FROST18_07", 1]], "free": []},
+    "3": {"chapter": "Frostfall in Ramsgate", "premium": [["QI_FLARE_FROST18_08", 1]], "free": []},
+    "4": {"chapter": "Frostfall in Ramsgate", "premium": [["BNC_SIGIL_EVENT_FROST18_00", 1]], "free": []},
+    "5": {"chapter": "Frostfall in Ramsgate", "premium": [["QI_FLARE_FROST18_01", 1]], "free": []},
+    "6": {"chapter": "Frostfall in Ramsgate", "premium": [["BNC_SIGIL_EVENT_FROST18_02", 1]], "free": []},
+    "7": {"chapter": "Frostfall in Ramsgate", "premium": [["QI_FLARE_FROST18_07", 1]], "free": []},
+    "8": {"chapter": "Frostfall in Ramsgate", "premium": [["BNC_SIGIL_EVENT_FROST18_08", 1]], "free": []},
+    "9": {"chapter": "Frostfall in Ramsgate", "premium": [["QI_FLARE_FROST18_00", 1]], "free": []},
+    "10": {"chapter": "Frostfall in Ramsgate", "premium": [["BNC_SIGIL_EVENT_FROST18_01", 1]], "free": []},
+    "11": {"chapter": "Frostfall in Ramsgate", "premium": [["QI_FLARE_FROST18_04", 1]], "free": []},
+    "12": {"chapter": "Frostfall in Ramsgate", "premium": [["BNC_SIGIL_EVENT_FROST18_04", 1]], "free": []},
+    "13": {"chapter": "Frostfall in Ramsgate", "premium": [["QI_FLARE_FROST18_05", 1]], "free": []},
+    "14": {"chapter": "Frostfall in Ramsgate", "premium": [["BNC_SIGIL_EVENT_FROST18_05", 1]], "free": []},
+    "15": {"chapter": "Frostfall in Ramsgate", "premium": [["BNC_FABRIC_EVENT_FROST18_01", 1]], "free": []}
+  }
+}

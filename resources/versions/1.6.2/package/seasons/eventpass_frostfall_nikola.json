@@ -1,0 +1,59 @@
+{
+  "_notes": [
+    "The Legend of Silver Nikola: event pass (as shipped) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label.",
+    "1 reward(s) were entitlements or lootboxes and are not granted offline; they are listed per level under _not_granted."
+  ],
+  "season_key": "eventpass_frostfall_nikola",
+  "season_title": "The Legend of Silver Nikola",
+  "season_kind": "event pass (as shipped)",
+  "pass_id": "season13a",
+  "levels": 10,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "eventpass_frostfall_nikola",
+    "start_date": "2020-12-03T18:00:00+00:00",
+    "end_date": "2021-01-04T17:59:59+00:00",
+    "premium_gating_entitlement": "eventpass_frostfall_nikola_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        5
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "The Legend of Silver Nikola", "premium": [["EM_PLAYER_EVENT_FROST18_000", 1]], "free": []},
+    "2": {"chapter": "The Legend of Silver Nikola", "premium": [["BNC_FABRIC_EVENT_FROST18_00", 1]], "free": []},
+    "3": {"chapter": "The Legend of Silver Nikola", "premium": [], "free": [], "_not_granted": ["character_facepaint_frostfall"]},
+    "4": {"chapter": "The Legend of Silver Nikola", "premium": [["QI_FLARE_FROST18_10", 1]], "free": []},
+    "5": {"chapter": "The Legend of Silver Nikola", "premium": [["AR_GOLDENBELLS_HELM", 1]], "free": []},
+    "6": {"chapter": "The Legend of Silver Nikola", "premium": [["LT_FROSTFALL_MISTLETOE", 1]], "free": []},
+    "7": {"chapter": "The Legend of Silver Nikola", "premium": [["QI_FLARE_FROST18_09", 1]], "free": []},
+    "8": {"chapter": "The Legend of Silver Nikola", "premium": [["EM_PLAYER_LAYDOWN_00", 1]], "free": []},
+    "9": {"chapter": "The Legend of Silver Nikola", "premium": [["TITLE_FROST18_02", 1]], "free": []},
+    "10": {"chapter": "The Legend of Silver Nikola", "premium": [["AR_SILVER_NIKOLA_CHEST", 1], ["AR_SILVER_NIKOLA_ARMS", 1], ["AR_SILVER_NIKOLA_HELM", 1], ["AR_SILVER_NIKOLA_LEGS", 1]], "free": []}
+  }
+}

@@ -1,0 +1,93 @@
+{
+  "_notes": [
+    "Hidden Blades: reimagined (50 levels, rebuilt from the season's items) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label.",
+    "No original level list survives for this season in full; rebuilt from its 72 items in the 1.6.2 catalogs. Elite: one emote at most per level, Ultra/finale set at level 50. Free: banners/flares/titles/emojis/dyes, Rams every level, cores, a Transmog Stone every 10."
+  ],
+  "season_key": "reimagined_hp05",
+  "season_title": "Hidden Blades",
+  "season_kind": "reimagined (50 levels, rebuilt from the season's items)",
+  "pass_id": "season13a",
+  "levels": 50,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        5
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Hidden Blades", "premium": [["EM_INTRO_HP05_FLIP_00", 1]], "free": [["BNC_ANIMATION_HP05_FLAMES_00", 1], ["BNC_ANIMATION_HP05_NINJASTARS_00", 1], ["CURRENCY_NOTES", 100]]},
+    "2": {"chapter": "Hidden Blades", "premium": [["EM_INTRO_HP05_MANHOLE_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "3": {"chapter": "Hidden Blades", "premium": [["EM_INTRO_HP05_NINJASTAR_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "4": {"chapter": "Hidden Blades", "premium": [["EM_INTRO_HP05_REVERSELOGVANISH_00", 1]], "free": [["BNC_ANIMATION_HP05_PETALS_00", 1], ["BNC_FABRIC_EVENT_HP05_00", 1], ["CURRENCY_NOTES", 100]]},
+    "5": {"chapter": "Hidden Blades", "premium": [["EM_INTRO_HP05_SMOKEBOMB_00", 1]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "6": {"chapter": "Hidden Blades", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "7": {"chapter": "Hidden Blades", "premium": [["EM_INTRO_HP05_SNEAK_00", 1]], "free": [["BNC_FABRIC_EVENT_HP05_01", 1], ["BNC_FABRIC_EVENT_HP05_02", 1], ["CURRENCY_NOTES", 100]]},
+    "8": {"chapter": "Hidden Blades", "premium": [["EM_INTRO_HP05_WHIRLWIND_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "9": {"chapter": "Hidden Blades", "premium": [["EM_PLAYER_HP05_CHERRYBLOSSOM_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "10": {"chapter": "Hidden Blades", "premium": [["EM_PLAYER_HP05_GLYPH_00", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "11": {"chapter": "Hidden Blades", "premium": [["EM_PLAYER_HP05_KATADANCE_00", 1]], "free": [["BNC_SIGIL_EVENT_HP05_00", 1], ["BNC_SIGIL_EVENT_HP05_01", 1], ["CURRENCY_NOTES", 100]]},
+    "12": {"chapter": "Hidden Blades", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "13": {"chapter": "Hidden Blades", "premium": [["EM_PLAYER_HP05_KUNGFUTAUNT_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "14": {"chapter": "Hidden Blades", "premium": [["EM_PLAYER_HP05_LOGVANISH_00", 1]], "free": [["BNC_SIGIL_EVENT_HP05_02", 1], ["BNC_SIGIL_EVENT_HP05_03", 1], ["CURRENCY_NOTES", 100]]},
+    "15": {"chapter": "Hidden Blades", "premium": [["EM_PLAYER_HP05_MEDITATE_00", 1]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "16": {"chapter": "Hidden Blades", "premium": [["EM_PLAYER_HP05_PUSHUP_00_0", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "17": {"chapter": "Hidden Blades", "premium": [["CURRENCY_NOTES", 250]], "free": [["BNC_SIGIL_EVENT_HP05_04", 1], ["BNC_SIGIL_EVENT_HP05_05", 1], ["CURRENCY_NOTES", 100]]},
+    "18": {"chapter": "Hidden Blades", "premium": [["EM_PLAYER_HP05_SHURIKEN_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "19": {"chapter": "Hidden Blades", "premium": [["LT_HP05_NINJA_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "20": {"chapter": "Hidden Blades", "premium": [["LT_HP05_NINJA_01", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "21": {"chapter": "Hidden Blades", "premium": [["LT_HP05_NINJA_02", 1]], "free": [["BNC_SIGIL_EVENT_HP05_06", 1], ["BNC_SIGIL_EVENT_HP05_07", 1], ["CURRENCY_NOTES", 100]]},
+    "22": {"chapter": "Hidden Blades", "premium": [["WP_CB_HP05_NINJA_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "23": {"chapter": "Hidden Blades", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "24": {"chapter": "Hidden Blades", "premium": [["WP_CB_HP05_NINJA_01", 1]], "free": [["BNC_STANDARD_HP05_NINJA_00", 1], ["BNC_STANDARD_HP05_NINJA_01", 1], ["CURRENCY_NOTES", 100]]},
+    "25": {"chapter": "Hidden Blades", "premium": [["WP_CB_HP05_NINJA_02", 1]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_GOLD_CELLCORE", 1]]},
+    "26": {"chapter": "Hidden Blades", "premium": [["WP_DP_HP05_NINJA_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "27": {"chapter": "Hidden Blades", "premium": [["WP_DP_HP05_NINJA_01", 1]], "free": [["BNC_STANDARD_HP05_NINJA_02", 1], ["QI_FLARE_HP05_00", 1], ["CURRENCY_NOTES", 100]]},
+    "28": {"chapter": "Hidden Blades", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "29": {"chapter": "Hidden Blades", "premium": [["WP_DP_HP05_NINJA_02", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "30": {"chapter": "Hidden Blades", "premium": [["WP_EB_HP05_NINJA_00", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "31": {"chapter": "Hidden Blades", "premium": [["WP_EB_HP05_NINJA_01", 1]], "free": [["QI_FLARE_HP05_01", 1], ["QI_FLARE_HP05_02", 1], ["CURRENCY_NOTES", 100]]},
+    "32": {"chapter": "Hidden Blades", "premium": [["WP_EB_HP05_NINJA_02", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "33": {"chapter": "Hidden Blades", "premium": [["WP_GA_HP05_NINJA_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "34": {"chapter": "Hidden Blades", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["QI_FLARE_HP05_03", 1], ["QI_FLARE_HP05_04", 1], ["CURRENCY_NOTES", 100]]},
+    "35": {"chapter": "Hidden Blades", "premium": [["WP_GA_HP05_NINJA_01", 1]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "36": {"chapter": "Hidden Blades", "premium": [["WP_GA_HP05_NINJA_02", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "37": {"chapter": "Hidden Blades", "premium": [["WP_IH_HP05_NINJA_00", 1]], "free": [["QI_FLARE_HP05_05", 1], ["QI_FLARE_HP05_06", 1], ["CURRENCY_NOTES", 100]]},
+    "38": {"chapter": "Hidden Blades", "premium": [["WP_IH_HP05_NINJA_01", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "39": {"chapter": "Hidden Blades", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "40": {"chapter": "Hidden Blades", "premium": [["WP_IH_HP05_NINJA_02", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "41": {"chapter": "Hidden Blades", "premium": [["WP_MS_HP05_NINJA_00", 1]], "free": [["QI_FLARE_HP05_07", 1], ["TITLE_HP05_00", 1], ["CURRENCY_NOTES", 100]]},
+    "42": {"chapter": "Hidden Blades", "premium": [["WP_MS_HP05_NINJA_01", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "43": {"chapter": "Hidden Blades", "premium": [["WP_MS_HP05_NINJA_02", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "44": {"chapter": "Hidden Blades", "premium": [["AR_HP05_NINJA_HELM_01", 1]], "free": [["TITLE_HP05_01", 1], ["TITLE_HP05_02", 1], ["CURRENCY_NOTES", 100]]},
+    "45": {"chapter": "Hidden Blades", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "46": {"chapter": "Hidden Blades", "premium": [["AR_HP05_NINJA_HELM_02", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "47": {"chapter": "Hidden Blades", "premium": [["AR_HP05_NINJA_HELM_03", 1]], "free": [["TITLE_HP05_03", 1], ["CURRENCY_NOTES", 100]]},
+    "48": {"chapter": "Hidden Blades", "premium": [["AR_HP05_NINJA_ARMS", 1], ["AR_HP05_NINJA_LEGS", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "49": {"chapter": "Hidden Blades", "premium": [["AR_HP05_NINJA_CHEST", 1], ["AR_HP05_NINJA_HELM_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "50": {"chapter": "Hidden Blades", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1], ["CURRENCY_MARKS_STEEL", 50], ["CONTAINER_CORE_SILVER_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_GOLD_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]}
+  }
+}

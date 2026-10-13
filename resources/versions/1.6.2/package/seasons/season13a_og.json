@@ -1,0 +1,99 @@
+{
+  "_notes": [
+    "Time Strike: original (as shipped) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label.",
+    "7 reward(s) were entitlements or lootboxes and are not granted offline; they are listed per level under _not_granted."
+  ],
+  "season_key": "season13a_og",
+  "season_title": "Time Strike",
+  "season_kind": "original (as shipped)",
+  "pass_id": "season13a",
+  "levels": 50,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "season13a",
+    "start_date": "2021-04-08T17:00:00+00:00",
+    "end_date": "2021-05-20T16:59:59+00:00",
+    "premium_gating_entitlement": "season13a_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_S13_COIN",
+        5
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_S13_COIN",
+        20
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Time Strike", "premium": [["AR_HP13A_ANCIENT_HELM_01", 1]], "free": [["CURRENCY_NOTES", 5000]]},
+    "2": {"chapter": "Time Strike", "premium": [["CURRENCY_PJM_PRESTIGE_EMPTY", 50]], "free": []},
+    "3": {"chapter": "Time Strike", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": []},
+    "4": {"chapter": "Time Strike", "premium": [["CELL_ENCHANTER_UC", 1]], "free": []},
+    "5": {"chapter": "Time Strike", "premium": [["EM_PLAYER_HP13A_ANCIENT_00", 1]], "free": [["CURRENCY_SEASON_13_PAST", 100]]},
+    "6": {"chapter": "Time Strike", "premium": [], "free": [], "_not_granted": ["ent_ccfp_hp13a_ancient_00"]},
+    "7": {"chapter": "Time Strike", "premium": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 100]], "free": []},
+    "8": {"chapter": "Time Strike", "premium": [["CURRENCY_PLATINUM_UNIV", 100]], "free": [["CURRENCY_NOTES", 5000]]},
+    "9": {"chapter": "Time Strike", "premium": [["CURRENCY_NOTES", 5000]], "free": []},
+    "10": {"chapter": "Time Strike", "premium": [["BNC_ANIMATION_HP13A_ANCIENT_00", 1]], "free": [["CURRENCY_SEASON_13_PAST", 200]]},
+    "11": {"chapter": "Time Strike", "premium": [["TOKEN_BOUNTY_DRAFT", 5]], "free": []},
+    "12": {"chapter": "Time Strike", "premium": [["CURRENCY_PJM_WEAPON", 200]], "free": []},
+    "13": {"chapter": "Time Strike", "premium": [["CURRENCY_NOTES", 5000]], "free": [["CURRENCY_NOTES", 5000]]},
+    "14": {"chapter": "Time Strike", "premium": [["CURRENCY_PJM_AIRSHIP", 200]], "free": []},
+    "15": {"chapter": "Time Strike", "premium": [["EJ_HP13A_ANCIENT_00", 1]], "free": [["CURRENCY_SEASON_13_PAST", 200]]},
+    "16": {"chapter": "Time Strike", "premium": [["BNC_SIGIL_HP13A_ANCIENT_00", 1]], "free": []},
+    "17": {"chapter": "Time Strike", "premium": [["CELL_ENCHANTER_UC", 1]], "free": []},
+    "18": {"chapter": "Time Strike", "premium": [["CURRENCY_PLATINUM_UNIV", 100]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "19": {"chapter": "Time Strike", "premium": [["CURRENCY_NOTES", 10000]], "free": []},
+    "20": {"chapter": "Time Strike", "premium": [["QI_FLARE_HP13A_ANCIENT_00", 1]], "free": [["CURRENCY_SEASON_13_PAST", 200]], "_not_granted": ["ent_hp13a_free_20"]},
+    "21": {"chapter": "Time Strike", "premium": [["TOKEN_BOUNTY_DRAFT", 5]], "free": []},
+    "22": {"chapter": "Time Strike", "premium": [["CELL_ENCHANTER_UC", 1]], "free": []},
+    "23": {"chapter": "Time Strike", "premium": [["CURRENCY_NOTES", 5000]], "free": [["CURRENCY_NOTES", 5000]]},
+    "24": {"chapter": "Time Strike", "premium": [["CURRENCY_PJM_PRESTIGE_EMPTY", 50]], "free": []},
+    "25": {"chapter": "Time Strike", "premium": [["AR_HP13A_ANCIENT_CHEST_01", 1]], "free": [["CURRENCY_SEASON_13_PAST", 200]]},
+    "26": {"chapter": "Time Strike", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "27": {"chapter": "Time Strike", "premium": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 100]], "free": []},
+    "28": {"chapter": "Time Strike", "premium": [["CURRENCY_PLATINUM_UNIV", 100]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "29": {"chapter": "Time Strike", "premium": [["CURRENCY_NOTES", 10000]], "free": []},
+    "30": {"chapter": "Time Strike", "premium": [["BNC_FABRIC_HP13A_ANCIENT_00", 1]], "free": [["CURRENCY_SEASON_13_PAST", 200]], "_not_granted": ["ent_hp13a_free_30"]},
+    "31": {"chapter": "Time Strike", "premium": [["TOKEN_BOUNTY_DRAFT", 5]], "free": []},
+    "32": {"chapter": "Time Strike", "premium": [["CURRENCY_PJM_WEAPON", 200]], "free": []},
+    "33": {"chapter": "Time Strike", "premium": [["CURRENCY_PLATINUM_UNIV", 100]], "free": [["CURRENCY_PJM_AIRSHIP", 100]]},
+    "34": {"chapter": "Time Strike", "premium": [["CURRENCY_PJM_AIRSHIP", 100]], "free": []},
+    "35": {"chapter": "Time Strike", "premium": [["LT_HP13A_ANCIENT_01", 1]], "free": [["CURRENCY_SEASON_13_PAST", 200]]},
+    "36": {"chapter": "Time Strike", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "37": {"chapter": "Time Strike", "premium": [["CELL_ENCHANTER_UC", 1]], "free": []},
+    "38": {"chapter": "Time Strike", "premium": [["CURRENCY_NOTES", 10000]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "39": {"chapter": "Time Strike", "premium": [["CURRENCY_PLATINUM_UNIV", 100]], "free": []},
+    "40": {"chapter": "Time Strike", "premium": [["EJ_HP13A_ANCIENT_01", 1]], "free": [["CURRENCY_SEASON_13_PAST", 200]], "_not_granted": ["ent_hp13a_free_40"]},
+    "41": {"chapter": "Time Strike", "premium": [["TOKEN_BOUNTY_DRAFT", 5]], "free": []},
+    "42": {"chapter": "Time Strike", "premium": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 100]], "free": []},
+    "43": {"chapter": "Time Strike", "premium": [["CURRENCY_PLATINUM_UNIV", 100]], "free": [["CURRENCY_NOTES", 5000]]},
+    "44": {"chapter": "Time Strike", "premium": [["CURRENCY_NOTES", 5000]], "free": []},
+    "45": {"chapter": "Time Strike", "premium": [], "free": [["CURRENCY_SEASON_13_PAST", 200]], "_not_granted": ["ent_cchd_hp13a_ancient_00"]},
+    "46": {"chapter": "Time Strike", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "47": {"chapter": "Time Strike", "premium": [["CELL_ENCHANTER_UC", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "48": {"chapter": "Time Strike", "premium": [["CURRENCY_PLATINUM_UNIV", 100]], "free": []},
+    "49": {"chapter": "Time Strike", "premium": [["CURRENCY_PJM_PRESTIGE_EMPTY", 50]], "free": [["CURRENCY_SEASON_13_PAST", 200]]},
+    "50": {"chapter": "Time Strike", "premium": [["AR_HP13A_ANCIENT_HELM_00_ULTRA", 1], ["AR_HP13A_ANCIENT_LEGS_00_ULTRA", 1], ["AR_HP13A_ANCIENT_ARMS_00_ULTRA", 1], ["AR_HP13A_ANCIENT_CHEST_00_ULTRA", 1]], "free": [["TITLE_HP13A_ANCIENT_00", 1]], "_not_granted": ["ent_hp13a_free_50", "ent_hp13a_elite_50"]}
+  }
+}

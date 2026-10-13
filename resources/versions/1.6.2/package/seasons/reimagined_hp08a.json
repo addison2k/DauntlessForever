@@ -1,0 +1,93 @@
+{
+  "_notes": [
+    "Myth & Legend: reimagined (50 levels, rebuilt from the season's items) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label.",
+    "No original level list survives for this season in full; rebuilt from its 39 items in the 1.6.2 catalogs. Elite: one emote at most per level, Ultra/finale set at level 50. Free: banners/flares/titles/emojis/dyes, Rams every level, cores, a Transmog Stone every 10."
+  ],
+  "season_key": "reimagined_hp08a",
+  "season_title": "Myth & Legend",
+  "season_kind": "reimagined (50 levels, rebuilt from the season's items)",
+  "pass_id": "season13a",
+  "levels": 50,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        5
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Myth & Legend", "premium": [["EM_INTRO_HP08A_BURIED_00", 1]], "free": [["BNC_ANIMATION_HP08A_HEROES_00", 1], ["BNC_FABRIC_EVENT_HP08A_00", 1], ["CURRENCY_NOTES", 100]]},
+    "2": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "3": {"chapter": "Myth & Legend", "premium": [["EM_INTRO_HP08A_HEROIC_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "4": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "5": {"chapter": "Myth & Legend", "premium": [["EM_INTRO_HP08A_WARCRY_00", 1]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "6": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "7": {"chapter": "Myth & Legend", "premium": [["EM_PLAYER_HP08A_DANCE_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "8": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "9": {"chapter": "Myth & Legend", "premium": [["EM_PLAYER_HP08A_HORSETROT_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "10": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "11": {"chapter": "Myth & Legend", "premium": [["EM_PLAYER_HP08A_RESPECTFULBOW_00", 1]], "free": [["BNC_SIGIL_EVENT_HP08A_00", 1], ["BNC_SIGIL_EVENT_HP08A_01", 1], ["CURRENCY_NOTES", 100]]},
+    "12": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "13": {"chapter": "Myth & Legend", "premium": [["EM_PLAYER_HP08A_RPGIDLE_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "14": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "15": {"chapter": "Myth & Legend", "premium": [["EM_PLAYER_HP08A_SHALLNOTPASS_00", 1]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "16": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "17": {"chapter": "Myth & Legend", "premium": [["EM_PLAYER_HP08A_SWORDFLOURISH_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "18": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "19": {"chapter": "Myth & Legend", "premium": [["EM_PLAYER_HP08A_SWORDINTHESTONE_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "20": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "21": {"chapter": "Myth & Legend", "premium": [["LT_HP08A_HEROES_00", 1]], "free": [["BNC_STANDARD_HP08A_HEROES_00", 1], ["QI_FLARE_HP08A_00", 1], ["CURRENCY_NOTES", 100]]},
+    "22": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "23": {"chapter": "Myth & Legend", "premium": [["WP_AC_HP08A_HEROES_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "24": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "25": {"chapter": "Myth & Legend", "premium": [["WP_CB_HP08A_HEROES_00", 1]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_GOLD_CELLCORE", 1]]},
+    "26": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "27": {"chapter": "Myth & Legend", "premium": [["WP_DP_HP08A_HEROES_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "28": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "29": {"chapter": "Myth & Legend", "premium": [["WP_EB_HP08A_HEROES_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "30": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "31": {"chapter": "Myth & Legend", "premium": [["WP_EB_HP08A_HEROES_01", 1]], "free": [["QI_FLARE_HP08A_01", 1], ["TITLE_HP08A_00", 1], ["CURRENCY_NOTES", 100]]},
+    "32": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "33": {"chapter": "Myth & Legend", "premium": [["WP_GA_HP08A_HEROES_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "34": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "35": {"chapter": "Myth & Legend", "premium": [["WP_IH_HP08A_HEROES_00", 1]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "36": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "37": {"chapter": "Myth & Legend", "premium": [["WP_MS_HP08A_HEROES_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "38": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "39": {"chapter": "Myth & Legend", "premium": [["AR_HP08A_HEROES_HELM_01", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "40": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "41": {"chapter": "Myth & Legend", "premium": [["AR_HP08A_HEROES_HELM_02", 1]], "free": [["TITLE_HP08A_01", 1], ["CURRENCY_NOTES", 100]]},
+    "42": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "43": {"chapter": "Myth & Legend", "premium": [["AR_HP08A_HEROES_HELM_03", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "44": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "45": {"chapter": "Myth & Legend", "premium": [["AR_HP08A_HEROES_ARMS", 1], ["AR_HP08A_HEROES_LEGS", 1]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "46": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "47": {"chapter": "Myth & Legend", "premium": [["AR_HP08A_HEROES_CHEST", 1], ["AR_HP08A_HEROES_HELM_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "48": {"chapter": "Myth & Legend", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "49": {"chapter": "Myth & Legend", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "50": {"chapter": "Myth & Legend", "premium": [["AR_HP08A_HEROES_ARMS_ULTRA", 1], ["AR_HP08A_HEROES_LEGS_ULTRA", 1], ["AR_HP08A_HEROES_CHEST_ULTRA", 1], ["AR_HP08A_HEROES_HELM_00_ULTRA", 1], ["CURRENCY_MARKS_STEEL", 50], ["CONTAINER_CORE_SILVER_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_GOLD_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]}
+  }
+}

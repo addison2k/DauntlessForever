@@ -1,0 +1,99 @@
+{
+  "_notes": [
+    "Alchemy of War: original (as shipped) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label.",
+    "8 reward(s) were entitlements or lootboxes and are not granted offline; they are listed per level under _not_granted."
+  ],
+  "season_key": "season11b",
+  "season_title": "Alchemy of War",
+  "season_kind": "original (as shipped)",
+  "pass_id": "season13a",
+  "levels": 50,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "season11b",
+    "start_date": "2020-10-22T17:00:00+00:00",
+    "end_date": "2020-12-03T17:59:59+00:00",
+    "premium_gating_entitlement": "season11b_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        4
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Alchemy of War", "premium": [["AR_HP11B_ENGINEER_HELM_00", 1], ["AR_HP11B_ENGINEER_LEGS_00", 1], ["AR_HP11B_ENGINEER_ARMS_00", 1], ["AR_HP11B_ENGINEER_CHEST_00", 1]], "free": [["EJ_HP11B_ENGINEER_01", 1]]},
+    "2": {"chapter": "Alchemy of War", "premium": [["TOKEN_UNLOCK_QI_HP11A_02", 1]], "free": []},
+    "3": {"chapter": "Alchemy of War", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 25]]},
+    "4": {"chapter": "Alchemy of War", "premium": [["WP_EB_HP11B_ENGINEER_00", 1]], "free": []},
+    "5": {"chapter": "Alchemy of War", "premium": [["EM_PLAYER_HP11B_ENGINEER_02", 1]], "free": [["TOKEN_UNLOCK_QI_HP11A_00", 1]]},
+    "6": {"chapter": "Alchemy of War", "premium": [], "free": [], "_not_granted": ["ent_cchd_hp11b_engineer_00"]},
+    "7": {"chapter": "Alchemy of War", "premium": [["CELL_HPSHIELD_DAMAGE_UC", 2]], "free": []},
+    "8": {"chapter": "Alchemy of War", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["QI_DAMAGE_BLOCK_POTION", 10]]},
+    "9": {"chapter": "Alchemy of War", "premium": [["TOKEN_BOUNTY_DRAFT_PREMIUM", 3]], "free": []},
+    "10": {"chapter": "Alchemy of War", "premium": [["LT_HP11B_ENGINEER_00", 1]], "free": [["TOKEN_UNLOCK_QI_HP11A_01", 1]]},
+    "11": {"chapter": "Alchemy of War", "premium": [["DYE_HP11B_ENGINEER_00_DURABLE", 1]], "free": []},
+    "12": {"chapter": "Alchemy of War", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": []},
+    "13": {"chapter": "Alchemy of War", "premium": [["BNC_FABRIC_EVENT_HP11B_ENGINEER_00", 1]], "free": [["QI_STAMINA_POTION_00", 10]]},
+    "14": {"chapter": "Alchemy of War", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": []},
+    "15": {"chapter": "Alchemy of War", "premium": [["WP_DP_HP11B_ENGINEER_00", 1]], "free": [["EJ_HP11B_ENGINEER_00", 1]]},
+    "16": {"chapter": "Alchemy of War", "premium": [["CELL_HPSHIELD_DAMAGE_UC", 2]], "free": [["TOKEN_UNLOCK_QI_HP11A_02", 1]]},
+    "17": {"chapter": "Alchemy of War", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": []},
+    "18": {"chapter": "Alchemy of War", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["QI_HEALING_PYLON_BIG", 5]]},
+    "19": {"chapter": "Alchemy of War", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "20": {"chapter": "Alchemy of War", "premium": [["WP_MS_HP11B_ENGINEER_00", 1]], "free": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 25]], "_not_granted": ["ent_hp11b_free_20"]},
+    "21": {"chapter": "Alchemy of War", "premium": [["EM_PLAYER_HP11B_ENGINEER_01", 1]], "free": []},
+    "22": {"chapter": "Alchemy of War", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": []},
+    "23": {"chapter": "Alchemy of War", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["QI_STAMINA_POTION_00", 10]]},
+    "24": {"chapter": "Alchemy of War", "premium": [["CELL_HPSHIELD_DAMAGE_UC", 2]], "free": []},
+    "25": {"chapter": "Alchemy of War", "premium": [["WP_AC_HP11B_ENGINEER_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "26": {"chapter": "Alchemy of War", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": []},
+    "27": {"chapter": "Alchemy of War", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": []},
+    "28": {"chapter": "Alchemy of War", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": []},
+    "29": {"chapter": "Alchemy of War", "premium": [], "free": [], "_not_granted": ["ent_ccfp_hp11b_engineer_00"]},
+    "30": {"chapter": "Alchemy of War", "premium": [["WP_CB_HP11B_ENGINEER_00", 1]], "free": [["QI_FLARE_HP11B_ENGINEER_00", 1]], "_not_granted": ["ent_hp11b_free_30"]},
+    "31": {"chapter": "Alchemy of War", "premium": [["EM_PLAYER_HP11B_ENGINEER_03", 1]], "free": []},
+    "32": {"chapter": "Alchemy of War", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": []},
+    "33": {"chapter": "Alchemy of War", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["EJ_HP11B_ENGINEER_02", 1]]},
+    "34": {"chapter": "Alchemy of War", "premium": [["CELL_HPSHIELD_DAMAGE_UC", 2]], "free": []},
+    "35": {"chapter": "Alchemy of War", "premium": [["WP_GA_HP11B_ENGINEER_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "36": {"chapter": "Alchemy of War", "premium": [["TOKEN_BOUNTY_DRAFT_PREMIUM", 3]], "free": []},
+    "37": {"chapter": "Alchemy of War", "premium": [["CURRENCY_PRESTIGE", 50]], "free": []},
+    "38": {"chapter": "Alchemy of War", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["QI_DAMAGE_PYLON", 5]]},
+    "39": {"chapter": "Alchemy of War", "premium": [["BNC_ANIMATION_HP11B_ENGINEER_00", 1]], "free": []},
+    "40": {"chapter": "Alchemy of War", "premium": [["WP_IH_HP11B_ENGINEER_00", 1]], "free": [["BNC_SIGIL_HP11B_ENGINEER_00", 1]], "_not_granted": ["ent_hp11b_free_40"]},
+    "41": {"chapter": "Alchemy of War", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": []},
+    "42": {"chapter": "Alchemy of War", "premium": [["TOKEN_BOUNTY_DRAFT_PREMIUM", 3]], "free": []},
+    "43": {"chapter": "Alchemy of War", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["EM_PLAYER_HP11B_ENGINEER_00", 1]]},
+    "44": {"chapter": "Alchemy of War", "premium": [], "free": [], "_not_granted": ["ent_ccfp_hp11b_engineer_01"]},
+    "45": {"chapter": "Alchemy of War", "premium": [["EM_INTRO_HP11B_ENGINEER_01", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "46": {"chapter": "Alchemy of War", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": []},
+    "47": {"chapter": "Alchemy of War", "premium": [["CURRENCY_PRESTIGE", 50]], "free": []},
+    "48": {"chapter": "Alchemy of War", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "49": {"chapter": "Alchemy of War", "premium": [["TOKEN_UNLOCK_EXOTIC_SALLY_IHAMMER", 1], ["WP_IH_SALLY_EXOTIC", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "50": {"chapter": "Alchemy of War", "premium": [["AR_HP11B_ENGINEER_HELM_00_ULTRA", 1], ["AR_HP11B_ENGINEER_CHEST_00_ULTRA", 1], ["AR_HP11B_ENGINEER_ARMS_00_ULTRA", 1], ["AR_HP11B_ENGINEER_LEGS_00_ULTRA", 1]], "free": [["AR_OSTIAN_ADMIRAL_CHEST", 1], ["AR_OSTIAN_DIADEM_HELM", 1], ["AR_OSTIAN_ADMIRAL_ARMS", 1], ["AR_OSTIAN_ADMIRAL_LEGS", 1], ["TITLE_HP11B_ENGINEER_00", 1]], "_not_granted": ["ent_hp11b_free_50", "ent_hp11b_elite_50"]}
+  }
+}

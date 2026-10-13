@@ -1,0 +1,78 @@
+{
+  "_notes": [
+    "Aetherpunk: Vault re-release (as shipped, 30 levels) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label."
+  ],
+  "season_key": "season08b_vault",
+  "season_title": "Aetherpunk",
+  "season_kind": "Vault re-release (as shipped, 30 levels)",
+  "pass_id": "season13a",
+  "levels": 30,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "season08b_vault",
+    "start_date": "2021-11-30T17:59:59+00:00",
+    "end_date": "2024-12-03T18:00:00+00:00",
+    "premium_gating_entitlement": "season08b_vault_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        5
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Aetherpunk", "premium": [["WP_EB_HP08B_PUNK_00", 1]], "free": []},
+    "2": {"chapter": "Aetherpunk", "premium": [["CURRENCY_NOTES", 10000]], "free": []},
+    "3": {"chapter": "Aetherpunk", "premium": [["AR_HP08B_PUNK_HELM_ULTRA", 1]], "free": []},
+    "4": {"chapter": "Aetherpunk", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 1]], "free": []},
+    "5": {"chapter": "Aetherpunk", "premium": [["LT_HP08B_PUNK_00", 1]], "free": []},
+    "6": {"chapter": "Aetherpunk", "premium": [["TOKEN_BOUNTY_DRAFT_PREMIUM", 5]], "free": []},
+    "7": {"chapter": "Aetherpunk", "premium": [["BNC_FABRIC_EVENT_HP08B_02", 1]], "free": []},
+    "8": {"chapter": "Aetherpunk", "premium": [["CURRENCY_PJM_PRESTIGE_EMPTY", 50]], "free": []},
+    "9": {"chapter": "Aetherpunk", "premium": [["AR_HP08B_PUNK_CHEST_ULTRA", 1]], "free": []},
+    "10": {"chapter": "Aetherpunk", "premium": [["WP_CB_HP08B_PUNK_00", 1]], "free": []},
+    "11": {"chapter": "Aetherpunk", "premium": [["CURRENCY_PJM_WEAPON", 200]], "free": []},
+    "12": {"chapter": "Aetherpunk", "premium": [["CURRENCY_NOTES", 10000]], "free": []},
+    "13": {"chapter": "Aetherpunk", "premium": [["AR_HP08B_PUNK_LEGS_ULTRA", 1]], "free": []},
+    "14": {"chapter": "Aetherpunk", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "15": {"chapter": "Aetherpunk", "premium": [["WP_IH_HP08B_PUNK_00", 1]], "free": []},
+    "16": {"chapter": "Aetherpunk", "premium": [["BNC_ANIMATION_HP08B_PUNK_00", 1]], "free": []},
+    "17": {"chapter": "Aetherpunk", "premium": [["WP_DP_HP08B_PUNK_00", 1]], "free": []},
+    "18": {"chapter": "Aetherpunk", "premium": [["EM_INTRO_HP08B_TRASHKICK_00", 1]], "free": []},
+    "19": {"chapter": "Aetherpunk", "premium": [["CURRENCY_NOTES", 10000]], "free": []},
+    "20": {"chapter": "Aetherpunk", "premium": [["WP_GA_HP08B_PUNK_00", 1]], "free": []},
+    "21": {"chapter": "Aetherpunk", "premium": [["CURRENCY_PJM_WEAPON", 200]], "free": []},
+    "22": {"chapter": "Aetherpunk", "premium": [["WP_AC_HP08B_PUNK_00", 1]], "free": []},
+    "23": {"chapter": "Aetherpunk", "premium": [["BNC_STANDARD_HP08B_PUNK_00", 1]], "free": []},
+    "24": {"chapter": "Aetherpunk", "premium": [["CURRENCY_PJM_PRESTIGE_EMPTY", 50]], "free": []},
+    "25": {"chapter": "Aetherpunk", "premium": [["AR_HP08B_PUNK_ARMS_ULTRA", 1]], "free": []},
+    "26": {"chapter": "Aetherpunk", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 1]], "free": []},
+    "27": {"chapter": "Aetherpunk", "premium": [["WP_MS_HP08B_PUNK_00", 1]], "free": []},
+    "28": {"chapter": "Aetherpunk", "premium": [["TOKEN_BOUNTY_DRAFT_PREMIUM", 5]], "free": []},
+    "29": {"chapter": "Aetherpunk", "premium": [["CURRENCY_PJM_WEAPON", 200]], "free": []},
+    "30": {"chapter": "Aetherpunk", "premium": [["EM_PLAYER_HP08B_GLOWSTICK_00", 1]], "free": []}
+  }
+}

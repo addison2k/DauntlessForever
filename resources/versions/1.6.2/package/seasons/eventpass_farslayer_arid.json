@@ -1,0 +1,78 @@
+{
+  "_notes": [
+    "The Burning Heights: event pass (as shipped) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label."
+  ],
+  "season_key": "eventpass_farslayer_arid",
+  "season_title": "The Burning Heights",
+  "season_kind": "event pass (as shipped)",
+  "pass_id": "season13a",
+  "levels": 30,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "eventpass_farslayer_arid",
+    "start_date": "2021-01-21T18:00:00+00:00",
+    "end_date": "2021-02-04T17:59:59+00:00",
+    "premium_gating_entitlement": "eventpass_farslayer_arid_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        5
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "The Burning Heights", "premium": [["WP_GA_HP04_ARID", 1]], "free": []},
+    "2": {"chapter": "The Burning Heights", "premium": [["QI_FLARE_HP04_04", 1]], "free": []},
+    "3": {"chapter": "The Burning Heights", "premium": [["BNC_ANIMATION_HP04_FIRE_00", 1]], "free": []},
+    "4": {"chapter": "The Burning Heights", "premium": [["QI_FLARE_HP04_07", 1]], "free": []},
+    "5": {"chapter": "The Burning Heights", "premium": [["WP_EB_HP04_ARID", 1]], "free": []},
+    "6": {"chapter": "The Burning Heights", "premium": [["QI_FLARE_HP04_00", 1]], "free": []},
+    "7": {"chapter": "The Burning Heights", "premium": [["BNC_FABRIC_EVENT_HP04_01", 1]], "free": []},
+    "8": {"chapter": "The Burning Heights", "premium": [["BNC_SIGIL_EVENT_HP04_03", 1]], "free": []},
+    "9": {"chapter": "The Burning Heights", "premium": [["EM_PLAYER_HP04_NECKCRACK_00", 1]], "free": []},
+    "10": {"chapter": "The Burning Heights", "premium": [["WP_CB_HP04_ARID", 1]], "free": []},
+    "11": {"chapter": "The Burning Heights", "premium": [["QI_FLARE_HP04_02", 1]], "free": []},
+    "12": {"chapter": "The Burning Heights", "premium": [["BNC_SIGIL_EVENT_HP04_00", 1]], "free": []},
+    "13": {"chapter": "The Burning Heights", "premium": [["BNC_STANDARD_HP04_ARID_00", 1]], "free": []},
+    "14": {"chapter": "The Burning Heights", "premium": [["BNC_SIGIL_EVENT_HP04_05", 1]], "free": []},
+    "15": {"chapter": "The Burning Heights", "premium": [["WP_IH_HP04_ARID", 1]], "free": []},
+    "16": {"chapter": "The Burning Heights", "premium": [["QI_FLARE_HP04_03", 1]], "free": []},
+    "17": {"chapter": "The Burning Heights", "premium": [["BNC_SIGIL_EVENT_HP04_02", 1]], "free": []},
+    "18": {"chapter": "The Burning Heights", "premium": [["AR_HP04_ARID_HELM_01", 1]], "free": []},
+    "19": {"chapter": "The Burning Heights", "premium": [["EM_PLAYER_HP04_FIREBREATH_00", 1]], "free": []},
+    "20": {"chapter": "The Burning Heights", "premium": [["WP_MS_HP04_ARID", 1]], "free": []},
+    "21": {"chapter": "The Burning Heights", "premium": [["QI_FLARE_HP04_06", 1]], "free": []},
+    "22": {"chapter": "The Burning Heights", "premium": [["BNC_FABRIC_EVENT_HP04_00", 1]], "free": []},
+    "23": {"chapter": "The Burning Heights", "premium": [["LT_HP04_ARID_00", 1]], "free": []},
+    "24": {"chapter": "The Burning Heights", "premium": [["BNC_SIGIL_EVENT_HP04_06", 1]], "free": []},
+    "25": {"chapter": "The Burning Heights", "premium": [["WP_DP_HP04_ARID", 1]], "free": []},
+    "26": {"chapter": "The Burning Heights", "premium": [["QI_FLARE_HP04_05", 1]], "free": []},
+    "27": {"chapter": "The Burning Heights", "premium": [["EM_INTRO_HP04_BLAZE_00", 1]], "free": []},
+    "28": {"chapter": "The Burning Heights", "premium": [["EM_PLAYER_HP04_SHOUT_00", 1]], "free": []},
+    "29": {"chapter": "The Burning Heights", "premium": [["TITLE_HP04_02", 1]], "free": []},
+    "30": {"chapter": "The Burning Heights", "premium": [["AR_HP04_ARID_ARMS", 1], ["AR_HP04_ARID_CHEST", 1], ["AR_HP04_ARID_HELM_00", 1], ["AR_HP04_ARID_LEGS", 1]], "free": []}
+  }
+}

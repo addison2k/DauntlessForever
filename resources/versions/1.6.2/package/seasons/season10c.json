@@ -1,0 +1,74 @@
+{
+  "_notes": [
+    "Farslayer's Fall: original (as shipped) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label.",
+    "2 reward(s) were entitlements or lootboxes and are not granted offline; they are listed per level under _not_granted. Farslayer's Fall was a rerun pass: its rewards are Overgrowth (HP03) items."
+  ],
+  "season_key": "season10c",
+  "season_title": "Farslayer's Fall",
+  "season_kind": "original (as shipped)",
+  "pass_id": "season13a",
+  "levels": 25,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "season10c",
+    "start_date": "2020-09-03T17:00:00+00:00",
+    "end_date": "2020-09-17T16:59:59+00:00",
+    "premium_gating_entitlement": "season10c_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        4
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Farslayer's Fall", "premium": [["BNC_SIGIL_EVENT_HP03_03", 1], ["QI_FLARE_HP03_03", 1]], "free": [["CURRENCY_PRESTIGE", 50]]},
+    "2": {"chapter": "Farslayer's Fall", "premium": [["LT_HP03_MOSSY_00", 1]], "free": [["QI_GRENADE_HEALING", 15]]},
+    "3": {"chapter": "Farslayer's Fall", "premium": [["WP_DP_HP03_MOSSY", 1]], "free": [["QI_HEALING_PYLON_BIG", 10]]},
+    "4": {"chapter": "Farslayer's Fall", "premium": [["BNC_STANDARD_HP03_MOSSY_00", 1]], "free": [["QI_DAMAGE_BLOCK_POTION", 15]]},
+    "5": {"chapter": "Farslayer's Fall", "premium": [["CURRENCY_PLATINUM_UNIV", 100]], "free": [["QI_ATTACK_SPEED_POTION", 25]]},
+    "6": {"chapter": "Farslayer's Fall", "premium": [["BNC_FABRIC_EVENT_HP03_00", 1]], "free": []},
+    "7": {"chapter": "Farslayer's Fall", "premium": [["EM_PLAYER_HP03_DANCE_00", 1]], "free": [["QI_STAMINA_POTION_00", 25]]},
+    "8": {"chapter": "Farslayer's Fall", "premium": [["WP_EB_HP03_MOSSY", 1]], "free": []},
+    "9": {"chapter": "Farslayer's Fall", "premium": [["CURRENCY_PLATINUM_UNIV", 100]], "free": [["QI_STAGGER_POTION", 25]]},
+    "10": {"chapter": "Farslayer's Fall", "premium": [["AR_HP03_MOSSY_HELM_01", 1]], "free": [["CURRENCY_PRESTIGE", 50]]},
+    "11": {"chapter": "Farslayer's Fall", "premium": [["WP_MS_HP03_MOSSY", 1]], "free": []},
+    "12": {"chapter": "Farslayer's Fall", "premium": [["BNC_SIGIL_EVENT_HP03_00", 1], ["QI_FLARE_HP03_00", 1]], "free": [["QI_LIFESTEAL_AOE_POTION", 15]]},
+    "13": {"chapter": "Farslayer's Fall", "premium": [["CURRENCY_PLATINUM_UNIV", 100]], "free": []},
+    "14": {"chapter": "Farslayer's Fall", "premium": [["WP_IH_HP03_MOSSY", 1]], "free": [["QI_DAMAGE_PYLON", 10]]},
+    "15": {"chapter": "Farslayer's Fall", "premium": [["EM_PLAYER_HP03_THROW_00", 1]], "free": [["CURRENCY_PRESTIGE", 50]]},
+    "16": {"chapter": "Farslayer's Fall", "premium": [["BNC_FABRIC_EVENT_HP03_01", 1]], "free": [["QI_DAMAGE_ENRAGEBONUS_POTION", 25]]},
+    "17": {"chapter": "Farslayer's Fall", "premium": [["WP_CB_HP03_MOSSY", 1]], "free": []},
+    "18": {"chapter": "Farslayer's Fall", "premium": [["BNC_ANIMATION_HP03_VINE_00", 1]], "free": [["QI_GRENADE_CLUSTER", 15]]},
+    "19": {"chapter": "Farslayer's Fall", "premium": [["CURRENCY_PLATINUM_UNIV", 100]], "free": []},
+    "20": {"chapter": "Farslayer's Fall", "premium": [["EM_INTRO_HP03_VINE_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "21": {"chapter": "Farslayer's Fall", "premium": [["WP_GA_HP03_MOSSY", 1]], "free": []},
+    "22": {"chapter": "Farslayer's Fall", "premium": [["BNC_STANDARD_HP03_MOSSY_01", 1]], "free": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 25]]},
+    "23": {"chapter": "Farslayer's Fall", "premium": [["EM_PLAYER_HP03_FIREFLY_00", 1]], "free": [["CURRENCY_PRESTIGE", 50]]},
+    "24": {"chapter": "Farslayer's Fall", "premium": [["CURRENCY_PLATINUM_UNIV", 100]], "free": []},
+    "25": {"chapter": "Farslayer's Fall", "premium": [["AR_HP03_MOSSY_HELM_00", 1], ["AR_HP03_MOSSY_CHEST", 1], ["AR_HP03_MOSSY_ARMS", 1], ["AR_HP03_MOSSY_LEGS", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 100]], "_not_granted": ["ent_hp10c_free_25", "ent_hp10c_elite_25"]}
+  }
+}

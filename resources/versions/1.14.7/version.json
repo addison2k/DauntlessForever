@@ -1,0 +1,66 @@
+{
+    "id":  "1.14.7",
+    "name":  "Dauntless 1.14.7",
+    "build":  "647472",
+    "released":  "April 9, 2024",
+    "era":  "Last pre-Awakening build",
+    "blurb":  "The last build before Awakening: the full 2023 Ramsgate, every weapon line as it was, and the Hunting Grounds as most players remember them.",
+    "works":  [
+                  "Sign in offline, Ramsgate, NPCs and quests (quest progress is saved)",
+                  "Training grounds, sprint, attacking",
+                  "Hunts (tested: the first Embermane hunt)"
+              ],
+    "notWorking":  [
+                       "Solo only. Much else may not work yet."
+                   ],
+    "exeRel":  "Archon/Binaries/Win64/Dauntless-Win64-Shipping.exe",
+    "exeSha256":  "F3F95FBF22709EF077A11632ED95D675B7209B7E0172D9ECB9BA7D02A1FBB66B",
+    "download":  {
+                     "manifestUrl":  "https://raw.githubusercontent.com/addison2k/DauntlessManifestArchive/main/manifests/Windows/Dauntless_1.14.7.647472.manifest",
+                     "manifestSha1":  "aa70748e4c0a776a991f2bac10ad342adaa31476",
+                     "downloadGB":  14.89,
+                     "installedGB":  15.39,
+                     "files":  611,
+                     "folderName":  "Dauntless_1.14.7"
+                 },
+    "package":  {
+                    "dir":  "package",
+                    "packageVersion":  "2026-10-12.3",
+                    "setup":  "tools/setup.ps1",
+                    "uninstallArgs":  [
+                                          "-Uninstall"
+                                      ],
+                    "play":  "tools/start.ps1",
+                    "stop":  {
+                                 "scripts":  [
+                                                 [
+                                                     "tools/server-1147.ps1",
+                                                     "-Stop"
+                                                 ]
+                                             ],
+                                 "pidFiles":  [
+                                                  "data/recorder.pid"
+                                              ]
+                             },
+                    "installedFiles":  [
+                                           {
+                                               "rel":  "Archon/Binaries/Win64/EOSSDK-Win64-Shipping.dll",
+                                               "sha256":  "4113C9EEBFBAC08532B6566A48F69E4F64A6B8E18A18AAFBA43F62F8F7DFDF70"
+                                           },
+                                           {
+                                               "rel":  "Archon/Binaries/Win64/dxgi.dll",
+                                               "sha256":  "D6FCEFB8F34A66EE2EE811CDF6FADEB65B8F82ADB6CD5472AFA303A16D1B9FBD"
+                                           }
+                                       ],
+                    "setupDoneFiles":  [
+                                           "eos/eos_offline.ini",
+                                           "captures"
+                                       ],
+                    "saveFiles":  [
+                                      "data/state.json"
+                                  ],
+                    "needsNode":  "16",
+                    "ports":  "63000-63027",
+                    "readme":  "README.txt"
+                }
+}

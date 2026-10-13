@@ -1,0 +1,59 @@
+{
+  "_notes": [
+    "Ostian Winter: event pass (as shipped) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label.",
+    "2 reward(s) were entitlements or lootboxes and are not granted offline; they are listed per level under _not_granted."
+  ],
+  "season_key": "eventpass_frostfall_ostian",
+  "season_title": "Ostian Winter",
+  "season_kind": "event pass (as shipped)",
+  "pass_id": "season13a",
+  "levels": 10,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "eventpass_frostfall_ostian",
+    "start_date": "2021-12-16T18:00:00+00:00",
+    "end_date": "2022-01-06T17:59:59+00:00",
+    "premium_gating_entitlement": "eventpass_frostfall_ostian_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        5
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Ostian Winter", "premium": [["EM_PLAYER_SEATED_01", 1]], "free": []},
+    "2": {"chapter": "Ostian Winter", "premium": [["BNC_FABRIC_EVENT_FROST18_02", 1]], "free": []},
+    "3": {"chapter": "Ostian Winter", "premium": [["QI_FLARE_FROST18_06", 1]], "free": []},
+    "4": {"chapter": "Ostian Winter", "premium": [], "free": [], "_not_granted": ["character_facepaint_feral"]},
+    "5": {"chapter": "Ostian Winter", "premium": [["LT_FROSTFALL_SNOWFLAKE", 1]], "free": []},
+    "6": {"chapter": "Ostian Winter", "premium": [["BNC_SIGIL_EVENT_FROST18_06", 1]], "free": []},
+    "7": {"chapter": "Ostian Winter", "premium": [], "free": [], "_not_granted": ["character_facepaint_enlightened"]},
+    "8": {"chapter": "Ostian Winter", "premium": [["BNC_STANDARD_OSTIA_01", 1]], "free": []},
+    "9": {"chapter": "Ostian Winter", "premium": [["TITLE_FROST18_00", 1]], "free": []},
+    "10": {"chapter": "Ostian Winter", "premium": [["AR_OSTIAN_STREETWEAR_CHEST", 1], ["AR_OSTIAN_STREETWEAR_ARMS", 1], ["AR_OSTIAN_STREETWEAR_HELM", 1], ["AR_OSTIAN_STREETWEAR_LEGS", 1]], "free": []}
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "_notes": [
+    "Realm of Ice: original (as shipped) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label.",
+    "9 reward(s) were entitlements or lootboxes and are not granted offline; they are listed per level under _not_granted."
+  ],
+  "season_key": "season12b",
+  "season_title": "Realm of Ice",
+  "season_kind": "original (as shipped)",
+  "pass_id": "season13a",
+  "levels": 50,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "season12b",
+    "start_date": "2021-02-04T17:00:00+00:00",
+    "end_date": "2021-04-08T16:59:59+00:00",
+    "premium_gating_entitlement": "season12b_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        4
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Realm of Ice", "premium": [["AR_HP12B_MAGICAL_HELM_00_ULTRA", 1], ["AR_HP12B_MAGICAL_CHEST_00_ULTRA", 1], ["AR_HP12B_MAGICAL_ARMS_00_ULTRA", 1], ["AR_HP12B_MAGICAL_LEGS_00_ULTRA", 1]], "free": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 25]]},
+    "2": {"chapter": "Realm of Ice", "premium": [["CURRENCY_PJM_PRESTIGE_EMPTY", 50]], "free": []},
+    "3": {"chapter": "Realm of Ice", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["TOKEN_BOUNTY_DRAFT", 3]]},
+    "4": {"chapter": "Realm of Ice", "premium": [["WP_EB_HP12B_MAGICAL_00", 1]], "free": []},
+    "5": {"chapter": "Realm of Ice", "premium": [["EM_PLAYER_HP12B_MAGICAL_02", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "6": {"chapter": "Realm of Ice", "premium": [], "free": [["CURRENCY_NOTES", 500]], "_not_granted": ["ent_cchd_hp12b_magical_00"]},
+    "7": {"chapter": "Realm of Ice", "premium": [["TOKEN_BOUNTY_DRAFT", 3]], "free": []},
+    "8": {"chapter": "Realm of Ice", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["CURRENCY_PJM_WEAPON", 75]]},
+    "9": {"chapter": "Realm of Ice", "premium": [["LT_HP12B_MAGICAL_00", 1]], "free": []},
+    "10": {"chapter": "Realm of Ice", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 3]], "free": [["EJ_HP12B_MAGICAL_01", 1]]},
+    "11": {"chapter": "Realm of Ice", "premium": [["DYE_HP12B_MAGICAL_00_DURABLE", 1]], "free": [["CURRENCY_NOTES", 500]]},
+    "12": {"chapter": "Realm of Ice", "premium": [["BNC_FABRIC_EVENT_HP12B_MAGICAL_00", 1]], "free": []},
+    "13": {"chapter": "Realm of Ice", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["CURRENCY_PJM_AIRSHIP", 75]]},
+    "14": {"chapter": "Realm of Ice", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": []},
+    "15": {"chapter": "Realm of Ice", "premium": [["WP_IH_HP12B_MAGICAL_00", 1]], "free": [["BNC_SIGIL_HP12B_MAGICAL_00", 1]]},
+    "16": {"chapter": "Realm of Ice", "premium": [["TOKEN_BOUNTY_DRAFT", 3]], "free": [["CURRENCY_NOTES", 500]]},
+    "17": {"chapter": "Realm of Ice", "premium": [["CURRENCY_PJM_WEAPON", 75]], "free": []},
+    "18": {"chapter": "Realm of Ice", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["CURRENCY_PJM_WEAPON", 75]]},
+    "19": {"chapter": "Realm of Ice", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 3]], "free": []},
+    "20": {"chapter": "Realm of Ice", "premium": [["WP_MS_HP12B_MAGICAL_00", 1]], "free": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 3]], "_not_granted": ["ent_hp12b_free_20"]},
+    "21": {"chapter": "Realm of Ice", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 500]]},
+    "22": {"chapter": "Realm of Ice", "premium": [["AR_HP12B_MAGICAL_CHEST_01", 1]], "free": []},
+    "23": {"chapter": "Realm of Ice", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["CURRENCY_PJM_AIRSHIP", 75]]},
+    "24": {"chapter": "Realm of Ice", "premium": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 50]], "free": []},
+    "25": {"chapter": "Realm of Ice", "premium": [["WP_AC_HP12B_MAGICAL_00", 1]], "free": [["CURRENCY_PJM_PRESTIGE_EMPTY", 50]]},
+    "26": {"chapter": "Realm of Ice", "premium": [["CURRENCY_PJM_AIRSHIP", 75]], "free": [["CURRENCY_NOTES", 1000]]},
+    "27": {"chapter": "Realm of Ice", "premium": [], "free": [], "_not_granted": ["ent_ccfp_hp12b_magical_00"]},
+    "28": {"chapter": "Realm of Ice", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 3]]},
+    "29": {"chapter": "Realm of Ice", "premium": [["TOKEN_BOUNTY_DRAFT", 3]], "free": []},
+    "30": {"chapter": "Realm of Ice", "premium": [["WP_CB_HP12B_MAGICAL_00", 1]], "free": [["QI_FLARE_HP12B_MAGICAL_00", 1]], "_not_granted": ["ent_hp12b_free_30"]},
+    "31": {"chapter": "Realm of Ice", "premium": [["EM_PLAYER_HP12B_MAGICAL_01", 1]], "free": [["CURRENCY_NOTES", 1000]]},
+    "32": {"chapter": "Realm of Ice", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 3]], "free": []},
+    "33": {"chapter": "Realm of Ice", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["EJ_HP12B_MAGICAL_00", 1]]},
+    "34": {"chapter": "Realm of Ice", "premium": [["CURRENCY_PJM_WEAPON", 75]], "free": []},
+    "35": {"chapter": "Realm of Ice", "premium": [["WP_GA_HP12B_MAGICAL_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "36": {"chapter": "Realm of Ice", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 1000]]},
+    "37": {"chapter": "Realm of Ice", "premium": [["BNC_ANIMATION_HP12B_MAGICAL_00", 1]], "free": []},
+    "38": {"chapter": "Realm of Ice", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 3]]},
+    "39": {"chapter": "Realm of Ice", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 3]], "free": []},
+    "40": {"chapter": "Realm of Ice", "premium": [["WP_DP_HP12B_MAGICAL_00", 1]], "free": [], "_not_granted": ["ent_rumour_wp_ih_rock_frost", "ent_hp12b_free_40"]},
+    "41": {"chapter": "Realm of Ice", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 1000]]},
+    "42": {"chapter": "Realm of Ice", "premium": [["TOKEN_BOUNTY_DRAFT", 5]], "free": []},
+    "43": {"chapter": "Realm of Ice", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 3]]},
+    "44": {"chapter": "Realm of Ice", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 3]], "free": [["EM_PLAYER_HP12B_MAGICAL_00", 1]]},
+    "45": {"chapter": "Realm of Ice", "premium": [["EM_INTRO_HP12B_MAGICAL_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "46": {"chapter": "Realm of Ice", "premium": [["CURRENCY_PJM_AIRSHIP", 75]], "free": [["CURRENCY_NOTES", 1000]]},
+    "47": {"chapter": "Realm of Ice", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 3]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "48": {"chapter": "Realm of Ice", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 3]]},
+    "49": {"chapter": "Realm of Ice", "premium": [["CURRENCY_PJM_PRESTIGE_EMPTY", 50]], "free": [], "_not_granted": ["ent_rumour_ar_rock_frost_helm"]},
+    "50": {"chapter": "Realm of Ice", "premium": [["AR_HP12B_MAGICAL_HELM_00", 1], ["AR_HP12B_MAGICAL_LEGS_00", 1], ["AR_HP12B_MAGICAL_ARMS_00", 1], ["AR_HP12B_MAGICAL_CHEST_00", 1]], "free": [["TITLE_HP12B_MAGICAL_00", 1]], "_not_granted": ["ent_hp12b_free_50", "ent_hp12b_elite_50"]}
+  }
+}

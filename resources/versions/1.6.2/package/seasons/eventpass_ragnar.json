@@ -1,0 +1,58 @@
+{
+  "_notes": [
+    "Ragnar's Folly: event pass (as shipped) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label."
+  ],
+  "season_key": "eventpass_ragnar",
+  "season_title": "Ragnar's Folly",
+  "season_kind": "event pass (as shipped)",
+  "pass_id": "season13a",
+  "levels": 10,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "eventpass_ragnar",
+    "start_date": "2022-01-14T17:00:00+00:00",
+    "end_date": "2024-12-03T18:00:00+00:00",
+    "premium_gating_entitlement": "eventpass_ragnar_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        5
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Ragnar's Folly", "premium": [["CURRENCY_NOTES", 5000]], "free": []},
+    "2": {"chapter": "Ragnar's Folly", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 10]], "free": []},
+    "3": {"chapter": "Ragnar's Folly", "premium": [["CURRENCY_NOTES", 10000]], "free": []},
+    "4": {"chapter": "Ragnar's Folly", "premium": [["TOKEN_BOUNTY_DRAFT_PREMIUM", 10]], "free": []},
+    "5": {"chapter": "Ragnar's Folly", "premium": [["AR_HP12A_FROSTWARDEN_CHEST_01", 1]], "free": []},
+    "6": {"chapter": "Ragnar's Folly", "premium": [["CURRENCY_NOTES", 15000]], "free": []},
+    "7": {"chapter": "Ragnar's Folly", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 10]], "free": []},
+    "8": {"chapter": "Ragnar's Folly", "premium": [["CURRENCY_NOTES", 20000]], "free": []},
+    "9": {"chapter": "Ragnar's Folly", "premium": [["TOKEN_BOUNTY_DRAFT_PREMIUM", 10]], "free": []},
+    "10": {"chapter": "Ragnar's Folly", "premium": [["AR_HP12A_FROSTWARDEN_HELM_01", 1]], "free": []}
+  }
+}

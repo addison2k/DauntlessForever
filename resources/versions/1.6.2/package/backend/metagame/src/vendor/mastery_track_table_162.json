@@ -1,0 +1,5354 @@
+[
+  {
+    "Type": "DataTable",
+    "Name": "mastery_track_table",
+    "Class": "UScriptClass'DataTable'",
+    "Flags": "RF_Public | RF_Standalone | RF_Transactional | RF_WasLoaded | RF_LoadCompleted",
+    "Properties": {
+      "RowStruct": {
+        "ObjectName": "ScriptStruct'MasteryTrackTableData'",
+        "ObjectPath": "/Script/Archon"
+      }
+    },
+    "Rows": {
+      "MasteryTrack_Behemoth": {
+        "CategoryThumbnail": {
+          "AssetPathName": "/Game/UI/Textures/MainMenuButtons/mainmenu_icon_behemoths.mainmenu_icon_behemoths",
+          "SubPathString": ""
+        },
+        "DisplayName": {
+          "Namespace": "",
+          "Key": "165B1FC64A1F1330F1B6BAAAA04105A6",
+          "SourceString": "Behemoth Mastery",
+          "LocalizedString": "Behemoth Mastery"
+        },
+        "ShortDisplayName": {
+          "Namespace": "",
+          "Key": "32EF32754609C2C43CB4BFB3372B7175",
+          "SourceString": "Behemoths",
+          "LocalizedString": "Behemoths"
+        },
+        "bIsUIEnabled": true,
+        "Categtory": "EUIMasteryCategories::Behemoths",
+        "ProgressionTrack": "MasteryTrack_Behemoth",
+        "PremiumGatingEntitlement": "",
+        "ResetWithCharacter": true,
+        "StartDate": {
+          "Ticks": 636819480000000000
+        },
+        "EndDate": {
+          "Ticks": 662065560000000000
+        },
+        "ProgressionMultiplier": 1,
+        "Requirements": [
+          {
+            "RankId": 1,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 2,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 3,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 4,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 5,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 6,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 7,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 8,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 9,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 10,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 11,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 12,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 13,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 14,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 15,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 16,
+            "RequiredXP": 6
+          },
+          {
+            "RankId": 17,
+            "RequiredXP": 6
+          },
+          {
+            "RankId": 18,
+            "RequiredXP": 6
+          },
+          {
+            "RankId": 19,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 20,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 21,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 22,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 23,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 24,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 25,
+            "RequiredXP": 9
+          },
+          {
+            "RankId": 26,
+            "RequiredXP": 9
+          },
+          {
+            "RankId": 27,
+            "RequiredXP": 9
+          },
+          {
+            "RankId": 28,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 29,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 30,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 31,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 32,
+            "RequiredXP": 11
+          },
+          {
+            "RankId": 33,
+            "RequiredXP": 11
+          },
+          {
+            "RankId": 34,
+            "RequiredXP": 11
+          },
+          {
+            "RankId": 35,
+            "RequiredXP": 12
+          },
+          {
+            "RankId": 36,
+            "RequiredXP": 12
+          },
+          {
+            "RankId": 37,
+            "RequiredXP": 12
+          },
+          {
+            "RankId": 38,
+            "RequiredXP": 12
+          },
+          {
+            "RankId": 39,
+            "RequiredXP": 12
+          },
+          {
+            "RankId": 40,
+            "RequiredXP": 12
+          },
+          {
+            "RankId": 41,
+            "RequiredXP": 12
+          },
+          {
+            "RankId": 42,
+            "RequiredXP": 12
+          },
+          {
+            "RankId": 43,
+            "RequiredXP": 12
+          },
+          {
+            "RankId": 44,
+            "RequiredXP": 12
+          },
+          {
+            "RankId": 45,
+            "RequiredXP": 12
+          },
+          {
+            "RankId": 46,
+            "RequiredXP": 12
+          },
+          {
+            "RankId": 47,
+            "RequiredXP": 12
+          },
+          {
+            "RankId": 48,
+            "RequiredXP": 12
+          },
+          {
+            "RankId": 49,
+            "RequiredXP": 12
+          },
+          {
+            "RankId": 50,
+            "RequiredXP": 12
+          }
+        ],
+        "FreeRewards": [
+          {
+            "RankId": 1,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 2,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 3,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 4,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 5,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 6,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 7,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 8,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 9,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 10,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 11,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 12,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 13,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 14,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 15,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 16,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 17,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 18,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 19,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 20,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 21,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 22,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 23,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 24,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 25,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 26,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 27,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 28,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 29,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 30,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 31,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 32,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 33,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 34,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 35,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 36,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 37,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 38,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 39,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 40,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 41,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 42,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 43,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 44,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 45,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 46,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 47,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 48,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 49,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 50,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 5,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          }
+        ],
+        "PremiumRewards": []
+      },
+      "MasteryTrack_PlayerLevel": {
+        "CategoryThumbnail": {
+          "AssetPathName": "/Game/UI/Textures/MainMenuButtons/mainmenu_icon_mastery.mainmenu_icon_mastery",
+          "SubPathString": ""
+        },
+        "DisplayName": {
+          "Namespace": "",
+          "Key": "437D49E3489D24DF9DCC77B2F3856F33",
+          "SourceString": "Slayer Level",
+          "LocalizedString": "Slayer Level"
+        },
+        "ShortDisplayName": {
+          "Namespace": "",
+          "Key": "15D574A443FFA806C02BD2A9EEFB36E3",
+          "SourceString": "Slayer",
+          "LocalizedString": "Slayer"
+        },
+        "bIsUIEnabled": false,
+        "Categtory": "EUIMasteryCategories::NONE",
+        "ProgressionTrack": "MasteryTrack_PlayerLevel",
+        "PremiumGatingEntitlement": "",
+        "ResetWithCharacter": true,
+        "StartDate": {
+          "Ticks": 636819480000000000
+        },
+        "EndDate": {
+          "Ticks": 662065560000000000
+        },
+        "ProgressionMultiplier": 1,
+        "Requirements": [
+          {
+            "RankId": 1,
+            "RequiredXP": 0
+          },
+          {
+            "RankId": 2,
+            "RequiredXP": 1
+          },
+          {
+            "RankId": 3,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 4,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 5,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 6,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 7,
+            "RequiredXP": 6
+          },
+          {
+            "RankId": 8,
+            "RequiredXP": 6
+          },
+          {
+            "RankId": 9,
+            "RequiredXP": 6
+          },
+          {
+            "RankId": 10,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 11,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 12,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 13,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 14,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 15,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 16,
+            "RequiredXP": 9
+          },
+          {
+            "RankId": 17,
+            "RequiredXP": 9
+          },
+          {
+            "RankId": 18,
+            "RequiredXP": 9
+          },
+          {
+            "RankId": 19,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 20,
+            "RequiredXP": 11
+          },
+          {
+            "RankId": 21,
+            "RequiredXP": 12
+          },
+          {
+            "RankId": 22,
+            "RequiredXP": 13
+          },
+          {
+            "RankId": 23,
+            "RequiredXP": 14
+          },
+          {
+            "RankId": 24,
+            "RequiredXP": 15
+          },
+          {
+            "RankId": 25,
+            "RequiredXP": 16
+          },
+          {
+            "RankId": 26,
+            "RequiredXP": 17
+          },
+          {
+            "RankId": 27,
+            "RequiredXP": 18
+          },
+          {
+            "RankId": 28,
+            "RequiredXP": 19
+          },
+          {
+            "RankId": 29,
+            "RequiredXP": 20
+          },
+          {
+            "RankId": 30,
+            "RequiredXP": 21
+          },
+          {
+            "RankId": 31,
+            "RequiredXP": 22
+          },
+          {
+            "RankId": 32,
+            "RequiredXP": 24
+          },
+          {
+            "RankId": 33,
+            "RequiredXP": 26
+          },
+          {
+            "RankId": 34,
+            "RequiredXP": 28
+          },
+          {
+            "RankId": 35,
+            "RequiredXP": 30
+          },
+          {
+            "RankId": 36,
+            "RequiredXP": 32
+          },
+          {
+            "RankId": 37,
+            "RequiredXP": 34
+          },
+          {
+            "RankId": 38,
+            "RequiredXP": 36
+          },
+          {
+            "RankId": 39,
+            "RequiredXP": 38
+          },
+          {
+            "RankId": 40,
+            "RequiredXP": 40
+          },
+          {
+            "RankId": 41,
+            "RequiredXP": 42
+          },
+          {
+            "RankId": 42,
+            "RequiredXP": 44
+          },
+          {
+            "RankId": 43,
+            "RequiredXP": 46
+          },
+          {
+            "RankId": 44,
+            "RequiredXP": 48
+          },
+          {
+            "RankId": 45,
+            "RequiredXP": 50
+          },
+          {
+            "RankId": 46,
+            "RequiredXP": 52
+          },
+          {
+            "RankId": 47,
+            "RequiredXP": 54
+          },
+          {
+            "RankId": 48,
+            "RequiredXP": 56
+          },
+          {
+            "RankId": 49,
+            "RequiredXP": 58
+          },
+          {
+            "RankId": 50,
+            "RequiredXP": 60
+          }
+        ],
+        "FreeRewards": [
+          {
+            "RankId": 2,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 10,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 3,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 10,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 4,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 10,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 5,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 6,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 15,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 7,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 15,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 8,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 0,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 9,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_SLAYER_01",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 10,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 0,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 11,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 12,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 13,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 14,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 15,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 16,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 17,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 18,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 19,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 20,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_SLAYER_02",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 21,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 22,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 23,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 24,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 25,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 26,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 27,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 28,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 29,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 30,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_SLAYER_03",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 31,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 32,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 33,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 34,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 35,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 36,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 37,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 38,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 39,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_SLAYER_04",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 40,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 41,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 42,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 43,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 44,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 45,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 46,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 47,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 48,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 49,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 50,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_SLAYER_05",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          }
+        ],
+        "PremiumRewards": []
+      },
+      "MasteryTrack_Weapon_Axe": {
+        "CategoryThumbnail": {
+          "AssetPathName": "/Game/UI/Textures/MainMenuButtons/mainmenu_icon_loadout_axe.mainmenu_icon_loadout_axe",
+          "SubPathString": ""
+        },
+        "DisplayName": {
+          "Namespace": "",
+          "Key": "D313EECD42081034A1B170BBB2F0B43B",
+          "SourceString": "Axe Mastery",
+          "LocalizedString": "Axe Mastery"
+        },
+        "ShortDisplayName": {
+          "Namespace": "",
+          "Key": "1DD4C60548F79327624F77AE4CB954E1",
+          "SourceString": "Axes",
+          "LocalizedString": "Axes"
+        },
+        "bIsUIEnabled": true,
+        "Categtory": "EUIMasteryCategories::Axes",
+        "ProgressionTrack": "MasteryTrack_Weapon_Axe",
+        "PremiumGatingEntitlement": "",
+        "ResetWithCharacter": true,
+        "StartDate": {
+          "Ticks": 636819480000000000
+        },
+        "EndDate": {
+          "Ticks": 662065560000000000
+        },
+        "ProgressionMultiplier": 1,
+        "Requirements": [
+          {
+            "RankId": 1,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 2,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 3,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 4,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 5,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 6,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 7,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 8,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 9,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 10,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 11,
+            "RequiredXP": 6
+          },
+          {
+            "RankId": 12,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 13,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 14,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 15,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 16,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 17,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 18,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 19,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 20,
+            "RequiredXP": 10
+          }
+        ],
+        "FreeRewards": [
+          {
+            "RankId": 1,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_NOTES",
+                "Quantity": 250,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 2,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_NOTES",
+                "Quantity": 250,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 3,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 4,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 10,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 5,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 6,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 15,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 7,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 8,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 15,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 9,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_GAXE_01",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 10,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 11,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 12,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 13,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 14,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 15,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 16,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 17,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 18,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 19,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_PRESTIGE_EMPTY",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 20,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_GAXE_02",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          }
+        ],
+        "PremiumRewards": []
+      },
+      "MasteryTrack_Weapon_ChainBlades": {
+        "CategoryThumbnail": {
+          "AssetPathName": "/Game/UI/Textures/MainMenuButtons/mainmenu_icon_loadout_blades.mainmenu_icon_loadout_blades",
+          "SubPathString": ""
+        },
+        "DisplayName": {
+          "Namespace": "",
+          "Key": "157D433B4E72E12C36D71DB8B93FDAE3",
+          "SourceString": "Chain Blades Mastery",
+          "LocalizedString": "Chain Blades Mastery"
+        },
+        "ShortDisplayName": {
+          "Namespace": "",
+          "Key": "4A3B53BC4E8443C362F75F910AB66424",
+          "SourceString": "Chain Blades",
+          "LocalizedString": "Chain Blades"
+        },
+        "bIsUIEnabled": true,
+        "Categtory": "EUIMasteryCategories::Blades",
+        "ProgressionTrack": "MasteryTrack_Weapon_ChainBlades",
+        "PremiumGatingEntitlement": "",
+        "ResetWithCharacter": true,
+        "StartDate": {
+          "Ticks": 636819480000000000
+        },
+        "EndDate": {
+          "Ticks": 662065560000000000
+        },
+        "ProgressionMultiplier": 1,
+        "Requirements": [
+          {
+            "RankId": 1,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 2,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 3,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 4,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 5,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 6,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 7,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 8,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 9,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 10,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 11,
+            "RequiredXP": 6
+          },
+          {
+            "RankId": 12,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 13,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 14,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 15,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 16,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 17,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 18,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 19,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 20,
+            "RequiredXP": 10
+          }
+        ],
+        "FreeRewards": [
+          {
+            "RankId": 1,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_NOTES",
+                "Quantity": 250,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 2,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_NOTES",
+                "Quantity": 250,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 3,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 10,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 4,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 10,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 5,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 6,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 15,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 7,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 8,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 15,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 9,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_CBLADE_01",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 10,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 11,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 12,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 13,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 14,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 15,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 16,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 17,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 18,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 19,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_PRESTIGE_EMPTY",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 20,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_CBLADE_02",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          }
+        ],
+        "PremiumRewards": []
+      },
+      "MasteryTrack_Weapon_Hammer": {
+        "CategoryThumbnail": {
+          "AssetPathName": "/Game/UI/Textures/MainMenuButtons/mainmenu_icon_loadout_hammer.mainmenu_icon_loadout_hammer",
+          "SubPathString": ""
+        },
+        "DisplayName": {
+          "Namespace": "",
+          "Key": "43DCB0054AD4C42C59553C826D225E3D",
+          "SourceString": "Hammer Mastery",
+          "LocalizedString": "Hammer Mastery"
+        },
+        "ShortDisplayName": {
+          "Namespace": "",
+          "Key": "260860A740B71ECDEFEEEC9A7A616E34",
+          "SourceString": "Hammers",
+          "LocalizedString": "Hammers"
+        },
+        "bIsUIEnabled": true,
+        "Categtory": "EUIMasteryCategories::Hammers",
+        "ProgressionTrack": "MasteryTrack_Weapon_Hammer",
+        "PremiumGatingEntitlement": "",
+        "ResetWithCharacter": true,
+        "StartDate": {
+          "Ticks": 636819480000000000
+        },
+        "EndDate": {
+          "Ticks": 662065560000000000
+        },
+        "ProgressionMultiplier": 1,
+        "Requirements": [
+          {
+            "RankId": 1,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 2,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 3,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 4,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 5,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 6,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 7,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 8,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 9,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 10,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 11,
+            "RequiredXP": 6
+          },
+          {
+            "RankId": 12,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 13,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 14,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 15,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 16,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 17,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 18,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 19,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 20,
+            "RequiredXP": 10
+          }
+        ],
+        "FreeRewards": [
+          {
+            "RankId": 1,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_NOTES",
+                "Quantity": 250,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 2,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_NOTES",
+                "Quantity": 250,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 3,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 10,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 4,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 10,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 5,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 6,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 15,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 7,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 8,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 15,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 9,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_IHAMMER_01",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 10,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 11,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 12,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 13,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 14,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 15,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 16,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 17,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 18,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 19,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_PRESTIGE_EMPTY",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 20,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_IHAMMER_02",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          }
+        ],
+        "PremiumRewards": []
+      },
+      "MasteryTrack_Weapon_Repeaters": {
+        "CategoryThumbnail": {
+          "AssetPathName": "/Game/UI/Textures/Icons/Weapons/ico_pistol_generic.ico_pistol_generic",
+          "SubPathString": ""
+        },
+        "DisplayName": {
+          "Namespace": "",
+          "Key": "700C16CB4DC1A370A4EC199F3D689689",
+          "SourceString": "Repeaters Mastery",
+          "LocalizedString": "Repeaters Mastery"
+        },
+        "ShortDisplayName": {
+          "Namespace": "",
+          "Key": "4550BDBF48706F3113C8788BC4452421",
+          "SourceString": "Repeaters",
+          "LocalizedString": "Repeaters"
+        },
+        "bIsUIEnabled": true,
+        "Categtory": "EUIMasteryCategories::Repeaters",
+        "ProgressionTrack": "MasteryTrack_Weapon_Repeaters",
+        "PremiumGatingEntitlement": "",
+        "ResetWithCharacter": true,
+        "StartDate": {
+          "Ticks": 636819480000000000
+        },
+        "EndDate": {
+          "Ticks": 662065560000000000
+        },
+        "ProgressionMultiplier": 1,
+        "Requirements": [
+          {
+            "RankId": 1,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 2,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 3,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 4,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 5,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 6,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 7,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 8,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 9,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 10,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 11,
+            "RequiredXP": 6
+          },
+          {
+            "RankId": 12,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 13,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 14,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 15,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 16,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 17,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 18,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 19,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 20,
+            "RequiredXP": 10
+          }
+        ],
+        "FreeRewards": [
+          {
+            "RankId": 1,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_NOTES",
+                "Quantity": 250,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 2,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_NOTES",
+                "Quantity": 250,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 3,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 10,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 4,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 10,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 5,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 6,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 15,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 7,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 8,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 15,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 9,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_DP_01",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 10,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 11,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 12,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 13,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 14,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 15,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 16,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 17,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 18,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 19,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_PRESTIGE_EMPTY",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 20,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_DP_02",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          }
+        ],
+        "PremiumRewards": []
+      },
+      "MasteryTrack_Weapon_Spear": {
+        "CategoryThumbnail": {
+          "AssetPathName": "/Game/UI/Textures/MainMenuButtons/mainmenu_icon_loadout_spear.mainmenu_icon_loadout_spear",
+          "SubPathString": ""
+        },
+        "DisplayName": {
+          "Namespace": "",
+          "Key": "03F4AE464CDFA35F61A1DDBF25B4FB8C",
+          "SourceString": "War Pike Mastery",
+          "LocalizedString": "War Pike Mastery"
+        },
+        "ShortDisplayName": {
+          "Namespace": "",
+          "Key": "08C6994A46E980105E9E269A7FD8F08C",
+          "SourceString": "Pikes",
+          "LocalizedString": "Pikes"
+        },
+        "bIsUIEnabled": true,
+        "Categtory": "EUIMasteryCategories::WarPikes",
+        "ProgressionTrack": "MasteryTrack_Weapon_Spear",
+        "PremiumGatingEntitlement": "",
+        "ResetWithCharacter": true,
+        "StartDate": {
+          "Ticks": 636819480000000000
+        },
+        "EndDate": {
+          "Ticks": 662065560000000000
+        },
+        "ProgressionMultiplier": 1,
+        "Requirements": [
+          {
+            "RankId": 1,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 2,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 3,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 4,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 5,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 6,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 7,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 8,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 9,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 10,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 11,
+            "RequiredXP": 6
+          },
+          {
+            "RankId": 12,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 13,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 14,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 15,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 16,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 17,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 18,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 19,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 20,
+            "RequiredXP": 10
+          }
+        ],
+        "FreeRewards": [
+          {
+            "RankId": 1,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_NOTES",
+                "Quantity": 250,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 2,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_NOTES",
+                "Quantity": 250,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 3,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 10,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 4,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 10,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 5,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 6,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 15,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 7,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 8,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 15,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 9,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_MSPEAR_01",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 10,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 11,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 12,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 13,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 14,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 15,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 16,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 17,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 18,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 19,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_PRESTIGE_EMPTY",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 20,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_MSPEAR_02",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          }
+        ],
+        "PremiumRewards": []
+      },
+      "MasteryTrack_Weapon_Sword": {
+        "CategoryThumbnail": {
+          "AssetPathName": "/Game/UI/Textures/MainMenuButtons/mainmenu_icon_loadout_sword.mainmenu_icon_loadout_sword",
+          "SubPathString": ""
+        },
+        "DisplayName": {
+          "Namespace": "",
+          "Key": "DC8EB02A4621B715745AE78EF29835BF",
+          "SourceString": "Sword Mastery",
+          "LocalizedString": "Sword Mastery"
+        },
+        "ShortDisplayName": {
+          "Namespace": "",
+          "Key": "A3769D194D4D1E39A02FB788008904D1",
+          "SourceString": "Swords",
+          "LocalizedString": "Swords"
+        },
+        "bIsUIEnabled": true,
+        "Categtory": "EUIMasteryCategories::Swords",
+        "ProgressionTrack": "MasteryTrack_Weapon_Sword",
+        "PremiumGatingEntitlement": "",
+        "ResetWithCharacter": true,
+        "StartDate": {
+          "Ticks": 636819480000000000
+        },
+        "EndDate": {
+          "Ticks": 662065560000000000
+        },
+        "ProgressionMultiplier": 1,
+        "Requirements": [
+          {
+            "RankId": 1,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 2,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 3,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 4,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 5,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 6,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 7,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 8,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 9,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 10,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 11,
+            "RequiredXP": 6
+          },
+          {
+            "RankId": 12,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 13,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 14,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 15,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 16,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 17,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 18,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 19,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 20,
+            "RequiredXP": 10
+          }
+        ],
+        "FreeRewards": [
+          {
+            "RankId": 1,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_NOTES",
+                "Quantity": 250,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 2,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_NOTES",
+                "Quantity": 250,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 3,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 10,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 4,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 10,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 5,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 6,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 15,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 7,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 8,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 15,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 9,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_EBLADE_01",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 10,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 11,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 12,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 13,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 14,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 15,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 16,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 17,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 18,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 19,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_PRESTIGE_EMPTY",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 20,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_EBLADE_02",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          }
+        ],
+        "PremiumRewards": []
+      },
+      "MasteryTrack_Weapon_Strikers": {
+        "CategoryThumbnail": {
+          "AssetPathName": "/Game/UI/Textures/Icons/Weapons/astrikers/ico_equip_as_borrowed_00.ico_equip_as_borrowed_00",
+          "SubPathString": ""
+        },
+        "DisplayName": {
+          "Namespace": "",
+          "Key": "26E832F8433349653E3784B127573B5C",
+          "SourceString": "Strikers Mastery",
+          "LocalizedString": "Strikers Mastery"
+        },
+        "ShortDisplayName": {
+          "Namespace": "",
+          "Key": "C436BC9B4472C20F1B26B89C65FF894E",
+          "SourceString": "Strikers",
+          "LocalizedString": "Strikers"
+        },
+        "bIsUIEnabled": true,
+        "Categtory": "EUIMasteryCategories::Strikers",
+        "ProgressionTrack": "MasteryTrack_Weapon_Strikers",
+        "PremiumGatingEntitlement": "",
+        "ResetWithCharacter": true,
+        "StartDate": {
+          "Ticks": 636819480000000000
+        },
+        "EndDate": {
+          "Ticks": 662065560000000000
+        },
+        "ProgressionMultiplier": 1,
+        "Requirements": [
+          {
+            "RankId": 1,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 2,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 3,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 4,
+            "RequiredXP": 2
+          },
+          {
+            "RankId": 5,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 6,
+            "RequiredXP": 3
+          },
+          {
+            "RankId": 7,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 8,
+            "RequiredXP": 4
+          },
+          {
+            "RankId": 9,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 10,
+            "RequiredXP": 5
+          },
+          {
+            "RankId": 11,
+            "RequiredXP": 6
+          },
+          {
+            "RankId": 12,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 13,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 14,
+            "RequiredXP": 7
+          },
+          {
+            "RankId": 15,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 16,
+            "RequiredXP": 8
+          },
+          {
+            "RankId": 17,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 18,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 19,
+            "RequiredXP": 10
+          },
+          {
+            "RankId": 20,
+            "RequiredXP": 10
+          }
+        ],
+        "FreeRewards": [
+          {
+            "RankId": 1,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_NOTES",
+                "Quantity": 250,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 2,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_NOTES",
+                "Quantity": 250,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 3,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 10,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 4,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 10,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 5,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 6,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 15,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 7,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_BRONZE_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 8,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 15,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 9,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_AC_01",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 10,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 11,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 25,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 12,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 13,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 14,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 15,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_WEAPON",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 16,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 17,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_AIRSHIP",
+                "Quantity": 50,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 18,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 19,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "CURRENCY_PJM_PRESTIGE_EMPTY",
+                "Quantity": 100,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          },
+          {
+            "RankId": 20,
+            "CustomRewardString": {
+              "CultureInvariantString": null
+            },
+            "StackedItems": [
+              {
+                "CatalogId": "TITLE_MASTERY_AC_02",
+                "Quantity": 1,
+                "Priority": 0
+              }
+            ],
+            "InstancedItems": [],
+            "OrderedInstancedItems": [],
+            "Entitlements": [],
+            "Buffs": []
+          }
+        ],
+        "PremiumRewards": []
+      }
+    }
+  }
+]

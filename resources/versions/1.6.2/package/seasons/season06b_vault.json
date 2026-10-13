@@ -1,0 +1,78 @@
+{
+  "_notes": [
+    "Zephyr Strike: Vault re-release (as shipped, 30 levels) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label."
+  ],
+  "season_key": "season06b_vault",
+  "season_title": "Zephyr Strike",
+  "season_kind": "Vault re-release (as shipped, 30 levels)",
+  "pass_id": "season13a",
+  "levels": 30,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "season06b_vault",
+    "start_date": "2021-01-19T18:00:00+00:00",
+    "end_date": "2024-12-03T18:00:00+00:00",
+    "premium_gating_entitlement": "season06b_vault_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        5
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Zephyr Strike", "premium": [["EM_PLAYER_HP06B_DANCE_00", 1]], "free": []},
+    "2": {"chapter": "Zephyr Strike", "premium": [["AR_HP06B_ACADEMY_HELM_00", 1]], "free": []},
+    "3": {"chapter": "Zephyr Strike", "premium": [["WP_CB_HP06B_ACADEMY_00", 1]], "free": []},
+    "4": {"chapter": "Zephyr Strike", "premium": [["CURRENCY_NOTES", 10000]], "free": []},
+    "5": {"chapter": "Zephyr Strike", "premium": [["LT_HP06B_ACADEMY_00", 1]], "free": []},
+    "6": {"chapter": "Zephyr Strike", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "7": {"chapter": "Zephyr Strike", "premium": [["WP_EB_HP06B_ACADEMY_00", 1]], "free": []},
+    "8": {"chapter": "Zephyr Strike", "premium": [["TOKEN_BOUNTY_DRAFT_PREMIUM", 5]], "free": []},
+    "9": {"chapter": "Zephyr Strike", "premium": [["AR_HP06B_ACADEMY_ARMS", 1]], "free": []},
+    "10": {"chapter": "Zephyr Strike", "premium": [["BNC_ANIMATION_HP06B_ORANGE_00", 1]], "free": []},
+    "11": {"chapter": "Zephyr Strike", "premium": [["CURRENCY_PJM_PRESTIGE_EMPTY", 50]], "free": []},
+    "12": {"chapter": "Zephyr Strike", "premium": [["WP_DP_HP06B_ACADEMY_00", 1]], "free": []},
+    "13": {"chapter": "Zephyr Strike", "premium": [["CURRENCY_PJM_WEAPON", 200]], "free": []},
+    "14": {"chapter": "Zephyr Strike", "premium": [["AR_HP06B_ACADEMY_LEGS", 1]], "free": []},
+    "15": {"chapter": "Zephyr Strike", "premium": [["EM_PLAYER_HP06B_LUNCHTIME_00", 1]], "free": []},
+    "16": {"chapter": "Zephyr Strike", "premium": [["CURRENCY_NOTES", 10000]], "free": []},
+    "17": {"chapter": "Zephyr Strike", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "18": {"chapter": "Zephyr Strike", "premium": [["WP_GA_HP06B_ACADEMY_00", 1]], "free": []},
+    "19": {"chapter": "Zephyr Strike", "premium": [["TOKEN_BOUNTY_DRAFT_PREMIUM", 5]], "free": []},
+    "20": {"chapter": "Zephyr Strike", "premium": [["AR_HP06B_ACADEMY_CHEST", 1]], "free": []},
+    "21": {"chapter": "Zephyr Strike", "premium": [["CURRENCY_PJM_PRESTIGE_EMPTY", 50]], "free": []},
+    "22": {"chapter": "Zephyr Strike", "premium": [["EM_PLAYER_HP06B_BASSDRUM_00", 1]], "free": []},
+    "23": {"chapter": "Zephyr Strike", "premium": [["CURRENCY_PJM_WEAPON", 200]], "free": []},
+    "24": {"chapter": "Zephyr Strike", "premium": [["WP_IH_HP06B_ACADEMY_00", 1]], "free": []},
+    "25": {"chapter": "Zephyr Strike", "premium": [["AR_HP06B_ACADEMY_HELM_02", 1]], "free": []},
+    "26": {"chapter": "Zephyr Strike", "premium": [["CURRENCY_NOTES", 10000]], "free": []},
+    "27": {"chapter": "Zephyr Strike", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "28": {"chapter": "Zephyr Strike", "premium": [["WP_MS_HP06B_ACADEMY_00", 1]], "free": []},
+    "29": {"chapter": "Zephyr Strike", "premium": [["CURRENCY_PJM_WEAPON", 200]], "free": []},
+    "30": {"chapter": "Zephyr Strike", "premium": [["EM_INTRO_HP06B_AETHERSURF_00", 1]], "free": []}
+  }
+}

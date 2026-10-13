@@ -1,0 +1,99 @@
+{
+  "_notes": [
+    "Strange Horizons: original (as shipped) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label.",
+    "9 reward(s) were entitlements or lootboxes and are not granted offline; they are listed per level under _not_granted."
+  ],
+  "season_key": "season11a",
+  "season_title": "Strange Horizons",
+  "season_kind": "original (as shipped)",
+  "pass_id": "season13a",
+  "levels": 50,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "season11a",
+    "start_date": "2020-09-17T17:00:00+00:00",
+    "end_date": "2020-10-22T16:59:59+00:00",
+    "premium_gating_entitlement": "season11a_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        4
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Strange Horizons", "premium": [["AR_HP11A_ALCHEMIST_HELM_00", 1], ["AR_HP11A_ALCHEMIST_LEGS_00", 1], ["AR_HP11A_ALCHEMIST_ARMS_00", 1], ["AR_HP11A_ALCHEMIST_CHEST_00", 1]], "free": [["EJ_HP11A_ALCHEMIST_01", 1]]},
+    "2": {"chapter": "Strange Horizons", "premium": [["TOKEN_UNLOCK_QI_HP11A_00", 1], ["TOKEN_UNLOCK_QI_HP11A_01", 1]], "free": []},
+    "3": {"chapter": "Strange Horizons", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 25]]},
+    "4": {"chapter": "Strange Horizons", "premium": [["WP_EB_HP11A_ALCHEMIST_00", 1]], "free": []},
+    "5": {"chapter": "Strange Horizons", "premium": [["EM_PLAYER_HP11A_ALCHEMIST_00", 1]], "free": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]]},
+    "6": {"chapter": "Strange Horizons", "premium": [], "free": [["TOKEN_BOUNTY_DRAFT", 2]], "_not_granted": ["ent_cchd_hp11a_alchemist_00"]},
+    "7": {"chapter": "Strange Horizons", "premium": [["CELL_DELAYED_DAMAGE_UC", 2]], "free": []},
+    "8": {"chapter": "Strange Horizons", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["QI_DAMAGE_BLOCK_POTION", 15]]},
+    "9": {"chapter": "Strange Horizons", "premium": [["TOKEN_BOUNTY_DRAFT", 5]], "free": []},
+    "10": {"chapter": "Strange Horizons", "premium": [["LT_HP11A_ALCHEMIST_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "11": {"chapter": "Strange Horizons", "premium": [["DYE_HP11A_ALCHEMIST_00_DURABLE", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "12": {"chapter": "Strange Horizons", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": []},
+    "13": {"chapter": "Strange Horizons", "premium": [["BNC_FABRIC_EVENT_HP11A_ALCHEMIST_00", 1]], "free": [["QI_STAMINA_POTION_00", 25]]},
+    "14": {"chapter": "Strange Horizons", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": []},
+    "15": {"chapter": "Strange Horizons", "premium": [["WP_GA_HP11A_ALCHEMIST_00", 1]], "free": [["EJ_HP11A_ALCHEMIST_00", 1]]},
+    "16": {"chapter": "Strange Horizons", "premium": [["CELL_DELAYED_DAMAGE_UC", 2]], "free": [["TOKEN_UNLOCK_QI_HP11A_00", 1]]},
+    "17": {"chapter": "Strange Horizons", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": []},
+    "18": {"chapter": "Strange Horizons", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["QI_HEALING_PYLON_BIG", 10]]},
+    "19": {"chapter": "Strange Horizons", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "20": {"chapter": "Strange Horizons", "premium": [["WP_MS_HP11A_ALCHEMIST_00", 1]], "free": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 25]], "_not_granted": ["ent_hp11a_free_20"]},
+    "21": {"chapter": "Strange Horizons", "premium": [["EM_PLAYER_HP11A_ALCHEMIST_03", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "22": {"chapter": "Strange Horizons", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": []},
+    "23": {"chapter": "Strange Horizons", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["QI_STAMINA_POTION_00", 25]]},
+    "24": {"chapter": "Strange Horizons", "premium": [["CELL_DELAYED_DAMAGE_UC", 2]], "free": []},
+    "25": {"chapter": "Strange Horizons", "premium": [["WP_AC_HP11A_ALCHEMIST_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "26": {"chapter": "Strange Horizons", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": [["TOKEN_UNLOCK_QI_HP11A_01", 1]]},
+    "27": {"chapter": "Strange Horizons", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": []},
+    "28": {"chapter": "Strange Horizons", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": []},
+    "29": {"chapter": "Strange Horizons", "premium": [], "free": [], "_not_granted": ["ent_ccfp_hp11a_alchemist_00"]},
+    "30": {"chapter": "Strange Horizons", "premium": [["WP_CB_HP11A_ALCHEMIST_00", 1]], "free": [["QI_FLARE_HP11A_ALCHEMIST_00", 1]], "_not_granted": ["ent_hp11a_free_30"]},
+    "31": {"chapter": "Strange Horizons", "premium": [["EM_PLAYER_HP11A_ALCHEMIST_04", 1]], "free": [["EJ_HP11A_ALCHEMIST_02", 1]]},
+    "32": {"chapter": "Strange Horizons", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": []},
+    "33": {"chapter": "Strange Horizons", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": []},
+    "34": {"chapter": "Strange Horizons", "premium": [["CELL_DELAYED_DAMAGE_UC", 2]], "free": []},
+    "35": {"chapter": "Strange Horizons", "premium": [["WP_DP_HP11A_ALCHEMIST_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "36": {"chapter": "Strange Horizons", "premium": [["BNC_ANIMATION_HP11A_ALCHEMIST_00", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "37": {"chapter": "Strange Horizons", "premium": [["CURRENCY_PRESTIGE", 50]], "free": []},
+    "38": {"chapter": "Strange Horizons", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["QI_DAMAGE_PYLON", 10]]},
+    "39": {"chapter": "Strange Horizons", "premium": [["AR_HP11A_ALCHEMIST_HELM_01", 1]], "free": []},
+    "40": {"chapter": "Strange Horizons", "premium": [["WP_IH_HP11A_ALCHEMIST_00", 1]], "free": [["BNC_SIGIL_HP11A_ALCHEMIST_00", 1]], "_not_granted": ["ent_hp11a_free_40"]},
+    "41": {"chapter": "Strange Horizons", "premium": [], "free": [["CURRENCY_PLATINUM_UNIV", 50]], "_not_granted": ["ent_ccfp_hp11a_alchemist_01"]},
+    "42": {"chapter": "Strange Horizons", "premium": [], "free": [], "_not_granted": ["ent_cchs_hp11a_alchemist_29"]},
+    "43": {"chapter": "Strange Horizons", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": []},
+    "44": {"chapter": "Strange Horizons", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": []},
+    "45": {"chapter": "Strange Horizons", "premium": [["EM_INTRO_HP11A_ALCHEMIST_00", 1]], "free": [["EM_PLAYER_HP11A_ALCHEMIST_01", 1]]},
+    "46": {"chapter": "Strange Horizons", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "47": {"chapter": "Strange Horizons", "premium": [["CURRENCY_PRESTIGE", 50]], "free": []},
+    "48": {"chapter": "Strange Horizons", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": []},
+    "49": {"chapter": "Strange Horizons", "premium": [["TOKEN_BOUNTY_DRAFT_PREMIUM", 5]], "free": []},
+    "50": {"chapter": "Strange Horizons", "premium": [["AR_HP11A_ALCHEMIST_HELM_00_ULTRA", 1], ["AR_HP11A_ALCHEMIST_CHEST_00_ULTRA", 1], ["AR_HP11A_ALCHEMIST_ARMS_00_ULTRA", 1], ["AR_HP11A_ALCHEMIST_LEGS_00_ULTRA", 1]], "free": [["AR_LIGHT_ARMS", 1], ["AR_LIGHT_CHEST", 1], ["AR_LIGHT_HELM", 1], ["AR_LIGHT_LEGS", 1], ["TITLE_HP11A_ALCHEMIST_00", 1]], "_not_granted": ["ent_hp11a_free_50", "ent_hp11a_elite_50"]}
+  }
+}

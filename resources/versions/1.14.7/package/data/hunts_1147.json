@@ -1,0 +1,3448 @@
+{
+ "CR19_MatchmakerHunt_Beaver": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 20.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/mcrollin/mcbeaver_normal_bp.mcbeaver_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Event_Spring_2020": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_dawn_00_bp.atmospheres_dawn_00_bp_C",
+    "w": 100.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_dawn_00_bp.atmospheres_dawn_00_bp_C",
+    "w": 100.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_dawn_00_bp.atmospheres_dawn_00_bp_C",
+    "w": 100.0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonEvent.BPGM_ArchonEvent_C",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_ShatteredIsles_TrainingDojo": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/dojo/training_dojo_persistent",
+    "tod": "",
+    "w": 100.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/dummy/dummy_fulgar_bp.dummy_fulgar_bp_C",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonTrainingGrounds.BPGM_ArchonTrainingGrounds_C",
+  "max": 12
+ },
+ "CR19_MatchmakerHunt_Beaver_Alpha": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 10.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/mcrollin/mcbeaver_alpha_bp.mcbeaver_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Beaver_Beta": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1705/dia_moss_triforce_2",
+    "tod": "",
+    "w": 50.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 50.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/mcrollin/mcbeaver_beta_bp.mcbeaver_beta_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Beaver_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 30.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 10.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/mcrollin/mcbeaver_alpha_bp.mcbeaver_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Beaver_Heroic+": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 30.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 10.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/mcrollin/mcbeaver_alpha_bp.mcbeaver_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Bugbear": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 20.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/moonface/bugbear/bugbear_normal_bp.bugbear_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Bullseye": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 10.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/bullseye/bullseye_normal_bp.bullseye_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Bullseye_Beta": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 10.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/bullseye/bullseye_beta_bp.bullseye_beta_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Bullseye_Alpha": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 10.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/bullseye/bullseye_alpha_bp.bullseye_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Bullseye_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 30.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 5.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/bullseye/bullseye_alpha_bp.bullseye_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Bullseye_Heroic+": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 30.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 5.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/bullseye/bullseye_alpha_bp.bullseye_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Crowbear": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 30.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 5.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/moonface/crowbear_normal_bp.crowbear_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Electroquill": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 25.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 25.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/electroquill/electroquill_normal_bp.electroquill_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Electroquill_Alpha": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 10.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/electroquill/electroquill_alpha_bp.electroquill_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Electroquill_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 30.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 5.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/electroquill/electroquill_alpha_bp.electroquill_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Electroquill_Heroic+": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 30.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 5.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/electroquill/electroquill_alpha_bp.electroquill_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Armstrong_Easy": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_blaze_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_blaze_00_bp.atmospheres_blaze_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Armstrong_Hard": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_blaze_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_blaze_00_bp.atmospheres_blaze_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Armstrong_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_blaze_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_blaze_00_bp.atmospheres_blaze_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Thunderbird_Easy": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_aether_storm_00_bp.atmospheres_aether_storm_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Thunderbird_Hard": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_aether_storm_00_bp.atmospheres_aether_storm_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Thunderbird_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_aether_storm_00_bp.atmospheres_aether_storm_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Randall_Easy": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_umbral_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_umbral_00_bp.atmospheres_night_umbral_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Randall_Hard": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_umbral_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_umbral_00_bp.atmospheres_night_umbral_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Randall_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_umbral_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_umbral_00_bp.atmospheres_night_umbral_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Funguy_Easy": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_terra_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_terra_00_bp.atmospheres_terra_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Funguy_Hard": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_terra_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_terra_00_bp.atmospheres_terra_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Funguy_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_terra_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_terra_00_bp.atmospheres_terra_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Mint_Easy": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_frost_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_frost_00_bp.atmospheres_frost_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Mint_Hard": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_frost_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_frost_00_bp.atmospheres_frost_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Mint_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_frost_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_frost_00_bp.atmospheres_frost_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Glitter_Easy": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_radiant_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_01_radiant_bp.atmospheres_night_01_radiant_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Glitter_Hard": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_radiant_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_01_radiant_bp.atmospheres_night_01_radiant_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Escalation_Glitter_heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_radiant_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_01_radiant_bp.atmospheres_night_01_radiant_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Gauntlet": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Destroyed_Ramsgate/adventure_destroyed_ramsgate_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_storm_01_bp.atmospheres_storm_01_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonGauntlet.BPGM_ArchonGauntlet_C",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Fulgar": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 25.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 25.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 25.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 25.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/fulgar/fulgar_normal_bp.fulgar_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Fulgar_Beta": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 100.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/fulgar/fulgar_beta_bp.fulgar_beta_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Host": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 45.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 45.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/tp/host/host_normal_bp.host_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Host_Alpha": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 1.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 45.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 45.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/tp/host/host_alpha_bp.host_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Host_Beta": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 100.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/tp/host/host_beta_bp.host_beta_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Host_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 40.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/tp/host/host_alpha_bp.host_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Host_Heroic+": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 40.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/tp/host/host_alpha_bp.host_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Lavaroller": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 45.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 3.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 45.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 3.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/mcrollin/lavaroller_normal_bp.lavaroller_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Lavaroller_Alpha": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 10.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/mcrollin/lavaroller_alpha_bp.lavaroller_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Lavaroller_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 25.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 5.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/mcrollin/lavaroller_heroic_bp.lavaroller_heroic_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Lavaroller_Heroic+": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 25.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 5.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/mcrollin/lavaroller_heroic_bp.lavaroller_heroic_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Lerawr": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 45.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/lerawr/lerawr_normal_bp.lerawr_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Lerawr_Alpha": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 30.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 40.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/lerawr/lerawr_alpha_bp.lerawr_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Lerawr_Beta": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1705/dia_moss_triforce_2",
+    "tod": "",
+    "w": 100.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/lerawr/lerawr_beta_bp.lerawr_beta_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Lerawr_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 25.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 25.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 20.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/lerawr/lerawr_alpha_bp.lerawr_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Lerawr_Heroic+": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 25.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 25.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 20.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/lerawr/lerawr_alpha_bp.lerawr_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_McRollin": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 46.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 48.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/mcrollin/mcrollin_normal_bp.mcrollin_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_McRollin_Alpha": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 46.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 45.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/mcrollin/mcrollin_alpha_bp.mcrollin_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_McRollin_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 35.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 35.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/mcrollin/mcrollin_alpha_bp.mcrollin_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_McRollin_Heroic+": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 35.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 35.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/mcrollin/mcrollin_alpha_bp.mcrollin_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Moonface": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 50.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 50.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/moonface/moonface_normal_bp.moonface_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Moonface_Alpha": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 5.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/moonface/moonface_alpha_bp.moonface_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Moonface_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 45.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 5.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/moonface/moonface_alpha_bp.moonface_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Moonface_Heroic+": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 45.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 5.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/moonface/moonface_alpha_bp.moonface_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Paper": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 45.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/aq/paper/paper_normal_bp.paper_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Paper_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 40.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/aq/paper/paper_normal_bp.paper_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Paper_Heroic+": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 40.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/aq/paper/paper_normal_bp.paper_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Rock": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 60.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/rock/sq_rock_normal_bp.sq_rock_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Rock_Alpha": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 50.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 35.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/rock/sq_rock_alpha_bp.sq_rock_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Rock_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 42.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 30.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 20.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/rock/sq_rock_alpha_bp.sq_rock_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Rock_Heroic+": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 42.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 30.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 20.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/rock/sq_rock_alpha_bp.sq_rock_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Sally": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 3.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 3.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 3.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 61.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 30.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/sally/sq_sally_normal_bp.sq_sally_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Sally_Alpha": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 30.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 30.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/sally/sq_sally_alpha_bp.sq_sally_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Sally_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 46.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 5.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/sally/sq_sally_alpha_bp.sq_sally_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Sally_Heroic+": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 46.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 2.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 5.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/sally/sq_sally_alpha_bp.sq_sally_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Salt": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 25.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 25.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 25.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 25.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/salt/sq_salt_normal_bp.sq_salt_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Salt_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 10.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/salt/sq_salt_normal_heroic_bp.sq_salt_normal_heroic_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Salt_Heroic+": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 10.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/salt/sq_salt_normal_heroic_bp.sq_salt_normal_heroic_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Scissors": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 30.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/moonface/scissors/scissors_normal_bp.scissors_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Scissors_Alpha": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 20.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/moonface/scissors/scissors_alpha_bp.scissors_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Scissors_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 40.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/moonface/scissors/scissors_alpha_bp.scissors_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Scissors_Heroic+": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 5.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 15.0
+   },
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 40.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/moonface/scissors/scissors_alpha_bp.scissors_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Shadowcat": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 50.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 40.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/aq/shadowcat/shadowcat_normal_bp.shadowcat_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Shadowcat_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/aq/shadowcat/shadowcat_normal_heroic_bp.shadowcat_normal_heroic_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Shadowcat_Heroic+": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 10.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/aq/shadowcat/shadowcat_normal_heroic_bp.shadowcat_normal_heroic_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Shockmane": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 30.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 20.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/lerawr/shockmane_normal_bp.shockmane_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Shockmane_Alpha": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 30.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 20.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/lerawr/shockmane_alpha_bp.shockmane_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Shockmane_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 30.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 20.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/lerawr/shockmane_alpha_bp.shockmane_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Shockmane_Heroic+": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 20.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1803/frida_moss_falls",
+    "tod": "",
+    "w": 10.0
+   },
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 30.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 20.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/lerawr/shockmane_alpha_bp.shockmane_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Snowflake_Alpha": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 50.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 50.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/moonface/snowflake_alpha_bp.snowflake_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Snowflake_Heroic": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 50.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 50.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/moonface/snowflake_alpha_bp.snowflake_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Snowflake_Heroic+": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 50.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 50.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/moonface/snowflake_alpha_bp.snowflake_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "CR19_MatchmakerHunt_Snowflake_New": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 40.0
+   },
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 60.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/moonface/snowflake_normal_new_bp.snowflake_normal_new_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "MatchmakerHunt_CombatDemo_Easy": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_arid_00_bp.atmospheres_night_arid_00_bp_C",
+    "w": 0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/sally/sq_sally_normal_bp.sq_sally_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "MatchmakerHunt_CombatDemo_Hard": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_starry_00_bp.atmospheres_night_starry_00_bp_C",
+    "w": 0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/salt/sq_salt_normal_bp.sq_salt_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "MatchmakerHunt_CombatDemo_Hard2": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/experimental/atmospheres_sunset_00_bp.atmospheres_sunset_00_bp_C",
+    "w": 0
+   }
+  ],
+  "behemoth": "/Game/Monsters/mcrollin/lavaroller_heroic_bp.lavaroller_heroic_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "MatchmakerHunt_CombatDemo_Normal": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_dawn_00_bp.atmospheres_dawn_00_bp_C",
+    "w": 0
+   }
+  ],
+  "behemoth": "/Game/Monsters/tp/host/host_normal_bp.host_normal_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "Trials_Test_MatchmakerHunt_Normal_01": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/arenas/arena_ramsgate_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_arena_00_bp.atmospheres_night_arena_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/fulgar/fulgar_umbral_bp.fulgar_umbral_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "Trials_Test_MatchmakerHunt_Normal_02": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/arenas/arena_ramsgate_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_arena_00_bp.atmospheres_night_arena_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/aq/paper/paper_umbral_bp.paper_umbral_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "Trials_Test_MatchmakerHunt_Normal_03": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/arenas/arena_ramsgate_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_arena_00_bp.atmospheres_night_arena_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/electroquill/electroquill_umbral_bp.electroquill_umbral_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "Trials_Test_MatchmakerHunt_Normal_04": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/arenas/arena_ramsgate_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_arena_00_bp.atmospheres_night_arena_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/lerawr/shockmane_alpha_bp.shockmane_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "Trials_Test_MatchmakerHunt_Dauntless_01": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/arenas/arena_ramsgate_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_arena_00_bp.atmospheres_night_arena_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/fulgar/fulgar_umbral_bp.fulgar_umbral_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "Trials_Test_MatchmakerHunt_Dauntless_02": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/arenas/arena_ramsgate_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_arena_00_bp.atmospheres_night_arena_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/aq/paper/paper_umbral_bp.paper_umbral_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "Trials_Test_MatchmakerHunt_Dauntless_03": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/arenas/arena_ramsgate_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_arena_00_bp.atmospheres_night_arena_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/sq/electroquill/electroquill_umbral_bp.electroquill_umbral_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "Trials_Test_MatchmakerHunt_Dauntless_04": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/arenas/arena_ramsgate_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_arena_00_bp.atmospheres_night_arena_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "/Game/Monsters/lerawr/shockmane_alpha_bp.shockmane_alpha_bp_C",
+  "game": "",
+  "max": 4
+ },
+ "Adventure_IslandA": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Moss_Triforce/adventure_moss_triforce",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_day_00_bp.atmospheres_day_00_bp_C",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 4
+ },
+ "Adventure_IslandB": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Snow_Jen/adventure_snow_jen",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/experimental/atmospheres_sunset_00_bp.atmospheres_sunset_00_bp_C",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandC": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Moss_Croissant/adventure_moss_croissant",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_dawn_00_bp.atmospheres_dawn_00_bp_C",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandD": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Aird_Rose/adventure_arid_rose",
+    "tod": "",
+    "w": 100.0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandE": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Moss_Falls/adventure_moss_falls",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandF": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Arid_Valley/adventure_arid_valley",
+    "tod": "",
+    "w": 100.0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandG": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Moss_Poodle/adventure_moss_poodle",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandH": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Snow_Big/adventure_snow_big",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandI": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Shock/adventure_shock_rose_p",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandJ": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Moss_Croissant/adventure_moss_croissant",
+    "tod": "",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandK": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Moss_Jamima/adventure_moss_jamima",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandL": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Snow_Vega/adventure_snow_vega",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_passing_storm_02_bp.atmospheres_passing_storm_02_bp_C",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandM": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Snow_Big/adventure_snow_big",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandM_S15Test": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Snow_Ritual/adventure_snow_ritual",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_umbral_02_bp.atmospheres_night_umbral_02_bp_C",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandN": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Moss_Cave/adventure_moss_cave",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandO": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Shock/adventure_shock_rose_p",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandP": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Aird_Rose/adventure_arid_rose",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandQ": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Moss_Poodle/adventure_moss_poodle",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandR": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Moss_Cave/adventure_moss_cave",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandS": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Radiant_Valley/adventure_radiant_valley",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_radiant_day_01_bp.atmospheres_radiant_day_01_bp_C",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandT": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Radiant_Cave/adventure_radiant_cave",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_radiant_day_03_bp.atmospheres_radiant_day_03_bp_C",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandT_193test": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Radiant_Cave/adventure_radiant_cave",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_radiant_day_03_bp.atmospheres_radiant_day_03_bp_C",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandU": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Tundra_Jamima/adventure_tundra_jamima",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_tundra_sunset_01_bp.atmospheres_tundra_sunset_01_bp_C",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandPublicEventsTestMap1": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Public_Events_Maps/public_events_test_map_1",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_IslandPublicEventsTestMap2": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Public_Events_Maps/public_events_test_map_2",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Experimental_Adventure_IslandA": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1705/dia_arid_rose",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_Experimental_ArchonExploration.BPGM_Experimental_ArchonExploration_C",
+  "max": 12
+ },
+ "Adventure_Island_Experiment_Mid": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Experiment2_Island_M": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Snow_Big/adventure_snow_big",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "Experiment2_Island_P": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Aird_Rose/adventure_arid_rose",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_Intro1": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/adventure_arid_rose",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_Intro2": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_Intro3": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1705/dia_moss_triforce_2",
+    "tod": "",
+    "w": 100.0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_Intro4": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_Neutral": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1705/dia_moss_triforce_2",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_Blaze": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_Frost": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_Terra": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_Shock": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/adventure_arid_rose",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_Dire1": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/adventure_moss_falls",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_Dire2": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/adventure_arid_rose",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_Dire3": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1705/dia_snow_big",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_Dire4": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_Heroic2": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_jamima",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_Heroic3": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1609/bella_jen_snow",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_Heroic4": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/adventure_arid_rose",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_Heroic5": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_croissant",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "AdventurePatrol_Experiment_HeroicPlus": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1806/gaia_moss_cave",
+    "tod": "",
+    "w": 0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonExploration.BPGM_ArchonExploration_C",
+  "max": 12
+ },
+ "11A_MatchmakerHunt_StoryMission_01_Terramane": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_terra_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_terra_00_bp.atmospheres_terra_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonStoryMissions.BPGM_ArchonStoryMissions_C",
+  "max": 4
+ },
+ "11A_MatchmakerHunt_StoryMission_02_Sally_Terrogg": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/escalation/escalation_island_terra_00",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_terra_00_foggy_bp.atmospheres_terra_00_foggy_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonStoryMissions.BPGM_ArchonStoryMissions_C",
+  "max": 4
+ },
+ "MatchmakerHunt_Event_Anniversary_01": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Moss_Triforce/adventure_moss_triforce",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_day_00_bp.atmospheres_day_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonStoryMissions.BPGM_ArchonStoryMissions_C",
+  "max": 4
+ },
+ "MatchmakerHunt_Event_Anniversary_02": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Moss_Triforce/adventure_moss_triforce",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/experimental/atmospheres_sunset_00_bp.atmospheres_sunset_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonStoryMissions.BPGM_ArchonStoryMissions_C",
+  "max": 4
+ },
+ "MatchmakerHunt_Event_Ramsgiving_01": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1705/dia_moss_triforce_ramsgiving",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_dawn_00_bp.atmospheres_dawn_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonStoryMissions.BPGM_ArchonStoryMissions_C",
+  "max": 4
+ },
+ "MatchmakerHunt_Event_Ramsgiving_02": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1705/dia_moss_triforce_ramsgiving",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_dawn_00_bp.atmospheres_dawn_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonStoryMissions.BPGM_ArchonStoryMissions_C",
+  "max": 4
+ },
+ "MatchmakerHunt_StoryMission_Linnea_01": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/adventure/Snow_Vega/adventure_snow_vega",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_frost_00_bp.atmospheres_frost_00_bp_C",
+    "w": 1.0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonStoryMissions.BPGM_ArchonStoryMissions_C",
+  "max": 4
+ },
+ "MatchmakerHunt_Event_Dark_Harvest_01": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_starry_00_bp.atmospheres_night_starry_00_bp_C",
+    "w": 100.0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonStoryMissions.BPGM_ArchonStoryMissions_C",
+  "max": 4
+ },
+ "MatchmakerHunt_Event_Dark_Harvest_Hard_01": {
+  "maps": [
+   {
+    "map": "/Game/Maps/islands/1702/cora_poodle",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_night_starry_00_bp.atmospheres_night_starry_00_bp_C",
+    "w": 100.0
+   }
+  ],
+  "behemoth": "",
+  "game": "/Game/Blueprints/GameMode/BPGM_ArchonStoryMissions.BPGM_ArchonStoryMissions_C",
+  "max": 4
+ }
+}

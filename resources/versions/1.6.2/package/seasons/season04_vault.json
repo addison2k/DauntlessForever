@@ -1,0 +1,78 @@
+{
+  "_notes": [
+    "Burndown: Vault re-release (as shipped, 30 levels) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label."
+  ],
+  "season_key": "season04_vault",
+  "season_title": "Burndown",
+  "season_kind": "Vault re-release (as shipped, 30 levels)",
+  "pass_id": "season13a",
+  "levels": 30,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "season04_vault",
+    "start_date": "2022-10-13T17:00:00+00:00",
+    "end_date": "2024-12-03T18:00:00+00:00",
+    "premium_gating_entitlement": "season04_vault_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        5
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Burndown", "premium": [["EM_PLAYER_HP04_FIREBREATH_00", 1]], "free": []},
+    "2": {"chapter": "Burndown", "premium": [["AR_HP04_ARID_HELM_01", 1]], "free": []},
+    "3": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 10000]], "free": []},
+    "4": {"chapter": "Burndown", "premium": [["WP_GA_HP04_ARID", 1]], "free": []},
+    "5": {"chapter": "Burndown", "premium": [["LT_HP04_ARID_00", 1]], "free": []},
+    "6": {"chapter": "Burndown", "premium": [["CURRENCY_PJM_PRESTIGE_EMPTY", 50]], "free": []},
+    "7": {"chapter": "Burndown", "premium": [["WP_DP_HP04_ARID", 1]], "free": []},
+    "8": {"chapter": "Burndown", "premium": [["CURRENCY_PJM_WEAPON", 200]], "free": []},
+    "9": {"chapter": "Burndown", "premium": [["BNC_ANIMATION_HP04_FIRE_00", 1]], "free": []},
+    "10": {"chapter": "Burndown", "premium": [["WP_IH_HP04_ARID", 1]], "free": []},
+    "11": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 10000]], "free": []},
+    "12": {"chapter": "Burndown", "premium": [["AR_HP04_ARID_LEGS", 1]], "free": []},
+    "13": {"chapter": "Burndown", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "14": {"chapter": "Burndown", "premium": [["AR_HP04_ARID_CHEST", 1]], "free": []},
+    "15": {"chapter": "Burndown", "premium": [["WP_MS_HP04_ARID", 1]], "free": []},
+    "16": {"chapter": "Burndown", "premium": [["TOKEN_BOUNTY_DRAFT_PREMIUM", 5]], "free": []},
+    "17": {"chapter": "Burndown", "premium": [["EM_PLAYER_HP04_NECKCRACK_00", 1]], "free": []},
+    "18": {"chapter": "Burndown", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "19": {"chapter": "Burndown", "premium": [["BNC_FABRIC_EVENT_HP04_01", 1]], "free": []},
+    "20": {"chapter": "Burndown", "premium": [["WP_CB_HP04_ARID", 1]], "free": []},
+    "21": {"chapter": "Burndown", "premium": [["TOKEN_BOUNTY_DRAFT_PREMIUM", 5]], "free": []},
+    "22": {"chapter": "Burndown", "premium": [["EM_PLAYER_HP04_SHOUT_00", 1]], "free": []},
+    "23": {"chapter": "Burndown", "premium": [["CURRENCY_PJM_PRESTIGE_EMPTY", 50]], "free": []},
+    "24": {"chapter": "Burndown", "premium": [["CURRENCY_PJM_WEAPON", 200]], "free": []},
+    "25": {"chapter": "Burndown", "premium": [["WP_EB_HP04_ARID", 1]], "free": []},
+    "26": {"chapter": "Burndown", "premium": [["EM_INTRO_HP04_BLAZE_00", 1]], "free": []},
+    "27": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 10000]], "free": []},
+    "28": {"chapter": "Burndown", "premium": [["AR_HP04_ARID_ARMS", 1]], "free": []},
+    "29": {"chapter": "Burndown", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "30": {"chapter": "Burndown", "premium": [["AR_HP04_ARID_HELM_00", 1]], "free": []}
+  }
+}

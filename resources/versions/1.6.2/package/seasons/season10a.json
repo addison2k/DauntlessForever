@@ -1,0 +1,99 @@
+{
+  "_notes": [
+    "Relics & Ruin: original (as shipped) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label.",
+    "11 reward(s) were entitlements or lootboxes and are not granted offline; they are listed per level under _not_granted."
+  ],
+  "season_key": "season10a",
+  "season_title": "Relics & Ruin",
+  "season_kind": "original (as shipped)",
+  "pass_id": "season13a",
+  "levels": 50,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "season10a",
+    "start_date": "2020-06-11T17:00:00+00:00",
+    "end_date": "2020-07-30T16:59:59+00:00",
+    "premium_gating_entitlement": "season10a_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        4
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Relics & Ruin", "premium": [["AR_HP10A_CELESTIAL_HELM_00", 1], ["AR_HP10A_CELESTIAL_LEGS_00", 1], ["AR_HP10A_CELESTIAL_ARMS_00", 1], ["AR_HP10A_CELESTIAL_CHEST_00", 1]], "free": [["TITLE_HP10A_CELESTIAL_00", 1], ["EJ_HP10A_CELESTIAL_02", 1]]},
+    "2": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_PRESTIGE", 50]], "free": []},
+    "3": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 25]]},
+    "4": {"chapter": "Relics & Ruin", "premium": [["WP_EB_HP10A_CELESTIAL_00", 1]], "free": [["Container_Core_Slayer_Silver", 1]]},
+    "5": {"chapter": "Relics & Ruin", "premium": [["EM_PLAYER_HP10A_CELESTIAL_04", 1]], "free": [["COL_SEASON_S10A_PAGE_01", 1]], "_not_granted": ["ent_hp10a_free_05"]},
+    "6": {"chapter": "Relics & Ruin", "premium": [], "free": [["TOKEN_BOUNTY_DRAFT", 2]], "_not_granted": ["ent_cchd_hp10a_celestial_00"]},
+    "7": {"chapter": "Relics & Ruin", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "8": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["QI_DAMAGE_BLOCK_POTION", 15]]},
+    "9": {"chapter": "Relics & Ruin", "premium": [["TOKEN_BOUNTY_DRAFT", 5]], "free": []},
+    "10": {"chapter": "Relics & Ruin", "premium": [["LT_HP10A_CELESTIAL_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "11": {"chapter": "Relics & Ruin", "premium": [["DYE_HP10A_CELESTIAL_00_DURABLE", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "12": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": []},
+    "13": {"chapter": "Relics & Ruin", "premium": [["BNC_FABRIC_EVENT_HP10A_CELESTIAL_00", 1]], "free": [["QI_STAMINA_POTION_00", 25]]},
+    "14": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": []},
+    "15": {"chapter": "Relics & Ruin", "premium": [["WP_CB_HP10A_CELESTIAL_00", 1]], "free": [["EJ_HP10A_CELESTIAL_00", 1]]},
+    "16": {"chapter": "Relics & Ruin", "premium": [], "free": [["TOKEN_BOUNTY_DRAFT", 2]], "_not_granted": ["ent_hp10a_esc_boost_24h_01"]},
+    "17": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": [["COL_SEASON_S10A_PAGE_02", 1]]},
+    "18": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["QI_HEALING_PYLON_BIG", 10]]},
+    "19": {"chapter": "Relics & Ruin", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "20": {"chapter": "Relics & Ruin", "premium": [["WP_IH_HP10A_CELESTIAL_00", 1]], "free": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 25]], "_not_granted": ["ent_hp10a_free_20"]},
+    "21": {"chapter": "Relics & Ruin", "premium": [["EM_PLAYER_HP10A_CELESTIAL_01", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "22": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": []},
+    "23": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["QI_STAMINA_POTION_00", 25]]},
+    "24": {"chapter": "Relics & Ruin", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "25": {"chapter": "Relics & Ruin", "premium": [["WP_MS_HP10A_CELESTIAL_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "26": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "27": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "28": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": []},
+    "29": {"chapter": "Relics & Ruin", "premium": [], "free": [], "_not_granted": ["ent_ccfp_hp10a_celestial_02"]},
+    "30": {"chapter": "Relics & Ruin", "premium": [["WP_GA_HP10A_CELESTIAL_00", 1]], "free": [["QI_FLARE_HP10A_CELESTIAL_00", 1]], "_not_granted": ["ent_hp10a_free_30"]},
+    "31": {"chapter": "Relics & Ruin", "premium": [["EM_PLAYER_HP10A_CELESTIAL_02", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "32": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "33": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["EJ_HP10A_CELESTIAL_01", 1]]},
+    "34": {"chapter": "Relics & Ruin", "premium": [["AR_HP10A_CELESTIAL_HELM_01", 1]], "free": [["COL_SEASON_S10A_PAGE_03", 1]]},
+    "35": {"chapter": "Relics & Ruin", "premium": [["WP_DP_HP10A_CELESTIAL_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "36": {"chapter": "Relics & Ruin", "premium": [["BNC_STANDARD_HP10A_CELESTIAL_00", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "37": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_PRESTIGE", 50]], "free": []},
+    "38": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["QI_DAMAGE_PYLON", 10]]},
+    "39": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "40": {"chapter": "Relics & Ruin", "premium": [["WP_AC_HP10A_CELESTIAL_00", 1]], "free": [["BNC_SIGIL_HP10A_CELESTIAL_00", 1]], "_not_granted": ["ent_hp10a_free_40"]},
+    "41": {"chapter": "Relics & Ruin", "premium": [["TOKEN_BOUNTY_DRAFT", 5]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "42": {"chapter": "Relics & Ruin", "premium": [], "free": [], "_not_granted": ["ent_hp10a_esc_boost_2h_01"]},
+    "43": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["EM_PLAYER_HP10A_CELESTIAL_00", 1]]},
+    "44": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "45": {"chapter": "Relics & Ruin", "premium": [["EM_INTRO_HP10A_CELESTIAL_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "46": {"chapter": "Relics & Ruin", "premium": [["TOKEN_BOUNTY_DRAFT", 5]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "47": {"chapter": "Relics & Ruin", "premium": [], "free": [], "_not_granted": ["ent_hp10a_esc_boost_2h_02"]},
+    "48": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": [["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "49": {"chapter": "Relics & Ruin", "premium": [["CURRENCY_PRESTIGE", 50]], "free": []},
+    "50": {"chapter": "Relics & Ruin", "premium": [["AR_HP10A_CELESTIAL_HELM_00_ULTRA", 1], ["AR_HP10A_CELESTIAL_CHEST_00_ULTRA", 1], ["AR_HP10A_CELESTIAL_ARMS_00_ULTRA", 1], ["AR_HP10A_CELESTIAL_LEGS_00_ULTRA", 1]], "free": [["AR_HP10A_CELESTIAL_HELM_00", 1], ["AR_HP10A_CELESTIAL_LEGS_00", 1], ["AR_HP10A_CELESTIAL_ARMS_00", 1], ["AR_HP10A_CELESTIAL_CHEST_00", 1], ["TITLE_HP10A_CELESTIAL_01", 1]], "_not_granted": ["ent_hp10a_free_50", "ent_hp10a_elite_50"]}
+  }
+}

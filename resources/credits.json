@@ -1,0 +1,67 @@
+{
+  "intro": "Dauntless Forever is a volunteer preservation project. Everything here stands on work other people published first; this page is where they are named. No ads, no paid advantages, ever.",
+  "sections": [
+    {
+      "title": "This project",
+      "people": [
+        {
+          "name": "Addison2k",
+          "role": "Maintainer",
+          "what": "Ported the server code and backends to 1.6.2, 1.12 and 1.14.7, wrote the offline sign-in stand-in, the two-click packages, this launcher, and keeps the manifest archive."
+        }
+      ]
+    },
+    {
+      "title": "Manifest archive contributors",
+      "people": [
+        {
+          "name": "zgh95",
+          "role": "Contributor",
+          "what": "Saved the 1.12.0 manifest."
+        },
+        {
+          "name": "Moyka009",
+          "role": "Contributor",
+          "what": "Saved the 1.14.7 manifest and tested the first 1.14.7 package."
+        }
+      ]
+    },
+    {
+      "title": "Built on",
+      "people": [
+        {
+          "name": "Undaunted",
+          "role": "gwog (Gregory Morford) and contributors",
+          "what": "The private-server approach, the loader and the original backend. AGPL-3.0. The server DLLs and backends in each version are modified versions of it, with full source in every package.",
+          "url": "https://github.com/SyST3MDeV/Undaunted"
+        },
+        {
+          "name": "meszmate/manifest",
+          "role": "MIT",
+          "what": "The download tool that fetches builds from Epic's servers (with a fix for uncompressed chunks).",
+          "url": "https://github.com/meszmate/manifest"
+        },
+        {
+          "name": "DauntlessEndpointDocumentation",
+          "role": "EisigesEis",
+          "what": "Public captures of the live servers' replies; 1.14.7 set-up downloads them for the local backend.",
+          "url": "https://github.com/EisigesEis/DauntlessEndpointDocumentation"
+        },
+        {
+          "name": "MinHook",
+          "role": "Tsuda Kageyu, BSD-2-Clause",
+          "what": "Used by the server DLLs.",
+          "url": "https://github.com/TsudaKageyu/minhook"
+        },
+        {
+          "name": "Dauntless Revived",
+          "role": "mixutin and contributors",
+          "what": "The other living fork of Undaunted (1.4.4). Where a fix came from there, its author is named next to it.",
+          "url": ""
+        }
+      ]
+    }
+  ],
+  "supportersIntro": "People supporting the project on Patreon. Support is optional, changes nothing in the game, and pays for the time and the test machines. Thank you.",
+  "supportersAnonymousNote": "Some supporters chose to stay anonymous. Thank you too."
+}

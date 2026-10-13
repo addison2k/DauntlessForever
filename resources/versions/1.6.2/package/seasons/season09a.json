@@ -1,0 +1,99 @@
+{
+  "_notes": [
+    "Searing Talons: original (as shipped) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label.",
+    "11 reward(s) were entitlements or lootboxes and are not granted offline; they are listed per level under _not_granted."
+  ],
+  "season_key": "season09a",
+  "season_title": "Searing Talons",
+  "season_kind": "original (as shipped)",
+  "pass_id": "season13a",
+  "levels": 50,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "season09a",
+    "start_date": "2020-03-19T17:00:00+00:00",
+    "end_date": "2020-04-30T16:59:59+00:00",
+    "premium_gating_entitlement": "season09a_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        4
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Searing Talons", "premium": [["AR_HP09A_ASSASSINS_HELM_00", 1], ["AR_HP09A_ASSASSINS_LEGS_00", 1], ["AR_HP09A_ASSASSINS_ARMS_00", 1], ["AR_HP09A_ASSASSINS_CHEST_00", 1]], "free": [["EJ_HP09A_ASSASSINS_00", 1], ["TITLE_HP09A_ASSASSINS_00", 1]]},
+    "2": {"chapter": "Searing Talons", "premium": [["DYE_HP09A_ASSASSINS_01_DURABLE", 1]], "free": []},
+    "3": {"chapter": "Searing Talons", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 25]]},
+    "4": {"chapter": "Searing Talons", "premium": [["WP_EB_HP09A_ASSASSINS_00", 1]], "free": []},
+    "5": {"chapter": "Searing Talons", "premium": [["EM_PLAYER_HP09A_ASSASSINS_03", 1]], "free": [["Container_Core_Slayer_Silver", 1]]},
+    "6": {"chapter": "Searing Talons", "premium": [], "free": [["TOKEN_BOUNTY_DRAFT", 2]], "_not_granted": ["ent_cchd_hp09a_assassins_00"]},
+    "7": {"chapter": "Searing Talons", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "8": {"chapter": "Searing Talons", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["QI_DAMAGE_BLOCK_POTION", 15]]},
+    "9": {"chapter": "Searing Talons", "premium": [], "free": [], "_not_granted": ["ent_ccfp_hp09a_assassins_03"]},
+    "10": {"chapter": "Searing Talons", "premium": [["LT_HP09A_ASSASSINS_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "11": {"chapter": "Searing Talons", "premium": [["DYE_HP09A_ASSASSINS_02_DURABLE", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "12": {"chapter": "Searing Talons", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": []},
+    "13": {"chapter": "Searing Talons", "premium": [["BNC_FABRIC_EVENT_HP09A_ASSASSINS_01", 1]], "free": [["QI_STAMINA_POTION_00", 25]]},
+    "14": {"chapter": "Searing Talons", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": []},
+    "15": {"chapter": "Searing Talons", "premium": [["WP_CB_HP09A_ASSASSINS_00", 1]], "free": [["EJ_HP09A_ASSASSINS_01", 1]]},
+    "16": {"chapter": "Searing Talons", "premium": [], "free": [["TOKEN_BOUNTY_DRAFT", 2]], "_not_granted": ["escalation_xp_boost_entitlement"]},
+    "17": {"chapter": "Searing Talons", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "18": {"chapter": "Searing Talons", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["QI_HEALING_PYLON_BIG", 10]]},
+    "19": {"chapter": "Searing Talons", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "20": {"chapter": "Searing Talons", "premium": [["WP_DP_HP09A_ASSASSINS_00", 1]], "free": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 25]]},
+    "21": {"chapter": "Searing Talons", "premium": [["EM_PLAYER_HP09A_ASSASSINS_01", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "22": {"chapter": "Searing Talons", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": []},
+    "23": {"chapter": "Searing Talons", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["QI_STAMINA_POTION_00", 25]]},
+    "24": {"chapter": "Searing Talons", "premium": [], "free": [], "_not_granted": ["escalation_xp_boost_entitlement"]},
+    "25": {"chapter": "Searing Talons", "premium": [["WP_MS_HP09A_ASSASSINS_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "26": {"chapter": "Searing Talons", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "27": {"chapter": "Searing Talons", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "28": {"chapter": "Searing Talons", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["DYE_HP09A_ASSASSINS_00_DURABLE", 1]]},
+    "29": {"chapter": "Searing Talons", "premium": [], "free": [], "_not_granted": ["ent_cchd_hp09a_assassins_07"]},
+    "30": {"chapter": "Searing Talons", "premium": [["WP_IH_HP09A_ASSASSINS_00", 1]], "free": [["QI_FLARE_HP09A_00", 1]]},
+    "31": {"chapter": "Searing Talons", "premium": [["EM_PLAYER_HP09A_ASSASSINS_02", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "32": {"chapter": "Searing Talons", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "33": {"chapter": "Searing Talons", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["QI_STAGGER_POTION", 25]]},
+    "34": {"chapter": "Searing Talons", "premium": [], "free": [], "_not_granted": ["escalation_xp_boost_entitlement"]},
+    "35": {"chapter": "Searing Talons", "premium": [["WP_GA_HP09A_ASSASSINS_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "36": {"chapter": "Searing Talons", "premium": [["BNC_STANDARD_HP09A_ASSASSINS_00", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "37": {"chapter": "Searing Talons", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": []},
+    "38": {"chapter": "Searing Talons", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["QI_DAMAGE_PYLON", 10]]},
+    "39": {"chapter": "Searing Talons", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "40": {"chapter": "Searing Talons", "premium": [["WP_AC_HP09A_ASSASSINS_00", 1]], "free": [["BNC_SIGIL_EVENT_HP09A_ASSASSINS_00", 1]]},
+    "41": {"chapter": "Searing Talons", "premium": [["TOKEN_BOUNTY_DRAFT", 5]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "42": {"chapter": "Searing Talons", "premium": [], "free": [], "_not_granted": ["escalation_xp_boost_entitlement"]},
+    "43": {"chapter": "Searing Talons", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["EJ_HP09A_ASSASSINS_02", 1]]},
+    "44": {"chapter": "Searing Talons", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "45": {"chapter": "Searing Talons", "premium": [["EM_INTRO_HP09A_ASSASSINS_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "46": {"chapter": "Searing Talons", "premium": [["TOKEN_BOUNTY_DRAFT", 5]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "47": {"chapter": "Searing Talons", "premium": [], "free": [], "_not_granted": ["escalation_xp_boost_entitlement"]},
+    "48": {"chapter": "Searing Talons", "premium": [["BNC_ANIMATION_HP09A_ASSASSINS_00", 1]], "free": [["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "49": {"chapter": "Searing Talons", "premium": [], "free": [], "_not_granted": ["ent_ccfp_hp09a_assassins_00"]},
+    "50": {"chapter": "Searing Talons", "premium": [["AR_HP09A_ASSASSINS_HELM_00_ULTRA", 1], ["AR_HP09A_ASSASSINS_CHEST_00_ULTRA", 1], ["AR_HP09A_ASSASSINS_ARMS_00_ULTRA", 1], ["AR_HP09A_ASSASSINS_LEGS_00_ULTRA", 1]], "free": [["EM_PLAYER_HP09A_ASSASSINS_04", 1], ["TITLE_HP09A_ASSASSINS_01", 1]], "_not_granted": ["ent_hp09a_basic_50", "ent_hp09a_elite_50"]}
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "_notes": [
+    "Cold Front: original (as shipped) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label.",
+    "9 reward(s) were entitlements or lootboxes and are not granted offline; they are listed per level under _not_granted."
+  ],
+  "season_key": "season12a",
+  "season_title": "Cold Front",
+  "season_kind": "original (as shipped)",
+  "pass_id": "season13a",
+  "levels": 50,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "season12a",
+    "start_date": "2020-12-03T18:00:00+00:00",
+    "end_date": "2020-02-04T17:59:59+00:00",
+    "premium_gating_entitlement": "season12a_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        4
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Cold Front", "premium": [["AR_HP12A_FROSTWARDEN_HELM_00", 1], ["AR_HP12A_FROSTWARDEN_LEGS_00", 1], ["AR_HP12A_FROSTWARDEN_ARMS_00", 1], ["AR_HP12A_FROSTWARDEN_CHEST_00", 1]], "free": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 25]]},
+    "2": {"chapter": "Cold Front", "premium": [["CURRENCY_PJM_PRESTIGE_EMPTY", 50]], "free": []},
+    "3": {"chapter": "Cold Front", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": []},
+    "4": {"chapter": "Cold Front", "premium": [["WP_EB_HP12A_FROSTWARDEN_00", 1]], "free": []},
+    "5": {"chapter": "Cold Front", "premium": [["EM_PLAYER_HP12A_FROSTWARDEN_03", 1]], "free": [["EJ_HP12A_FROSTWARDEN_01", 1]]},
+    "6": {"chapter": "Cold Front", "premium": [], "free": [], "_not_granted": ["ent_cchd_hp12a_frostwarden_00"]},
+    "7": {"chapter": "Cold Front", "premium": [["TOKEN_BOUNTY_DRAFT", 3]], "free": []},
+    "8": {"chapter": "Cold Front", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": []},
+    "9": {"chapter": "Cold Front", "premium": [["LT_HP12A_FROSTWARDEN_00", 1]], "free": []},
+    "10": {"chapter": "Cold Front", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 3]], "free": [["BNC_SIGIL_HP12A_FROSTWARDEN_00", 1]]},
+    "11": {"chapter": "Cold Front", "premium": [["DYE_HP12A_FROSTWARDEN_00_DURABLE", 1]], "free": []},
+    "12": {"chapter": "Cold Front", "premium": [["BNC_FABRIC_EVENT_HP12A_FROSTWARDEN_00", 1]], "free": []},
+    "13": {"chapter": "Cold Front", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": []},
+    "14": {"chapter": "Cold Front", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": []},
+    "15": {"chapter": "Cold Front", "premium": [["WP_IH_HP12A_FROSTWARDEN_00", 1]], "free": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 3]]},
+    "16": {"chapter": "Cold Front", "premium": [["TOKEN_BOUNTY_DRAFT", 3]], "free": []},
+    "17": {"chapter": "Cold Front", "premium": [["CURRENCY_PJM_WEAPON", 75]], "free": []},
+    "18": {"chapter": "Cold Front", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": []},
+    "19": {"chapter": "Cold Front", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 3]], "free": []},
+    "20": {"chapter": "Cold Front", "premium": [["WP_MS_HP12A_FROSTWARDEN_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]], "_not_granted": ["ent_hp12a_free_20"]},
+    "21": {"chapter": "Cold Front", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": []},
+    "22": {"chapter": "Cold Front", "premium": [["EM_PLAYER_HP12A_FROSTWARDEN_02", 1]], "free": []},
+    "23": {"chapter": "Cold Front", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": []},
+    "24": {"chapter": "Cold Front", "premium": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 50]], "free": []},
+    "25": {"chapter": "Cold Front", "premium": [["WP_AC_HP12A_FROSTWARDEN_00", 1]], "free": [["CURRENCY_PJM_PRESTIGE_EMPTY", 50]]},
+    "26": {"chapter": "Cold Front", "premium": [["CURRENCY_PJM_AIRSHIP", 75]], "free": []},
+    "27": {"chapter": "Cold Front", "premium": [], "free": [], "_not_granted": ["ent_ccfp_hp12a_frostwarden_00"]},
+    "28": {"chapter": "Cold Front", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": []},
+    "29": {"chapter": "Cold Front", "premium": [["TOKEN_BOUNTY_DRAFT", 3]], "free": []},
+    "30": {"chapter": "Cold Front", "premium": [["WP_CB_HP12A_FROSTWARDEN_00", 1]], "free": [["QI_FLARE_HP12A_FROSTWARDEN_00", 1]], "_not_granted": ["ent_hp12a_free_30"]},
+    "31": {"chapter": "Cold Front", "premium": [["EM_PLAYER_HP12A_FROSTWARDEN_01", 1]], "free": []},
+    "32": {"chapter": "Cold Front", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 3]], "free": []},
+    "33": {"chapter": "Cold Front", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["EJ_HP12A_FROSTWARDEN_02", 1]]},
+    "34": {"chapter": "Cold Front", "premium": [["CURRENCY_PJM_WEAPON", 75]], "free": []},
+    "35": {"chapter": "Cold Front", "premium": [["WP_GA_HP12A_FROSTWARDEN_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "36": {"chapter": "Cold Front", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": []},
+    "37": {"chapter": "Cold Front", "premium": [["BNC_ANIMATION_HP12A_FROSTWARDEN_00", 1]], "free": []},
+    "38": {"chapter": "Cold Front", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": []},
+    "39": {"chapter": "Cold Front", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 3]], "free": []},
+    "40": {"chapter": "Cold Front", "premium": [["WP_DP_HP12A_FROSTWARDEN_00", 1]], "free": [["TOKEN_AR_HP12A_FROSTWARDEN_CHEST_02", 1]], "_not_granted": ["ent_hp12a_free_40"]},
+    "41": {"chapter": "Cold Front", "premium": [["CURRENCY_MARKS_STEEL", 50]], "free": []},
+    "42": {"chapter": "Cold Front", "premium": [], "free": [], "_not_granted": ["ent_ccfp_hp12a_frostwarden_01"]},
+    "43": {"chapter": "Cold Front", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": [["EM_PLAYER_HP12A_FROSTWARDEN_00", 1]]},
+    "44": {"chapter": "Cold Front", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 3]], "free": []},
+    "45": {"chapter": "Cold Front", "premium": [["EM_INTRO_HP12A_FROSTWARDEN_01", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "46": {"chapter": "Cold Front", "premium": [["CURRENCY_PJM_AIRSHIP", 75]], "free": []},
+    "47": {"chapter": "Cold Front", "premium": [], "free": [], "_not_granted": ["ent_cchs_hp12a_frostwarden_32"]},
+    "48": {"chapter": "Cold Front", "premium": [["CURRENCY_PLATINUM_UNIV", 75]], "free": []},
+    "49": {"chapter": "Cold Front", "premium": [["CURRENCY_PJM_PRESTIGE_EMPTY", 50]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "50": {"chapter": "Cold Front", "premium": [["AR_HP12A_FROSTWARDEN_HELM_00_ULTRA", 1], ["AR_HP12A_FROSTWARDEN_CHEST_00_ULTRA", 1], ["AR_HP12A_FROSTWARDEN_ARMS_00_ULTRA", 1], ["AR_HP12A_FROSTWARDEN_LEGS_00_ULTRA", 1]], "free": [["TOKEN_AR_HP12A_FROSTWARDEN_HELM_02", 1], ["TITLE_HP12A_FROSTWARDEN_00", 1]], "_not_granted": ["ent_hp12a_free_50", "ent_hp12a_elite_50"]}
+  }
+}

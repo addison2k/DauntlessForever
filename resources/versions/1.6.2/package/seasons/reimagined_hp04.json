@@ -1,0 +1,93 @@
+{
+  "_notes": [
+    "Burndown: reimagined (50 levels, rebuilt from the season's items) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label.",
+    "No original level list survives for this season in full; rebuilt from its 47 items in the 1.6.2 catalogs. Elite: one emote at most per level, Ultra/finale set at level 50. Free: banners/flares/titles/emojis/dyes, Rams every level, cores, a Transmog Stone every 10."
+  ],
+  "season_key": "reimagined_hp04",
+  "season_title": "Burndown",
+  "season_kind": "reimagined (50 levels, rebuilt from the season's items)",
+  "pass_id": "season13a",
+  "levels": 50,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        5
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Burndown", "premium": [["EM_INTRO_HP04_BLAZE_00", 1]], "free": [["BNC_ANIMATION_HP04_FIRE_00", 1], ["BNC_FABRIC_EVENT_HP04_00", 1], ["CURRENCY_NOTES", 100]]},
+    "2": {"chapter": "Burndown", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "3": {"chapter": "Burndown", "premium": [["EM_INTRO_HP04_HEAVYLAND_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "4": {"chapter": "Burndown", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["BNC_FABRIC_EVENT_HP04_01", 1], ["BNC_FABRIC_EVENT_HP04_02", 1], ["CURRENCY_NOTES", 100]]},
+    "5": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "6": {"chapter": "Burndown", "premium": [["EM_PLAYER_HP04_BOULDER_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "7": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "8": {"chapter": "Burndown", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["BNC_SIGIL_EVENT_HP04_00", 1], ["BNC_SIGIL_EVENT_HP04_01", 1], ["CURRENCY_NOTES", 100]]},
+    "9": {"chapter": "Burndown", "premium": [["EM_PLAYER_HP04_DANCE_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "10": {"chapter": "Burndown", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "11": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 250]], "free": [["BNC_SIGIL_EVENT_HP04_02", 1], ["BNC_SIGIL_EVENT_HP04_03", 1], ["CURRENCY_NOTES", 100]]},
+    "12": {"chapter": "Burndown", "premium": [["EM_PLAYER_HP04_FIREBREATH_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "13": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "14": {"chapter": "Burndown", "premium": [["EM_PLAYER_HP04_NECKCRACK_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "15": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 250]], "free": [["BNC_SIGIL_EVENT_HP04_04", 1], ["BNC_SIGIL_EVENT_HP04_05", 1], ["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "16": {"chapter": "Burndown", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "17": {"chapter": "Burndown", "premium": [["EM_PLAYER_HP04_SHOUT_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "18": {"chapter": "Burndown", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["BNC_SIGIL_EVENT_HP04_06", 1], ["BNC_SIGIL_EVENT_HP04_07", 1], ["CURRENCY_NOTES", 100]]},
+    "19": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "20": {"chapter": "Burndown", "premium": [["LT_HP04_ARID_00", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "21": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "22": {"chapter": "Burndown", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["BNC_SIGIL_EVENT_HP04_08", 1], ["BNC_STANDARD_HP04_ARID_00", 1], ["CURRENCY_NOTES", 100]]},
+    "23": {"chapter": "Burndown", "premium": [["LT_HP04_ARID_01", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "24": {"chapter": "Burndown", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "25": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_GOLD_CELLCORE", 1]]},
+    "26": {"chapter": "Burndown", "premium": [["WP_CB_HP04_ARID", 1]], "free": [["QI_FLARE_HP04_00", 1], ["QI_FLARE_HP04_01", 1], ["CURRENCY_NOTES", 100]]},
+    "27": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "28": {"chapter": "Burndown", "premium": [["WP_DP_HP04_ARID", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "29": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 250]], "free": [["QI_FLARE_HP04_02", 1], ["QI_FLARE_HP04_03", 1], ["CURRENCY_NOTES", 100]]},
+    "30": {"chapter": "Burndown", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "31": {"chapter": "Burndown", "premium": [["WP_EB_HP04_ARID", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "32": {"chapter": "Burndown", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "33": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 250]], "free": [["QI_FLARE_HP04_04", 1], ["QI_FLARE_HP04_05", 1], ["CURRENCY_NOTES", 100]]},
+    "34": {"chapter": "Burndown", "premium": [["WP_GA_HP04_ARID", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "35": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "36": {"chapter": "Burndown", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["QI_FLARE_HP04_06", 1], ["QI_FLARE_HP04_07", 1], ["CURRENCY_NOTES", 100]]},
+    "37": {"chapter": "Burndown", "premium": [["WP_IH_HP04_ARID", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "38": {"chapter": "Burndown", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "39": {"chapter": "Burndown", "premium": [["WP_MS_HP04_ARID", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "40": {"chapter": "Burndown", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1], ["CURRENCY_MARKS_STEEL", 50]], "free": [["QI_FLARE_HP04_08", 1], ["TITLE_HP04_00", 1], ["CURRENCY_NOTES", 100], ["CONTAINER_CORE_SILVER_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "41": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "42": {"chapter": "Burndown", "premium": [["AR_HP04_ARID_HELM_01", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "43": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 250]], "free": [["TITLE_HP04_01", 1], ["TITLE_HP04_02", 1], ["CURRENCY_NOTES", 100]]},
+    "44": {"chapter": "Burndown", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "45": {"chapter": "Burndown", "premium": [["AR_HP04_ARID_ARMS", 1], ["AR_HP04_ARID_LEGS", 1]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_BRONZE_CELLCORE", 1]]},
+    "46": {"chapter": "Burndown", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "47": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 250]], "free": [["TITLE_HP04_03", 1], ["CURRENCY_NOTES", 100]]},
+    "48": {"chapter": "Burndown", "premium": [["AR_HP04_ARID_CHEST", 1], ["AR_HP04_ARID_HELM_00", 1]], "free": [["CURRENCY_NOTES", 100]]},
+    "49": {"chapter": "Burndown", "premium": [["CURRENCY_NOTES", 250]], "free": [["CURRENCY_NOTES", 100]]},
+    "50": {"chapter": "Burndown", "premium": [["CONTAINER_CORE_BRONZE_CELLCORE", 1], ["CURRENCY_MARKS_STEEL", 50], ["CONTAINER_CORE_SILVER_CELLCORE", 1]], "free": [["CURRENCY_NOTES", 100], ["CONTAINER_CORE_GOLD_CELLCORE", 1], ["CURRENCY_TOKEN_TRANSMOG", 1]]}
+  }
+}

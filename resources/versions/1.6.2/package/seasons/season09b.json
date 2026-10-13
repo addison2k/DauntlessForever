@@ -1,0 +1,99 @@
+{
+  "_notes": [
+    "Rogue Elements: original (as shipped) Hunt Pass for Dauntless 1.6.2 (Undaunted metagame, huntpass162.ts).",
+    "Shown on screen as Time Strike (pass_id season13a, the newest pass the 1.6.2 client shows); levels and rewards are this season's.",
+    "Progress is saved per season (season_key). Rewards: [catalog_id, quantity]. 'chapter' is only a label.",
+    "9 reward(s) were entitlements or lootboxes and are not granted offline; they are listed per level under _not_granted."
+  ],
+  "season_key": "season09b",
+  "season_title": "Rogue Elements",
+  "season_kind": "original (as shipped)",
+  "pass_id": "season13a",
+  "levels": 50,
+  "xp_per_level": 100,
+  "weapon_xp_ratio": 0.0,
+  "max_xp_per_post": 1000,
+  "premium_free": false,
+  "entitlements": [
+    "season13a_premium",
+    "exchange_slot_2",
+    "exchange_slot_3"
+  ],
+  "entitlement_shape": "wrapped",
+  "claim_mode": "grant",
+  "start_date": "2020-01-01T00:00:00+00:00",
+  "end_date": "2099-01-01T00:00:00+00:00",
+  "original": {
+    "progression_id": "season09b",
+    "start_date": "2020-04-30T17:00:00+00:00",
+    "end_date": "2020-06-11T16:59:59+00:00",
+    "premium_gating_entitlement": "season09b_premium"
+  },
+  "prestige": {
+    "xp_per_level": 100,
+    "free": [
+      [
+        "CURRENCY_PRESTIGE",
+        1
+      ]
+    ],
+    "premium": [
+      [
+        "CURRENCY_PRESTIGE",
+        5
+      ]
+    ]
+  },
+  "rewards": {
+    "1": {"chapter": "Rogue Elements", "premium": [["AR_HP09B_COMMANDO_HELM_00", 1], ["AR_HP09B_COMMANDO_LEGS_00", 1], ["AR_HP09B_COMMANDO_ARMS_00", 1], ["AR_HP09B_COMMANDO_CHEST_00", 1]], "free": [["TITLE_HP09B_COMMANDO_00", 1], ["EJ_HP09B_COMMANDO_02", 1]]},
+    "2": {"chapter": "Rogue Elements", "premium": [["DYE_HP09B_COMMANDO_01_DURABLE", 1]], "free": []},
+    "3": {"chapter": "Rogue Elements", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 25]]},
+    "4": {"chapter": "Rogue Elements", "premium": [["WP_EB_HP09B_COMMANDO_00", 1]], "free": []},
+    "5": {"chapter": "Rogue Elements", "premium": [["EM_INTRO_HP09B_COMMANDO_00_F", 1]], "free": [["Container_Core_Slayer_Silver", 1]]},
+    "6": {"chapter": "Rogue Elements", "premium": [], "free": [["TOKEN_BOUNTY_DRAFT", 2]], "_not_granted": ["ent_cchd_hp09b_commando_00"]},
+    "7": {"chapter": "Rogue Elements", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "8": {"chapter": "Rogue Elements", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["QI_DAMAGE_BLOCK_POTION", 15]]},
+    "9": {"chapter": "Rogue Elements", "premium": [], "free": [["TOKEN_EVENT_S09B_QUEST_COUNTER", 1]], "_not_granted": ["ent_ccfp_hp09b_commando_00"]},
+    "10": {"chapter": "Rogue Elements", "premium": [["LT_HP09B_COMMANDO_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "11": {"chapter": "Rogue Elements", "premium": [["DYE_HP09B_COMMANDO_02_DURABLE", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "12": {"chapter": "Rogue Elements", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": []},
+    "13": {"chapter": "Rogue Elements", "premium": [["BNC_FABRIC_EVENT_HP09B_COMMANDO_00", 1]], "free": [["QI_STAMINA_POTION_00", 25]]},
+    "14": {"chapter": "Rogue Elements", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": []},
+    "15": {"chapter": "Rogue Elements", "premium": [["WP_CB_HP09B_COMMANDO_00", 1]], "free": [["EJ_HP09B_COMMANDO_00", 1]]},
+    "16": {"chapter": "Rogue Elements", "premium": [], "free": [["TOKEN_BOUNTY_DRAFT", 2]], "_not_granted": ["escalation_xp_boost_entitlement"]},
+    "17": {"chapter": "Rogue Elements", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "18": {"chapter": "Rogue Elements", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["QI_HEALING_PYLON_BIG", 10]]},
+    "19": {"chapter": "Rogue Elements", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": [["TOKEN_EVENT_S09B_QUEST_COUNTER", 1]]},
+    "20": {"chapter": "Rogue Elements", "premium": [["WP_IH_HP09B_COMMANDO_00", 1]], "free": [["CURRENCY_TOKEN_EXCHANGE_SPEED_UP", 25]]},
+    "21": {"chapter": "Rogue Elements", "premium": [["EM_PLAYER_HP09B_COMMANDO_01", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "22": {"chapter": "Rogue Elements", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": []},
+    "23": {"chapter": "Rogue Elements", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["QI_STAMINA_POTION_00", 25]]},
+    "24": {"chapter": "Rogue Elements", "premium": [["TOKEN_DAILY_PATROL_BONUS_PURCHASED", 5]], "free": []},
+    "25": {"chapter": "Rogue Elements", "premium": [["WP_MS_HP09B_COMMANDO_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "26": {"chapter": "Rogue Elements", "premium": [["CURRENCY_TOKEN_TRANSMOG", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "27": {"chapter": "Rogue Elements", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "28": {"chapter": "Rogue Elements", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["DYE_HP09B_COMMANDO_00_DURABLE", 1]]},
+    "29": {"chapter": "Rogue Elements", "premium": [], "free": [["TOKEN_EVENT_S09B_QUEST_COUNTER", 1]], "_not_granted": ["ent_ccfp_hp09b_commando_01"]},
+    "30": {"chapter": "Rogue Elements", "premium": [["WP_GA_HP09B_COMMANDO_00", 1]], "free": [["QI_FLARE_HP09B_COMMANDO_00", 1]]},
+    "31": {"chapter": "Rogue Elements", "premium": [["EM_PLAYER_HP09B_COMMANDO_02", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "32": {"chapter": "Rogue Elements", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "33": {"chapter": "Rogue Elements", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["EJ_HP09B_COMMANDO_01", 1]]},
+    "34": {"chapter": "Rogue Elements", "premium": [], "free": [], "_not_granted": ["escalation_xp_boost_entitlement"]},
+    "35": {"chapter": "Rogue Elements", "premium": [["WP_DP_HP09B_COMMANDO_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "36": {"chapter": "Rogue Elements", "premium": [["BNC_STANDARD_HP09B_COMMANDO_00", 1]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "37": {"chapter": "Rogue Elements", "premium": [["CURRENCY_PRESTIGE", 50]], "free": []},
+    "38": {"chapter": "Rogue Elements", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["QI_DAMAGE_PYLON", 10]]},
+    "39": {"chapter": "Rogue Elements", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": [["TOKEN_EVENT_S09B_QUEST_COUNTER", 2]]},
+    "40": {"chapter": "Rogue Elements", "premium": [["WP_AC_HP09B_COMMANDO_00", 1]], "free": [["BNC_SIGIL_HP09B_COMMANDO_00", 1]]},
+    "41": {"chapter": "Rogue Elements", "premium": [["TOKEN_BOUNTY_DRAFT", 5]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "42": {"chapter": "Rogue Elements", "premium": [], "free": [], "_not_granted": ["escalation_xp_boost_entitlement"]},
+    "43": {"chapter": "Rogue Elements", "premium": [["CURRENCY_PLATINUM_UNIV", 50]], "free": [["EM_PLAYER_HP09B_COMMANDO_00", 1]]},
+    "44": {"chapter": "Rogue Elements", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": []},
+    "45": {"chapter": "Rogue Elements", "premium": [["EM_INTRO_HP09B_COMMANDO_00", 1]], "free": [["CURRENCY_PLATINUM_UNIV", 50]]},
+    "46": {"chapter": "Rogue Elements", "premium": [["TOKEN_BOUNTY_DRAFT", 5]], "free": [["TOKEN_BOUNTY_DRAFT", 2]]},
+    "47": {"chapter": "Rogue Elements", "premium": [], "free": [], "_not_granted": ["escalation_xp_boost_entitlement"]},
+    "48": {"chapter": "Rogue Elements", "premium": [["CURRENCY_MARKS_STEEL", 100]], "free": [["CURRENCY_TOKEN_TRANSMOG", 1]]},
+    "49": {"chapter": "Rogue Elements", "premium": [["CURRENCY_PRESTIGE", 50]], "free": [["TOKEN_EVENT_S09B_QUEST_COUNTER", 3]]},
+    "50": {"chapter": "Rogue Elements", "premium": [["AR_HP09B_COMMANDO_HELM_00_ULTRA", 1], ["AR_HP09B_COMMANDO_CHEST_00_ULTRA", 1], ["AR_HP09B_COMMANDO_ARMS_00_ULTRA", 1], ["AR_HP09B_COMMANDO_LEGS_00_ULTRA", 1]], "free": [["AR_HP09B_COMMANDO_HELM_00", 1], ["AR_HP09B_COMMANDO_LEGS_00", 1], ["AR_HP09B_COMMANDO_ARMS_00", 1], ["AR_HP09B_COMMANDO_CHEST_00", 1], ["TITLE_HP09B_COMMANDO_01", 1]], "_not_granted": ["ent_hp09b_elite_50", "ent_hp09b_elite_50"]}
+  }
+}
