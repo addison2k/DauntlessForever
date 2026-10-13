@@ -1,0 +1,34 @@
+{
+  "_comment": "Inventory page (launcher). Items players ask for most; every other item in the save is listed under 'Everything else'. Ids are 1.6.2 catalog ids.",
+  "groups": [
+    {
+      "title": "Currencies",
+      "items": [
+        { "id": "CURRENCY_NOTES", "name": "Rams", "blurb": "The everyday currency: crafting, upgrades, the Slayer's Path." },
+        { "id": "CURRENCY_PJM_WEAPON", "name": "Combat Merits", "blurb": "Slayer's Path nodes (sword icon)." },
+        { "id": "CURRENCY_PJM_AIRSHIP", "name": "Airship Merits", "blurb": "Slayer's Path nodes (the other Merit counter)." },
+        { "id": "CURRENCY_PJM_PRESTIGE_FILLED", "name": "Aetherhearts", "blurb": "Reforging and power surging." },
+        { "id": "CURRENCY_PJM_PRESTIGE_EMPTY", "name": "Aethersparks", "blurb": "Weapon mastery reward, turns into Aetherhearts." },
+        { "id": "CURRENCY_PRESTIGE", "name": "Vault Coins", "blurb": "Vault currency." },
+        { "id": "CURRENCY_MARKS_STEEL", "name": "Marks of Steel", "blurb": "Trials currency (Hard Trials unlock)." }
+      ]
+    },
+    {
+      "title": "Tokens and keys",
+      "items": [
+        { "id": "TOKEN_DAILY_PATROL_BONUS_PURCHASED", "name": "Patrol Keys", "blurb": "Open the patrol chests." },
+        { "id": "TOKEN_BOUNTY_DRAFT", "name": "Bounty Tokens", "blurb": "Draft new bounties." },
+        { "id": "TOKEN_BOUNTY_DRAFT_PREMIUM", "name": "Premium Bounty Tokens", "blurb": "Draft premium bounties." },
+        { "id": "CURRENCY_TOKEN_EXCHANGE_SPEED_UP", "name": "Fusion Speed-ups", "blurb": "Finish a cell fusion early." }
+      ]
+    },
+    {
+      "title": "Cell cores",
+      "items": [
+        { "id": "CONTAINER_CORE_BRONZE_CELLCORE", "name": "Bronze Cell Core", "blurb": "Opens into cells." },
+        { "id": "CONTAINER_CORE_SILVER_CELLCORE", "name": "Silver Cell Core", "blurb": "Opens into better cells." },
+        { "id": "CONTAINER_CORE_GOLD_CELLCORE", "name": "Gold Cell Core", "blurb": "Opens into the best cells." }
+      ]
+    }
+  ]
+}

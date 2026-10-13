@@ -3,6 +3,14 @@
   "notes": [
     {
       "date": "2026-10-13",
+      "title": "Inventory page (1.6.2)",
+      "items": [
+        "New Inventory page: add or remove Rams, Merits, Aetherhearts, Patrol Keys, Bounty Tokens, cell cores and anything else in your save.",
+        "Close the game first. Every save here makes a backup of your save in backup\\inventory (the last 10 are kept)."
+      ]
+    },
+    {
+      "date": "2026-10-13",
       "title": "Game Rules (1.6.2)",
       "items": [
         "New Game Rules page: weapon XP speed, Hunt Pass XP speed, loot amount and free crafting. Your picks apply the next time you press Play.",

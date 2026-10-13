@@ -277,6 +277,38 @@ ipcMain.handle('rules:set', (_e, id, changes) => {
   return { ok: true, running: R.isRunning(v.id) };
 });
 
+// ---------------------------------------------------------------- Inventory (package files items.json + tools/items.js)
+// tools/items.js reads/changes the stacked items in data/undaunted.db with the package's own Node.js and SQLite module.
+async function runItems(v, args) {
+  let node = null;
+  try { node = JSON.parse(fs.readFileSync(path.join(v.dataDir, 'config.json'), 'utf8').replace(/^﻿/, '')).Node; } catch {}
+  if (!node || !fs.existsSync(node)) node = (await findNode() || {}).path;
+  if (!node) return { ok: false, error: 'Node.js was not found. Run Set up first.' };
+  return new Promise((resolve) => {
+    execFile(node, [path.join(v.dataDir, 'tools', 'items.js'), ...args], { cwd: v.dataDir, timeout: 30000, windowsHide: true }, (e, out) => {
+      try { resolve(JSON.parse(String(out || '').trim())); }
+      catch { resolve({ ok: false, error: e ? `Could not read the save (${e.message.split('\n')[0]}).` : 'Could not read the save.' }); }
+    });
+  });
+}
+ipcMain.handle('items:list', async (_e, id) => {
+  const v = byId(id); if (!v || !v.package) return null;
+  let catalog;
+  try { catalog = JSON.parse(fs.readFileSync(path.join(v.dataDir, 'items.json'), 'utf8').replace(/^﻿/, '')); } catch { return null; }
+  if (!fs.existsSync(path.join(v.dataDir, 'tools', 'items.js'))) return null;
+  const save = await runItems(v, ['list']);
+  return { groups: catalog.groups || [], save, running: R.isRunning(v.id) };
+});
+ipcMain.handle('items:set', async (_e, id, characterId, changes) => {
+  const v = byId(id); if (!v || !v.package) return { ok: false, error: 'Unknown version.' };
+  if (R.isRunning(v.id) || R.isRunning(v.id + ':setup')) return { ok: false, error: 'Close the game first (press Stop), then change items.' };
+  if (!/^[\w-]{1,64}$|^\*$/.test(String(characterId))) return { ok: false, error: 'Unknown character.' };
+  const clean = {};
+  for (const [k, n] of Object.entries(changes || {})) if (/^[A-Z0-9_]{3,80}$/.test(k) && Number.isFinite(Number(n))) clean[k] = Math.max(0, Math.floor(Number(n)));
+  if (!Object.keys(clean).length) return { ok: false, error: 'Nothing to change.' };
+  return runItems(v, ['set', String(characterId), JSON.stringify(clean)]);
+});
+
 // ---------------------------------------------------------------- patch notes (bundled, the repo's copy wins)
 ipcMain.handle('patchnotes:list', async () => {
   let notes = readJson(path.join(P.bundledRoot(), 'patchnotes.json'), { notes: [] });

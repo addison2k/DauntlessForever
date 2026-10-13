@@ -34,6 +34,7 @@ function showPage(name) {
   if (name === 'seasons') renderSeasons();
   if (name === 'events') renderEvents();
   if (name === 'rules') renderRules();
+  if (name === 'items') renderItems(true);
   if (name === 'patches') renderPatches();
   document.querySelector('.content').scrollTop = 0;
 }
@@ -277,6 +278,106 @@ async function renderRules() {
     list.appendChild(row);
   }
   $('rule-reset').onclick = () => apply(Object.fromEntries(d.rules.map(x => [x.key, x.default])), 'Back to the defaults');
+}
+
+// ---------------------------------------------------------------- Inventory (add / remove items in the save)
+let itemVer = null, itemChar = null, itemNote = null, itemData = null, itemPending = {}, itemErr = false;
+const fmtN = n => Number(n || 0).toLocaleString('en-US');
+async function renderItems(reload) {
+  const vs = versions.filter(x => x.hasPackage);
+  if (reload || !itemData) {
+    const found = [];
+    for (const v of vs) { let d = null; try { d = await L.items(v.id); } catch {} if (d) found.push({ v, d }); }
+    if (!found.some(x => x.v.id === itemVer)) itemVer = (found.find(x => x.v.id === selected) || found[0] || {}).v?.id || null;
+    itemData = { found };
+  }
+  const { found } = itemData;
+  const tabs = $('item-vtabs'); tabs.innerHTML = '';
+  for (const { v } of found) {
+    const b = document.createElement('button'); b.className = 'season-tab'; b.setAttribute('role', 'tab');
+    b.setAttribute('aria-selected', String(v.id === itemVer)); b.textContent = v.name || v.id;
+    b.addEventListener('click', () => { itemVer = v.id; itemPending = {}; itemNote = null; renderItems(true); });
+    tabs.appendChild(b);
+  }
+  tabs.hidden = found.length < 2;
+  const cur = found.find(x => x.v.id === itemVer);
+  const save = cur && cur.d.save;
+  const chars = (save && save.ok && save.characters) || [];
+  const usable = cur && chars.length;
+  $('item-none').hidden = !!usable; $('item-body').hidden = !usable;
+  if (!usable) {
+    const why = !cur ? null : (save && !save.ok ? save.error : 'No character yet. Press Play once and make a character first.');
+    $('item-none-title').textContent = why ? 'Nothing to edit yet' : 'No inventory editing for this version yet';
+    $('item-none-pill').hidden = !!why;
+    $('item-none-text').textContent = why || 'The Inventory page is ready for 1.6.2 first. Other versions get it through a server-file update.';
+    return;
+  }
+  if (!chars.some(c => c.id === itemChar)) itemChar = chars[0].id;
+  const ch = chars.find(c => c.id === itemChar);
+  const sel = $('item-char'); sel.innerHTML = '';
+  for (const c of chars) { const o = document.createElement('option'); o.value = c.id; o.textContent = c.name || c.id.slice(0, 8); o.selected = c.id === itemChar; sel.appendChild(o); }
+  $('item-char-wrap').hidden = chars.length < 2;
+  sel.onchange = () => { itemChar = sel.value; itemPending = {}; itemNote = null; renderItems(false); };
+  const n = Object.keys(itemPending).length;
+  const note = $('item-note');
+  note.textContent = itemNote || (cur.d.running ? 'The game is running: close it before saving.' : (n ? `${n} unsaved change${n > 1 ? 's' : ''}.` : ''));
+  note.classList.toggle('err', itemErr);
+  $('item-save').disabled = !n; $('item-undo').disabled = !n;
+  $('item-save').textContent = n ? `Save ${n} change${n > 1 ? 's' : ''}` : 'Save changes';
+  const known = new Set();
+  const row = (id, name, blurb) => {
+    const have = ch.items[id] || 0;
+    const val = id in itemPending ? itemPending[id] : have;
+    const r = document.createElement('div'); r.className = 'season-row item-row' + (id in itemPending ? ' active' : '');
+    r.innerHTML = `
+      <div><div class="season-name">${esc(name)}</div><div class="season-kind">${blurb ? esc(blurb) + ' ' : ''}<code>${esc(id)}</code></div></div>
+      <div class="item-have">${id in itemPending ? `<s>${fmtN(have)}</s> → ` : ''}<b>${fmtN(val)}</b></div>
+      <div class="item-edit">
+        <button class="ghost step" data-d="-10" title="10 less">−10</button>
+        <input type="number" min="0" max="99999999" value="${val}" aria-label="${esc(name)}">
+        <button class="ghost step" data-d="10" title="10 more">+10</button>
+        <button class="ghost step" data-d="100" title="100 more">+100</button>
+        <button class="ghost step zero" data-z="1" title="Set to 0 (removes it)">Clear</button>
+      </div>`;
+    const inp = r.querySelector('input');
+    const setTo = (x) => {
+      x = Math.max(0, Math.min(99999999, Math.floor(Number(x) || 0)));
+      if (x === have) delete itemPending[id]; else itemPending[id] = x;
+      itemNote = null; itemErr = false; renderItems(false);
+    };
+    inp.addEventListener('change', () => setTo(inp.value));
+    inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') setTo(inp.value); });
+    for (const b of r.querySelectorAll('.step')) b.addEventListener('click', () => setTo(b.dataset.z ? 0 : val + Number(b.dataset.d)));
+    return r;
+  };
+  const host = $('item-groups'); host.innerHTML = '';
+  for (const g of cur.d.groups) {
+    const h = document.createElement('h2'); h.className = 'list-head'; h.textContent = g.title; host.appendChild(h);
+    const list = document.createElement('div'); list.className = 'season-list';
+    for (const it of g.items) { known.add(it.id); list.appendChild(row(it.id, it.name, it.blurb)); }
+    host.appendChild(list);
+  }
+  const other = $('item-other'); other.innerHTML = '';
+  const otherIds = [...new Set([...Object.keys(ch.items), ...Object.keys(itemPending)])].filter(id => !known.has(id)).sort();
+  for (const id of otherIds) other.appendChild(row(id, id.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase()), ''));
+  $('item-more-n').textContent = otherIds.length;
+  $('item-undo').onclick = () => { itemPending = {}; itemNote = null; itemErr = false; renderItems(false); };
+  $('item-save').onclick = async () => {
+    $('item-save').disabled = true; itemNote = 'Saving...'; itemErr = false; note.textContent = itemNote;
+    const r = await L.setItems(itemVer, itemChar, itemPending);
+    if (r && r.ok) { itemPending = {}; itemNote = 'Saved. You will see it the next time you press Play. (Backup kept in backup\\inventory.)'; itemErr = false; }
+    else { itemNote = (r && r.error) || 'Could not save.'; itemErr = true; }
+    renderItems(!!(r && r.ok));
+  };
+  $('item-add-btn').onclick = () => {
+    const id = $('item-add-id').value.trim().toUpperCase(), q = Math.max(0, Math.floor(Number($('item-add-n').value) || 0));
+    if (!/^[A-Z0-9_]{3,80}$/.test(id)) { itemNote = 'That is not an item ID (capital letters, digits and _ only).'; itemErr = true; renderItems(false); return; }
+    const have = ch.items[id] || 0;
+    if (q === have) delete itemPending[id]; else itemPending[id] = q;
+    $('item-add-id').value = ''; itemNote = null; itemErr = false;
+    if (!known.has(id)) $('item-more').open = true;
+    renderItems(false);
+  };
 }
 
 // ---------------------------------------------------------------- patch notes

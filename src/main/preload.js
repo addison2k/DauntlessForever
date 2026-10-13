@@ -45,5 +45,7 @@ contextBridge.exposeInMainWorld('launcher', {
   setEvents: invoke('events:set'),
   rules: invoke('rules:list'),
   setRules: invoke('rules:set'),
+  items: invoke('items:list'),
+  setItems: invoke('items:set'),
   patchNotes: invoke('patchnotes:list'),
 });

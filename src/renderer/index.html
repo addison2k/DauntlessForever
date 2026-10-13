@@ -23,6 +23,7 @@
     <button class="nav-item" data-page="seasons"><span class="nav-ico">✦</span>Seasons</button>
     <button class="nav-item" data-page="events"><span class="nav-ico">◆</span>Events</button>
     <button class="nav-item" data-page="rules"><span class="nav-ico">±</span>Game Rules</button>
+    <button class="nav-item" data-page="items"><span class="nav-ico">□</span>Inventory</button>
     <button class="nav-item" data-page="mods"><span class="nav-ico">⬡</span>Mods</button>
     <button class="nav-item" data-page="patches"><span class="nav-ico">≡</span>Patch notes</button>
     <button class="nav-item" data-page="settings"><span class="nav-ico">⚙</span>Settings</button>
@@ -164,6 +165,34 @@
     <div class="season-list" id="rule-list"></div>
     <div class="rule-foot"><button class="ghost" id="rule-reset">Back to the defaults</button></div>
     <p class="small">"Experimental" means it works in the server files but has not been checked in a real hunt yet. If something looks wrong, set it back to Normal or Off. Whatever you earned while a rule was on stays earned.</p>
+  </div>
+</section>
+
+<!-- ============================================================ Inventory -->
+<section class="page" id="page-items" hidden>
+  <h1 class="page-title">Inventory</h1>
+  <p class="lead">Add or remove currencies, tokens and keys in your save. Close the game first. A backup of your save is made every time you save here.</p>
+  <div class="season-tabs" id="item-vtabs" role="tablist"></div>
+  <div id="item-none" class="card" hidden>
+    <div class="card-head"><h2 id="item-none-title">No inventory editing for this version yet</h2><span class="pill" id="item-none-pill">Planned</span></div>
+    <p id="item-none-text">The Inventory page is ready for 1.6.2 first. Other versions get it through a server-file update.</p>
+  </div>
+  <div id="item-body" hidden>
+    <div class="item-bar">
+      <label class="item-char" id="item-char-wrap" hidden>Character <select id="item-char"></select></label>
+      <p class="action-note" id="item-note" aria-live="polite"></p>
+      <div class="item-acts"><button class="ghost" id="item-undo" disabled>Undo</button><button class="primary-sm" id="item-save" disabled>Save changes</button></div>
+    </div>
+    <div id="item-groups"></div>
+    <details class="item-more" id="item-more">
+      <summary>Everything else in your save <span class="n" id="item-more-n"></span></summary>
+      <div class="season-list" id="item-other"></div>
+    </details>
+    <div class="item-add">
+      <h2 class="list-head">Add another item by its ID</h2>
+      <div class="item-add-row"><input id="item-add-id" placeholder="CURRENCY_NOTES" spellcheck="false" autocomplete="off"><input id="item-add-n" type="number" min="0" value="1"><button class="ghost" id="item-add-btn">Add to the list</button></div>
+      <p class="small">IDs are the game's catalog names (capital letters, digits and _). An ID the game doesn't know does nothing in game and can be removed again here.</p>
+    </div>
   </div>
 </section>
 

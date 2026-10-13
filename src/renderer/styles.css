@@ -298,3 +298,27 @@ dialog form { margin-top: 18px; display: flex; justify-content: flex-end; }
 .rule-choice { padding: 4px 10px; border-color: var(--line); }
 .rule-choice[aria-pressed="true"] { border-color: var(--brass); color: var(--brass-2); background: var(--bg-3); }
 .rule-foot { display: flex; justify-content: flex-end; margin-top: 10px; }
+
+/* Inventory */
+.item-bar { position: sticky; top: 8px; z-index: 2; display: flex; align-items: center; gap: 16px; padding: 10px 14px; background: var(--bg-2); border: 1px solid var(--line); border-radius: 8px; }
+.item-bar .action-note { margin: 0; flex: 1; min-height: 0; }
+.item-bar .action-note:empty::before { content: 'Change a number, then save.'; color: var(--ink-3); }
+.item-char { display: flex; align-items: center; gap: 8px; color: var(--ink-2); font-size: 13px; }
+.item-char select { background: var(--bg-2); color: var(--ink); border: 1px solid var(--line-2); border-radius: 6px; padding: 5px 8px; }
+.item-acts { display: flex; gap: 8px; }
+.primary-sm { padding: 8px 16px; border-radius: 6px; background: var(--brass); color: #1a1408; font-weight: 600; }
+.primary-sm:disabled, .item-acts .ghost:disabled { opacity: .45; cursor: default; }
+.item-row { grid-template-columns: minmax(0, 1fr) 150px auto; }
+.item-row .season-kind code { font-size: 11px; color: var(--ink-3); }
+.item-have { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink-2); }
+.item-have b { color: var(--ink); font-weight: 600; }
+.item-have s { color: var(--ink-3); }
+.item-edit { display: flex; gap: 4px; align-items: center; }
+.item-edit .ghost { padding: 4px 8px; font-size: 12.5px; min-width: 38px; }
+.item-edit input, .item-add-row input { width: 96px; background: var(--bg); color: var(--ink); border: 1px solid var(--line-2); border-radius: 6px; padding: 5px 8px; font: inherit; font-size: 13px; }
+.item-more { margin-top: 22px; }
+.item-more summary { cursor: pointer; color: var(--ink-2); padding: 6px 0 10px; }
+.item-more summary .n { color: var(--ink-3); margin-left: 4px; }
+.item-add { margin-top: 22px; }
+.item-add-row { display: flex; gap: 8px; align-items: center; }
+.item-add-row #item-add-id { width: 280px; text-transform: uppercase; }

@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-13.2",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-13.2.zip",
-                         "sha256":  "1bc8379a4d0e534480f2ac54f0322886c34100327665fdafec6a0b2e1435ae69",
+                         "packageVersion":  "2026-10-13.3",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-13.3.zip",
+                         "sha256":  "d0d458c235ed9446e818aba0d7ab0d78f5d28341dbfa773ee8b811b7783ebe8f",
                          "date":  "2026-10-13",
-                         "note":  "Game Rules: weapon XP 2x by default, Hunt Pass XP, loot, free crafting"
+                         "note":  "Inventory page: add or remove items"
                      },
                      {
                          "id":  "1.14.7",
@@ -18,9 +18,9 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.1.7",
-                     "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.1.7",
-                     "notes":  "Game Rules page: XP speed, loot, free crafting",
+                     "version":  "0.1.8",
+                     "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.1.8",
+                     "notes":  "Inventory page: add or remove items",
                      "date":  "2026-10-13"
                  }
 }
