@@ -26,7 +26,7 @@
                  },
     "package":  {
                     "dir":  "package",
-                    "packageVersion":  "2026-10-13.4",
+                    "packageVersion":  "2026-10-13.5",
                     "setup":  "tools/setup.ps1",
                     "uninstallArgs":  [
                                           "-Uninstall"
@@ -50,7 +50,7 @@
                                            },
                                            {
                                                "rel":  "Archon/Binaries/Win64/dxgi.dll",
-                                               "sha256":  "3B4D406CD16268C872A1574F8D16457623C96D5FA570DD3AD441C192BFBD8698"
+                                               "sha256":  "B241981F0C60843D66ADD4005FABCE205CDAEC9368C2965CE8B0B67573B33B6D"
                                            }
                                        ],
                     "setupDoneFiles":  [
