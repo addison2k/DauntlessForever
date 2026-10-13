@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-13.5",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-13.5.zip",
-                         "sha256":  "32c6da3e885ddc920f6b3a0e25445945785a70cc28fd923d6ab0c76cd30ea2c2",
+                         "packageVersion":  "2026-10-13.6",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-13.6.zip",
+                         "sha256":  "d5b3e960598a60e6d6ece0684d0eb72d5bf25b0a84f63d0538ba337334ae9b0c",
                          "date":  "2026-10-13",
-                         "note":  "Server copies are silent and no longer grab the mouse"
+                         "note":  "Fixes the freeze at start-up on some Windows 11 PCs (stuck at Starting the game server)"
                      }
                  ],
     "launcher":  {
