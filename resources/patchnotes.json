@@ -1,0 +1,32 @@
+{
+  "_comment": "Patch notes shown in the launcher (newest first). The launcher also reads this file from the repo, so new notes need no build.",
+  "notes": [
+    {
+      "date": "2026-10-13",
+      "title": "Ramsgate events (1.6.2)",
+      "items": [
+        "New Events page: switch Ramsgate's event decorations on before you play. Springtide 2021 (spring/Easter) works; Saint's Bond, the event stall and older season decorations are there to try.",
+        "Setting is kept per version and applies the next time you press Play."
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "title": "1.14.7 server files: Windows 11 25H2",
+      "items": [
+        "The 1.14.7 loader no longer gives up when Windows 11 25H2 delays loading its graphics file; the game window and the game server now start on 25H2.",
+        "Run Set up once on 1.14.7 after the update."
+      ]
+    },
+    {
+      "date": "2026-10-12",
+      "title": "Dauntless Forever 0.1.5",
+      "items": [
+        "New name: Dauntless Forever.",
+        "Seasons page for 1.6.2: 36 Hunt Passes to pick from, each keeps its own level.",
+        "The launcher tells you when a new version is out.",
+        "Uninstall always works and only removes our own files; set-up window stays open on errors.",
+        "Log zips include the game's own logs, with tokens and keys hidden."
+      ]
+    }
+  ]
+}

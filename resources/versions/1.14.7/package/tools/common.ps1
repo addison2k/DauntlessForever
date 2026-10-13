@@ -10,7 +10,7 @@ $ConfigFile = Join-Path $Root 'config.json'
 $ExeHash      = 'F3F95FBF22709EF077A11632ED95D675B7209B7E0172D9ECB9BA7D02A1FBB66B'   # Dauntless 1.14.7, CL 647472
 $EpicEosHash  = 'CBC0E5C922CEB88A9FA99121008AE9CD76244B17753701D9D25C6B596EA2FBFC'   # Epic's EOSSDK-Win64-Shipping.dll
 $StandInHash  = '4113C9EEBFBAC08532B6566A48F69E4F64A6B8E18A18AAFBA43F62F8F7DFDF70'   # bin\EOSSDK-Win64-Shipping.dll (offline sign-in)
-$LoaderHash   = 'DE0C0803064AC5DC390F767CC271B9E88E99F214EE15187F6FB252444457BCE4'    # bin\dxgi.dll (server loader)
+$LoaderHash   = '3B4D406CD16268C872A1574F8D16457623C96D5FA570DD3AD441C192BFBD8698'    # bin\dxgi.dll (server loader)
 $ExeRel       = 'Archon\Binaries\Win64\Dauntless-Win64-Shipping.exe'
 $CapturesUrl  = 'https://github.com/EisigesEis/DauntlessEndpointDocumentation/archive/refs/heads/main.zip'
 

@@ -21,7 +21,9 @@
   <nav class="nav" id="nav">
     <button class="nav-item selected" data-page="play"><span class="nav-ico">▶</span>Play</button>
     <button class="nav-item" data-page="seasons"><span class="nav-ico">✦</span>Seasons</button>
+    <button class="nav-item" data-page="events"><span class="nav-ico">❀</span>Events</button>
     <button class="nav-item" data-page="mods"><span class="nav-ico">⬡</span>Mods</button>
+    <button class="nav-item" data-page="patches"><span class="nav-ico">☰</span>Patch notes</button>
     <button class="nav-item" data-page="settings"><span class="nav-ico">⚙</span>Settings</button>
     <button class="nav-item" data-page="credits"><span class="nav-ico">♥</span>Credits</button>
     <button class="nav-item" data-page="help"><span class="nav-ico">?</span>Help</button>
@@ -29,6 +31,10 @@
   <div class="side-foot">
     <a class="side-link discord" id="lnk-discord" data-url="" hidden><span class="nav-ico">◉</span><span id="lnk-discord-text">Join the Discord</span></a>
     <div class="side-rule"></div>
+    <a class="side-link ask" id="lnk-ask" data-url="" hidden>
+      <svg class="ask-ico" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H11l-4.6 3.7c-.5.4-1.2 0-1.2-.6V16h-.2A2.5 2.5 0 0 1 4 13.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="9" cy="9.6" r="1.1" fill="currentColor"/><circle cx="12" cy="9.6" r="1.1" fill="currentColor"/><circle cx="15" cy="9.6" r="1.1" fill="currentColor"/></svg>
+      <span class="ask-text"><span class="ask-title" id="lnk-ask-title">Questions?</span><span class="ask-sub">Ask me on Discord</span></span>
+    </a>
     <a class="side-link" id="lnk-patreon" data-url="" hidden><span class="nav-ico">◆</span>Support on Patreon</a>
     <div class="side-meta"><span id="side-ver">Dauntless Forever</span> · <a href="#" id="lnk-source" data-url="https://github.com/addison2k/DauntlessForever">source</a></div>
   </div>
@@ -52,6 +58,7 @@
       </div>
       <p class="meta" id="d-meta"></p>
       <p class="blurb" id="d-blurb"></p>
+      <div class="warn-box" id="d-warn" hidden></div>
     </div>
 
     <ol class="path" id="path">
@@ -121,6 +128,32 @@
     <div class="season-list" id="season-list"></div>
     <p class="small">The game's own Hunt Pass screen always says "Time Strike": 1.6.2 can only show its own pass. The levels and rewards are the season you picked here. A few original rewards (account unlocks, loot boxes) cannot be given offline; the rewards list marks them.</p>
   </div>
+</section>
+
+<!-- ============================================================ Events -->
+<section class="page" id="page-events" hidden>
+  <h1 class="page-title">Events</h1>
+  <p class="lead">Dress Ramsgate up for an old event before you play. The choice is kept and applies the next time you press Play.</p>
+  <div class="season-tabs" id="event-vtabs" role="tablist"></div>
+  <div id="event-none" class="card" hidden>
+    <div class="card-head"><h2>No events for this version yet</h2><span class="pill">Planned</span></div>
+    <p>Events are ready for 1.6.2 first. Other versions get theirs through a server-file update.</p>
+  </div>
+  <div id="event-body" hidden>
+    <p class="action-note" id="event-note" aria-live="polite"></p>
+    <h2 class="list-head">Ramsgate event</h2>
+    <div class="season-list" id="event-list"></div>
+    <h2 class="list-head">Season decorations</h2>
+    <div class="season-list" id="dressing-list"></div>
+    <p class="small">"Experimental" means the decorations are in the game files and switch on the same way as Springtide, but nobody has seen them in game yet. If one looks wrong or Ramsgate will not load, pick "No event" / "Time Strike" again. Frostfall's Ramsgate decorations are not in 1.6.2's files, so they cannot be offered here.</p>
+  </div>
+</section>
+
+<!-- ============================================================ Patch notes -->
+<section class="page" id="page-patches" hidden>
+  <h1 class="page-title">Patch notes</h1>
+  <p class="lead">What changed in the launcher and the server files. Server-file updates arrive by themselves when you start the launcher.</p>
+  <div id="patch-list" class="patch-list"></div>
 </section>
 
 <!-- ============================================================ Mods -->

@@ -205,6 +205,45 @@ ipcMain.handle('seasons:openDoc', (_e, id, key) => {
   const f = path.join(v.dataDir, 'seasons', doc);
   try { return fs.readFileSync(f, 'utf8').replace(/^\uFEFF/, ''); } catch { return ''; }
 });
+// ---------------------------------------------------------------- Ramsgate events (package file events.json)
+// The choice is written to data/city_events.txt: a "# keys" line for the launcher, then on=/off= feature flags that
+// start.ps1 hands to the deploy server (Ramsgate map URL ?OverridenFeaturesOn=/Off=).
+function readEvents(v) {
+  if (!v || !v.package) return null;
+  let def;
+  try { def = JSON.parse(fs.readFileSync(path.join(v.dataDir, 'events.json'), 'utf8').replace(/^﻿/, '')); } catch { return null; }
+  let event = 'none', dressing = 'default';
+  try {
+    const m = /#\s*keys:\s*event=([\w-]+);\s*dressing=([\w-]+)/.exec(fs.readFileSync(path.join(v.dataDir, 'data', 'city_events.txt'), 'utf8'));
+    if (m) { event = m[1]; dressing = m[2]; }
+  } catch {}
+  if (!(def.events || []).some(e => e.key === event)) event = 'none';
+  if (!(def.dressings || []).some(d => d.key === dressing)) dressing = 'default';
+  return { events: def.events || [], dressings: def.dressings || [], event, dressing, running: R.isRunning(v.id) };
+}
+ipcMain.handle('events:list', (_e, id) => readEvents(byId(id)));
+ipcMain.handle('events:set', (_e, id, eventKey, dressingKey) => {
+  const v = byId(id); if (!v) return { ok: false, error: 'Unknown version.' };
+  let def; try { def = JSON.parse(fs.readFileSync(path.join(v.dataDir, 'events.json'), 'utf8').replace(/^﻿/, '')); } catch { return { ok: false, error: 'This version has no events.' }; }
+  const ev = (def.events || []).find(e => e.key === eventKey) || { key: 'none', on: [] };
+  const dr = (def.dressings || []).find(d => d.key === dressingKey) || { key: 'default', flag: null };
+  const on = [...(ev.on || [])], off = [];
+  if (dr.flag) { on.push(dr.flag); for (const f of def.huntPassFlags || []) if (f !== dr.flag) off.push(f); }
+  const lines = [`# keys: event=${ev.key}; dressing=${dr.key}`, '# written by the launcher (Events page)'];
+  if (on.length) lines.push('on=' + on.join(','));
+  if (off.length) lines.push('off=' + off.join(','));
+  fs.mkdirSync(path.join(v.dataDir, 'data'), { recursive: true });
+  fs.writeFileSync(path.join(v.dataDir, 'data', 'city_events.txt'), lines.join('\r\n') + '\r\n');
+  return { ok: true, running: R.isRunning(v.id) };
+});
+
+// ---------------------------------------------------------------- patch notes (bundled, the repo's copy wins)
+ipcMain.handle('patchnotes:list', async () => {
+  let notes = readJson(path.join(P.bundledRoot(), 'patchnotes.json'), { notes: [] });
+  try { const live = await U.fetchJson(U.PATCHNOTES_URL); if (live && Array.isArray(live.notes)) notes = live; } catch {}
+  return notes.notes || [];
+});
+
 ipcMain.handle('read:readme', (_e, id) => { const v = byId(id); try { return fs.readFileSync(path.join(v.dataDir, v.package.readme), 'utf8'); } catch { return ''; } });
 
 // ---------------------------------------------------------------- IPC: download

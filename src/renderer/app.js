@@ -32,6 +32,8 @@ function showPage(name) {
   for (const pg of document.querySelectorAll('.page')) pg.hidden = pg.id !== 'page-' + name;
   if (name === 'settings') fillSettings();
   if (name === 'seasons') renderSeasons();
+  if (name === 'events') renderEvents();
+  if (name === 'patches') renderPatches();
   document.querySelector('.content').scrollTop = 0;
 }
 async function loadCommunity() {
@@ -41,6 +43,10 @@ async function loadCommunity() {
     const el = $(id); if (!el) continue; el.dataset.url = url || ''; el.hidden = !url;
   }
   // the Discord button only shows once there is an invite link in community.json
+  // "Questions?" opens the author's Discord profile once its user id is in community.json
+  const ask = $('lnk-ask'); const uid = String(links.discordUserId || '').trim();
+  ask.hidden = !/^\d{15,22}$/.test(uid); ask.dataset.url = ask.hidden ? '' : `https://discord.com/users/${uid}`;
+  if (links.contactLabel) $('lnk-ask-title').textContent = links.contactLabel;
   const dc = $('lnk-discord'); dc.dataset.url = links.discord || ''; dc.hidden = !links.discord;
   $('lnk-discord-text').textContent = 'Join the Discord';
   if (links.github) $('lnk-source').dataset.url = links.github;
@@ -103,7 +109,7 @@ function renderShelf() {
     const b = document.createElement('button');
     b.className = 'build' + (v.id === selected ? ' selected' : '') + (st.key === 'ready' ? ' ready' : '') + (st.key === 'soon' ? ' soon' : '');
     b.setAttribute('aria-current', v.id === selected ? 'true' : 'false');
-    b.innerHTML = `<div class="build-ver">${esc(v.id)}</div><div class="build-when">${esc(v.released)}</div><div class="build-state ${st.key}">${esc(st.label)}</div>`;
+    b.innerHTML = `<div class="build-ver">${esc(v.id)}${v.warning ? '<span class="build-flag" title="Experimental">Experimental</span>' : ''}</div><div class="build-when">${esc(v.released)}</div><div class="build-state ${st.key}">${esc(st.label)}</div>`;
     b.addEventListener('click', () => select(v.id));
     li.appendChild(b); ol.appendChild(li);
   }
@@ -122,6 +128,7 @@ function renderDetail() {
   $('d-ver').textContent = v.id;
   $('d-meta').textContent = `Build ${v.build}, released ${v.released}. ${v.era}.`;
   $('d-blurb').textContent = v.blurb || '';
+  $('d-warn').hidden = !v.warning; $('d-warn').textContent = v.warning || '';
   const pill = $('d-pill'); pill.textContent = st.label; pill.className = 'pill ' + st.key;
 
   // steps
@@ -179,6 +186,63 @@ function renderDetail() {
 function setStep(name, cls, sub) { const el = document.querySelector(`.step[data-step="${name}"]`); el.className = 'step ' + cls; $('s-' + name).textContent = sub; }
 function fill(id, items) { const ul = $(id); ul.innerHTML = ''; for (const t of (items || [])) { const li = document.createElement('li'); li.textContent = t; ul.appendChild(li); } }
 function shortPath(p) { if (!p) return ''; return p.length > 48 ? '…' + p.slice(-46) : p; }
+// ---------------------------------------------------------------- events (Ramsgate decorations)
+let eventVer = null, eventNote = null;
+async function renderEvents() {
+  const withEvents = [];
+  for (const v of versions.filter(x => x.hasPackage)) {
+    let d = null; try { d = await L.events(v.id); } catch {}
+    if (d && d.events.length) withEvents.push({ v, d });
+  }
+  if (!withEvents.some(x => x.v.id === eventVer)) eventVer = (withEvents.find(x => x.v.id === selected) || withEvents[0] || {}).v?.id || null;
+  const tabs = $('event-vtabs'); tabs.innerHTML = '';
+  for (const { v } of withEvents) {
+    const b = document.createElement('button'); b.className = 'season-tab'; b.setAttribute('role', 'tab');
+    b.setAttribute('aria-selected', String(v.id === eventVer)); b.textContent = v.name || v.id;
+    b.addEventListener('click', () => { eventVer = v.id; eventNote = null; renderEvents(); });
+    tabs.appendChild(b);
+  }
+  tabs.hidden = withEvents.length < 2;
+  const cur = withEvents.find(x => x.v.id === eventVer);
+  $('event-none').hidden = !!cur; $('event-body').hidden = !cur;
+  if (!cur) return;
+  const { d } = cur;
+  $('event-note').textContent = eventNote || '';
+  const fill = (host, items, chosen, pick) => {
+    host.innerHTML = '';
+    for (const x of items) {
+      const row = document.createElement('div'); row.className = 'season-row event-row' + (x.key === chosen ? ' active' : '');
+      row.innerHTML = `
+        <div><div class="season-name">${esc(x.title)}</div><div class="season-kind">${esc(x.blurb || '')}</div></div>
+        <div class="season-lvl">${x.tested ? '<span class="tag ok">Tested</span>' : '<span class="tag exp">Experimental</span>'}</div>
+        <div class="season-acts">${x.key === chosen ? '<span class="season-on">On</span>' : '<button class="ghost pick">Use this</button>'}</div>`;
+      const b = row.querySelector('.pick');
+      if (b) b.addEventListener('click', () => pick(x));
+      host.appendChild(row);
+    }
+  };
+  const apply = async (ev, dr, title) => {
+    const r = await L.setEvents(eventVer, ev, dr);
+    eventNote = !r || !r.ok ? ((r && r.error) || 'Could not change it.')
+      : r.running ? `${title}: close the game and press Play again to see it.` : `${title}: you will see it the next time you press Play.`;
+    renderEvents();
+  };
+  fill($('event-list'), d.events, d.event, (x) => apply(x.key, d.dressing, x.title));
+  fill($('dressing-list'), d.dressings, d.dressing, (x) => apply(d.event, x.key, x.title));
+}
+
+// ---------------------------------------------------------------- patch notes
+async function renderPatches() {
+  const host = $('patch-list');
+  let notes = []; try { notes = await L.patchNotes(); } catch {}
+  host.innerHTML = notes.length ? '' : '<p class="small">No patch notes yet.</p>';
+  for (const n of notes) {
+    const d = document.createElement('article'); d.className = 'patch';
+    d.innerHTML = `<div class="patch-date">${esc(n.date || '')}</div><h2>${esc(n.title || '')}</h2><ul>${(n.items || []).map(i => `<li>${esc(i)}</li>`).join('')}</ul>`;
+    host.appendChild(d);
+  }
+}
+
 // ---------------------------------------------------------------- seasons
 const SEASON_KINDS = [
   ['all', 'All'], ['original', 'Original'], ['reimagined', 'Reimagined'], ['vault', 'Vault'], ['event', 'Event passes'], ['mega', 'Mega'],

@@ -5,6 +5,7 @@
     "released":  "April 9, 2024",
     "era":  "Last pre-Awakening build",
     "blurb":  "The last build before Awakening: the full 2023 Ramsgate, every weapon line as it was, and the Hunting Grounds as most players remember them.",
+    "warning":  "Experimental. 1.14.7 is much less complete than 1.6.2: expect missing features, odd behaviour and the occasional crash. Play 1.6.2 for the full experience.",
     "works":  [
                   "Sign in offline, Ramsgate, NPCs and quests (quest progress is saved)",
                   "Training grounds, sprint, attacking",
@@ -25,7 +26,7 @@
                  },
     "package":  {
                     "dir":  "package",
-                    "packageVersion":  "2026-10-13.3",
+                    "packageVersion":  "2026-10-13.4",
                     "setup":  "tools/setup.ps1",
                     "uninstallArgs":  [
                                           "-Uninstall"
@@ -49,7 +50,7 @@
                                            },
                                            {
                                                "rel":  "Archon/Binaries/Win64/dxgi.dll",
-                                               "sha256":  "DE0C0803064AC5DC390F767CC271B9E88E99F214EE15187F6FB252444457BCE4"
+                                               "sha256":  "3B4D406CD16268C872A1574F8D16457623C96D5FA570DD3AD441C192BFBD8698"
                                            }
                                        ],
                     "setupDoneFiles":  [

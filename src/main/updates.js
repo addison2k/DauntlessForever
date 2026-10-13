@@ -19,6 +19,7 @@ const RAW = 'https://raw.githubusercontent.com/addison2k/DauntlessForever/main/'
 const INDEX_URL = RAW + 'packages.json';
 const SUPPORTERS_URL = RAW + 'supporters.json';
 const COMMUNITY_URL = RAW + 'resources/community.json';
+const PATCHNOTES_URL = RAW + 'resources/patchnotes.json';
 const TIMEOUT_MS = 15000;
 
 function fetch(url, toFile, redirects = 0) {
@@ -97,4 +98,4 @@ async function checkAndApply(registry, onEvent, isBusy, onLauncher) {
 }
 
 async function fetchJson(url) { if (MOCK) return null; return JSON.parse(await fetch(url)); }
-module.exports = { checkAndApply, fetchJson, INDEX_URL, SUPPORTERS_URL, COMMUNITY_URL };
+module.exports = { checkAndApply, fetchJson, INDEX_URL, SUPPORTERS_URL, COMMUNITY_URL, PATCHNOTES_URL };

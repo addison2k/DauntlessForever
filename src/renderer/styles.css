@@ -257,3 +257,24 @@ dialog form { margin-top: 18px; display: flex; justify-content: flex-end; }
 .banner.launcher-up { background: #2a2414; border-bottom-color: #6b5520; }
 .banner-acts { display: flex; align-items: center; gap: 14px; flex: 0 0 auto; }
 .banner-acts .ghost { padding: 5px 14px; color: var(--brass-2); border-color: #6b5520; }
+
+/* ================================================================ events, patch notes, warnings, questions */
+.list-head { font-family: var(--display); font-size: 17px; margin: 22px 0 10px; }
+.tag { font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--line-2); }
+.tag.ok { color: var(--aether); border-color: var(--aether-dim); }
+.tag.exp { color: var(--brass-2); border-color: #6b5520; }
+.event-row .season-kind { white-space: normal; }
+.patch-list { display: flex; flex-direction: column; gap: 14px; max-width: 760px; }
+.patch { border: 1px solid var(--line); border-radius: 8px; background: var(--bg-2); padding: 16px 20px; }
+.patch-date { color: var(--ink-3); font-size: 12.5px; }
+.patch h2 { font-family: var(--display); font-size: 18px; margin: 2px 0 8px; }
+.patch ul { list-style: disc; padding-left: 20px; color: var(--ink-2); }
+.patch li { margin: 4px 0; }
+.warn-box { margin-top: 12px; max-width: 70ch; padding: 10px 14px; border: 1px solid #6b5520; border-left: 3px solid var(--brass); border-radius: 6px; background: #2a2414; color: var(--ink); font-size: 13.5px; }
+.build-flag { margin-left: 8px; vertical-align: middle; font-family: var(--font); font-size: 11px; font-weight: 500; color: var(--brass-2); border: 1px solid #6b5520; border-radius: 999px; padding: 1px 7px; }
+.side-link.ask { align-items: center; gap: 10px; border: 1px solid var(--line-2); background: var(--bg-3); color: var(--ink); margin-bottom: 2px; }
+.side-link.ask:hover { border-color: var(--ink-3); }
+.ask-ico { flex: 0 0 auto; color: var(--aether); }
+.ask-text { display: flex; flex-direction: column; line-height: 1.2; }
+.ask-title { font-weight: 600; font-size: 14px; }
+.ask-sub { color: var(--ink-2); font-size: 12px; }
