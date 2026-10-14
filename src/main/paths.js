@@ -17,6 +17,8 @@ function bundledRoot() {
 }
 function bundledVersionsDir() { return path.join(bundledRoot(), 'versions'); }
 function bundledToolsDir() { return path.join(bundledRoot(), 'tools'); }
+// The official portable Node.js shipped with the launcher (tools/fetch-node.ps1 puts it in resources/runtime/node).
+function bundledNode() { const p = path.join(bundledRoot(), 'runtime', 'node', 'node.exe'); return fs.existsSync(p) ? p : null; }
 
 // Writable: a copy of each package (it writes config.json, data\, logs\ ...), plus launcher.json.
 function dataRoot() {
@@ -34,4 +36,4 @@ function launcherLog() { return path.join(dataRoot(), 'launcher.log'); }
 
 function ensureDir(p) { fs.mkdirSync(p, { recursive: true }); return p; }
 
-module.exports = { IS_WIN, MOCK, bundledRoot, bundledVersionsDir, bundledToolsDir, dataRoot, versionsDataDir, settingsFile, launcherLog, ensureDir };
+module.exports = { IS_WIN, MOCK, bundledRoot, bundledVersionsDir, bundledToolsDir, bundledNode, dataRoot, versionsDataDir, settingsFile, launcherLog, ensureDir };

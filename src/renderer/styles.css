@@ -322,3 +322,25 @@ dialog form { margin-top: 18px; display: flex; justify-content: flex-end; }
 .item-add { margin-top: 22px; }
 .item-add-row { display: flex; gap: 8px; align-items: center; }
 .item-add-row #item-add-id { width: 280px; text-transform: uppercase; }
+
+/* version banner (Game Rules, Inventory): which version's save/server the page changes */
+.ver-banner { display: flex; align-items: center; gap: 16px; margin: 4px 0 18px; padding: 14px 18px; border: 1px solid #6b5520; border-left: 4px solid var(--brass); border-radius: 8px; background: linear-gradient(90deg, rgba(212,170,74,.10), rgba(212,170,74,0) 70%), var(--bg-2); }
+.ver-banner[hidden] { display: none; }
+.ver-banner.off { border-color: var(--line-2); border-left-color: var(--ink-3); background: var(--bg-2); }
+.ver-banner .vb-num { font-family: var(--display); font-size: 30px; font-weight: 700; line-height: 1; color: var(--brass-2); min-width: 92px; font-variant-numeric: tabular-nums; }
+.ver-banner.off .vb-num { color: var(--ink-3); }
+.ver-banner .vb-title { font-weight: 600; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+.ver-banner .vb-era { font-size: 12px; font-weight: 400; color: var(--ink-2); border: 1px solid var(--line-2); border-radius: 999px; padding: 1px 8px; }
+.ver-banner .vb-sub { color: var(--ink-2); font-size: 13.5px; margin-top: 2px; }
+.ver-banner .vb-sub b { color: var(--ink); font-weight: 600; }
+.ver-tab { font-variant-numeric: tabular-nums; }
+.ver-tab.soon { color: var(--ink-3); }
+.ver-tab .soon-tag { font-size: 11px; color: var(--ink-3); margin-left: 4px; }
+
+/* Nav icons drawn in CSS (no font glyphs: symbols missing from the UI font fall back to another font and render blurry) */
+.nav-ico.ic-rules, .nav-ico.ic-items { position: relative; height: 14px; flex: 0 0 18px; }
+.ic-rules::before, .ic-rules::after { content: ""; position: absolute; left: 3px; width: 12px; height: 2px; background: currentColor; }
+.ic-rules::before { top: 3px; box-shadow: 0 6px 0 currentColor; }
+.ic-rules::after { top: 1px; left: 10px; width: 2px; height: 6px; box-shadow: -5px 6px 0 currentColor; }
+.ic-items::before { content: ""; position: absolute; left: 3px; top: 2px; width: 12px; height: 10px; box-sizing: border-box; border: 2px solid currentColor; border-radius: 2px; }
+.ic-items::after { content: ""; position: absolute; left: 3px; top: 6px; width: 12px; height: 2px; background: currentColor; }

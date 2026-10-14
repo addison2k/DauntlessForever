@@ -18,6 +18,8 @@ contextBridge.exposeInMainWorld('launcher', {
   setLast: invoke('launcher:setLast'),
   download: invoke('game:download'),
   cancelDownload: invoke('game:cancelDownload'),
+  partialInfo: invoke('game:partialInfo'),
+  deletePartial: invoke('game:deletePartial'),
   setup: invoke('game:setup'),
   play: invoke('game:play'),
   stop: invoke('game:stop'),

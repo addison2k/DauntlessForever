@@ -33,7 +33,7 @@ function download(v, outDir, onProgress, onLine) {
     const args = ['download', v.download.manifestUrl, '--base-url', BASE_URL, '--output', outDir, '--concurrency', '16'];
     const child = spawn(toolPath(), args, { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'] });
     active.set(v.id, child);
-    let summary = '', failed = null, lastErrLine = '';
+    let summary = '', failed = null, lastErrLine = '', errorLine = '';
     // e.g. "Downloading  45% |████    | (994 MB/12 GB, 272 MB/s) [3s:40s]"  or  "(12/12 GB, 260 MB/s)" (unit once)
     const re = /(\d{1,3})%.*?\(([\d.]+(?:\s*[KMGT]?i?B)?)\s*\/\s*([\d.]+\s*[KMGT]?i?B)(?:,\s*([^)\]]+))?\)(?:\s*\[([^\]]*)\])?/;
     child.stderr.on('data', (d) => {
@@ -47,7 +47,12 @@ function download(v, outDir, onProgress, onLine) {
           onProgress({ pct: +m[1], done, total, speed: m[4] || '', eta: prettyEta(m[5] || ''), line: piece.trim() });
         }
         else if (/^\s*Downloading\b.*%/.test(piece)) { /* a progress line in a shape we did not expect: not for the log */ }
-        else { lastErrLine = piece.trim(); onLine(lastErrLine, /error|fail|denied|cannot|403|404/i.test(piece)); }
+        else {
+          lastErrLine = piece.trim();
+          // the tool prints its real error first, then its help text: keep the first "Error: ..." line
+          if (!errorLine && /^\s*Error:/i.test(piece)) errorLine = lastErrLine;
+          onLine(lastErrLine, /error|fail|denied|cannot|403|404/i.test(piece));
+        }
       }
     });
     child.stdout.on('data', (d) => {
@@ -58,7 +63,7 @@ function download(v, outDir, onProgress, onLine) {
         const f = /failed:\s*(\d+)/.exec(l); if (f) failed = +f[1];
       }
     });
-    child.on('exit', (code) => { active.delete(v.id); resolve({ code: code == null ? 1 : code, failed, summary, lastErrLine }); });
+    child.on('exit', (code) => { active.delete(v.id); resolve({ code: code == null ? 1 : code, failed, summary, lastErrLine, errorLine }); });
     child.on('error', (e) => { active.delete(v.id); resolve({ code: 1, error: 'Could not start the download tool: ' + e.message }); });
   });
 }

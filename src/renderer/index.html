@@ -22,8 +22,8 @@
     <button class="nav-item selected" data-page="play"><span class="nav-ico">▶</span>Play</button>
     <button class="nav-item" data-page="seasons"><span class="nav-ico">✦</span>Seasons</button>
     <button class="nav-item" data-page="events"><span class="nav-ico">◆</span>Events</button>
-    <button class="nav-item" data-page="rules"><span class="nav-ico">±</span>Game Rules</button>
-    <button class="nav-item" data-page="items"><span class="nav-ico">□</span>Inventory</button>
+    <button class="nav-item" data-page="rules"><span class="nav-ico ic-rules" aria-hidden="true"></span>Game Rules</button>
+    <button class="nav-item" data-page="items"><span class="nav-ico ic-items" aria-hidden="true"></span>Inventory</button>
     <button class="nav-item" data-page="mods"><span class="nav-ico">⬡</span>Mods</button>
     <button class="nav-item" data-page="patches"><span class="nav-ico">≡</span>Patch notes</button>
     <button class="nav-item" data-page="settings"><span class="nav-ico">⚙</span>Settings</button>
@@ -86,6 +86,7 @@
       <button data-act="openver">Open this version's launcher folder (save, logs)</button>
       <button data-act="logs">Get the logs for asking for help</button>
       <button data-act="readme">Read this version's README</button>
+      <button data-act="delpartial" class="danger">Delete the unfinished download (frees space)</button>
       <button data-act="uninstall" class="danger">Uninstall: put the game folder back</button>
     </div>
 
@@ -155,9 +156,10 @@
 <section class="page" id="page-rules" hidden>
   <h1 class="page-title">Game Rules</h1>
   <p class="lead">Play it your way: level faster or slower, get more loot, craft for free. Your picks are kept and apply the next time you press Play. They never touch your save on their own, so you can change them any time.</p>
-  <div class="season-tabs" id="rule-vtabs" role="tablist"></div>
+  <div class="season-tabs" id="rule-vtabs" role="tablist" aria-label="Version"></div>
+  <div class="ver-banner" id="rule-vbanner"></div>
   <div id="rule-none" class="card" hidden>
-    <div class="card-head"><h2>No Game Rules for this version yet</h2><span class="pill">Planned</span></div>
+    <div class="card-head"><h2 id="rule-none-title">No Game Rules for this version yet</h2><span class="pill">Planned</span></div>
     <p>Game Rules are ready for 1.6.2 first. Other versions get them through a server-file update.</p>
   </div>
   <div id="rule-body" hidden>
@@ -172,7 +174,8 @@
 <section class="page" id="page-items" hidden>
   <h1 class="page-title">Inventory</h1>
   <p class="lead">Add or remove currencies, tokens and keys in your save. Close the game first. A backup of your save is made every time you save here.</p>
-  <div class="season-tabs" id="item-vtabs" role="tablist"></div>
+  <div class="season-tabs" id="item-vtabs" role="tablist" aria-label="Version"></div>
+  <div class="ver-banner" id="item-vbanner"></div>
   <div id="item-none" class="card" hidden>
     <div class="card-head"><h2 id="item-none-title">No inventory editing for this version yet</h2><span class="pill" id="item-none-pill">Planned</span></div>
     <p id="item-none-text">The Inventory page is ready for 1.6.2 first. Other versions get it through a server-file update.</p>

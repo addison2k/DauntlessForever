@@ -18,9 +18,9 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.1.8",
-                     "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.1.8",
-                     "notes":  "Inventory page: add or remove items",
+                     "version":  "0.1.9",
+                     "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.1.9",
+                     "notes":  "Node.js included, download space checks, clearer version on Game Rules and Inventory",
                      "date":  "2026-10-13"
                  }
 }

@@ -13,7 +13,8 @@ const PORT = process.env.PORT;
 (0, db_1.GetDb)(); // This runs migrations TODO make this more explicit
 (0, apikeys_1.DrainAndRegisterAPIKeys)().then(async () => {
     await (0, auth_1.DrainAndRegisterUserAPIKeys)();
-    app_1.app.listen(Number(PORT), "127.0.0.1", () => {
+    // BIND_HOST: 127.0.0.1 normally (this PC only); the LAN test (LAN - HOST.bat) sets 0.0.0.0 so other PCs can connect.
+    app_1.app.listen(Number(PORT), process.env.BIND_HOST || "127.0.0.1", () => {
         logger_1.logger.info(`Undaunted Metagame on port ${PORT}`);
         logger_1.logger.info(`Clear Skies, Slayer.`);
     });

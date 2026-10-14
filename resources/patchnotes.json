@@ -3,6 +3,31 @@
   "notes": [
     {
       "date": "2026-10-13",
+      "title": "Downloads: space checks",
+      "items": [
+        "Before downloading, the launcher checks the drive has enough free space and tells you how much it needs.",
+        "A full drive or a folder Windows won't let it write to now gives a clear message with what to do.",
+        "New under More: delete an unfinished download to get the space back."
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "title": "Node.js included",
+      "items": [
+        "The launcher now includes Node.js (the official build). Set-up no longer asks to install it or opens the Node.js website.",
+        "Already set up? Nothing to do. If you run Set up again it switches to the included Node.js and downloads the server parts once more (about 30 MB)."
+      ]
+    },
+    {
+      "date": "2026-10-13",
+      "title": "Clearer version on Game Rules and Inventory",
+      "items": [
+        "Game Rules and Inventory now show a big banner with the version you are changing, and the Save button names it too. Each version keeps its own rules and its own save.",
+        "Versions that don't have these pages yet show as \"soon\" in the version tabs."
+      ]
+    },
+    {
+      "date": "2026-10-13",
       "title": "Inventory page (1.6.2)",
       "items": [
         "New Inventory page: add or remove Rams, Merits, Aetherhearts, Patrol Keys, Bounty Tokens, cell cores and anything else in your save.",

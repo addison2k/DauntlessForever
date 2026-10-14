@@ -9,7 +9,7 @@
 const { spawn, execFile } = require('child_process');
 const fs = require('fs');
 const path = require('path');
-const { IS_WIN, MOCK } = require('./paths');
+const { IS_WIN, MOCK, bundledNode } = require('./paths');
 
 const PS = 'powershell.exe';
 const PS_ARGS = ['-NoProfile', '-ExecutionPolicy', 'Bypass'];
@@ -21,6 +21,14 @@ const running = new Map(); // versionId -> { kind, child }
 const { execFileSync } = require('child_process');
 function freshEnv() {
   const env = { ...process.env };
+  // The Node.js that ships with the launcher: the package scripts use it first (Find-Node), so players never install Node.
+  const bn = bundledNode();
+  if (bn) {
+    env.DF_NODE = bn;
+    // Also first on PATH, so server files from before DF_NODE (their Find-Node looks at PATH first) use it too.
+    const k = Object.keys(env).find(x => x.toLowerCase() === 'path') || 'Path';
+    env[k] = path.dirname(bn) + ';' + (env[k] || '');
+  }
   if (!IS_WIN) return env;
   const read = (key) => {
     try {

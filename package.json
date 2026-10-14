@@ -1,7 +1,7 @@
 {
   "name": "dauntless-forever-launcher",
   "productName": "Dauntless Forever",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Pick a Dauntless version, download it from Epic's own servers, set it up and play it offline.",
   "main": "src/main/main.js",
   "author": "Addison2k",
@@ -10,6 +10,8 @@
   "scripts": {
     "start": "electron .",
     "dev": "DL_MOCK=1 electron .",
+    "predist": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/fetch-node.ps1",
+    "predist:dir": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/fetch-node.ps1",
     "dist": "electron-builder --win --x64",
     "dist:dir": "electron-builder --win --x64 --dir"
   },
@@ -33,6 +35,10 @@
       {
         "from": "resources/versions",
         "to": "versions"
+      },
+      {
+        "from": "resources/runtime",
+        "to": "runtime"
       },
       {
         "from": "resources/tools",

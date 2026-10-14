@@ -79,7 +79,7 @@ async function fillSettings() {
   $('set-sky').textContent = Sky.enabled() ? 'Turn off' : 'Turn on';
   $('set-games').textContent = info.gamesRoot;
   $('set-data').textContent = info.dataRoot;
-  $('set-node').textContent = info.node ? `${info.node.version} at ${info.node.path}` : 'Not installed yet. Set-up offers to install it.';
+  $('set-node').textContent = info.node ? (info.node.bundled ? `${info.node.version}, included with the launcher` : `${info.node.version} at ${info.node.path}`) : 'Not installed yet. Set-up offers to install it.';
   $('set-tool').textContent = info.toolOk ? 'manifest.exe (meszmate/manifest with the plain-chunk fix), checked' : 'Missing or damaged. Reinstall the launcher.';
   $('set-ver').textContent = `Dauntless Forever ${info.version}`;
   $('set-pkgs').textContent = versions.filter(v => v.hasPackage).map(v => `${v.id}: ${v.package.packageVersion}`).join(', ') + (updateLog.length ? ` (last check: ${updateLog[updateLog.length - 1]})` : '');
@@ -184,6 +184,7 @@ function renderDetail() {
   m.querySelector('[data-act="uninstall"]').disabled = !gameDone || st.key === 'busy';
   m.querySelector('[data-act="opengame"]').disabled = !s.gameDir;
   m.querySelector('[data-act="pick"]').disabled = st.key === 'busy';
+  m.querySelector('[data-act="delpartial"]').disabled = st.key === 'busy' || s.game === 'ok';
 }
 function setStep(name, cls, sub) { const el = document.querySelector(`.step[data-step="${name}"]`); el.className = 'step ' + cls; $('s-' + name).textContent = sub; }
 function fill(id, items) { const ul = $(id); ul.innerHTML = ''; for (const t of (items || [])) { const li = document.createElement('li'); li.textContent = t; ul.appendChild(li); } }
@@ -233,32 +234,57 @@ async function renderEvents() {
   fill($('dressing-list'), d.dressings, d.dressing, (x) => apply(d.event, x.key, x.title));
 }
 
+// ---------------------------------------------------------------- version picker + banner (Game Rules, Inventory)
+// Every version with server files gets a tab; ones without this page yet are marked "soon". The banner says loudly which
+// version's save / server the page is changing, because each version keeps its own.
+function versionPicker(tabsId, bannerId, all, curId, supported, onPick, bannerSub) {
+  const tabs = $(tabsId); tabs.innerHTML = '';
+  for (const v of all) {
+    const ok = supported.has(v.id);
+    const b = document.createElement('button'); b.className = 'season-tab ver-tab' + (ok ? '' : ' soon'); b.setAttribute('role', 'tab');
+    b.setAttribute('aria-selected', String(v.id === curId));
+    b.innerHTML = `${esc(v.id)}${ok ? '' : ' <span class="soon-tag">soon</span>'}`;
+    b.addEventListener('click', () => { if (v.id !== curId) onPick(v.id); });
+    tabs.appendChild(b);
+  }
+  tabs.hidden = all.length < 2;
+  const v = all.find(x => x.id === curId), ban = $(bannerId);
+  ban.hidden = !v;
+  if (!v) return;
+  ban.classList.toggle('off', !supported.has(v.id));
+  ban.innerHTML = `<div class="vb-num">${esc(v.id)}</div>
+    <div class="vb-text"><div class="vb-title">Dauntless ${esc(v.id)}${v.era ? ` <span class="vb-era">${esc(v.era)}</span>` : ''}</div>
+    <div class="vb-sub">${bannerSub}</div></div>`;
+}
+function pickVersion(all, cur, supported) {
+  if (all.some(v => v.id === cur)) return cur;
+  return (all.find(v => v.id === selected && supported.has(v.id)) || all.find(v => supported.has(v.id)) || all.find(v => v.id === selected) || all[0] || {}).id || null;
+}
+
 // ---------------------------------------------------------------- Game Rules
 let ruleVer = null, ruleNote = null;
 async function renderRules() {
+  const all = versions.filter(x => x.hasPackage);
   const withRules = [];
-  for (const v of versions.filter(x => x.hasPackage)) {
+  for (const v of all) {
     let d = null; try { d = await L.rules(v.id); } catch {}
     if (d && d.rules.length) withRules.push({ v, d });
   }
-  if (!withRules.some(x => x.v.id === ruleVer)) ruleVer = (withRules.find(x => x.v.id === selected) || withRules[0] || {}).v?.id || null;
-  const tabs = $('rule-vtabs'); tabs.innerHTML = '';
-  for (const { v } of withRules) {
-    const b = document.createElement('button'); b.className = 'season-tab'; b.setAttribute('role', 'tab');
-    b.setAttribute('aria-selected', String(v.id === ruleVer)); b.textContent = v.name || v.id;
-    b.addEventListener('click', () => { ruleVer = v.id; ruleNote = null; renderRules(); });
-    tabs.appendChild(b);
-  }
-  tabs.hidden = withRules.length < 2;
+  const supported = new Set(withRules.map(x => x.v.id));
+  ruleVer = pickVersion(all, ruleVer, supported);
   const cur = withRules.find(x => x.v.id === ruleVer);
+  versionPicker('rule-vtabs', 'rule-vbanner', all, ruleVer, supported, (id) => { ruleVer = id; ruleNote = null; renderRules(); },
+    cur ? `These rules change <b>Dauntless ${esc(ruleVer)} only</b>. Every version keeps its own Game Rules.`
+        : `Game Rules are not available for Dauntless ${esc(ruleVer || '')} yet.`);
   $('rule-none').hidden = !!cur; $('rule-body').hidden = !cur;
+  $('rule-none-title').textContent = `No Game Rules for ${ruleVer || 'this version'} yet`;
   if (!cur) return;
   const { d } = cur;
   $('rule-note').textContent = ruleNote || '';
   const apply = async (changes, what) => {
     const r = await L.setRules(ruleVer, changes);
     ruleNote = !r || !r.ok ? ((r && r.error) || 'Could not change it.')
-      : r.running ? `${what}: close the game and press Play again for it to apply.` : `${what}: applies the next time you press Play.`;
+      : r.running ? `${ruleVer} ${what}: close the game and press Play again for it to apply.` : `${ruleVer} ${what}: applies the next time you play ${ruleVer}.`;
     renderRules();
   };
   const list = $('rule-list'); list.innerHTML = '';
@@ -284,30 +310,31 @@ async function renderRules() {
 let itemVer = null, itemChar = null, itemNote = null, itemData = null, itemPending = {}, itemErr = false;
 const fmtN = n => Number(n || 0).toLocaleString('en-US');
 async function renderItems(reload) {
-  const vs = versions.filter(x => x.hasPackage);
+  const all = versions.filter(x => x.hasPackage);
   if (reload || !itemData) {
     const found = [];
-    for (const v of vs) { let d = null; try { d = await L.items(v.id); } catch {} if (d) found.push({ v, d }); }
-    if (!found.some(x => x.v.id === itemVer)) itemVer = (found.find(x => x.v.id === selected) || found[0] || {}).v?.id || null;
+    for (const v of all) { let d = null; try { d = await L.items(v.id); } catch {} if (d) found.push({ v, d }); }
     itemData = { found };
   }
   const { found } = itemData;
-  const tabs = $('item-vtabs'); tabs.innerHTML = '';
-  for (const { v } of found) {
-    const b = document.createElement('button'); b.className = 'season-tab'; b.setAttribute('role', 'tab');
-    b.setAttribute('aria-selected', String(v.id === itemVer)); b.textContent = v.name || v.id;
-    b.addEventListener('click', () => { itemVer = v.id; itemPending = {}; itemNote = null; renderItems(true); });
-    tabs.appendChild(b);
-  }
-  tabs.hidden = found.length < 2;
+  const supported = new Set(found.map(x => x.v.id));
+  itemVer = pickVersion(all, itemVer, supported);
   const cur = found.find(x => x.v.id === itemVer);
   const save = cur && cur.d.save;
   const chars = (save && save.ok && save.characters) || [];
   const usable = cur && chars.length;
+  const chName = usable ? ((chars.find(c => c.id === itemChar) || chars[0]).name || '') : '';
+  versionPicker('item-vtabs', 'item-vbanner', all, itemVer, supported,
+    (id) => {
+      if (Object.keys(itemPending).length && !confirm(`You have unsaved changes for ${itemVer}. Switch to ${id} and drop them?`)) return;
+      itemVer = id; itemPending = {}; itemNote = null; itemErr = false; renderItems(true);
+    },
+    cur ? `You are editing your <b>Dauntless ${esc(itemVer)} save</b>${chName ? ` (character <b>${esc(chName)}</b>)` : ''}. Every version has its own save and its own items.`
+        : `Inventory editing is not available for Dauntless ${esc(itemVer || '')} yet.`);
   $('item-none').hidden = !!usable; $('item-body').hidden = !usable;
   if (!usable) {
     const why = !cur ? null : (save && !save.ok ? save.error : 'No character yet. Press Play once and make a character first.');
-    $('item-none-title').textContent = why ? 'Nothing to edit yet' : 'No inventory editing for this version yet';
+    $('item-none-title').textContent = why ? 'Nothing to edit yet' : `No inventory editing for ${itemVer || 'this version'} yet`;
     $('item-none-pill').hidden = !!why;
     $('item-none-text').textContent = why || 'The Inventory page is ready for 1.6.2 first. Other versions get it through a server-file update.';
     return;
@@ -323,7 +350,7 @@ async function renderItems(reload) {
   note.textContent = itemNote || (cur.d.running ? 'The game is running: close it before saving.' : (n ? `${n} unsaved change${n > 1 ? 's' : ''}.` : ''));
   note.classList.toggle('err', itemErr);
   $('item-save').disabled = !n; $('item-undo').disabled = !n;
-  $('item-save').textContent = n ? `Save ${n} change${n > 1 ? 's' : ''}` : 'Save changes';
+  $('item-save').textContent = n ? `Save ${n} change${n > 1 ? 's' : ''} to ${itemVer}` : `Save to ${itemVer}`;
   const known = new Set();
   const row = (id, name, blurb) => {
     const have = ch.items[id] || 0;
@@ -365,7 +392,7 @@ async function renderItems(reload) {
   $('item-save').onclick = async () => {
     $('item-save').disabled = true; itemNote = 'Saving...'; itemErr = false; note.textContent = itemNote;
     const r = await L.setItems(itemVer, itemChar, itemPending);
-    if (r && r.ok) { itemPending = {}; itemNote = 'Saved. You will see it the next time you press Play. (Backup kept in backup\\inventory.)'; itemErr = false; }
+    if (r && r.ok) { itemPending = {}; itemNote = `Saved to your ${itemVer} save. You will see it the next time you play ${itemVer}. (Backup kept in backup\\inventory.)`; itemErr = false; }
     else { itemNote = (r && r.error) || 'Could not save.'; itemErr = true; }
     renderItems(!!(r && r.ok));
   };
@@ -570,6 +597,13 @@ function wire() {
     if (act === 'opengame') L.openGameFolder(v.id);
     if (act === 'openver') L.openVersionFolder(v.id);
     if (act === 'logs') { L.openLogs(v.id); const n = $('action-note'); n.textContent = 'Send the two zips in the upload folder (client_logs.zip, server_logs.zip). Your PC name and user name are blanked out in them.'; n.className = 'action-note'; }
+    if (act === 'delpartial') {
+      const n = $('action-note');
+      const r = await L.deletePartial(v.id);
+      if (r && r.ok) { delete dl[v.id]; logs[v.id] = []; n.textContent = `Deleted the unfinished download (${r.gb} GB freed).`; n.className = 'action-note'; }
+      else if (r && !r.cancelled) { n.textContent = r.error || 'Nothing was deleted.'; n.className = 'action-note err'; }
+      await refresh(v.id);
+    }
     if (act === 'readme') { $('readme-title').textContent = `${v.name} README`; $('readme-body').textContent = (await L.readme(v.id)) || '(no README in this package)'; $('dlg-readme').showModal(); }
   });
   $('btn-log-clear').addEventListener('click', () => { if (selected) { logs[selected] = []; renderDetail(); } });

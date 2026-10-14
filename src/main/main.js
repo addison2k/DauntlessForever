@@ -88,6 +88,8 @@ function publicVersion(v) {
   return { ...rest, hasPackage: !!v.package };
 }
 function findNode() {
+  const bn = P.bundledNode();
+  if (bn) return new Promise((resolve) => execFile(bn, ['--version'], (e, ver) => resolve({ path: bn, version: e ? '?' : ver.trim(), bundled: true })));
   return new Promise((resolve) => {
     if (!P.IS_WIN) return resolve(P.MOCK ? { path: 'C:\\Program Files\\nodejs\\node.exe', version: 'v22.12.0' } : null);
     const cands = [process.env.ProgramFiles && path.join(process.env.ProgramFiles, 'nodejs', 'node.exe'),
@@ -319,10 +321,54 @@ ipcMain.handle('patchnotes:list', async () => {
 ipcMain.handle('read:readme', (_e, id) => { const v = byId(id); try { return fs.readFileSync(path.join(v.dataDir, v.package.readme), 'utf8'); } catch { return ''; } });
 
 // ---------------------------------------------------------------- IPC: download
+// ---------------------------------------------------------------- download helpers
+// Size of a folder in GB (a half-finished download counts towards the space it still needs).
+function folderGB(dir) {
+  let bytes = 0;
+  const walk = (d) => {
+    let ents = []; try { ents = fs.readdirSync(d, { withFileTypes: true }); } catch { return; }
+    for (const e of ents) {
+      const p = path.join(d, e.name);
+      if (e.isDirectory()) walk(p); else { try { bytes += fs.statSync(p).size; } catch {} }
+    }
+  };
+  walk(dir);
+  return bytes / 1e9;
+}
+// The download tool's message, in words a player can act on.
+function downloadError(res) {
+  const raw = (res.errorLine || res.lastErrLine || '').replace(/^\s*Error:\s*/i, '');
+  if (/not enough space|no space left|disk full|ENOSPC/i.test(raw))
+    return 'Your drive is full. Free some space and press Download again (it carries on where it stopped), or pick another drive: Settings, "Downloaded games go to", Change folder. More, "Delete the unfinished download" gives the space back.';
+  if (/access is denied|permission denied|EPERM|EACCES/i.test(raw))
+    return 'Windows would not let the launcher write to the games folder. Pick another folder in Settings ("Downloaded games go to") and press Download again.';
+  return raw ? `The download stopped: ${raw}` : 'The download was stopped.';
+}
+// Where this version downloads to, and whether an unfinished download is there.
+function partialInfo(v) {
+  const dir = path.join(defaultGamesRoot(), v.download.folderName);
+  const exists = fs.existsSync(dir);
+  const hasCache = exists && fs.existsSync(path.join(dir, '.manifest-cache'));
+  const exe = path.join(dir, v.exeRel);
+  const complete = exists && fs.existsSync(exe) && (!v.exeSha256 || V.sha256(exe) === v.exeSha256.toUpperCase()) && !hasCache;
+  return { dir, exists, hasCache, complete, gb: exists ? +folderGB(dir).toFixed(2) : 0 };
+}
+
 ipcMain.handle('game:download', async (_e, id, targetRoot) => {
   const v = byId(id); if (!v) return { ok: false, error: 'unknown version' };
   const root = targetRoot || defaultGamesRoot();
   const outDir = path.join(root, v.download.folderName);
+  // enough room? It needs about twice the game's size while it runs; what is already there counts.
+  if (P.IS_WIN && !P.MOCK) {
+    const free = await freeSpaceGB(root);
+    const have = fs.existsSync(outDir) ? folderGB(outDir) : 0;
+    const need = Math.max(1, v.download.installedGB * 2 - have);
+    if (free != null && free < need) {
+      const error = `Not enough space: this download needs about ${Math.ceil(need)} GB more on that drive, and it has ${free} GB free. Free some space, or pick another drive in Settings ("Downloaded games go to", Change folder).`;
+      send('download:state', { id, state: 'failed', error, outDir });
+      return { ok: false, error, outDir };
+    }
+  }
   settings.update(s => { s.gamesRoot = root; });
   log('download', id, '->', outDir);
   send('download:state', { id, state: 'running', outDir });
@@ -342,12 +388,33 @@ ipcMain.handle('game:download', async (_e, id, targetRoot) => {
     }
   } else if (!error) {
     error = res.failed ? `${res.failed} chunks failed. Check your connection and press Download again; it carries on where it stopped.`
-      : (res.lastErrLine ? `The download stopped: ${res.lastErrLine}` : 'The download was stopped.');
+      : downloadError(res);
   }
   send('download:state', { id, state: ok ? 'done' : 'failed', error, outDir });
   return { ok, error, outDir };
 });
 ipcMain.handle('game:cancelDownload', (_e, id) => D.cancel(id));
+ipcMain.handle('game:partialInfo', (_e, id) => { const v = byId(id); return v ? partialInfo(v) : null; });
+// Delete an unfinished (or broken) download to get the space back. Never touches a complete, correct game,
+// and only ever the launcher's own download folder for this version.
+ipcMain.handle('game:deletePartial', async (_e, id) => {
+  const v = byId(id); if (!v) return { ok: false, error: 'unknown version' };
+  if (D.isDownloading(id) || R.isRunning(id) || R.isRunning(id + ':setup')) return { ok: false, error: 'Stop the download or game first.' };
+  const info = partialInfo(v);
+  if (!info.exists) return { ok: false, error: 'There is no unfinished download for this version.' };
+  if (info.complete) return { ok: false, error: 'That folder holds the complete game, so it was left alone.' };
+  if (path.basename(info.dir) !== v.download.folderName) return { ok: false, error: 'Unexpected folder; nothing was deleted.' };
+  const r = await dialog.showMessageBox(win, { type: 'warning', buttons: ['Delete it', 'Keep it'], defaultId: 1, cancelId: 1,
+    message: `Delete the unfinished ${v.name} download?`,
+    detail: `${info.dir}\n${info.gb} GB\n\nThis frees the space. You can press Download again later (it starts from the beginning).` });
+  if (r.response !== 0) return { ok: false, cancelled: true };
+  try { await fs.promises.rm(info.dir, { recursive: true, force: true }); }
+  catch (e) { return { ok: false, error: 'Could not delete everything: ' + e.message }; }
+  const e = settings.versionEntry(id);
+  if (e.gameDir && path.resolve(e.gameDir).toLowerCase().startsWith(path.resolve(info.dir).toLowerCase())) settings.setVersionEntry(id, { gameDir: '' });
+  log('deletePartial', id, info.dir, info.gb + ' GB');
+  return { ok: true, gb: info.gb, dir: info.dir };
+});
 
 // ---------------------------------------------------------------- IPC: set-up / play / stop / uninstall
 ipcMain.handle('game:setup', async (_e, id, uninstall) => {

@@ -28,6 +28,8 @@ function Save-Config($cfg) {
 
 # Node: on PATH, or where the installer puts it (PATH is not refreshed in a window opened before the install).
 function Find-Node {
+    # The launcher ships the official portable Node.js and passes it in DF_NODE: use it first, nothing to install.
+    if ($env:DF_NODE -and (Test-Path -LiteralPath $env:DF_NODE)) { return $env:DF_NODE }
     $c = Get-Command node.exe -ErrorAction SilentlyContinue
     if ($c) { return $c.Source }
     foreach ($p in @("$env:ProgramFiles\nodejs\node.exe", "${env:ProgramFiles(x86)}\nodejs\node.exe", "$env:LOCALAPPDATA\Programs\nodejs\node.exe")) {
