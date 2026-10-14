@@ -10,6 +10,7 @@ import { UpdatePlayerActivity } from "../controllers/undauntedapi";
 import { ActivePassId, PlayerEntitlements } from "../huntpass162";
 import { ApplyBountyPost, GetBounties, RemoveBounties } from "../bounties162";
 import { ApplyCooldownBatch, CooldownMap } from "../cooldowns162";
+import { EscalationMode, GetEscalation, SaveEscalation, ValidSeasonId } from "../escalation162";
 
 export const systemRouter = Router();
 
@@ -111,22 +112,20 @@ systemRouter.get("/playertreatments/:userId", HasUndauntedMetagameAuth, (req, re
 	});
 });
 
-systemRouter.get("/escalation/:escalationSeason/:userId", HasUndauntedMetagameAuth, (req, res) => {
-	const EscalationSeason = req.params.escalationSeason;
-
-	logger.info(`Escalation Configuration for season ${EscalationSeason} (stubbed)`);
+// Escalation progress per player and season (escalation162.ts). The game server does the arithmetic and posts the
+// whole season; GET serves the stored one (level 0 for a new player). ESCALATION_MODE=stub brings back the old 99999 stub.
+systemRouter.get("/escalation/:escalationSeason/:userId", HasUndauntedMetagameAuth, (req: any, res) => {
+	const SeasonId = String(req.params.escalationSeason);
+	if (!ValidSeasonId(SeasonId)) {
+		res.status(404).send();
+		return;
+	}
 
 	res.status(200);
 	res.json({
 		code: null,
 		message: "OK",
-		payload: {
-        	escalation_level: 99999,
-        	next_level_xp: 99999,
-        	talents_progress: [],
-        	unlock_progress: [],
-        	update_version: 1,
-      	}
+		payload: GetEscalation(String(req.params.userId), SeasonId)
 	});
 });
 
@@ -261,8 +260,15 @@ systemRouter.get("/all/", HasUndauntedMetagameAuth, (req: any, res) => {
 		}
 	});
 });
-// [esc-log] temporary: record what the game POSTs to /escalation, still answer 404 as before
-systemRouter.post("/escalation/:escalationSeason/:userId", (req, res) => {
-    logger.info(`[esc-log] POST ${req.params.escalationSeason} ct=${req.headers["content-type"]} len=${req.headers["content-length"]} query=${JSON.stringify(req.query)} body=${JSON.stringify(req.body)}`);
-    res.status(404).end();
+// The game server saving a player's season (UpdateSeasonalEscalationEndpoint, the whole season as the body)
+systemRouter.post("/escalation/:escalationSeason/:userId", HasUndauntedMetagameAuth, (req: any, res) => {
+	const SeasonId = String(req.params.escalationSeason);
+	if (EscalationMode() === "stub" || !ValidSeasonId(SeasonId)) {
+		res.status(404).send();
+		return;
+	}
+
+	const Result = SaveEscalation(String(req.params.userId), SeasonId, req.body);
+	res.status(Result.status);
+	res.json({ code: null, message: Result.status === 200 ? "OK" : "Refused", payload: Result.payload });
 });

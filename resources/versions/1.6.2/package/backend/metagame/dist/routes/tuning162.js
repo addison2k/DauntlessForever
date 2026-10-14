@@ -1,8 +1,8 @@
+"use strict";
 // Dauntless Forever - Dauntless 1.6.2 offline backend
 // Copyright (C) 2026 Addison2k (port to this Dauntless build and all changes). https://github.com/addison2k/DauntlessForever
 // Based on Undaunted, Copyright (C) gwog and contributors, https://github.com/SyST3MDeV/Undaunted
 // Licence: AGPL-3.0-only (LICENSE-AGPL-3.0.txt). Keep this notice: the licence requires it.
-"use strict";
 // [1.6.2 port] Game-tuning blobs that 1.6.2 requests but 1.4.4 did not.
 // In 1.6.2 the bounty configuration comes from the game-tuning blobs bounty_game_data,
 // bounty_game_data_daily and bounty_game_data_weekly (GET /game_tuning/{blobid}),
@@ -200,7 +200,11 @@ function BountyGameData(ids) {
         token_rollover_warning_days: 1000,
         automatic_draft: false,
         automatic_claim: false,
-        delete_claimed_bounties: false, // game server clears claimed bounties at once (false kept the card until relog)
+        // true: a claim goes to POST /bounty/delete; on 2xx the game server pays the bounty, removes it and sends the
+        // client ClientDeleteBounties, so the slot frees at once (UBountyComponent::ServerClaimBounty_Implementation,
+        // OnClaimBountyComplete 0x145FDD0). false: it only posts the bounty as claimed and never tells the client, so
+        // the card stays until a relog. BOUNTY_DELETE_CLAIMED=0 goes back to false.
+        delete_claimed_bounties: (process.env.BOUNTY_DELETE_CLAIMED ?? "1") === "1",
     };
 }
 const BLOBS = {

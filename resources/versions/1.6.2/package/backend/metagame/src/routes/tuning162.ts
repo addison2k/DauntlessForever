@@ -203,7 +203,11 @@ function BountyGameData(ids: string[]){
         token_rollover_warning_days: 1000,
         automatic_draft: false,
         automatic_claim: false,
-        delete_claimed_bounties: false,   // game server clears claimed bounties at once (false kept the card until relog)
+        // true: a claim goes to POST /bounty/delete; on 2xx the game server pays the bounty, removes it and sends the
+        // client ClientDeleteBounties, so the slot frees at once (UBountyComponent::ServerClaimBounty_Implementation,
+        // OnClaimBountyComplete 0x145FDD0). false: it only posts the bounty as claimed and never tells the client, so
+        // the card stays until a relog. BOUNTY_DELETE_CLAIMED=0 goes back to false.
+        delete_claimed_bounties: (process.env.BOUNTY_DELETE_CLAIMED ?? "1") === "1",
     };
 }
 

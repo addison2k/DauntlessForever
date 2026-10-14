@@ -11,7 +11,6 @@
                   "Cell fusion (middle slot)"
               ],
     "notWorking":  [
-                       "Escalation progress and rewards (shows a fake level 25)",
                        "Factions, challenges",
                        "Solo only"
                    ],
@@ -27,7 +26,7 @@
                  },
     "package":  {
                     "dir":  "package",
-                    "packageVersion":  "2026-10-13.3",
+                    "packageVersion":  "2026-10-14.2",
                     "setup":  "tools/setup.ps1",
                     "uninstallArgs":  [
                                           "-Uninstall"

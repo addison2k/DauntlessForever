@@ -326,6 +326,7 @@ if (-not $hasAccount) {
     $n = Read-Host 'Your player name (3-16 letters/numbers; Enter for "Slayer")'
     if ($n -match '^[A-Za-z0-9_]{3,16}$') { $name = $n } elseif ($n) { Say '  Not a valid name, using Slayer.' 'Yellow' }
 }
+Clear-DauntlessPorts -TcpPorts @($MetaPort, $DeployPort)
 Say 'Setting up the local backend (your account, keys and settings)...'
 $code = Invoke-Native $node @((Join-Path $PSScriptRoot 'backend-setup.js'), $exe, $name)
 if ($code -ne 0) { Fail 'setting up the local backend failed (see the line above).' }

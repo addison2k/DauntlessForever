@@ -31,6 +31,7 @@ New-Item -ItemType Directory -Force $DataDir, $LogDir | Out-Null
 
 # --- leftovers from a run that did not close properly
 Stop-Everything -Quiet
+Clear-DauntlessPorts -TcpPorts @($MetaPort, $DeployPort) -UdpPorts (8770..8777)
 foreach ($port in @($MetaPort, $DeployPort)) {
     $owner = Get-ListenerPid $port
     if ($owner) {

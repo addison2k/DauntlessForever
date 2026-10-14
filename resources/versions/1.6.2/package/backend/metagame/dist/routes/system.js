@@ -1,10 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.systemRouter = void 0;
 // Dauntless Forever - Dauntless 1.6.2 offline backend
 // Copyright (C) 2026 Addison2k (port to this Dauntless build and all changes). https://github.com/addison2k/DauntlessForever
 // Based on Undaunted, Copyright (C) gwog and contributors, https://github.com/SyST3MDeV/Undaunted
 // Licence: AGPL-3.0-only (LICENSE-AGPL-3.0.txt). Keep this notice: the licence requires it.
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.systemRouter = void 0;
 const express_1 = require("express");
 const logger_1 = require("../logger");
 const HasUndauntedMetagameAuth_1 = require("../middleware/HasUndauntedMetagameAuth");
@@ -13,6 +13,7 @@ const undauntedapi_1 = require("../controllers/undauntedapi");
 const huntpass162_1 = require("../huntpass162");
 const bounties162_1 = require("../bounties162");
 const cooldowns162_1 = require("../cooldowns162");
+const escalation162_1 = require("../escalation162");
 exports.systemRouter = (0, express_1.Router)();
 exports.systemRouter.get("/dauntless-status", (req, res) => {
     logger_1.logger.info("Status");
@@ -91,20 +92,19 @@ exports.systemRouter.get("/playertreatments/:userId", HasUndauntedMetagameAuth_1
         ]
     });
 });
+// Escalation progress per player and season (escalation162.ts). The game server does the arithmetic and posts the
+// whole season; GET serves the stored one (level 0 for a new player). ESCALATION_MODE=stub brings back the old 99999 stub.
 exports.systemRouter.get("/escalation/:escalationSeason/:userId", HasUndauntedMetagameAuth_1.HasUndauntedMetagameAuth, (req, res) => {
-    const EscalationSeason = req.params.escalationSeason;
-    logger_1.logger.info(`Escalation Configuration for season ${EscalationSeason} (stubbed)`);
+    const SeasonId = String(req.params.escalationSeason);
+    if (!(0, escalation162_1.ValidSeasonId)(SeasonId)) {
+        res.status(404).send();
+        return;
+    }
     res.status(200);
     res.json({
         code: null,
         message: "OK",
-        payload: {
-            escalation_level: 99999,
-            next_level_xp: 99999,
-            talents_progress: [],
-            unlock_progress: [],
-            update_version: 1,
-        }
+        payload: (0, escalation162_1.GetEscalation)(String(req.params.userId), SeasonId)
     });
 });
 exports.systemRouter.get("/eventstats/", HasUndauntedMetagameAuth_1.HasUndauntedMetagameAuth, (req, res) => {
@@ -222,8 +222,14 @@ exports.systemRouter.get("/all/", HasUndauntedMetagameAuth_1.HasUndauntedMetagam
         }
     });
 });
-// [esc-log] temporary: record what the game POSTs to /escalation, still answer 404 as before
-exports.systemRouter.post("/escalation/:escalationSeason/:userId", (req, res) => {
-    logger_1.logger.info(`[esc-log] POST ${req.params.escalationSeason} ct=${req.headers["content-type"]} len=${req.headers["content-length"]} query=${JSON.stringify(req.query)} body=${JSON.stringify(req.body)}`);
-    res.status(404).end();
+// The game server saving a player's season (UpdateSeasonalEscalationEndpoint, the whole season as the body)
+exports.systemRouter.post("/escalation/:escalationSeason/:userId", HasUndauntedMetagameAuth_1.HasUndauntedMetagameAuth, (req, res) => {
+    const SeasonId = String(req.params.escalationSeason);
+    if ((0, escalation162_1.EscalationMode)() === "stub" || !(0, escalation162_1.ValidSeasonId)(SeasonId)) {
+        res.status(404).send();
+        return;
+    }
+    const Result = (0, escalation162_1.SaveEscalation)(String(req.params.userId), SeasonId, req.body);
+    res.status(Result.status);
+    res.json({ code: null, message: Result.status === 200 ? "OK" : "Refused", payload: Result.payload });
 });

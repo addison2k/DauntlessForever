@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-13.3",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-13.3.zip",
-                         "sha256":  "d0d458c235ed9446e818aba0d7ab0d78f5d28341dbfa773ee8b811b7783ebe8f",
-                         "date":  "2026-10-13",
-                         "note":  "Inventory page: add or remove items"
+                         "packageVersion":  "2026-10-14.2",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-14.2.zip",
+                         "sha256":  "a41f12dba492fd6681196feab91263847d6e3839e934ae7295ce31ca602591aa",
+                         "date":  "2026-10-14",
+                         "note":  "Escalation progress is saved; claimed bounties clear at once"
                      },
                      {
                          "id":  "1.14.7",

@@ -61,6 +61,54 @@ function Get-ListenerPid([int]$Port) {
 }
 function Test-UdpPort([int]$Port) { [bool](Get-NetUDPEndpoint -LocalPort $Port -ErrorAction SilentlyContinue) }
 
+# True when Windows has reserved this TCP port (Hyper-V, WSL, Docker): nothing owns it, but no program may open it.
+function Test-PortReserved([int]$Port) {
+    try { $out = & netsh int ipv4 show excludedportrange protocol=tcp 2>$null } catch { return $false }
+    foreach ($l in @($out)) { if ("$l" -match '^\s*(\d+)\s+(\d+)') { if ($Port -ge [int]$Matches[1] -and $Port -le [int]$Matches[2]) { return $true } } }
+    return $false
+}
+
+# Other Dauntless private servers (Dauntless Revived, older copies of this package, ...) are built on the same
+# Undaunted code and use the same ports: backend 61000/61001 (TCP), game servers 8770-8777 (UDP). Only one can run.
+# Closes Dauntless backends (node ... dist/server.js) and Dauntless server copies found on those ports, and stops
+# with the program's name for anything else. Run Stop-Everything first (this package's own leftovers).
+function Clear-DauntlessPorts([int[]]$TcpPorts = @(), [int[]]$UdpPorts = @()) {
+    $owners = @{}
+    foreach ($port in $TcpPorts) {
+        foreach ($c in @(Get-NetTCPConnection -LocalPort $port -State Listen -ErrorAction SilentlyContinue)) { if ($c.OwningProcess -gt 4) { $owners[[int]$c.OwningProcess] = "TCP $port" } }
+    }
+    foreach ($port in $UdpPorts) {
+        foreach ($c in @(Get-NetUDPEndpoint -LocalPort $port -ErrorAction SilentlyContinue)) { if ($c.OwningProcess -gt 4) { $owners[[int]$c.OwningProcess] = "UDP $port" } }
+    }
+    $closed = 0
+    foreach ($id in $owners.Keys) {
+        $w = Get-CimInstance Win32_Process -Filter "ProcessId=$id" -ErrorAction SilentlyContinue
+        $pname = if ($w) { $w.Name } else { "process $id" }
+        $cmd = if ($w -and $w.CommandLine) { $w.CommandLine } else { '' }
+        $isBackend = ($pname -eq 'node.exe' -and $cmd -match 'dist[\\/]server\.js')
+        $isServerCopy = ($pname -eq 'Dauntless-Win64-Shipping.exe')
+        if ($isBackend -or $isServerCopy) {
+            $what = if ($isBackend) { 'Dauntless server' } else { 'Dauntless game server' }
+            Say "    Closing another $what that was using port $($owners[$id]) (often Dauntless Revived or an old copy; it is not harmed)." 'Yellow'
+            Stop-Process -Id $id -Force -ErrorAction SilentlyContinue
+            $closed++
+        } else {
+            $where = if ($w -and $w.ExecutablePath) { $w.ExecutablePath } else { $pname }
+            Fail "port $($owners[$id]) is used by another program: $where`n         If that is another Dauntless launcher (for example Dauntless Revived), close it completely, also from the`n         system tray next to the clock, then try again. Restarting the PC also frees it."
+        }
+    }
+    if ($closed) {
+        Start-Sleep -Seconds 2
+        foreach ($port in $TcpPorts) { if (Get-ListenerPid $port) { Fail "port $port is still in use after closing the other Dauntless server. Restart the PC, then try again." } }
+        foreach ($port in $UdpPorts) { if (Test-UdpPort $port) { Fail "game port $port is still in use after closing the other Dauntless server. Restart the PC, then try again." } }
+    }
+    foreach ($port in $TcpPorts) {
+        if (Test-PortReserved $port) {
+            Fail "Windows has reserved port $port (this happens with Hyper-V, WSL or Docker), so the backend cannot use it.`n         Fix: right-click Start > Terminal (Admin) or Windows PowerShell (Admin), run:  net stop winnat; net start winnat`n         then try again."
+        }
+    }
+}
+
 # Game copies started as servers have -server on their command line; the player's own game does not.
 function Get-ServerCopies {
     @(Get-CimInstance Win32_Process -Filter "Name='Dauntless-Win64-Shipping.exe'" -ErrorAction SilentlyContinue |

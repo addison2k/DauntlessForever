@@ -35,9 +35,13 @@ const FlagPath = (s) => {
 const FlagList = (v) => (v || "").split(",").map(s => s.trim()).filter(s => /^[A-Za-z0-9_\/.]+$/.test(s)).map(FlagPath).join(",");
 const CITY_EVENTS_ON = FlagList(process.env.CITY_EVENTS_ON);
 const CITY_EVENTS_OFF = FlagList(process.env.CITY_EVENTS_OFF);
-const RAMSGATE_MAP_PATH = "/Game/Maps/ramsgate/ramsgate_01_persistent" +
+// Player limits: without ?MaxPlayers the server allows ONE player ("max player count is 1" in its log), and a second
+// player who travels in times out after 2 minutes and is sent back to the menu. Ramsgate 20 like Dauntless Revived.
+const CITY_PLAYER_LIMIT = Math.max(1, Number(process.env.CITY_PLAYER_LIMIT) || 20);
+const DOJO_PLAYER_LIMIT = Math.max(1, Number(process.env.DOJO_PLAYER_LIMIT) || 4);
+const RAMSGATE_MAP_PATH = "/Game/Maps/ramsgate/ramsgate_01_persistent" + `?MaxPlayers=${CITY_PLAYER_LIMIT}` +
     (CITY_EVENTS_ON ? `?OverridenFeaturesOn=${CITY_EVENTS_ON}` : "") + (CITY_EVENTS_OFF ? `?OverridenFeaturesOff=${CITY_EVENTS_OFF}` : "");
-const TRAINING_DOJO_MAP_PATH = "/Game/Maps/islands/dojo/training_dojo_persistent";
+const TRAINING_DOJO_MAP_PATH = "/Game/Maps/islands/dojo/training_dojo_persistent" + `?MaxPlayers=${DOJO_PLAYER_LIMIT}`;
 const TRIALS_MAP_PATH = "/Game/Maps/islands/arenas/arena_ramsgate_00";
 exports.Gameservers = [];
 let FreePorts = [];
@@ -55,6 +59,10 @@ const METAGAME_ADDRESS = process.env.METAGAME_ADDRESS || "127.0.0.1:61000";
 
 const METAGAME_API_KEY = process.env.METAGAME_API_KEY;
 const MY_IP = process.env.MY_IP;
+// Online hosting through the Dauntless Forever relay: players reach this PC's game servers at relay ports
+// (base .. base+7) instead of 8770-8777. "ONLINE - HOST.bat" sets PUBLIC_PORT_OFFSET = base - 8770. 0 otherwise.
+const PUBLIC_PORT_OFFSET = Number(process.env.PUBLIC_PORT_OFFSET) || 0;
+const PublicPort = (Port) => Port + PUBLIC_PORT_OFFSET;
 const SECONDS_TO_WAIT_BETWEEN_GAMESERVER_STARTUP = Number(process.env.SECONDS_TO_WAIT_BETWEEN_GAMESERVER_STARTUP);
 function TransformExpectedPlayerArgs(ExpectedPlayers) {
     let ToReturn = "";
@@ -120,7 +128,7 @@ async function StartServer(Map, Behemoth, MatchmakerHuntId, ExpectedPlayers, IsR
         Behemoth != undefined ? Behemoth : "NO_BEHEMOTH",
         MatchmakerHuntId != undefined ? MatchmakerHuntId : "NO_MM_HUNTID",
         ExpectedPlayers != undefined ? TransformExpectedPlayerArgs(ExpectedPlayers) : "NO_EXPECTED_PLAYERS",
-        MY_IP + ":" + Port.toString(),
+        MY_IP + ":" + PublicPort(Port).toString(),  // the address players use for this server
         METAGAME_ADDRESS,
         ...STANDARD_GAMESERVER_ARGS
     ], { windowsHide: true, stdio: "ignore" }); // offline package: server copies stay hidden
@@ -148,13 +156,13 @@ async function StartServer(Map, Behemoth, MatchmakerHuntId, ExpectedPlayers, IsR
 function GetRamsgateConnectionDetails() {
     return {
         host: MY_IP,
-        port: RamsgateServer.port
+        port: PublicPort(RamsgateServer.port)
     };
 }
 function GetTrainingDojoConnectionDetails() {
     return {
         host: MY_IP,
-        port: TrainingDojoServer.port
+        port: PublicPort(TrainingDojoServer.port)
     };
 }
 async function StartupGameserverWithArgs(GameArgs) {
@@ -163,7 +171,7 @@ async function StartupGameserverWithArgs(GameArgs) {
     const GameServerToReturn = await StartServer(Map, Behemoth, undefined, undefined, false, false);
     return {
         host: MY_IP,
-        port: GameServerToReturn.port
+        port: PublicPort(GameServerToReturn.port)
     };
 }
 function GetMatchmakerHuntIdFromPlayerHuntId(PlayerHuntId) {
@@ -218,7 +226,7 @@ async function StartupGameserverWithHuntIdAndPlayers(HuntId, ExpectedPlayers) {
     }), false, false);
     return {
         host: MY_IP,
-        port: GameServerToReturn.port
+        port: PublicPort(GameServerToReturn.port)
     };
 }
 async function Startup() {
