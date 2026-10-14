@@ -6,7 +6,7 @@ import { Router } from "express";
 import { HasUndauntedMetagameAuth } from "../middleware/HasUndauntedMetagameAuth";
 import { logger } from "../logger";
 import { AddEncounteredContent, GetBreadcrumbsForCharacterIdAndUserId, ProgressionError, QueryEncounteredContent, SetBreadcrumbsForCharacterIdAndUserId } from "../controllers/progression";
-import { ApplyProgressionPost, BuildProgressTracks, GetObjectiveProgress, GrantTrackXp, ListObjectiveProgress, LogProgressionPost, ObjectivesForPriming, PROGRESSION_MODE } from "../progression162";
+import { ApplyProgressionPost, BuildProgressTracks, GetObjectiveProgress, GrantTrackXp, ListObjectiveProgress, LogProgressionPost, ObjectivesForPriming, PROGRESSION_MODE, ResetWeaponTrack } from "../progression162";
 
 export const progressionRouter = Router();
 
@@ -198,17 +198,18 @@ progressionRouter.post("/breadcrumbs/:characterId", HasUndauntedMetagameAuth, as
 // XP granted directly by the game server, e.g. a claimed bounty's Weapon Skill XP or the game's own Hunt Pass XP:
 //   POST /progression/<uid>/ExperienceTrack_Weapon_ChainBlades/200, POST /progression/<uid>/season13a/10, ...
 // The metagame always STORES the XP (GrantTrackXp in progression162.ts). The reply is chosen with GRANT_REPLY in .env:
-//   "404"   (default) like before this route existed: the game server keeps its own numbers, but it treats the grant as
+//   "track" (default since Oct 14) 200 with the updated track itself as payload (progress = old + grant, ranks).
+//           Without it the game server logs "failed to update back end with XP progress" for every bounty claim.
+//   "404"   like before this route existed: the game server keeps its own numbers, but it treats the grant as
 //           failed ("failed to update back end with XP progress"), so a claimed bounty's card only clears after a relog.
-//   "track" 200 with the updated track itself as payload (progress = old + grant, ranks), which is presumably what the
-//           game server expects. Test mode: if the hunt HUD shows absurd numbers again, go back to "404".
+//           If the hunt HUD ever shows absurd numbers again, set GRANT_REPLY=404.
 //   "ok"    200 with an empty payload (made the HUD show garbage: the server read it as progress 0).
 progressionRouter.post("/progression/:userId/:trackId/:amount", HasUndauntedMetagameAuth, (req: any, res) => {
     const UserId = String(req.params.userId);
     const TrackId = String(req.params.trackId);
     GrantTrackXp(UserId, TrackId, req.params.amount);
 
-    const Mode = (process.env.GRANT_REPLY ?? (process.env.GRANT_REPLY_OK === "1" ? "ok" : "404")).toLowerCase();
+    const Mode = (process.env.GRANT_REPLY ?? (process.env.GRANT_REPLY_OK === "1" ? "ok" : "track")).toLowerCase();
     if (Mode === "track") {
         const Track = BuildProgressTracks(UserId, (Path) => Path.progression_id === TrackId)[0] ?? {};
         res.status(200).json({ code: null, message: "OK", payload: Track });
@@ -219,6 +220,33 @@ progressionRouter.post("/progression/:userId/:trackId/:amount", HasUndauntedMeta
         return;
     }
     res.status(404).send();
+});
+
+// [reforge] One track, as the game reads it right after a reforge: GET /progression/<uid>/<trackId>.
+// Same shape as the grant reply: 200 with the track itself as payload (404 for a track the config does not have).
+progressionRouter.get("/progression/:userId/:trackId", HasUndauntedMetagameAuth, (req: any, res) => {
+    const UserId = String(req.params.userId);
+    const TrackId = String(req.params.trackId);
+    const Track = BuildProgressTracks(UserId, (Path) => Path.progression_id === TrackId)[0];
+    if (Track === undefined) {
+        res.status(404).send();
+        return;
+    }
+    logger.info(`Progression: track ${TrackId} read for ${UserId} (progress ${(Track as any).progress})`);
+    res.status(200).json({ code: null, message: "OK", payload: Track });
+});
+
+// [reforge] The game server resetting a weapon to level 1 (Sparkforge reforge): DELETE /progression/<uid>/ExperienceTrack_Weapon_<W>.
+// Answered like a grant ("track" reply): 200 with the track as it is now (progress 0).
+progressionRouter.delete("/progression/:userId/:trackId", HasUndauntedMetagameAuth, (req: any, res) => {
+    const UserId = String(req.params.userId);
+    const TrackId = String(req.params.trackId);
+    if (!ResetWeaponTrack(UserId, TrackId)) {
+        res.status(400).send();
+        return;
+    }
+    const Track = BuildProgressTracks(UserId, (Path) => Path.progression_id === TrackId)[0] ?? {};
+    res.status(200).json({ code: null, message: "OK", payload: Track });
 });
 
 progressionRouter.post("/progression/:userId", HasUndauntedMetagameAuth, (req: any, res) => {

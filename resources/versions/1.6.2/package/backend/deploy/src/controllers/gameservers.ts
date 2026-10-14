@@ -262,6 +262,18 @@ function RandomlyGenTrialsData(IsElite: boolean): TrialsData{
     };
 }
 
+// Public games (DF-ONLINE-1): the backend lets players join a hunt for HUNT_JOIN_WINDOW_SEC after it starts, so hunt
+// servers then get room for HUNT_PLAYER_LIMIT players (4). Without the window, hunts start exactly as before.
+const HUNT_JOIN_OPEN = (Number(process.env.HUNT_JOIN_WINDOW_SEC) || 0) > 0;
+const HUNT_PLAYER_LIMIT = Math.min(8, Math.max(1, Number(process.env.HUNT_PLAYER_LIMIT) || 4));
+
+// the metagame asks before sending a player into a hunt that started earlier: is that server still running?
+export function IsServerUp(Id: string){
+    const Server = Gameservers.find((S) => S.id === Id);
+    if(!Server || !Server.processId) return false;
+    try { process.kill(Server.processId, 0); return true; } catch { return false; }
+}
+
 export async function StartupGameserverWithHuntIdAndPlayers(HuntId: string, ExpectedPlayers: string[]){
     const TrialsData = HuntId.includes("Arena") ? RandomlyGenTrialsData(HuntId.includes("Elite")) : undefined;
     const MatchmakerHuntId = TrialsData == undefined ? GetMatchmakerHuntIdFromPlayerHuntId(HuntId) : TrialsData.TrialsHuntId;
@@ -275,6 +287,10 @@ export async function StartupGameserverWithHuntIdAndPlayers(HuntId: string, Expe
             logger.info(`Overriding gamemode to ${OverrideGameMode}`);
             MapPath = `${MapPath}?game=${OverrideGameMode}`;
         }
+    }
+
+    if(HUNT_JOIN_OPEN){
+        MapPath = `${MapPath}?MaxPlayers=${HUNT_PLAYER_LIMIT}`;
     }
 
     const GameServerToReturn = await StartServer(MapPath, BehemothPath, MatchmakerHuntId, ExpectedPlayers.map((PlayerId) => {

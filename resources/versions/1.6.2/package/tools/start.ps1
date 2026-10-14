@@ -28,6 +28,11 @@ if (@($missing).Count -gt 0) { Fail "Windows is missing parts the game needs ($(
 if (@(Get-PlayerGame).Count -gt 0) { Fail 'the game is already running. Close it first (or end Dauntless-Win64-Shipping in Task Manager).' }
 
 New-Item -ItemType Directory -Force $DataDir, $LogDir | Out-Null
+# Your player name comes from the launcher (one name for every version): keep this account's name in step.
+if ($env:DF_PLAYER_NAME -match '^[A-Za-z0-9_]{3,16}$' -and $env:DF_PLAYER_NAME -cne "$($cfg.PlayerName)") {
+    & $node (Join-Path $PSScriptRoot 'travel.js') name $env:DF_PLAYER_NAME | Out-Null
+    if ($LASTEXITCODE -eq 0) { $cfg | Add-Member -NotePropertyName PlayerName -NotePropertyValue $env:DF_PLAYER_NAME -Force; Save-Config $cfg; Say "Player name: $($env:DF_PLAYER_NAME)" 'Green' }
+}
 
 # --- leftovers from a run that did not close properly
 Stop-Everything -Quiet

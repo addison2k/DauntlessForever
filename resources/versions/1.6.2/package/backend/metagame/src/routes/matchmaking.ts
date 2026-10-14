@@ -5,7 +5,7 @@
 import { Router } from "express";
 import { HasUndauntedMetagameAuth } from "../middleware/HasUndauntedMetagameAuth";
 import { logger } from "../logger";
-import { CheckAndUpdateQueueStatus, HandlePlayerMatchmaking } from "../controllers/matchmaking";
+import { CancelMatchmaking, CheckAndUpdateQueueStatus, GetEntryForCandidate, HandlePlayerMatchmaking, NoteSentTo } from "../controllers/matchmaking";
 
 export const matchmakingRouter = Router();
 
@@ -19,12 +19,7 @@ matchmakingRouter.post("/candidate/player/register", HasUndauntedMetagameAuth, (
     res.json({});
 });
 
-matchmakingRouter.delete("/party/member", HasUndauntedMetagameAuth, (req: any, res) => {
-    logger.info(`Clear party (stubbed)`);
-
-    res.status(200);
-    res.json({});
-});
+// DELETE /party/member is answered by routes/party.ts (leaving a party)
 
 matchmakingRouter.get("/candidate/regions", HasUndauntedMetagameAuth, (req: any, res) => {
     logger.info(`Querying regions for QoS`);
@@ -57,6 +52,7 @@ matchmakingRouter.get("/candidate/status", HasUndauntedMetagameAuth, async (req:
     if(MatchmakingResult != undefined){
         if(MatchmakingResult.Ready){
             logger.info(`Telling client to travel to ${MatchmakingResult.Host}:${MatchmakingResult.Port}`);
+            NoteSentTo(UserId, MatchmakingResult.Host, MatchmakingResult.Port);
 
             res.status(200);
             res.json({
@@ -131,6 +127,36 @@ matchmakingRouter.post("/candidate/join", HasUndauntedMetagameAuth, async (req: 
         candidateId: MatchmakingEntry!.CandidateId,
         gameMode: GameMode,
         huntId: HuntId,
+        status: "MATCHING",
+        statusReason: null
+    });
+});
+
+matchmakingRouter.delete("/candidate", HasUndauntedMetagameAuth, (req: any, res) => {
+    CancelMatchmaking(req.AuthData.userId);
+    res.status(200);
+    res.json({});
+});
+
+// A party member's game following the leader's hunt by candidate id
+matchmakingRouter.post("/candidate/join/:candidateId", HasUndauntedMetagameAuth, async (req: any, res) => {
+    const UserId = req.AuthData.userId;
+    const Entry = GetEntryForCandidate(UserId, req.params.candidateId);
+
+    if(Entry === undefined){
+        logger.info(`UserId ${UserId} asked to join candidate ${String(req.params.candidateId).slice(0, 64)}, which is not theirs`);
+        res.status(404);
+        res.send();
+        return;
+    }
+
+    logger.info(`UserId ${UserId} follows candidate ${Entry.CandidateId} (${Entry.HuntId})`);
+
+    res.status(200);
+    res.json({
+        candidateId: Entry.CandidateId,
+        gameMode: "ISLAND",
+        huntId: Entry.HuntId,
         status: "MATCHING",
         statusReason: null
     });

@@ -7,6 +7,7 @@ import { HasUndauntedMetagameAuth } from "../middleware/HasUndauntedMetagameAuth
 import { logger } from "../logger";
 import { ApplyInventoryRules } from "../rules162";
 import { GetInventoryForUserIdAndCharacterId, InventoryError, RunInventoryTransaction, UpdateInstancedItem } from "../controllers/inventory";
+import { NoteReforgePrepaid, ReforgeReward } from "../progression162";
 
 export const inventoryRouter = Router();
 
@@ -66,12 +67,25 @@ inventoryRouter.post("/inventory", HasUndauntedMetagameAuth, async (req: any, re
     const StackedItemsToRemove = req.body.removeStackedItems;
     const InstancedItemsToSave = req.body.saveInstancedItems;
 
+    // [reforge] The Sparkforge reforge is a transaction that only spends Aethersparks. Pay the Aetherheart in the same
+    // transaction, so it is in this reply and the game shows it at once (no relog). See progression162.ts.
+    let ReforgeAdd: any[] = [];
+    if (Array.isArray(StackedItemsToRemove) && StackedItemsToRemove.length > 0
+        && StackedItemsToRemove.every((i: any) => i?.catalogId === "CURRENCY_PJM_PRESTIGE_EMPTY" && i.quantity > 0)
+        && !(Array.isArray(StackedItemsToAdd) && StackedItemsToAdd.length) && !(Array.isArray(InstancedItemsToAdd) && InstancedItemsToAdd.length)
+        && !(Array.isArray(InstancedItemsToRemove) && InstancedItemsToRemove.length)) {
+        ReforgeAdd = ReforgeReward(1);
+    }
+    const IsReforge = ReforgeAdd.length > 0;
+
     // [rules] Game Rules: more loot, free crafting (rules162.ts). Kept = items whose removal was skipped.
     const Tx = { instancedAdd: InstancedItemsToAdd ?? [], stackedAdd: StackedItemsToAdd ?? [], instancedRemove: InstancedItemsToRemove ?? [],
         stackedRemove: StackedItemsToRemove ?? [], instancedSave: InstancedItemsToSave ?? [] };
     let Kept: string[] = [];
     try { Kept = ApplyInventoryRules(Tx, String(TransactionId), !!req.AuthData.IsGameserver); }
     catch (error) { logger.error(error, `[rules] could not apply Game Rules to ${TransactionId}; stored unchanged`); }
+    // The reforge reward is added after the Game Rules, so "more loot" never multiplies it
+    if (IsReforge) Tx.stackedAdd = [...Tx.stackedAdd, ...ReforgeAdd];
 
     const TransactionResult = await RunInventoryTransaction(UserId, CharacterId, TransactionId, InstancedItemsToAdd, Tx.stackedAdd, InstancedItemsToRemove, Tx.stackedRemove, InstancedItemsToSave);
 
@@ -91,6 +105,10 @@ inventoryRouter.post("/inventory", HasUndauntedMetagameAuth, async (req: any, re
 
     if(TransactionResult.success){
         logger.info(`Ran transactionId ${TransactionId} for userId ${UserId} and characterId ${CharacterId}`);
+        if (IsReforge) {
+            NoteReforgePrepaid(UserId);
+            logger.info(`Inventory: reforge spark spend, paid ${ReforgeAdd.map((i: any) => `${i.catalogId} x${i.quantity}`).join(", ")} in the same transaction`);
+        }
 
         res.status(200);
         res.json({

@@ -5,6 +5,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.matchmakingRouter = void 0;
+// Dauntless Forever - Dauntless 1.6.2 offline backend
+// Copyright (C) 2026 Addison2k (port to this Dauntless build and all changes). https://github.com/addison2k/DauntlessForever
+// Based on Undaunted, Copyright (C) gwog and contributors, https://github.com/SyST3MDeV/Undaunted
+// Licence: AGPL-3.0-only (LICENSE-AGPL-3.0.txt). Keep this notice: the licence requires it.
 const express_1 = require("express");
 const HasUndauntedMetagameAuth_1 = require("../middleware/HasUndauntedMetagameAuth");
 const logger_1 = require("../logger");
@@ -17,11 +21,7 @@ exports.matchmakingRouter.post("/candidate/player/register", HasUndauntedMetagam
     res.status(200);
     res.json({});
 });
-exports.matchmakingRouter.delete("/party/member", HasUndauntedMetagameAuth_1.HasUndauntedMetagameAuth, (req, res) => {
-    logger_1.logger.info(`Clear party (stubbed)`);
-    res.status(200);
-    res.json({});
-});
+// DELETE /party/member is answered by routes/party.ts (leaving a party)
 exports.matchmakingRouter.get("/candidate/regions", HasUndauntedMetagameAuth_1.HasUndauntedMetagameAuth, (req, res) => {
     logger_1.logger.info(`Querying regions for QoS`);
     res.status(200);
@@ -48,6 +48,7 @@ exports.matchmakingRouter.get("/candidate/status", HasUndauntedMetagameAuth_1.Ha
     if (MatchmakingResult != undefined) {
         if (MatchmakingResult.Ready) {
             logger_1.logger.info(`Telling client to travel to ${MatchmakingResult.Host}:${MatchmakingResult.Port}`);
+            (0, matchmaking_1.NoteSentTo)(UserId, MatchmakingResult.Host, MatchmakingResult.Port);
             res.status(200);
             res.json({
                 candidateId: MatchmakingResult.CandidateId,
@@ -112,6 +113,31 @@ exports.matchmakingRouter.post("/candidate/join", HasUndauntedMetagameAuth_1.Has
         candidateId: MatchmakingEntry.CandidateId,
         gameMode: GameMode,
         huntId: HuntId,
+        status: "MATCHING",
+        statusReason: null
+    });
+});
+exports.matchmakingRouter.delete("/candidate", HasUndauntedMetagameAuth_1.HasUndauntedMetagameAuth, (req, res) => {
+    (0, matchmaking_1.CancelMatchmaking)(req.AuthData.userId);
+    res.status(200);
+    res.json({});
+});
+// A party member's game following the leader's hunt by candidate id
+exports.matchmakingRouter.post("/candidate/join/:candidateId", HasUndauntedMetagameAuth_1.HasUndauntedMetagameAuth, async (req, res) => {
+    const UserId = req.AuthData.userId;
+    const Entry = (0, matchmaking_1.GetEntryForCandidate)(UserId, req.params.candidateId);
+    if (Entry === undefined) {
+        logger_1.logger.info(`UserId ${UserId} asked to join candidate ${String(req.params.candidateId).slice(0, 64)}, which is not theirs`);
+        res.status(404);
+        res.send();
+        return;
+    }
+    logger_1.logger.info(`UserId ${UserId} follows candidate ${Entry.CandidateId} (${Entry.HuntId})`);
+    res.status(200);
+    res.json({
+        candidateId: Entry.CandidateId,
+        gameMode: "ISLAND",
+        huntId: Entry.HuntId,
         status: "MATCHING",
         statusReason: null
     });

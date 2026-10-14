@@ -8,6 +8,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.GrantMasteryRewards = GrantMasteryRewards;
+exports.GrantItems = GrantItems;
 // mastery-rewards.ts — grant 1.6.2 mastery rank rewards (Merits, cell cores, titles) on rank-up.
 // Rewards come from the game's own Gameplay/Mastery/mastery_track_table (FModel export),
 // saved as src/vendor/mastery_track_table_162.json. Ranks come from the same RankForXp the
@@ -116,4 +117,29 @@ async function DoGrant(accountId, trackPoints, rankFor) {
     }
     SaveGranted(accountId, newGranted);
     logger_1.logger.info(`MasteryRewards: ${changes.join(", ")} -> ${items.map(i => `${i.catalogId} x${i.quantity}`).join(", ")}`);
+}
+// ---------- One-off item grants (used by the Sparkforge reforge) ----------
+// Same queue and same character pick as the rank rewards, so a reforge and a rank-up can't race each other.
+function GrantItems(accountId, items, reason) {
+    const list = items.filter(i => /^[A-Z0-9_]{3,80}$/.test(i.catalogId) && i.quantity > 0);
+    if (!list.length)
+        return;
+    const next = (queues.get(accountId) ?? Promise.resolve())
+        .then(() => DoGrantItems(accountId, list, reason))
+        .catch(e => logger_1.logger.error(e, `MasteryRewards: ${reason} grant failed`));
+    queues.set(accountId, next);
+}
+async function DoGrantItems(accountId, items, reason) {
+    const chars = await (0, db_1.GetDb)().query.characters.findMany({ where: (0, drizzle_orm_1.eq)(schema_1.characters.userId, accountId) });
+    if (!chars.length) {
+        logger_1.logger.warn(`MasteryRewards: no character for ${accountId}; ${reason} not paid`);
+        return;
+    }
+    const character = [...chars].sort((a, b) => (a.lastModifiedDate < b.lastModifiedDate ? 1 : -1))[0];
+    const result = await (0, inventory_1.RunInventoryTransaction)(accountId, character.characterId, `${reason.replace(/[^\w-]/g, "_")}-${Date.now()}`, [], items, [], [], []);
+    if (!result.success) {
+        logger_1.logger.error(`MasteryRewards: ${reason} inventory transaction failed (${result.error})`);
+        return;
+    }
+    logger_1.logger.info(`MasteryRewards: ${reason} -> ${items.map(i => `${i.catalogId} x${i.quantity}`).join(", ")}`);
 }

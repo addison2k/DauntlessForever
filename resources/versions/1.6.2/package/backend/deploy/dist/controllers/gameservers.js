@@ -14,6 +14,7 @@ exports.GetTrainingDojoConnectionDetails = GetTrainingDojoConnectionDetails;
 exports.StartupGameserverWithArgs = StartupGameserverWithArgs;
 exports.StartupGameserverWithHuntIdAndPlayers = StartupGameserverWithHuntIdAndPlayers;
 exports.Startup = Startup;
+exports.IsServerUp = IsServerUp;
 const node_child_process_1 = require("node:child_process");
 const promises_1 = require("node:timers/promises");
 const node_crypto_1 = __importDefault(require("node:crypto"));
@@ -43,6 +44,10 @@ const RAMSGATE_MAP_PATH = "/Game/Maps/ramsgate/ramsgate_01_persistent" + `?MaxPl
     (CITY_EVENTS_ON ? `?OverridenFeaturesOn=${CITY_EVENTS_ON}` : "") + (CITY_EVENTS_OFF ? `?OverridenFeaturesOff=${CITY_EVENTS_OFF}` : "");
 const TRAINING_DOJO_MAP_PATH = "/Game/Maps/islands/dojo/training_dojo_persistent" + `?MaxPlayers=${DOJO_PLAYER_LIMIT}`;
 const TRIALS_MAP_PATH = "/Game/Maps/islands/arenas/arena_ramsgate_00";
+// Public games (DF-ONLINE-1): the backend lets players join a hunt for HUNT_JOIN_WINDOW_SEC after it starts, so hunt
+// servers then get room for HUNT_PLAYER_LIMIT players (4). Without the window, hunts start exactly as before.
+const HUNT_JOIN_OPEN = (Number(process.env.HUNT_JOIN_WINDOW_SEC) || 0) > 0;
+const HUNT_PLAYER_LIMIT = Math.min(8, Math.max(1, Number(process.env.HUNT_PLAYER_LIMIT) || 4));
 exports.Gameservers = [];
 let FreePorts = [];
 let RamsgateServer;
@@ -218,6 +223,9 @@ async function StartupGameserverWithHuntIdAndPlayers(HuntId, ExpectedPlayers) {
             MapPath = `${MapPath}?game=${OverrideGameMode}`;
         }
     }
+    if (HUNT_JOIN_OPEN) {
+        MapPath = `${MapPath}?MaxPlayers=${HUNT_PLAYER_LIMIT}`;
+    }
     const GameServerToReturn = await StartServer(MapPath, BehemothPath, MatchmakerHuntId, ExpectedPlayers.map((PlayerId) => {
         return {
             playerUid: PlayerId,
@@ -226,8 +234,23 @@ async function StartupGameserverWithHuntIdAndPlayers(HuntId, ExpectedPlayers) {
     }), false, false);
     return {
         host: MY_IP,
-        port: PublicPort(GameServerToReturn.port)
+        port: PublicPort(GameServerToReturn.port),
+        id: GameServerToReturn.id
     };
+}
+// the metagame asks before sending a player into a hunt that started earlier: is that server still running?
+function IsServerUp(Id) {
+    const Server = exports.Gameservers.find((S) => S.id === Id);
+    if (!Server || !Server.processId) {
+        return false;
+    }
+    try {
+        process.kill(Server.processId, 0);
+        return true;
+    }
+    catch {
+        return false;
+    }
 }
 async function Startup() {
     for (let i = PORT_RANGE_BEGIN; i <= PORT_RANGE_END - 2; i++) {

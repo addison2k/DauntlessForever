@@ -8,11 +8,12 @@
     "works":  [
                   "Log in, the tutorial hunt, Ramsgate, hunts",
                   "Weapon XP and mastery, the Slayer\u0027s Path, crafting, cores, bounties",
-                  "Cell fusion (middle slot)"
+                  "Cell fusion (middle slot)",
+                  "Play with friends: host or join from the Friends panel (parties, voice)",
+                  "Play online: join a game that is open to everyone, or host one"
               ],
     "notWorking":  [
-                       "Factions, challenges",
-                       "Solo only"
+                       "Factions, challenges"
                    ],
     "exeRel":  "Archon/Binaries/Win64/Dauntless-Win64-Shipping.exe",
     "exeSha256":  "E7ACBA587320491B71CB53BB8F8CBF5F3760BB52F78E74A82384B8BC42D05FD6",
@@ -26,7 +27,7 @@
                  },
     "package":  {
                     "dir":  "package",
-                    "packageVersion":  "2026-10-14.2",
+                    "packageVersion":  "2026-10-14.9",
                     "setup":  "tools/setup.ps1",
                     "uninstallArgs":  [
                                           "-Uninstall"
@@ -49,7 +50,7 @@
                                            },
                                            {
                                                "rel":  "Archon/Binaries/Win64/UndauntedInternalServer.dll",
-                                               "sha256":  "7B563865D317AEDA3DA99F1D4078326BBFDBC00A93BB5A7D61D008116539C988"
+                                               "sha256":  "64DE377188F0AE720507E627263587CE69808A8DC4DA64FD939235C707CBF1B1"
                                            }
                                        ],
                     "setupDoneFiles":  [

@@ -5,6 +5,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.loginRouter = void 0;
+// Dauntless Forever - Dauntless 1.6.2 offline backend
+// Copyright (C) 2026 Addison2k (port to this Dauntless build and all changes). https://github.com/addison2k/DauntlessForever
+// Based on Undaunted, Copyright (C) gwog and contributors, https://github.com/SyST3MDeV/Undaunted
+// Licence: AGPL-3.0-only (LICENSE-AGPL-3.0.txt). Keep this notice: the licence requires it.
 const express_1 = require("express");
 const logger_1 = require("../logger");
 const HasUndauntedMetagameAuth_1 = require("../middleware/HasUndauntedMetagameAuth");
@@ -12,6 +16,7 @@ const db_1 = require("../db");
 const schema_1 = require("../db/schema");
 const drizzle_orm_1 = require("drizzle-orm");
 const login_1 = require("../controllers/login");
+const social162_1 = require("../controllers/social162");
 exports.loginRouter = (0, express_1.Router)();
 exports.loginRouter.get("/features/platform/win", (req, res) => {
     logger_1.logger.info("Features");
@@ -94,22 +99,36 @@ exports.loginRouter.put("/gamesession/epic", HasUndauntedMetagameAuth_1.HasUndau
         }
     });
 });
+// POST /accountinfo/public: the game looks up OTHER players here (party invite senders, party members,
+// friends), body {"accountId": <id>} or {"displayname": <name>}. The reply must describe the LOOKED-UP
+// account: the game files it under the reply's accountId (the first reply per id wins for the session).
+// The old reply carried the caller's own id, so other players never showed (Dauntless Revived's finding).
 exports.loginRouter.post("/accountinfo/public", HasUndauntedMetagameAuth_1.HasUndauntedMetagameAuth, async (req, res) => {
-    const AccountIdToLookupFromRequest = req.body.accountId;
-    const RequestorAccountId = req.AuthData.userId;
-    const Username = await (0, login_1.GetUsernameForUserId)(AccountIdToLookupFromRequest);
-    // We allow anybody to look up anybody's username from account id
+    const AskedId = req.body?.accountId;
+    let Found;
+    if (AskedId !== undefined && AskedId !== null && AskedId !== "") {
+        const Name = await (0, social162_1.FindUsername)(AskedId);
+        Found = Name !== undefined ? { UserId: AskedId, Username: Name } : undefined;
+    }
+    else {
+        Found = await (0, social162_1.FindAccountByName)(req.body?.displayname ?? req.body?.displayName);
+    }
+    if (!Found) {
+        res.status(404);
+        res.json({});
+        return;
+    }
     res.status(200);
     res.json({
-        accountId: RequestorAccountId,
+        accountId: Found.UserId,
         isSubscribed: true,
         language: null,
         linkedAccounts: [
             {
-                accountId: RequestorAccountId,
+                accountId: Found.UserId,
                 accountType: "epic"
             }
         ],
-        username: Username
+        username: Found.Username
     });
 });

@@ -9,7 +9,7 @@ import fs from "fs";
 import path from "path";
 import baseConfig from "./vendor/progression_config.json";
 import { logger } from "./logger";
-import { GrantMasteryRewards } from "./mastery-rewards";
+import { GrantItems, GrantMasteryRewards } from "./mastery-rewards";
 import { ActivePassId, AddHuntPassXp, HuntPassPath, HuntPassTrack, RecordHuntPassPost } from "./huntpass162";
 import { Rules, ScaleXp } from "./rules162";
 
@@ -62,6 +62,17 @@ const paths162 = Load162Paths();
 const merged = new Map<string, ProgressionPath>();
 for (const p of [...basePaths, ...paths162]) merged.set(p.progression_id, p);
 merged.set(HuntPassPath.progression_id, HuntPassPath);
+
+// [reforge] The 1.6.2 config gives every PrestigeTrack_Weapon_* only rank 0, so the reforge badge under the weapon
+// level could never show more than 0 whatever we stored. One rank per reforge (1 progress each), up to
+// PRESTIGE_MAX_RANK (default 100), so progress 2 = rank 2.
+const PRESTIGE_MAX_RANK = Math.max(1, Math.min(1000, Math.floor(Number(process.env.PRESTIGE_MAX_RANK ?? 100)) || 100));
+for (const [id, p] of merged) {
+    if (!id.startsWith("PrestigeTrack_")) continue;
+    const requirements = [{ rank_id: 0, xp_required: 0 }];
+    for (let r = 1; r <= PRESTIGE_MAX_RANK; r++) requirements.push({ rank_id: r, xp_required: 1 });
+    merged.set(id, { ...p, requirements });
+}
 
 export const MergedPaths: ProgressionPath[] = [...merged.values()];
 
@@ -157,7 +168,10 @@ function SaveState(accountId: string, state: ProgressionState) {
 // They are kept in <UID>.bonus.json (separate from objectives, so PROGRESSION_REBUILD doesn't lose them) and added on
 // top of the objective-derived totals. ExperienceTrack_PlayerLevel / MasteryTrack_PlayerLevel grants are ignored:
 // both are sums of the per-weapon tracks, so counting them too would double every grant.
-type BonusState = { xp: Record<string, number>; backfilled?: boolean };
+// reforgedXp: weapon XP taken off a weapon by a reforge (Sparkforge). It no longer counts for that weapon's level, but
+//             still counts for the Slayer's Path (ExperienceTrack_PlayerLevel), so a reforge never lowers the Slayer rank.
+// prestige:   reforges per weapon (PrestigeTrack_Weapon_<W>), raised by the game server's POST .../PrestigeTrack_Weapon_<W>/1.
+type BonusState = { xp: Record<string, number>; backfilled?: boolean; reforgedXp?: Record<string, number>; prestige?: Record<string, number> };
 
 function BonusPath(accountId: string) {
     return path.join(STATE_DIR, `${accountId.replace(/[^\w-]/g, "_")}.bonus.json`);
@@ -166,7 +180,7 @@ function BonusPath(accountId: string) {
 function LoadBonus(accountId: string): BonusState {
     try {
         const parsed = JSON.parse(fs.readFileSync(BonusPath(accountId), "utf8").replace(/^\uFEFF/, ""));
-        return { xp: parsed.xp ?? {}, backfilled: parsed.backfilled };
+        return { xp: parsed.xp ?? {}, backfilled: parsed.backfilled, reforgedXp: parsed.reforgedXp ?? {}, prestige: parsed.prestige ?? {} };
     } catch {
         return { xp: {} };
     }
@@ -180,6 +194,37 @@ function SaveBonus(accountId: string, bonus: BonusState) {
 }
 
 const GRANT_LOG_PATH = process.env.PROGRESSION_GRANT_LOG ?? path.join(process.cwd(), "progression_grants.jsonl");
+
+export function ReforgeReward(times: number) {
+    const raw = (process.env.REFORGE_REWARD ?? "CURRENCY_PJM_PRESTIGE_FILLED:1").trim();
+    if (!raw || /^(none|0|off)$/i.test(raw)) return [];
+    const out: { catalogId: string; quantity: number }[] = [];
+    for (const part of raw.split(",")) {
+        const [id, n] = part.trim().split(":");
+        const quantity = Math.floor(Number(n ?? 1)) * times;
+        if (/^[A-Z0-9_]{3,80}$/.test(id ?? "") && quantity > 0 && quantity <= 1000) out.push({ catalogId: id, quantity });
+        else logger.warn(`Progression: REFORGE_REWARD entry "${part}" ignored`);
+    }
+    return out;
+}
+
+// [reforge] Hearts already paid inside the game's own spark transaction (routes/inventory.ts), so the game shows
+// them at once. The PrestigeTrack post that follows within a minute then doesn't pay again.
+const prepaidReforges = new Map<string, number[]>();
+export function NoteReforgePrepaid(accountId: string) {
+    const now = Date.now();
+    const list = (prepaidReforges.get(accountId) ?? []).filter(t => now - t < 60000);
+    list.push(now);
+    prepaidReforges.set(accountId, list);
+}
+function TakeReforgePrepaid(accountId: string) {
+    const now = Date.now();
+    const list = (prepaidReforges.get(accountId) ?? []).filter(t => now - t < 60000);
+    const had = list.length > 0;
+    if (had) list.shift();
+    prepaidReforges.set(accountId, list);
+    return had;
+}
 
 export function GrantTrackXp(accountId: string, trackId: string, amountRaw: any) {
     const amount = Math.floor(Number(amountRaw));
@@ -198,6 +243,31 @@ export function GrantTrackXp(accountId: string, trackId: string, amountRaw: any)
             return;
         }
         AddHuntPassXp(accountId, amount, "game server", true);
+        return;
+    }
+    // [reforge] Sparkforge "Reforge Weapon Skill": the game server counts one reforge with POST .../PrestigeTrack_Weapon_<W>/1
+    // (right after DELETE .../ExperienceTrack_Weapon_<W>, see ResetWeaponTrack).
+    if (trackId.startsWith("PrestigeTrack_Weapon_")) {
+        if (amount > 10) {
+            logger.warn(`Progression: ignored reforge grant ${trackId} +${amount} for ${accountId} (implausibly large)`);
+            return;
+        }
+        // The game takes the 100 Aethersparks itself (POST /inventory) but never asks for the Aetherheart, so the
+        // backend pays it here, once per reforge. REFORGE_REWARD="ID:count[,ID:count]" changes it, "none" turns it off.
+        for (let i = 0; i < amount; i++) {
+            if (TakeReforgePrepaid(accountId)) {
+                logger.info(`Progression: reforge ${trackId} reward already paid with the spark transaction`);
+                continue;
+            }
+            const reward = ReforgeReward(1);
+            if (reward.length) GrantItems(accountId, reward, `reforge ${trackId}`);
+        }
+        if (PROGRESSION_MODE !== "real") return;
+        const bonus = LoadBonus(accountId);
+        bonus.prestige = bonus.prestige ?? {};
+        bonus.prestige[trackId] = (bonus.prestige[trackId] ?? 0) + amount;
+        SaveBonus(accountId, bonus);
+        logger.info(`Progression: reforge ${trackId} +${amount} for ${accountId} (now ${bonus.prestige[trackId]})`);
         return;
     }
     if (trackId === "ExperienceTrack_PlayerLevel" || trackId === "MasteryTrack_PlayerLevel") {
@@ -393,6 +463,26 @@ export function ObjectivesForPriming(accountId: string) {
     return lines.join("\n");
 }
 
+// [reforge] DELETE /progression/<uid>/ExperienceTrack_Weapon_<W>: the game server resets a weapon to level 1 when it is
+// reforged at the Sparkforge (it has already paid the Aethersparks and given the Aetherheart through /inventory).
+// The weapon's XP moves to reforgedXp: the weapon starts again at 0, the Slayer's Path keeps the XP.
+// Only weapon experience tracks can be reset; anything else is refused (returns false).
+export function ResetWeaponTrack(accountId: string, trackId: string): boolean {
+    if (!trackId.startsWith("ExperienceTrack_Weapon_")) {
+        logger.warn(`Progression: refused reset of ${trackId} for ${accountId} (only weapon tracks are reset by a reforge)`);
+        return false;
+    }
+    if (PROGRESSION_MODE !== "real") return true;
+    const bonus = LoadBonus(accountId);
+    const moved = Math.max(0, bonus.xp[trackId] ?? 0);
+    bonus.reforgedXp = bonus.reforgedXp ?? {};
+    bonus.reforgedXp[trackId] = (bonus.reforgedXp[trackId] ?? 0) + moved;
+    bonus.xp[trackId] = 0;
+    SaveBonus(accountId, bonus);
+    logger.info(`Progression: reforge reset ${trackId} for ${accountId}: ${moved} XP moved off the weapon (kept for the Slayer's Path)`);
+    return true;
+}
+
 export function GetObjectiveProgress(accountId: string, objectiveId: string) {
     if (PROGRESSION_MODE !== "real" || !REAL_OBJECTIVES) return null;
     return LoadState(accountId).objectives[objectiveId] ?? { progress: 0, completed_count: 0 };
@@ -424,18 +514,21 @@ function RankForXp(trackId: string, xp: number) {
 
 export function BuildProgressTracks(accountId: string, filter?: (p: ProgressionPath) => boolean) {
     const now = new Date().toISOString();
-    const totals = PROGRESSION_MODE === "real" ? DeriveTotals(LoadState(accountId), LoadBonus(accountId).xp) : null;
+    const bonusState = PROGRESSION_MODE === "real" ? LoadBonus(accountId) : null;
+    const totals = bonusState ? DeriveTotals(LoadState(accountId), bonusState.xp) : null;
+    const reforgedTotal = bonusState ? Object.values(bonusState.reforgedXp ?? {}).reduce((sum, v) => sum + (v > 0 ? v : 0), 0) : 0;
     return MergedPaths.filter(p => (filter ? filter(p) : true)).map(p => {
         if (PROGRESSION_MODE === "real" && p.progression_id === ActivePassId()) return HuntPassTrack(accountId);
         // Weapon prestige (1.6.2, weapon_prestige_track_table): starts at 0 and is only raised by prestiging a weapon
         // (a CURRENCY_PJM_PRESTIGE_EMPTY cost). Must never get the "unlocked" 99,999,999 of the old season tracks.
         if (p.progression_id.startsWith("PrestigeTrack_")) {
+            const reforges = Math.min(bonusState?.prestige?.[p.progression_id] ?? 0, MaxRank(p));
             return {
                 phx_account_id: accountId,
                 progression_id: p.progression_id,
-                progress: 0,
-                confirmed_fremium_rank: 0,
-                confirmed_premium_rank: 0,
+                progress: reforges,
+                confirmed_fremium_rank: reforges,
+                confirmed_premium_rank: reforges,
                 confirmed_date: now,
             };
         }
@@ -444,7 +537,7 @@ export function BuildProgressTracks(accountId: string, filter?: (p: ProgressionP
         const isPlayerXp = p.progression_id === "ExperienceTrack_PlayerLevel";
         if (totals && (isWeaponXp || isPlayerXp || p.progression_id.startsWith("MasteryTrack_"))) {
             const xp = isPlayerXp
-                ? Object.values(totals.weaponXp).reduce((sum, v) => sum + v, 0)
+                ? Object.values(totals.weaponXp).reduce((sum, v) => sum + v, 0) + reforgedTotal
                 : isWeaponXp ? (totals.weaponXp[p.progression_id] ?? 0) : (totals.tracks[p.progression_id] ?? 0);
             const rank = RankForXp(p.progression_id, xp);
             return {

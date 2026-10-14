@@ -9,6 +9,7 @@ import { GetDb } from "../db";
 import { users } from "../db/schema";
 import { eq } from "drizzle-orm";
 import { GetUsernameForUserId } from "../controllers/login";
+import { FindAccountByName, FindUsername } from "../controllers/social162";
 
 export const loginRouter = Router();
 
@@ -115,25 +116,35 @@ loginRouter.put("/gamesession/epic", HasUndauntedMetagameAuth, (req: any, res) =
     })
 });
 
+// POST /accountinfo/public: the game looks up OTHER players here (party invite senders, party members,
+// friends), body {"accountId": <id>} or {"displayname": <name>}. The reply must describe the LOOKED-UP
+// account: the game files it under the reply's accountId (the first reply per id wins for the session).
+// The old reply carried the caller's own id, so other players never showed (Dauntless Revived's finding).
 loginRouter.post("/accountinfo/public", HasUndauntedMetagameAuth, async (req: any, res) => {
-    const AccountIdToLookupFromRequest = req.body.accountId;
-    const RequestorAccountId = req.AuthData.userId;
-
-    const Username = await GetUsernameForUserId(AccountIdToLookupFromRequest);
-
-    // We allow anybody to look up anybody's username from account id
-
+    const AskedId = req.body?.accountId;
+    let Found: { UserId: string, Username: string } | undefined;
+    if(AskedId !== undefined && AskedId !== null && AskedId !== ""){
+        const Name = await FindUsername(AskedId);
+        Found = Name !== undefined ? { UserId: AskedId, Username: Name } : undefined;
+    } else {
+        Found = await FindAccountByName(req.body?.displayname ?? req.body?.displayName);
+    }
+    if(!Found){
+        res.status(404);
+        res.json({});
+        return;
+    }
     res.status(200);
     res.json({
-        accountId: RequestorAccountId,
+        accountId: Found.UserId,
         isSubscribed: true,
         language: null,
         linkedAccounts: [
             {
-                accountId: RequestorAccountId,
+                accountId: Found.UserId,
                 accountType: "epic"
             }
         ],
-        username: Username
+        username: Found.Username
     });
 });

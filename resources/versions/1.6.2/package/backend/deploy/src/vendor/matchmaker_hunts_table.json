@@ -25340,6 +25340,39 @@
           },
           "RowName": "SNOWBALL_FIGHT_TEST"
         }
+      },
+      "MatchmakerHunt_StoryMission_Linnea_01": {
+        "HuntThreatLevel": 11,
+        "GameModeOverride": "/Game/Blueprints/GameMode/BPGM_ArchonStoryMissions.BPGM_ArchonStoryMissions_C",
+        "SpecificBehemoth": {
+          "BehemothName": "snowflake_alpha_oneeye",
+          "BehemothAsset": {
+            "AssetPathName": "None",
+            "SubPathString": ""
+          },
+          "PowerOverride": 325,
+          "Weighting": 0
+        },
+        "MaxPlayers": 4,
+        "MapList": [
+          {
+            "MapName": "coldrunner-key",
+            "MapAssetName": "/Game/Maps/islands/adventure/Snow_Vega/adventure_snow_vega.adventure_snow_vega",
+            "Biome": "EHuntBiome::Ice",
+            "Weighting": 1,
+            "SpecificAtmosphere": {
+              "AtmosphereName": "frost",
+              "AtmosphereAsset": {
+                "AssetPathName": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_frost_00_bp.atmospheres_frost_00_bp_C",
+                "SubPathString": ""
+              },
+              "Weighting": 1
+            }
+          }
+        ],
+        "GameModeSpecificData": {
+          "RowName": "MISSION_LINNEA_01"
+        }
       }
     }
   }

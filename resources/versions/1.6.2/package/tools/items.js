@@ -10,6 +10,7 @@
 //       sets each count (0 removes the item); "*" = every character. Backs the save up first.
 // Refuses while the backend is running (port 61000), so a running game can't overwrite the change.
 "use strict";
+const crypto = require("crypto");
 const fs = require("fs");
 const net = require("net");
 const path = require("path");
@@ -20,6 +21,24 @@ const SQLITE = path.join(ROOT, "backend", "metagame", "node_modules", "better-sq
 const ID_OK = /^[A-Z0-9_]{3,80}$/;
 const MAX = 99999999;
 const KEEP_BACKUPS = 10;
+
+// Your own account: the one data\player.key belongs to (same rule as tools\travel.js). While you host, the backend also
+// holds an account per friend (and characters that travelled here); those are never listed or changed here.
+function myAccount(db) {
+    const keyFile = path.join(ROOT, "data", "player.key");
+    const key = fs.existsSync(keyFile) ? fs.readFileSync(keyFile, "utf8").trim() : "";
+    if (!key.startsWith("UUK_")) return null;
+    const hash = crypto.createHash("sha256").update(key, "utf8").digest("hex");
+    let row = null;
+    try { row = db.prepare("SELECT userId FROM userapikeys WHERE keyHash = ?").get(hash); } catch {}
+    if (!row) { try { row = db.prepare("SELECT userId FROM userapikeystoregister WHERE key = ?").get(key); } catch {} }
+    return row ? row.userId : null;
+}
+function myCharacterIds(db) {
+    const me = myAccount(db);
+    if (!me) return null;
+    return new Set(db.prepare("SELECT characterId FROM characters WHERE userId = ?").all(me).map((r) => r.characterId));
+}
 
 function out(o) { process.stdout.write(JSON.stringify(o)); }
 function fail(error) { out({ ok: false, error }); process.exit(0); }
@@ -53,7 +72,9 @@ function backup() {
         const db = new Database(DB, { readonly: true, fileMustExist: true });
         try {
             const names = Object.fromEntries(db.prepare("select characterId, name from characters").all().map((r) => [r.characterId, r.name]));
-            const characters = db.prepare("select characterId, stackedItems from inventories").all().map((r) => {
+            const mine = myCharacterIds(db);
+            if (!mine) fail("Could not tell which account is yours (data\\player.key). Run Set up again.");
+            const characters = db.prepare("select characterId, stackedItems from inventories").all().filter((r) => mine.has(r.characterId)).map((r) => {
                 const items = {};
                 for (const i of JSON.parse(r.stackedItems || "[]")) if (i && i.catalogId) items[i.catalogId] = Number(i.quantity) || 0;
                 return { id: r.characterId, name: names[r.characterId] || "", items };
@@ -73,7 +94,10 @@ function backup() {
         const db = new Database(DB, { fileMustExist: true });
         const result = {};
         try {
-            const rows = db.prepare("select characterId, stackedItems from inventories").all().filter((r) => who === "*" || r.characterId === who);
+            const mine = myCharacterIds(db);
+            if (!mine) fail("Could not tell which account is yours (data\\player.key). Run Set up again.");
+            const rows = db.prepare("select characterId, stackedItems from inventories").all()
+                .filter((r) => mine.has(r.characterId) && (who === "*" || r.characterId === who));
             if (!rows.length) fail("Character not found.");
             const upd = db.prepare("update inventories set stackedItems=? where characterId=?");
             db.transaction(() => {

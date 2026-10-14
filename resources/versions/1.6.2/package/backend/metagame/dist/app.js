@@ -8,6 +8,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
+// Dauntless Forever - Dauntless 1.6.2 offline backend
+// Copyright (C) 2026 Addison2k (port to this Dauntless build and all changes). https://github.com/addison2k/DauntlessForever
+// Based on Undaunted, Copyright (C) gwog and contributors, https://github.com/SyST3MDeV/Undaunted
+// Licence: AGPL-3.0-only (LICENSE-AGPL-3.0.txt). Keep this notice: the licence requires it.
 const express_1 = __importDefault(require("express"));
 const login_js_1 = require("./routes/login.js");
 const logger_js_1 = require("./logger.js");
@@ -26,6 +30,7 @@ const undauntedapi_js_1 = require("./routes/undauntedapi.js");
 const playerjourney_js_1 = require("./routes/playerjourney.js");
 const tuning162_js_1 = require("./routes/tuning162.js");
 const factions_js_1 = require("./routes/factions.js");
+const social162_js_1 = require("./routes/social162.js");
 exports.app = (0, express_1.default)();
 exports.app.use(express_1.default.json({ limit: "50mb" }));
 exports.app.use(express_1.default.urlencoded({ extended: true }));
@@ -33,6 +38,8 @@ exports.app.use((req, res, next) => {
     res.on("finish", () => logger_js_1.logger.info(`REQ ${req.method} ${req.originalUrl} -> ${res.statusCode}`));
     next();
 });
+exports.app.use("/", require("./routes/travel162.js").travelRouter); // your character travels with you to a friend's game
+exports.app.use("/", social162_js_1.socialRouter); // before eosRouter: account lookups for other players, friends
 exports.app.use("/", login_js_1.loginRouter);
 exports.app.use("/", eos_js_1.eosRouter);
 exports.app.use("/", system_js_1.systemRouter);

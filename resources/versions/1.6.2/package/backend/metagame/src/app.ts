@@ -2,6 +2,7 @@
 // Copyright (C) 2026 Addison2k (port to this Dauntless build and all changes). https://github.com/addison2k/DauntlessForever
 // Based on Undaunted, Copyright (C) gwog and contributors, https://github.com/SyST3MDeV/Undaunted
 // Licence: AGPL-3.0-only (LICENSE-AGPL-3.0.txt). Keep this notice: the licence requires it.
+import { travelRouter } from "./routes/travel162";
 import express from "express";
 import { loginRouter } from "./routes/login.js";
 import { logger } from "./logger.js";
@@ -20,6 +21,7 @@ import { undauntedApiRouter } from "./routes/undauntedapi.js";
 import { playerJourneyRouter } from "./routes/playerjourney.js";
 import { tuning162Router } from "./routes/tuning162.js";
 import { factionsRouter } from "./routes/factions.js";
+import { socialRouter } from "./routes/social162.js";
 
 export const app = express();
 
@@ -31,6 +33,8 @@ app.use((req, res, next) => {
     next();
 });
 
+app.use("/", travelRouter); // your character travels with you to a friend's game
+app.use("/", socialRouter); // before eosRouter: account lookups for other players, friends
 app.use("/", loginRouter);
 app.use("/", eosRouter);
 app.use("/", systemRouter);

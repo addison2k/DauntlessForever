@@ -9,7 +9,7 @@ $ConfigFile = Join-Path $Root 'config.json'
 # The one game build this package works with, and the two files it puts into the game folder.
 $ExeHash     = 'E7ACBA587320491B71CB53BB8F8CBF5F3760BB52F78E74A82384B8BC42D05FD6'   # Dauntless 1.6.2, CL 271281
 $LoaderHash  = '9A431D7B6FD20C43FA92BEBD91C3BC023EC7A3FCBC52871C41F4DF293D4B0D1F'   # bin\dxgi.dll (Undaunted loader)
-$ServerHash  = '7B563865D317AEDA3DA99F1D4078326BBFDBC00A93BB5A7D61D008116539C988'   # bin\UndauntedInternalServer.dll (1.6.2 port)
+$ServerHash  = '64DE377188F0AE720507E627263587CE69808A8DC4DA64FD939235C707CBF1B1'   # bin\UndauntedInternalServer.dll (1.6.2 port)
 $ExeRel      = 'Archon\Binaries\Win64\Dauntless-Win64-Shipping.exe'
 $MetaPort    = 61000
 $DeployPort  = 61001
@@ -179,4 +179,19 @@ function Save-LogZip([string[]]$Files, [string]$ZipName) {
     if (Test-Path -LiteralPath $zip) { Remove-Item -LiteralPath $zip -Force }
     if (Get-ChildItem -LiteralPath $tmp -File) { Compress-Archive -Path (Join-Path $tmp '*') -DestinationPath $zip }
     Remove-Item -LiteralPath $tmp -Recurse -Force -ErrorAction SilentlyContinue
+}
+
+# In-game text chat: the game's chat connection (XMPP over WebSocket) goes to the backend it plays on
+# (the metagame serves chat on its own port). Rewrites only the [OnlineSubsystemMcp.XMPP] section of Engine.ini.
+function Set-ChatConfig([string]$CfgDir, [string]$ChatHost, [int]$ChatPort) {
+    $eng = Join-Path $CfgDir 'Engine.ini'
+    $lines = if (Test-Path -LiteralPath $eng) { @(Get-Content -LiteralPath $eng) } else { @() }
+    $keep = New-Object System.Collections.Generic.List[string]; $skip = $false
+    foreach ($l in $lines) {
+        if ($l -match '^\[OnlineSubsystemMcp\.XMPP\]') { $skip = $true; continue }
+        if ($skip -and $l -match '^\[') { $skip = $false }
+        if (-not $skip) { $keep.Add($l) }
+    }
+    $xmpp = @('[OnlineSubsystemMcp.XMPP]', "ServerAddr=`"ws://$ChatHost`"", "ServerPort=$ChatPort", 'bUseSSL=false', '')
+    Set-Content -LiteralPath $eng -Encoding ASCII -Value ($xmpp + $keep)
 }

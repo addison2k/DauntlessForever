@@ -21,3 +21,7 @@ exports.matchmakingRouter.post("/handle-matchmaking-for-player", express_2.defau
     res.status(200);
     res.json(MatchmakingResult);
 });
+// DF-ONLINE-1: is this game server still running? (the metagame asks before sending a player into an open hunt)
+exports.matchmakingRouter.get("/alive/:id", (req, res) => {
+    res.json({ alive: (0, require("../controllers/gameservers").IsServerUp)(String(req.params.id)) });
+});

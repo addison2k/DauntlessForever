@@ -5,6 +5,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.eosRouter = void 0;
+// Dauntless Forever - Dauntless 1.6.2 offline backend
+// Copyright (C) 2026 Addison2k (port to this Dauntless build and all changes). https://github.com/addison2k/DauntlessForever
+// Based on Undaunted, Copyright (C) gwog and contributors, https://github.com/SyST3MDeV/Undaunted
+// Licence: AGPL-3.0-only (LICENSE-AGPL-3.0.txt). Keep this notice: the licence requires it.
 const express_1 = require("express");
 const logger_1 = require("../logger");
 const auth_1 = require("../controllers/auth");
@@ -94,9 +98,9 @@ exports.eosRouter.delete("/account/api/oauth/sessions/kill/:AuthToken", (req, re
     // TODO: Is this needed?
     res.json({});
 });
-exports.eosRouter.get("/account/api/public/account", HasUndauntedMetagameAuth_1.HasUndauntedMetagameAuth, (req, res) => {
+exports.eosRouter.get("/account/api/public/account", HasUndauntedMetagameAuth_1.HasUndauntedMetagameAuth, async (req, res) => {
     const UserId = req.AuthData.userId;
-    const Username = (0, login_1.GetUsernameForUserId)(UserId);
+    const Username = await (0, login_1.GetUsernameForUserId)(UserId);
     logger_1.logger.info(`Account info for userId ${UserId}`);
     res.json({
         "id": UserId,

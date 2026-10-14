@@ -4,7 +4,9 @@
 # setup.ps1 - one-time set-up for playing Dauntless 1.6.2 offline. Started by "1 - SETUP.bat".
 #   setup.ps1             set up (safe to run again at any time; it only fixes what is missing)
 #   setup.ps1 -Uninstall  take this package's two files out of the game folder again
-param([switch]$Uninstall)
+param([switch]$Uninstall, [switch]$Auto)
+# -Auto (DF-AUTO): the launcher runs set-up by itself after the download, without a window. Every question is answered
+# "yes" (use the folder it found, install what is missing); with no game folder found it stops and says so.
 . (Join-Path $PSScriptRoot 'common.ps1')
 
 $loader = Join-Path $Root 'bin\dxgi.dll'
@@ -106,10 +108,11 @@ if (-not $gameDir) {
         $gameDir = $found[0]
         Say "Found it: $gameDir" 'Green'
         if ($found.Count -gt 1) { Say "  (also found: $(($found | Select-Object -Skip 1) -join ', '))" }
-        $a = Read-Host 'Use this folder? Press Enter for yes, or type N to pick another'
+        $a = if ($Auto) { '' } else { Read-Host 'Use this folder? Press Enter for yes, or type N to pick another' }
         if ($a -match '^[nN]') { $gameDir = $null }
     }
 }
+if (-not $gameDir -and $Auto) { Fail 'the game folder was not found. In the launcher use More > "Use a game folder I already have", or Download.' }
 while (-not $gameDir) {
     Say ''
     Say 'Pick the Dauntless 1.6.2 game folder (the one that has the "Archon" folder inside it).' 'White'
@@ -184,7 +187,7 @@ $dxNeeded = @('xinput1_3.dll', 'x3daudio1_7.dll', 'xapofx1_5.dll')    # DirectX 
 function Get-MissingDx { @($dxNeeded | Where-Object { -not (Test-Path -LiteralPath (Join-Path $env:WINDIR "System32\$_")) }) }
 function Install-WithWinget([string]$Id, [string]$What) {
     if (-not (Get-Command winget.exe -ErrorAction SilentlyContinue)) { return $false }
-    $a = Read-Host "Install $What now with winget? Press Enter for yes, or type N for no"
+    $a = if ($Auto) { '' } else { Read-Host "Install $What now with winget? Press Enter for yes, or type N for no" }
     if ($a -match '^[nN]') { return $false }
     Say "  Installing $What (Windows may ask for permission)..."
     & winget.exe install -e --id $Id --accept-package-agreements --accept-source-agreements
@@ -212,7 +215,7 @@ $missDx = Get-MissingDx
 if ($missDx.Count -gt 0) {
     Say "DirectX parts the game needs are missing: $($missDx -join ', ')." 'White'
     Say "  Microsoft's DirectX End-User Runtime (June 2010) adds them. It is about 95 MB."
-    $a = Read-Host 'Download and install it now? Press Enter for yes, or type N for no'
+    $a = if ($Auto) { '' } else { Read-Host 'Download and install it now? Press Enter for yes, or type N for no' }
     if ($a -notmatch '^[nN]') {
         # The offline package: it carries every file inside (the web installer can stop half-way).
         $dxUrl  = 'https://download.microsoft.com/download/8/4/A/84A35BF1-DAFE-4AE8-82AF-AD2AE20B6B14/directx_Jun2010_redist.exe'
@@ -261,7 +264,7 @@ if ($node -and (Get-NodeVersion $node) -lt $MinNode) {
 if (-not $node) {
     Say 'Node.js (the LTS version) is needed to run the local backend the game talks to.' 'White'
     if (Get-Command winget.exe -ErrorAction SilentlyContinue) {
-        $a = Read-Host 'Install Node.js LTS now with winget? Press Enter for yes, or type N for no'
+        $a = if ($Auto) { '' } else { Read-Host 'Install Node.js LTS now with winget? Press Enter for yes, or type N for no' }
         if ($a -notmatch '^[nN]') {
             & winget.exe install -e --id OpenJS.NodeJS.LTS --accept-package-agreements --accept-source-agreements
             $node = Find-Node
@@ -320,16 +323,14 @@ foreach ($pair in @(@($loader, $dxgi, $LoaderHash, 'Loader (dxgi.dll)'), @($serv
 New-Item -ItemType Directory -Force $DataDir, $LogDir | Out-Null
 $name = 'Slayer'
 if ($cfg -and $cfg.PlayerName) { $name = $cfg.PlayerName }
+# One player name for every version: the launcher asks once and passes it in DF_PLAYER_NAME (no question here).
+if ($env:DF_PLAYER_NAME -match '^[A-Za-z0-9_]{3,16}$') { $name = $env:DF_PLAYER_NAME }
 $hasAccount = (Test-Path -LiteralPath (Join-Path $DataDir 'player.key'))
-if (-not $hasAccount) {
-    Say ''
-    $n = Read-Host 'Your player name (3-16 letters/numbers; Enter for "Slayer")'
-    if ($n -match '^[A-Za-z0-9_]{3,16}$') { $name = $n } elseif ($n) { Say '  Not a valid name, using Slayer.' 'Yellow' }
-}
 Clear-DauntlessPorts -TcpPorts @($MetaPort, $DeployPort)
 Say 'Setting up the local backend (your account, keys and settings)...'
 $code = Invoke-Native $node @((Join-Path $PSScriptRoot 'backend-setup.js'), $exe, $name)
 if ($code -ne 0) { Fail 'setting up the local backend failed (see the line above).' }
+if ($hasAccount) { & $node (Join-Path $PSScriptRoot 'travel.js') name $name | Out-Null }   # an existing account takes the current name
 Say "Player name: $name" 'Green'
 
 # ---------------------------------------------------------------- 6. private settings folder with the backend addresses

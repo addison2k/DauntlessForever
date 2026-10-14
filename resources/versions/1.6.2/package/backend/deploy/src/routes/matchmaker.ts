@@ -5,6 +5,7 @@
 import { Router } from "express";
 import { logger } from "../logger";
 import { HandleMatchmakingRequest } from "../controllers/matchmaker";
+import { IsServerUp } from "../controllers/gameservers";
 import express from "express";
 
 export const matchmakingRouter = Router();
@@ -19,4 +20,9 @@ matchmakingRouter.post("/handle-matchmaking-for-player", express.json(), async (
 
     res.status(200);
     res.json(MatchmakingResult);
+});
+
+// DF-ONLINE-1: is this game server still running? (the metagame asks before sending a player into an open hunt)
+matchmakingRouter.get("/alive/:id", (req, res) => {
+    res.json({ alive: IsServerUp(String(req.params.id)) });
 });

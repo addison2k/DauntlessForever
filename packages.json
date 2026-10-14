@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-14.2",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-14.2.zip",
-                         "sha256":  "a41f12dba492fd6681196feab91263847d6e3839e934ae7295ce31ca602591aa",
+                         "packageVersion":  "2026-10-14.9",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-14.9.zip",
+                         "sha256":  "64230f7328307ca1e236027b4255999a2c66795edab0e2521ff7ba3cc4c5b78d",
                          "date":  "2026-10-14",
-                         "note":  "Escalation progress is saved; claimed bounties clear at once"
+                         "note":  "Weapon levelling and reforge fixes; your character is saved home while you play with friends"
                      },
                      {
                          "id":  "1.14.7",

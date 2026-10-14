@@ -115,9 +115,9 @@ eosRouter.delete("/account/api/oauth/sessions/kill/:AuthToken", (req, res) => {
     res.json({});
 })
 
-eosRouter.get("/account/api/public/account", HasUndauntedMetagameAuth, (req: any, res) => {
+eosRouter.get("/account/api/public/account", HasUndauntedMetagameAuth, async (req: any, res) => {
     const UserId = req.AuthData.userId;
-    const Username = GetUsernameForUserId(UserId);
+    const Username = await GetUsernameForUserId(UserId);
 
     logger.info(`Account info for userId ${UserId}`);
 

@@ -15239,6 +15239,17 @@
           "EventID": "None",
           "PlayerJourneyMapNodes": []
         }
+      },
+      "PlayerHunt_StoryMission_Linnea_01": {
+        "MatchmakingType": "EMatchmakingType::Reserved",
+        "MatchmakingGameType": "EMatchmakingGameType::Mission",
+        "MinWeaponSkillLevel": 0,
+        "RecomendedWeaponSkillLevel": 0,
+        "MatchmakerHuntIDs": [
+          {
+            "RowName": "MatchmakerHunt_StoryMission_Linnea_01"
+          }
+        ]
       }
     }
   }

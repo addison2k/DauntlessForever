@@ -126,3 +126,29 @@ async function DoGrant(accountId: string, trackPoints: Record<string, number>, r
     SaveGranted(accountId, newGranted);
     logger.info(`MasteryRewards: ${changes.join(", ")} -> ${items.map(i => `${i.catalogId} x${i.quantity}`).join(", ")}`);
 }
+
+// ---------- One-off item grants (used by the Sparkforge reforge) ----------
+// Same queue and same character pick as the rank rewards, so a reforge and a rank-up can't race each other.
+export function GrantItems(accountId: string, items: Reward[], reason: string) {
+    const list = items.filter(i => /^[A-Z0-9_]{3,80}$/.test(i.catalogId) && i.quantity > 0);
+    if (!list.length) return;
+    const next = (queues.get(accountId) ?? Promise.resolve())
+        .then(() => DoGrantItems(accountId, list, reason))
+        .catch(e => logger.error(e, `MasteryRewards: ${reason} grant failed`));
+    queues.set(accountId, next);
+}
+
+async function DoGrantItems(accountId: string, items: Reward[], reason: string) {
+    const chars = await GetDb().query.characters.findMany({ where: eq(characters.userId, accountId) });
+    if (!chars.length) {
+        logger.warn(`MasteryRewards: no character for ${accountId}; ${reason} not paid`);
+        return;
+    }
+    const character = [...chars].sort((a, b) => (a.lastModifiedDate < b.lastModifiedDate ? 1 : -1))[0];
+    const result = await RunInventoryTransaction(accountId, character.characterId, `${reason.replace(/[^\w-]/g, "_")}-${Date.now()}`, [], items, [], [], []);
+    if (!result.success) {
+        logger.error(`MasteryRewards: ${reason} inventory transaction failed (${result.error})`);
+        return;
+    }
+    logger.info(`MasteryRewards: ${reason} -> ${items.map(i => `${i.catalogId} x${i.quantity}`).join(", ")}`);
+}

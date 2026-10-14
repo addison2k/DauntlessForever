@@ -1,47 +1,72 @@
 // Dauntless Forever - Dauntless 1.6.2 offline backend
 // Copyright (C) 2026 Addison2k (port to this Dauntless build and all changes). https://github.com/addison2k/DauntlessForever
 // Based on Undaunted, Copyright (C) gwog and contributors, https://github.com/SyST3MDeV/Undaunted
-// Licence: AGPL-3.0-only (LICENSE-AGPL-3.0.txt). Keep this notice: the licence requires it.
+// Party routes follow Dauntless Revived's findings (AGPL-3.0). Licence: AGPL-3.0-only (LICENSE-AGPL-3.0.txt). Keep this notice.
 import { Router } from "express";
 import { HasUndauntedMetagameAuth } from "../middleware/HasUndauntedMetagameAuth";
-import { logger } from "../logger";
-import { GetUsernameForUserId } from "../controllers/login";
+import {
+    AcceptInvite, DeclineInvites, EvictLeader, InviteToParty, KickMember, LeaveParty, ListInvites, PartiesOf, PartyResult, PollParty, PromoteMember
+} from "../controllers/social162";
 
-// TODO: Party functionality will be coming very soon (tm), for now this is just a stub
-
+// Every route acts as the bearer token's own account; ids in the URL or body only name the other player or the party.
 export const partyRouter = Router();
 
-partyRouter.post("/party", HasUndauntedMetagameAuth, (req: any, res) => {
-    const UserId = req.AuthData.userId;
-    const Username = GetUsernameForUserId(UserId);
+function Send(res: any, R: PartyResult){ res.status(R.Status); res.json(R.Body); }
+const Player = (req: any): string | undefined => typeof req.AuthData?.userId === "string" ? req.AuthData.userId : undefined;
 
-    logger.info("Get Party State (stubbed)");
-
+// The game's poll, about every 10 s: the caller's party (a party of one if none)
+partyRouter.post("/party", HasUndauntedMetagameAuth, async (req: any, res) => {
+    const Me = Player(req);
+    if(!Me){ res.status(200); res.json({}); return; }
     res.status(200);
-    res.json({
-        candidateId: "CANDIDATE_ID_LOL",
-        candidateState: "QUEUED_FOR_START",
-        gauntletLevel: null,
-        leaderPlayerId: UserId,
-        partyId: UserId, // TODO: Switch to tracked UUID
-        playerHuntId: null, // TODO: Make current Hunt ID
-        playerStates: [
-            {
-                consoleSessionId: null,
-                displayName: Username,
-                isMemberOfCandidate: true,
-                platform: "win",
-                playerId: UserId
-            }
-        ]
-    });
+    res.json(await PollParty(Me));
 });
 
-partyRouter.get("/party/invites", (req: any, res) => {
-    logger.info("Get Party Invites (stubbed)");
-
+partyRouter.get("/party/invites", HasUndauntedMetagameAuth, (req: any, res) => {
+    const Me = Player(req);
     res.status(200);
-    res.json({
-        invitations: []
-    });
+    res.json(Me ? ListInvites(Me) : { invitations: [] });
+});
+
+// {recipientPlayerId, partyId, buildId, featureOverrides}
+partyRouter.put("/party/invite", HasUndauntedMetagameAuth, async (req: any, res) => {
+    const Me = Player(req); if(!Me){ res.status(401); res.send(); return; }
+    Send(res, await InviteToParty(Me, req.body?.recipientPlayerId));
+});
+
+partyRouter.put("/party/invite/accept/:id", HasUndauntedMetagameAuth, async (req: any, res) => {
+    const Me = Player(req); if(!Me){ res.status(401); res.send(); return; }
+    Send(res, await AcceptInvite(Me, req.params.id));
+});
+
+partyRouter.delete("/party/invite", HasUndauntedMetagameAuth, (req: any, res) => {
+    const Me = Player(req); if(!Me){ res.status(401); res.send(); return; }
+    Send(res, DeclineInvites(Me, req.body));
+});
+
+// No body: the caller leaves their party (the game also sends this at login and character select)
+partyRouter.delete("/party/member", HasUndauntedMetagameAuth, (req: any, res) => {
+    const Me = Player(req); if(!Me){ res.status(200); res.json({}); return; }
+    Send(res, LeaveParty(Me));
+});
+
+partyRouter.delete("/party/member/:memberId", HasUndauntedMetagameAuth, (req: any, res) => {
+    const Me = Player(req); if(!Me){ res.status(401); res.send(); return; }
+    Send(res, KickMember(Me, req.params.memberId));
+});
+
+partyRouter.put("/party/member/promote/:memberId", HasUndauntedMetagameAuth, (req: any, res) => {
+    const Me = Player(req); if(!Me){ res.status(401); res.send(); return; }
+    Send(res, PromoteMember(Me, req.params.memberId));
+});
+
+partyRouter.delete("/party/leader/:leaderId", HasUndauntedMetagameAuth, (req: any, res) => {
+    const Me = Player(req); if(!Me){ res.status(401); res.send(); return; }
+    Send(res, EvictLeader(Me, req.params.leaderId));
+});
+
+// {playerIds: [...]} -> {parties, invitations}
+partyRouter.post("/party/status", HasUndauntedMetagameAuth, async (req: any, res) => {
+    const Me = Player(req); if(!Me){ res.status(401); res.send(); return; }
+    Send(res, await PartiesOf(Me, req.body?.playerIds));
 });
