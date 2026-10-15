@@ -110,6 +110,20 @@ if (Test-Path -LiteralPath $rulesDef) {
         if ($shown.Count) { Say "    Game Rules: $($shown -join ', ')" }
     } catch { Say "    Could not read the Game Rules; playing with normal rules. ($($_.Exception.Message))" 'Yellow' }
 }
+# Hosting (Host with friends, Play online, LAN host; set by online-host.ps1 / lan-host.ps1): other players' progress
+# runs on this backend, so it uses the standard settings in online.env, whatever this PC's backend .env or Game Rules
+# say. Values set here win over the same lines in .env (node --env-file never replaces a variable already set).
+# Solo play is untouched: there the player's own .env and Game Rules apply.
+if ($env:DF_HOSTING -eq '1') {
+    $onlineEnv = Join-Path $Root 'online.env'
+    if (Test-Path -LiteralPath $onlineEnv) {
+        $n = 0
+        foreach ($line in Get-Content -LiteralPath $onlineEnv -ErrorAction SilentlyContinue) {
+            if ($line -match '^\s*([A-Z][A-Z0-9_]*)\s*=\s*(.*?)\s*$') { Set-Item -Path "Env:$($Matches[1])" -Value $Matches[2]; $n++ }
+        }
+        Say "    Hosting: standard online settings ($n from online.env); your own .env and Game Rules apply to solo play." 'Green'
+    }
+}
 $meta = Start-Process -FilePath $node -ArgumentList @('--env-file=.env', 'dist/server.js') -WorkingDirectory $MetaDir -WindowStyle Hidden `
     -RedirectStandardOutput $metaLog -RedirectStandardError $metaErr -PassThru
 [IO.File]::WriteAllText((Join-Path $DataDir 'metagame.pid'), "$($meta.Id)")

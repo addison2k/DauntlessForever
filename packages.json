@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-14.11",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-14.11.zip",
-                         "sha256":  "5f0132da05fddea223dff43c0544e57029be09a26047b242b32d7c37496ae811",
+                         "packageVersion":  "2026-10-14.12",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-14.12.zip",
+                         "sha256":  "80cd46daff1d6316911ccf7de64f5f7bf3004d350d4a23b344592a0d3955c0f1",
                          "date":  "2026-10-14",
-                         "note":  "Players joining a host no longer get the host\u0027s weapon levels; Inventory gear; Revived import"
+                         "note":  "Hosting always uses standard progression (online.env), solo keeps your own settings; Revived import brings quests too"
                      },
                      {
                          "id":  "1.14.7",

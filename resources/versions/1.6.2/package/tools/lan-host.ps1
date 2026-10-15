@@ -96,6 +96,7 @@ try {
     $env:BIND_HOST = '0.0.0.0'                              # backend: accept the other PC (still only through the rules above)
     $env:MY_IP = $ip                                       # deploy server: the address it gives games for Ramsgate / hunts
     $env:QOS_TARGET_URL = "http://${ip}:$MetaPort/QoS"     # the "ping" address the game is given
+    $env:DF_HOSTING = '1'                                  # others play on this backend: start.ps1 uses the standard online.env
     Say ''
     Say 'Starting PLAY in its own window (backend, game servers, then your game)...'
     $play = Start-Process -FilePath 'powershell.exe' -PassThru -WorkingDirectory $Root `

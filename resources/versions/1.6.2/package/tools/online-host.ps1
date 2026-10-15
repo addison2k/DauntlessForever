@@ -102,6 +102,7 @@ try {
     $env:PUBLIC_PORT_OFFSET = "$($base - 8770)"          # ...and relay ports instead of 8770-8777
     $env:QOS_TARGET_URL = "http://${ip}:$base/QoS"       # the "ping" address the game is given
     Remove-Item Env:\BIND_HOST -ErrorAction SilentlyContinue   # backend stays on this PC only: the relay reaches it locally
+    $env:DF_HOSTING = '1'                                # others play on this backend: start.ps1 uses the standard online.env
     if ($Public) {
         $env:HUNT_JOIN_WINDOW_SEC = '180'
         Say 'Open to everyone: players from "Play online" can join you, and join your hunts in the first 3 minutes.' 'Green'

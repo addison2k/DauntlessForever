@@ -5,7 +5,9 @@
 // Reads a Revived undaunted.db (opened from a temporary copy, never changed) and adds that character's items to
 // YOUR character in this package's save (data\undaunted.db, the account data\player.key belongs to):
 //   - gear (weapons, armour, lanterns, parts, emotes, banners, flares) with its level, cells and dyes;
-//   - stacked items (Rams, cells, materials, dyes, tokens, cores).
+//   - stacked items (Rams, cells, materials, dyes, tokens, cores);
+//   - quests (the SERIE_* quest series in the character's save) and tutorial flags, unless --no-quests. EXPERIMENTAL:
+//     series 1.6.2 does not have yet are added; for series both have, each quest keeps the further-along progress.
 // Only items that exist in 1.6.2 are imported (tools\catalog162-ids.txt); the rest are listed in the report.
 // Gear you already have is kept unless the imported copy has a higher level. Stacks are added together, except
 // TOKEN_* counters and flags, which take the higher of the two.
@@ -81,7 +83,7 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
     let users, chars;
     try {
         users = sdb.prepare("SELECT userId, name FROM users").all();
-        chars = sdb.prepare("SELECT c.characterId, c.userId, c.name, i.instancedItems, i.stackedItems FROM characters c JOIN inventories i ON i.characterId = c.characterId").all();
+        chars = sdb.prepare("SELECT c.characterId, c.userId, c.name, c.data, i.instancedItems, i.stackedItems FROM characters c JOIN inventories i ON i.characterId = c.characterId").all();
     } catch (e) { fail("That file does not look like a Dauntless Revived save (" + e.message + ")."); }
     sdb.close();
     try { fs.rmSync(tmp, { recursive: true, force: true }); } catch {}
@@ -100,7 +102,7 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
     const tdb = new Database(TARGET, { readonly: cmd === "check", fileMustExist: true });
     const me = myAccount(tdb);
     if (!me) { tdb.close(); fail("Could not tell which 1.6.2 account is yours (data\\player.key). Run Set up again."); }
-    const T = tdb.prepare("SELECT c.characterId, c.name, i.instancedItems, i.stackedItems FROM characters c JOIN inventories i ON i.characterId = c.characterId WHERE c.userId = ? ORDER BY c.createdDate LIMIT 1").get(me);
+    const T = tdb.prepare("SELECT c.characterId, c.name, c.data, c.updateVersion, i.instancedItems, i.stackedItems FROM characters c JOIN inventories i ON i.characterId = c.characterId WHERE c.userId = ? ORDER BY c.createdDate LIMIT 1").get(me);
     if (!T) { tdb.close(); fail("You have no 1.6.2 character yet. Press Play once, make your character, close the game, then import."); }
     const tInst = parse(T.instancedItems, []), tStack = parse(T.stackedItems, []);
 
@@ -138,6 +140,39 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
         if (cur) cur.quantity = after; else outStack.push({ catalogId: it.catalogId, quantity: after });
         if (after !== before) plan.stacks.push({ id: it.catalogId, before, after });
     }
+    // ---- quests: SERIE_<series> entries hold a JSON string {ID, Status, <questGuid>: {Status, <stepGuid>: {Status, CurrentAmount, ...}}}
+    // Status: 0 not started, 1 active, 2 step done, 3 quest done. Merge = keep the higher Status / amounts at every level.
+    const quests = { added: [], merged: [], flags: 0 };
+    const tData = parse(T.data, {}), sData = parse(S.data, {});
+    const mergeNode = (a, b) => {
+        if (!a || typeof a !== "object") return b;
+        if (!b || typeof b !== "object") return a;
+        const out = { ...a };
+        for (const [k, v] of Object.entries(b)) {
+            if (v && typeof v === "object") out[k] = mergeNode(a[k], v);
+            else if (typeof v === "number" && /^(Status|CurrentAmount)$/.test(k)) out[k] = Math.max(Number(a[k]) || 0, v);
+            else if (!(k in a)) out[k] = v;
+        }
+        return out;
+    };
+    if (!flag("--no-quests")) {
+        for (const [k, v] of Object.entries(sData)) {
+            if (!k.startsWith("SERIE_") || typeof v !== "string") continue;
+            const sv = parse(v, null); if (!sv || typeof sv !== "object") continue;
+            if (!(k in tData)) { tData[k] = v; quests.added.push(k.slice(6)); continue; }
+            const tv = parse(tData[k], null); if (!tv || typeof tv !== "object") continue;
+            const merged = JSON.stringify(mergeNode(tv, sv));
+            if (merged !== tData[k]) { tData[k] = merged; quests.merged.push(k.slice(6)); }
+        }
+        // Tutorial and one-time flags (CharacterFlagData {"Flags":[{FlagKey, FlagValue}]}): add the ones 1.6.2 lacks
+        const sf = parse(sData.CharacterFlagData, null), tf = parse(tData.CharacterFlagData, { Flags: [] });
+        if (sf && Array.isArray(sf.Flags) && tf && Array.isArray(tf.Flags)) {
+            const have = new Set(tf.Flags.map((f) => f && f.FlagKey));
+            for (const f of sf.Flags) if (f && f.FlagKey && !have.has(f.FlagKey)) { tf.Flags.push(f); quests.flags++; }
+            if (quests.flags) tData.CharacterFlagData = JSON.stringify(tf);
+        }
+    }
+    const questsChanged = quests.added.length + quests.merged.length + quests.flags > 0;
     const srcUser = (users.find((u) => u.userId === S.userId) || {}).name || "";
     const summary = {
         ok: true, mode: cmd,
@@ -145,6 +180,7 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
         to: { character: T.name },
         gearNew: plan.gearNew.length, gearUpgraded: plan.gearUpgraded.length, gearKept: plan.gearKept.length,
         stacksChanged: plan.stacks.length, skipped: [...new Set(plan.skipped)],
+        questsAdded: quests.added, questsMerged: quests.merged, flagsAdded: quests.flags,
         rams: (() => { const r = plan.stacks.find((s) => s.id === "CURRENCY_NOTES"); return r ? r.after - r.before : 0; })(),
     };
     const lines = [
@@ -156,6 +192,10 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
         `  Gear you already had: ${plan.gearKept.length}`,
         `  Stacks added to:     ${plan.stacks.length}  (Rams +${summary.rams.toLocaleString("en-US")})`,
         `  Not in 1.6.2:        ${summary.skipped.length}${summary.skipped.length ? "  (" + summary.skipped.join(", ") + ")" : ""}`,
+        ``,
+        `  Quest lines added:   ${quests.added.length}${quests.added.length ? "  (" + quests.added.join(", ") + ")" : ""}`,
+        `  Quest lines merged:  ${quests.merged.length}${quests.merged.length ? "  (" + quests.merged.join(", ") + ")" : ""}  (experimental)`,
+        `  Tutorial flags:      +${quests.flags}`,
         ``,
         `Not carried over yet: loadouts (equip your gear again in game), mastery ranks, Hunt Pass and escalation.`,
     ];
@@ -176,8 +216,14 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
     tdb.close();
     fs.copyFileSync(TARGET, path.join(bdir, `undaunted.db.${stamp}`));
     const wdb = new Database(TARGET, { fileMustExist: true });
-    wdb.prepare("UPDATE inventories SET instancedItems = ?, stackedItems = ? WHERE characterId = ?")
-        .run(JSON.stringify(outInst), JSON.stringify(outStack), T.characterId);
+    wdb.transaction(() => {
+        wdb.prepare("UPDATE inventories SET instancedItems = ?, stackedItems = ? WHERE characterId = ?")
+            .run(JSON.stringify(outInst), JSON.stringify(outStack), T.characterId);
+        if (questsChanged) {
+            wdb.prepare("UPDATE characters SET data = ?, updateVersion = ?, lastModifiedDate = ? WHERE characterId = ?")
+                .run(JSON.stringify(tData), (Number(T.updateVersion) || 0) + 1, new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }), T.characterId);
+        }
+    })();
     wdb.close();
     marker.push({ source: key, account: srcUser, character: S.name, into: T.characterId, at: new Date().toISOString() });
     fs.writeFileSync(MARKER, JSON.stringify(marker, null, 2));
