@@ -61,7 +61,10 @@ const PORT_RANGE_END = Number(process.env.PORT_RANGE_END!);
 const RAMSGATE_PORT = PORT_RANGE_END;
 const TRAINING_DOJO_PORT = PORT_RANGE_END - 1;
 const GAMESERVER_BINARY_PATH = process.env.GAMESERVER_BINARY_PATH!;
-const STANDARD_GAMESERVER_ARGS = ["-EpicPortal", "-server", "-nullrhi"];
+// -CULTURE=en-US: the hidden server copies run on the player's PC and would take its number format.
+// With a decimal comma (French, German, ...) the game's server-only code misreads numbers: parts break with
+// stage NONE (no visual, no break loot, e.g. BREAK_BEAVER_BETA_TAIL_NONE). Live servers always ran in English.
+const STANDARD_GAMESERVER_ARGS = ["-EpicPortal", "-server", "-nullrhi", "-CULTURE=en-US"];
 // Offline package: the backend address is handed to every server copy as its 8th argument; the server DLL
 // serves all endpoint overrides from that (no Game.ini in any profile folder is needed).
 const METAGAME_ADDRESS = process.env.METAGAME_ADDRESS || "127.0.0.1:61000";

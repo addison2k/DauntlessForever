@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-14.9",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-14.9.zip",
-                         "sha256":  "64230f7328307ca1e236027b4255999a2c66795edab0e2521ff7ba3cc4c5b78d",
+                         "packageVersion":  "2026-10-14.10",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-14.10.zip",
+                         "sha256":  "63a1a015480465fd382858c089f942448e61407336de8761c4ae65aaf83a0c3f",
                          "date":  "2026-10-14",
-                         "note":  "Weapon levelling and reforge fixes; your character is saved home while you play with friends"
+                         "note":  "hunt servers use the English number format (part breaks on French/German Windows)"
                      },
                      {
                          "id":  "1.14.7",
