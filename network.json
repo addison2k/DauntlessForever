@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "note": "Where the Dauntless Forever online services are. Edit and push; open launchers pick it up within 10 minutes. To switch online play off for everyone (server down): set online.enabled to false and write a message. To add a region: add a relay (another VPS running the relay); hosts use the one they reach fastest. Keep 'relay' as the main one for older launchers.",
+  "online": {
+    "enabled": true,
+    "message": ""
+  },
+  "relays": [
+    {
+      "id": "us",
+      "name": "US East",
+      "host": "209.145.57.41",
+      "controlPort": 7000
+    },
+    {
+      "id": "eu",
+      "name": "EU",
+      "host": "169.58.75.86",
+      "controlPort": 7000
+    }
+  ],
+  "relay": {
+    "host": "209.145.57.41",
+    "controlPort": 7000
+  },
+  "social": {
+    "url": "http://209.145.57.41:7080"
+  }
+}
