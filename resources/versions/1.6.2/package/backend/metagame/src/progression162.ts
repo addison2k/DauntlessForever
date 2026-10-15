@@ -441,15 +441,10 @@ function RebuildFromPostLog() {
 
 // For the game server DLL: the player's saved objective progress as "id<TAB>value<TAB>completed" lines.
 // Only objectives whose bars would otherwise show 0 at login: in-progress one-time objectives and the repeatable
-// "Experience" ones. Falls back to the most recently saved player if the id isn't known (single-player setups).
+// "Experience" ones. Only ever that player's own file: an unknown id gets nothing. (It used to fall back to the most
+// recently saved player, which on a host handed the host's own progress to a joining friend.)
 export function ObjectivesForPriming(accountId: string) {
-    let file = StatePath(accountId);
-    if (!fs.existsSync(file) && fs.existsSync(STATE_DIR)) {
-        // Only <UID>.json (not <UID>.rewards.json / <UID>.huntpass.json)
-        const newest = fs.readdirSync(STATE_DIR).filter(f => /^[\w-]+\.json$/.test(f))
-            .map(f => ({ f, t: fs.statSync(path.join(STATE_DIR, f)).mtimeMs })).sort((a, b) => b.t - a.t)[0];
-        if (newest) file = path.join(STATE_DIR, newest.f);
-    }
+    const file = StatePath(accountId);
     let objectives: Record<string, ObjectiveState> = {};
     try { objectives = JSON.parse(fs.readFileSync(file, "utf8").replace(/^\uFEFF/, "")).objectives ?? {}; } catch { /* none saved */ }
     const lines: string[] = [];

@@ -428,14 +428,8 @@ function RebuildFromPostLog() {
 // Only objectives whose bars would otherwise show 0 at login: in-progress one-time objectives and the repeatable
 // "Experience" ones. Falls back to the most recently saved player if the id isn't known (single-player setups).
 function ObjectivesForPriming(accountId) {
-    let file = StatePath(accountId);
-    if (!fs_1.default.existsSync(file) && fs_1.default.existsSync(STATE_DIR)) {
-        // Only <UID>.json (not <UID>.rewards.json / <UID>.huntpass.json)
-        const newest = fs_1.default.readdirSync(STATE_DIR).filter(f => /^[\w-]+\.json$/.test(f))
-            .map(f => ({ f, t: fs_1.default.statSync(path_1.default.join(STATE_DIR, f)).mtimeMs })).sort((a, b) => b.t - a.t)[0];
-        if (newest)
-            file = path_1.default.join(STATE_DIR, newest.f);
-    }
+    // Only ever this player's own file: an unknown id gets nothing (no fallback to another player's progress)
+    const file = StatePath(accountId);
     let objectives = {};
     try {
         objectives = JSON.parse(fs_1.default.readFileSync(file, "utf8").replace(/^\uFEFF/, "")).objectives ?? {};

@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-14.10",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-14.10.zip",
-                         "sha256":  "63a1a015480465fd382858c089f942448e61407336de8761c4ae65aaf83a0c3f",
+                         "packageVersion":  "2026-10-14.11",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-14.11.zip",
+                         "sha256":  "5f0132da05fddea223dff43c0544e57029be09a26047b242b32d7c37496ae811",
                          "date":  "2026-10-14",
-                         "note":  "hunt servers use the English number format (part breaks on French/German Windows)"
+                         "note":  "Players joining a host no longer get the host\u0027s weapon levels; Inventory gear; Revived import"
                      },
                      {
                          "id":  "1.14.7",
