@@ -24,6 +24,19 @@
       ]
     },
     {
+      "title": "Rare behemoth materials",
+      "items": [
+        { "id": "BREAK_AMBER_EPIC", "name": "Cataclysm Shard", "blurb": "Epic Rezakiri material." },
+        { "id": "BREAK_AMBER_RARE", "name": "Luminescent Chitin", "blurb": "Rare Rezakiri material." },
+        { "id": "BREAK_PAPER_EPIC", "name": "Thornsoul Shard", "blurb": "Epic Koshai material." },
+        { "id": "BREAK_PAPER_RARE", "name": "Vital Thorn", "blurb": "Rare Koshai material." },
+        { "id": "BREAK_THUNDERBIRD_EPIC", "name": "Shard of the Eternal Storm", "blurb": "Epic Malkarion material." },
+        { "id": "BREAK_THUNDERBIRD_RARE", "name": "Peerless Stormplate", "blurb": "Rare Malkarion material." },
+        { "id": "BREAK_RANDALL_EPIC", "name": "Uncanny Scale", "blurb": "Epic Thrax material." },
+        { "id": "BREAK_RANDALL_RARE", "name": "Warped Chitin", "blurb": "Rare Thrax material." }
+      ]
+    },
+    {
       "title": "Cell cores",
       "items": [
         { "id": "CONTAINER_CORE_BRONZE_CELLCORE", "name": "Bronze Cell Core", "blurb": "Opens into cells." },

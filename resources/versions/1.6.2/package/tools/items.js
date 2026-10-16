@@ -38,6 +38,35 @@ const GEAR_FILE = path.join(__dirname, "gear-162.json");   // [[id, name, type],
 function gearCatalog() { try { return JSON.parse(fs.readFileSync(GEAR_FILE, "utf8")); } catch { return null; } }
 const COSMETIC_FILE = path.join(__dirname, "cosmetics-162.json");   // {stacked: [ids], instanced: [ids]}
 function cosmeticCatalog() { try { return JSON.parse(fs.readFileSync(COSMETIC_FILE, "utf8")); } catch { return null; } }
+// Cosmetic format fix (by KombatKing, Inventory Editor Cosmetics 162 R1, AGPL-3.0-only): many skins, banner parts and
+// flares are in gear-162.json but the game keeps them as an unlock (a stack of 1), not as a gear item. addgear, set,
+// list and removegear now use the right format, and re-adding repairs the empty gear row the old editor made.
+const COS = cosmeticCatalog() || { stacked: [], instanced: [] };
+const stackedUnlocks = new Set(COS.stacked || []), instancedUnlocks = new Set(COS.instanced || []);
+function mentioned(text, id) {
+    function walk(value) {
+        if (value === id) return true;
+        if (Array.isArray(value)) return value.some(walk);
+        if (value && typeof value === "object") return Object.values(value).some(walk);
+        if (typeof value === "string" && /^[\[{]/.test(value.trim())) { try { return walk(JSON.parse(value)); } catch {} }
+        return false;
+    }
+    // loadouts and persistent are separate JSON documents; anything unreadable counts as "in use"
+    return text.some((t) => { try { return walk(JSON.parse(t || "null")); } catch { return true; } });
+}
+function addUnlockStack(stacks, inst, id, loadout) {
+    const held = stacks.filter((x) => x && x.catalogId === id);
+    if (held.some((x) => !Number.isSafeInteger(x.quantity) || x.quantity < 0)) throw Error("Invalid cosmetic quantity: " + id);
+    const already = held.some((x) => x.quantity > 0);
+    const next = stacks.filter((x) => !x || x.catalogId !== id); next.push({ catalogId: id, quantity: 1 });
+    // Repair only the exact stateless entry the old editor made; equipped or stateful entries stay.
+    const repaired = inst.filter((x) => !(x && x.catalogId === id && x.instanceId === id && x.updateVersion === 0 && x.itemData == null && !mentioned(loadout, id)));
+    return { stacks: next, inst: repaired, changed: !already || held.length !== 1 || (held[0] && held[0].quantity !== 1) || repaired.length !== inst.length };
+}
+function loadoutOf(db, characterId) {
+    const lr = db.prepare("select loadouts, persistent from loadouts where characterId = ?").get(characterId);
+    return [lr && lr.loadouts || "[]", lr && lr.persistent || "{}"];
+}
 // The change list: one JSON argument (the launcher), or plain words (typed by hand): ID=count for set, IDs otherwise
 function argList(kind) {
     const rest = process.argv.slice(4);
@@ -110,10 +139,13 @@ function backup() {
                 const items = {};
                 for (const i of JSON.parse(r.stackedItems || "[]")) if (i && i.catalogId) items[i.catalogId] = Number(i.quantity) || 0;
                 const lt = loadoutText[r.characterId] || "";
-                const gear = gearIds ? JSON.parse(r.instancedItems || "[]").filter((i) => i && gearIds.has(i.catalogId)).map((i) => {
+                const gear = gearIds ? JSON.parse(r.instancedItems || "[]").filter((i) => i && gearIds.has(i.catalogId) && !stackedUnlocks.has(i.catalogId)).map((i) => {
                     let level = 0; try { level = Number(JSON.parse(i.itemData || "{}").CurrentLevel) || 0; } catch {}
                     return { id: i.catalogId, instanceId: i.instanceId, level, equipped: lt.includes('"' + i.instanceId + '"') };
                 }) : undefined;
+                for (const i of JSON.parse(r.instancedItems || "[]")) if (i && instancedUnlocks.has(i.catalogId)) items[i.catalogId] = 1;
+                // cosmetics kept as an unlock show in the gear list too, so they can be seen and removed there
+                if (gear) for (const i of JSON.parse(r.stackedItems || "[]")) if (i && i.quantity > 0 && gearIds.has(i.catalogId) && stackedUnlocks.has(i.catalogId) && !gear.some((g) => g.id === i.catalogId)) gear.push({ id: i.catalogId, instanceId: i.catalogId, level: 0, equipped: lt.includes('"' + i.catalogId + '"') });
                 return { id: r.characterId, name: names[r.characterId] || "", items, gear };
             });
             out({ ok: true, characters, gearCatalog: cat || undefined });
@@ -133,22 +165,31 @@ function backup() {
         try {
             const mine = myCharacterIds(db);
             if (!mine) fail("Could not tell which account is yours (data\\player.key). Run Set up again.");
-            const rows = db.prepare("select characterId, stackedItems from inventories").all()
+            const rows = db.prepare("select characterId, stackedItems, instancedItems from inventories").all()
                 .filter((r) => mine.has(r.characterId) && (who === "*" || r.characterId === who));
             if (!rows.length) fail("Character not found.");
-            const upd = db.prepare("update inventories set stackedItems=? where characterId=?");
+            const upd = db.prepare("update inventories set stackedItems=?, instancedItems=? where characterId=?");
             db.transaction(() => {
                 for (const r of rows) {
-                    let s = JSON.parse(r.stackedItems || "[]");
+                    let s = JSON.parse(r.stackedItems || "[]"), inst = JSON.parse(r.instancedItems || "[]");
+                    const loadout = loadoutOf(db, r.characterId);
                     for (const [id, raw] of changes) {
-                        const n = Math.max(0, Math.min(MAX, Math.floor(Number(raw))));
+                        const cos = stackedUnlocks.has(id) || instancedUnlocks.has(id);
+                        const n = cos ? (Number(raw) > 0 ? 1 : 0) : Math.max(0, Math.min(MAX, Math.floor(Number(raw))));
+                        if (cos && n === 0 && mentioned(loadout, id)) throw Error("Unequip the cosmetic before removing it: " + id);
+                        if (instancedUnlocks.has(id)) {
+                            if (n === 0) inst = inst.filter((i) => !i || i.catalogId !== id);
+                            else if (!inst.some((i) => i && i.catalogId === id)) inst.push({ catalogId: id, instanceId: id, itemData: null, updateVersion: 0 });
+                            result[id] = n; continue;
+                        }
+                        if (stackedUnlocks.has(id) && n > 0) { const p = addUnlockStack(s, inst, id, loadout); s = p.stacks; inst = p.inst; result[id] = 1; continue; }
                         const it = s.find((i) => i && i.catalogId === id);
                         if (n === 0) s = s.filter((i) => !(i && i.catalogId === id));
                         else if (it) it.quantity = n;
                         else s.push({ catalogId: id, quantity: n });
                         result[id] = n;
                     }
-                    upd.run(JSON.stringify(s), r.characterId);
+                    upd.run(JSON.stringify(s), JSON.stringify(inst), r.characterId);
                 }
             })();
         } finally { db.close(); }
@@ -164,61 +205,51 @@ function backup() {
         if (await backendUp()) fail("Dauntless is still running. Close the game (and the launcher's server window), then try again.");
         const db = new Database(DB, { fileMustExist: true });
         const result = { added: [], already: [], removed: [], equipped: [], unknown: [] };
+        const writes = [];
         try {
             const mine = myCharacterIds(db);
             if (!mine) fail("Could not tell which account is yours (data\\player.key). Run Set up again.");
-            if (who === "*" && cmd === "addgear") {
-                // every character of yours
-                const rows = db.prepare("select characterId, instancedItems from inventories").all().filter((r) => mine.has(r.characterId));
-                if (!rows.length) fail("Character not found.");
-                const writes = [];
-                for (const r of rows) {
-                    const inst = JSON.parse(r.instancedItems || "[]"); let n = 0;
+            if (who !== "*" && !mine.has(who)) fail("Character not found.");
+            if (who === "*" && cmd === "removegear") fail("Remove gear one character at a time.");
+            const rows = db.prepare("select characterId, instancedItems, stackedItems from inventories").all()
+                .filter((r) => mine.has(r.characterId) && (who === "*" || r.characterId === who));
+            if (!rows.length) fail("Character not found.");
+            for (const r of rows) {
+                let inst = JSON.parse(r.instancedItems || "[]"), stacks = JSON.parse(r.stackedItems || "[]"), changed = false;
+                const loadout = loadoutOf(db, r.characterId);
+                if (cmd === "addgear") {
                     for (const id of list) {
                         if (typeof id !== "string" || !gearIds.has(id)) { if (!result.unknown.includes(String(id))) result.unknown.push(String(id)); continue; }
+                        if (stackedUnlocks.has(id)) {   // a cosmetic the game keeps as an unlock, not a gear item
+                            const p = addUnlockStack(stacks, inst, id, loadout); stacks = p.stacks; inst = p.inst;
+                            (p.changed ? result.added : result.already).push(id); if (p.changed) changed = true; continue;
+                        }
                         if (inst.some((i) => i && i.catalogId === id)) { result.already.push(id); continue; }
-                        inst.push({ catalogId: id, updateVersion: 0, instanceId: inst.some((i) => i && i.instanceId === id) ? crypto.randomUUID() : id });
-                        result.added.push(id); n++;
+                        // Same shape as gear the game hands out: the item id doubles as the instance id; no itemData = level 0
+                        const instanceId = inst.some((i) => i && i.instanceId === id) ? crypto.randomUUID() : id;
+                        inst.push({ catalogId: id, updateVersion: 0, instanceId });
+                        result.added.push(id); changed = true;
                     }
-                    if (n) writes.push([JSON.stringify(inst), r.characterId]);
+                } else {
+                    for (const iid of list) {
+                        if (stackedUnlocks.has(iid) && stacks.some((x) => x && x.catalogId === iid && x.quantity > 0)) {
+                            if (mentioned(loadout, iid)) { result.equipped.push(iid); continue; }
+                            stacks = stacks.filter((x) => !x || x.catalogId !== iid); result.removed.push(iid); changed = true; continue;
+                        }
+                        const i = inst.findIndex((x) => x && x.instanceId === iid && gearIds.has(x.catalogId));
+                        if (i < 0) { result.unknown.push(String(iid)); continue; }
+                        if (mentioned(loadout, iid)) { result.equipped.push(inst[i].catalogId); continue; }
+                        result.removed.push(inst[i].catalogId); inst.splice(i, 1); changed = true;
+                    }
                 }
-                if (writes.length) {
-                    db.close(); backup();
-                    const w = new Database(DB, { fileMustExist: true });
-                    try { const u = w.prepare("update inventories set instancedItems=? where characterId=?"); w.transaction(() => { for (const x of writes) u.run(...x); })(); } finally { w.close(); }
-                }
-                out({ ok: true, ...result });
-                return;
-            }
-            if (!mine.has(who)) fail("Character not found.");
-            const row = db.prepare("select instancedItems from inventories where characterId = ?").get(who);
-            if (!row) fail("Character not found.");
-            let inst = JSON.parse(row.instancedItems || "[]");
-            if (cmd === "addgear") {
-                for (const id of list) {
-                    if (typeof id !== "string" || !gearIds.has(id)) { result.unknown.push(String(id)); continue; }
-                    if (inst.some((i) => i && i.catalogId === id)) { result.already.push(id); continue; }
-                    // Same shape as gear the game hands out: the item id doubles as the instance id; no itemData = level 0
-                    const instanceId = inst.some((i) => i && i.instanceId === id) ? crypto.randomUUID() : id;
-                    inst.push({ catalogId: id, updateVersion: 0, instanceId });
-                    result.added.push(id);
-                }
-            } else {
-                const lr = db.prepare("select loadouts, persistent from loadouts where characterId = ?").get(who);
-                const lt = lr ? String(lr.loadouts || "") + String(lr.persistent || "") : "";
-                for (const iid of list) {
-                    const i = inst.findIndex((x) => x && x.instanceId === iid && gearIds.has(x.catalogId));
-                    if (i < 0) { result.unknown.push(String(iid)); continue; }
-                    if (lt.includes('"' + iid + '"')) { result.equipped.push(inst[i].catalogId); continue; }
-                    result.removed.push(inst[i].catalogId); inst.splice(i, 1);
-                }
-            }
-            if (result.added.length || result.removed.length) {
-                db.close(); backup();
-                const w = new Database(DB, { fileMustExist: true });
-                try { w.prepare("update inventories set instancedItems=? where characterId=?").run(JSON.stringify(inst), who); } finally { w.close(); }
+                if (changed) writes.push([JSON.stringify(inst), JSON.stringify(stacks), r.characterId]);
             }
         } finally { try { db.close(); } catch {} }
+        if (writes.length) {
+            backup();
+            const w = new Database(DB, { fileMustExist: true });
+            try { const u = w.prepare("update inventories set instancedItems=?, stackedItems=? where characterId=?"); w.transaction(() => { for (const x of writes) u.run(...x); })(); } finally { w.close(); }
+        }
         out({ ok: true, ...result });
         return;
     }
@@ -247,9 +278,9 @@ function backup() {
                         if (inst.some((i) => i && i.catalogId === id)) { result.already.push(id); continue; }
                         inst.push({ catalogId: id, instanceId: inst.some((i) => i && i.instanceId === id) ? crypto.randomUUID() : id, itemData: null, updateVersion: 0 });
                     } else {
-                        const it = st.find((i) => i && i.catalogId === id);
-                        if (it && Number(it.quantity) > 0) { result.already.push(id); continue; }
-                        if (it) it.quantity = 1; else st.push({ catalogId: id, quantity: 1 });
+                        const p = addUnlockStack(st, inst, id, loadoutOf(db, r.characterId));
+                        if (!p.changed) { result.already.push(id); continue; }
+                        st.length = 0; st.push(...p.stacks); inst.length = 0; inst.push(...p.inst);
                     }
                     result.added.push(id); n++;
                 }

@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-16.8",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.8.zip",
-                         "sha256":  "690e8a5dec126697a0830f7de6622c4d6f326ca35c62b0602f2b058cc1851d59",
+                         "packageVersion":  "2026-10-16.9",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.9.zip",
+                         "sha256":  "9a5d2eb81e61db104eb62b5e920d0009d01cf438a8e58032a40fae8f9b227f7e",
                          "date":  "2026-10-16",
-                         "note":  "No duplicates on Revived import, FIX duplicate items, Gilded Marks, addcosmetic (thanks KombatKing)"
+                         "note":  "Inventory page stores cosmetics the way the game does, rare materials (thanks KombatKing)"
                      },
                      {
                          "id":  "1.14.7",
