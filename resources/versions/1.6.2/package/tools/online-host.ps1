@@ -10,7 +10,9 @@
 #   - when PLAY is closed: disconnects from the relay
 #   -Public (the launcher's "Play online" or "Allow randoms"): anyone can join, and hunts stay open to join for
 #   3 minutes after they start (HUNT_JOIN_WINDOW_SEC, read by the backend). Without it: friends only, as before. DF-ONLINE-1
-param([switch]$Public)
+# -HostMode (the launcher's Host Mode page): no game window here; the server stays up (start.ps1 -NoGame) until the
+# launcher stops it. Exit codes: 0 stopped on request, 3 the relay connection was lost, else start.ps1's.
+param([switch]$Public, [switch]$HostMode)
 . (Join-Path $PSScriptRoot 'common.ps1')
 
 $DefaultRelay = '209.145.57.41'          # the Dauntless Forever relay; data\relay_host.txt overrides it
@@ -22,7 +24,10 @@ Say ''
 Say '=== Dauntless 1.6.2 - ONLINE host (friends join from anywhere) ===' 'Cyan'
 $cfg = Get-Config
 if (-not $cfg) { Fail 'set-up has not been run yet. Double-click "1 - SETUP.bat" first.' }
+# Node: the one set-up saved, else the launcher's own (DF_NODE) or an installed one (the saved path breaks when the
+# launcher runs from a new folder, e.g. a new launcher unzipped elsewhere). Same rule as start.ps1 and lan-join.ps1.
 $node = $cfg.Node
+if (-not $node -or -not (Test-Path -LiteralPath $node)) { $node = Find-Node }
 if (-not $node -or -not (Test-Path -LiteralPath $node)) { Fail 'Node.js from set-up is missing. Run "1 - SETUP.bat" again.' }
 New-Item -ItemType Directory -Force $DataDir | Out-Null
 
@@ -108,9 +113,16 @@ try {
         Say 'Open to everyone: players from "Play online" can join you, and join your hunts in the first 3 minutes.' 'Green'
     } else { Remove-Item Env:\HUNT_JOIN_WINDOW_SEC -ErrorAction SilentlyContinue }
     Say ''
-    Say 'Starting PLAY in its own window (backend, game servers, then your game)...'
-    $play = Start-Process -FilePath 'powershell.exe' -PassThru -WorkingDirectory $Root `
-        -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$(Join-Path $PSScriptRoot 'start.ps1')`"")
+    if ($HostMode) {
+        Say 'Starting Host Mode: the backend and the game servers, no game window (log: logs\hostmode.log)...'
+        $play = Start-Process -FilePath 'powershell.exe' -PassThru -WindowStyle Hidden -WorkingDirectory $Root `
+            -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$(Join-Path $PSScriptRoot 'start.ps1')`"", '-NoGame') `
+            -RedirectStandardOutput (Join-Path $logDir 'hostmode.log') -RedirectStandardError (Join-Path $logDir 'hostmode.err')
+    } else {
+        Say 'Starting PLAY in its own window (backend, game servers, then your game)...'
+        $play = Start-Process -FilePath 'powershell.exe' -PassThru -WorkingDirectory $Root `
+            -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$(Join-Path $PSScriptRoot 'start.ps1')`"")
+    }
 
     # --- 3. an account for the friend (made once, kept in data\lan_friend.key)
     $t0 = Get-Date
@@ -139,6 +151,20 @@ try {
     if ($ok) { Say 'Checked: your backend answers through the relay.' 'Green' }
     else { Say 'Warning: your backend did not answer through the relay yet. If your friend cannot join, send logs\relay.log.' 'Yellow' }
 
+    if ($HostMode) {
+        Say 'Host Mode is running. Players join from their launcher (Friends, or Play online when it is open to everyone).' 'Green'
+        $relayLost = $false
+        while (-not $play.HasExited) {
+            if ($relay.HasExited) { Say 'The relay connection was lost: stopping, so the launcher can start Host Mode again.' 'Yellow'; $relayLost = $true; break }
+            Start-Sleep -Seconds 2
+        }
+        if ($relayLost) {
+            [IO.File]::WriteAllText((Join-Path $DataDir 'hostmode_stop'), 'relay lost')
+            if (-not $play.WaitForExit(90000)) { try { $play.Kill() } catch {} }
+            $script:hostExit = 3
+        } else { $play.WaitForExit(); $script:hostExit = $play.ExitCode }
+        exit ([int]$script:hostExit)   # the finally below still runs (disconnects from the relay)
+    }
     Say ''
     Say '============================================================' 'Cyan'
     Say ' Your friend: double-click "LAN - JOIN.bat" and paste this join code:' 'Cyan'

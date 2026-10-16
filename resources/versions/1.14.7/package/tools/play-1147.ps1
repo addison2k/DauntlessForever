@@ -5,6 +5,13 @@
 # Normally started by "2 - PLAY.bat" (tools\start.ps1) after the backend and the server are up.
 # Waits until you close the game, then puts the logs into upload\client_logs.zip (PC name and user name blanked).
 . (Join-Path $PSScriptRoot 'common.ps1')
+function Set-EosName([string]$Ini, [string]$Name) {
+    $lines = if (Test-Path -LiteralPath $Ini) { @(Get-Content -LiteralPath $Ini) } else { @('; eos_offline settings. Lines starting with ; are comments.') }
+    $done = $false
+    $lines = @(foreach ($l in $lines) { if ($l -match '^DisplayName=') { if (-not $done) { "DisplayName=$Name"; $done = $true } } else { $l } })
+    if (-not $done) { $lines += "DisplayName=$Name" }
+    [System.IO.File]::WriteAllText($Ini, (($lines -join "`r`n") + "`r`n"), [System.Text.Encoding]::ASCII)
+}
 
 $cfg = Get-Config
 if (-not $cfg) { Fail 'set-up has not been run yet. Double-click "1 - SETUP.bat" first.' }
@@ -13,6 +20,11 @@ $Exe      = Join-Path $Bin 'Dauntless-Win64-Shipping.exe'
 $GameEos  = Join-Path $Bin 'EOSSDK-Win64-Shipping.dll'
 $HomeDir  = Join-Path $Root 'home'
 $EosDir   = Join-Path $Root 'eos'
+# Your player name comes from the launcher (one name for every version): the game reads it from eos_offline.ini.
+if ($env:DF_PLAYER_NAME -match '^[A-Za-z0-9_]{3,16}$') {
+    New-Item -ItemType Directory -Force $EosDir | Out-Null
+    Set-EosName (Join-Path $EosDir 'eos_offline.ini') $env:DF_PLAYER_NAME
+}
 $Stamp    = Get-Date -Format 'yyyyMMdd_HHmmss'
 $RunDir   = Join-Path $Root "logs\run_$Stamp"
 $Upload   = Join-Path $Root 'upload'

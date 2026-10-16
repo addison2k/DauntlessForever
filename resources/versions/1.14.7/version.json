@@ -12,7 +12,7 @@
                   "Hunts (tested: the first Embermane hunt)"
               ],
     "notWorking":  [
-                       "Solo only. Much else may not work yet."
+                       "Multiplayer (1.6.2 has it for now). Much else may not work yet."
                    ],
     "exeRel":  "Archon/Binaries/Win64/Dauntless-Win64-Shipping.exe",
     "exeSha256":  "F3F95FBF22709EF077A11632ED95D675B7209B7E0172D9ECB9BA7D02A1FBB66B",
@@ -26,7 +26,7 @@
                  },
     "package":  {
                     "dir":  "package",
-                    "packageVersion":  "2026-10-13.6",
+                    "packageVersion":  "2026-10-15",
                     "setup":  "tools/setup.ps1",
                     "uninstallArgs":  [
                                           "-Uninstall"

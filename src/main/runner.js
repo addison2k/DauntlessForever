@@ -21,6 +21,8 @@ const running = new Map(); // versionId -> { kind, child }
 const { execFileSync } = require('child_process');
 function freshEnv() {
   const env = { ...process.env };
+  // the launcher's one player name (player.js): set-up uses it instead of asking, Play keeps every version in step
+  try { const n = require('./player').get(); if (n) env.DF_PLAYER_NAME = n; } catch {}
   // The Node.js that ships with the launcher: the package scripts use it first (Find-Node), so players never install Node.
   const bn = bundledNode();
   if (bn) {

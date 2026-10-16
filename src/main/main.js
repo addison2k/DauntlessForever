@@ -17,22 +17,44 @@ const U = require('./updates');
 
 let win = null;
 let registry = [];
+// voice chat: friends' voices play without a click first
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
+// Drawn without the graphics card: on some PCs (drivers, scaling) the GPU path leaves bits of old frames behind buttons
+// and draws text soft. The launcher is a few flat panels, so the processor draws it just as fast. DF_GPU=1 turns it back on.
+if (process.env.DF_GPU !== '1') app.disableHardwareAcceleration();
+// One launcher at a time: opening it again brings the open window forward (two launchers would both poll the
+// friends service, both run voice, and fight over the same files)
+if (!app.requestSingleInstanceLock()) { app.quit(); process.exit(0); }
+app.on('second-instance', () => { if (win && !win.isDestroyed()) { if (win.isMinimized()) win.restore(); win.show(); win.focus(); } });
 
+// Opened by Windows at login for Host Mode (Host Mode page: "Start with Windows"): start minimized, then start Host Mode
+const FROM_WINDOWS = process.argv.includes('--hostmode');
+let closeOk = false;   // Host Mode was stopped on the way out: the window may close now
 const log = (...a) => { try { fs.appendFileSync(P.launcherLog(), new Date().toISOString() + ' ' + a.join(' ') + '\n'); } catch {} };
 const send = (ch, payload) => { if (win && !win.isDestroyed()) win.webContents.send(ch, payload); };
 
 function createWindow() {
   win = new BrowserWindow({
-    width: 1180, height: 760, minWidth: 940, minHeight: 620,
+    width: 1340, height: 800, minWidth: 940, minHeight: 620,
     title: 'Dauntless Forever', backgroundColor: '#0f1419', show: false,
     icon: path.join(P.bundledRoot(), app.isPackaged ? 'icon.png' : '../build/icon.png'),
     autoHideMenuBar: true,
-    webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, sandbox: true },
+    webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, sandbox: true, backgroundThrottling: false },
   });
   win.loadFile(path.join(__dirname, '..', 'renderer', 'index.html'));
-  win.once('ready-to-show', () => win.show());
+  win.once('ready-to-show', () => { if (FROM_WINDOWS) { win.showInactive(); win.minimize(); } else win.show(); });
   // never leave a game orphaned without saying so
   win.on('close', (e) => {
+    // Host Mode runs without a window of its own: closing the launcher would leave a server nobody can stop
+    const HM = require('./hostmode');
+    if (!closeOk && HM.isWanted()) {
+      e.preventDefault();
+      const r = dialog.showMessageBoxSync(win, { type: 'question', buttons: ['Keep it running', 'Minimize the launcher', 'Stop Host Mode and close'], defaultId: 1, cancelId: 0,
+        message: 'Host Mode is running.', detail: 'Players can be in your server right now. Minimize keeps it running; closing the launcher stops the server (players in it get a minute and their characters are saved home).' });
+      if (r === 1) win.minimize();
+      if (r === 2) { HM.shutdown().finally(() => { closeOk = true; setTimeout(() => { try { win.close(); } catch {} }, 1500); }); }
+      return;
+    }
     if (!R.anyRunning().some(r => r.kind === 'play')) return;
     const r = dialog.showMessageBoxSync(win, { type: 'question', buttons: ['Keep playing', 'Close the launcher anyway'], defaultId: 0, cancelId: 0,
       message: 'The game is still running.', detail: 'The servers it started keep running until the game closes by itself. If something is stuck, use "Stop everything" in the launcher first.' });
@@ -43,9 +65,26 @@ function createWindow() {
 
 app.whenReady().then(() => {
   P.ensureDir(P.dataRoot());
+  // voice chat: the window may use the microphone (it only ever shows the launcher's own pages)
+  require('electron').session.defaultSession.setPermissionRequestHandler((_wc, perm, cb) => cb(perm === 'media' || perm === 'clipboard-sanitized-write' || perm === 'fullscreen'));
   registry = V.loadRegistry();
   for (const v of registry) { try { V.syncPackage(v); } catch (e) { log('syncPackage', v.id, e.message); } }
   createWindow();
+  // Friends page: its own IPC handlers and the online-status poll (social.js)
+  require('./social').init({ get registry() { return registry; }, byId: (id) => byId(id), runner: R, send, log: (t) => log('social', t) });
+  // One player name for every version and the Friends page (player.js)
+  require('./player').init({ get registry() { return registry; }, social: require('./social'), log: (t) => log('player', t) });
+  // Voice chat with the people in your game (voice.js)
+  require('./voice').init({ social: require('./social'), send, log: (t) => log('voice', t) });
+  // Host Mode: a server on this PC that stays up (hostmode.js)
+  require('./hostmode').init({ get registry() { return registry; }, byId: (id) => byId(id), runner: R, send, log: (t) => log(t), social: require('./social'),
+    status: async (id) => { const v = byId(id); return v ? V.status(v) : null; },
+    nodeFor: async (v) => {
+      let node = null;
+      try { node = JSON.parse(fs.readFileSync(path.join(v.dataDir, 'config.json'), 'utf8').replace(/^\uFEFF/, '')).Node; } catch {}
+      if (!node || !fs.existsSync(node)) node = (await findNode() || {}).path;
+      return node || null;
+    } });
   // server-file updates: after the window is up, quietly; the window hears about anything that changed
   win.webContents.once('did-finish-load', () => setTimeout(checkUpdates, 1500));
 });
@@ -61,11 +100,14 @@ ipcMain.handle('launcher:newer', () => newerLauncher);
 async function checkUpdates() {
   try {
     const results = await U.checkAndApply(registry, (msg) => { log('updates', msg); send('updates:event', { msg }); },
-      (id) => R.isRunning(id) || R.isRunning(id + ':setup') || D.isDownloading(id), launcherUpdate);
+      (id) => R.isRunning(id) || R.isRunning(id + ':setup') || R.isRunning(id + ':host') || D.isDownloading(id), launcherUpdate);
     if (P.MOCK && process.env.DL_MOCK_LAUNCHER) launcherUpdate({ version: process.env.DL_MOCK_LAUNCHER, url: 'https://github.com/addison2k/DauntlessForever/releases', notes: 'Test notes.' });
     if (results.length) send('updates:done', { results });
   } catch (e) { log('updates', e.message); }
+  // Host Mode may start by itself once the server files are up to date (Host Mode page options)
+  if (!autoStarted) { autoStarted = true; try { require('./hostmode').autoStart(FROM_WINDOWS); } catch (e) { log('hostmode', e.message); } }
 }
+let autoStarted = false;
 ipcMain.handle('updates:check', () => checkUpdates());
 
 // ---------------------------------------------------------------- credits, community links, supporters
@@ -80,12 +122,16 @@ ipcMain.handle('community:info', async () => {
   try { const live = await U.fetchJson(U.COMMUNITY_URL); if (live && typeof live === 'object') Object.assign(community, live); } catch {}
   return { credits, community, supporters };
 });
+app.on('before-quit', () => { try { require('./hostmode').shutdown(); } catch {} try { require('./voice').shutdown(); } catch {} try { require('./social').shutdown(); } catch {} });
 app.on('window-all-closed', () => app.quit());
 // ---------------------------------------------------------------- helpers
 const byId = (id) => registry.find(v => v.id === id);
 function publicVersion(v) {
   const { bundledDir, ...rest } = v;
-  return { ...rest, hasPackage: !!v.package };
+  // can host friends (Friends panel / "Host with friends"): its server files have the online host script
+  let canHost = false;
+  try { canHost = !!v.package && fs.existsSync(path.join(v.dataDir, 'tools', 'online-host.ps1')); } catch {}
+  return { ...rest, hasPackage: !!v.package, canHost };
 }
 function findNode() {
   const bn = P.bundledNode();
@@ -126,6 +172,10 @@ ipcMain.handle('versions:list', () => registry.map(publicVersion));
 ipcMain.handle('versions:status', (_e, id) => {
   const v = byId(id); if (!v) return null;
   const s = V.status(v);
+  // The Revived (1.4.4) import that comes with the server files (More menu): there, and has it been used here?
+  s.canImport = fs.existsSync(path.join(v.dataDir, 'tools', 'import-revived.ps1'));
+  s.canImportFix = s.canImport && /TutorialOnly/.test((() => { try { return fs.readFileSync(path.join(v.dataDir, 'tools', 'import-revived.ps1'), 'utf8'); } catch { return ''; } })());
+  s.imported = fs.existsSync(path.join(v.dataDir, 'data', 'import-revived.json'));
   s.busy = R.isRunning(id) ? 'play' : (D.isDownloading(id) ? 'download' : (R.isRunning(id + ':setup') ? 'setup' : null));
   return s;
 });
@@ -301,6 +351,16 @@ ipcMain.handle('items:list', async (_e, id) => {
   const save = await runItems(v, ['list']);
   return { groups: catalog.groups || [], save, running: R.isRunning(v.id) };
 });
+// Gear (instanced items): add by catalog id, remove by instance id. Only versions whose helper knows "addgear".
+ipcMain.handle('items:gear', async (_e, id, characterId, action, list) => {
+  const v = byId(id); if (!v || !v.package) return { ok: false, error: 'Unknown version.' };
+  if (R.isRunning(v.id) || R.isRunning(v.id + ':setup')) return { ok: false, error: 'Close the game first (press Stop), then change gear.' };
+  if (!/^[\w-]{1,64}$/.test(String(characterId))) return { ok: false, error: 'Unknown character.' };
+  if (action !== 'addgear' && action !== 'removegear') return { ok: false, error: 'Unknown action.' };
+  const clean = (Array.isArray(list) ? list : []).map(String).filter(x => /^[\w-]{1,80}$/.test(x)).slice(0, 500);
+  if (!clean.length) return { ok: false, error: 'Nothing to change.' };
+  return runItems(v, [action, String(characterId), JSON.stringify(clean)]);
+});
 ipcMain.handle('items:set', async (_e, id, characterId, changes) => {
   const v = byId(id); if (!v || !v.package) return { ok: false, error: 'Unknown version.' };
   if (R.isRunning(v.id) || R.isRunning(v.id + ':setup')) return { ok: false, error: 'Close the game first (press Stop), then change items.' };
@@ -417,24 +477,54 @@ ipcMain.handle('game:deletePartial', async (_e, id) => {
 });
 
 // ---------------------------------------------------------------- IPC: set-up / play / stop / uninstall
-ipcMain.handle('game:setup', async (_e, id, uninstall) => {
+ipcMain.handle('game:setup', async (_e, id, uninstall, auto) => {
   const v = byId(id); if (!v || !v.package) return { ok: false };
   const key = id + ':setup';
   if (R.isRunning(key)) return { ok: false, error: 'Set-up is already running.' };
   const g = V.knownGameDir(v);
   if (g && !uninstall) V.seedConfig(v, g);
   const script = path.join(v.dataDir, v.package.setup);
+  // auto: no window and no questions (setup.ps1 -Auto); the lines go to the log under the button. Packages from
+  // before -Auto existed get the normal window.
+  let canAuto = false;
+  try { canAuto = !uninstall && /\[switch\]\$Auto/.test(fs.readFileSync(script, 'utf8')); } catch {}
+  if (auto && canAuto) {
+    send('setup:state', { id, state: 'running', auto: true });
+    let lastError = '';
+    const code = await R.runHidden(key, 'setup', script, ['-Auto'], (line, isErr) => {
+      if (/^STOPPED:/.test(line.trim())) lastError = line.trim().replace(/^STOPPED:\s*/, '');
+      send('log:line', { id, line, isErr, kind: 'setup' });
+    });
+    send('setup:state', { id, state: 'done', code, auto: true });
+    return { ok: code === 0, code, error: lastError };
+  }
   send('setup:state', { id, state: 'running', uninstall: !!uninstall });
   const code = await R.runVisible(key, 'setup', script, uninstall ? v.package.uninstallArgs : [], `${v.name} offline - ${uninstall ? 'uninstall' : 'set-up'}`);
   send('setup:state', { id, state: 'done', code, uninstall: !!uninstall });
   return { ok: true, code };
 });
 
+// More > Bring my Dauntless Revived (1.4.4) character: the server files' own import (tools\import-revived.ps1), in a
+// window, because it shows what comes over and asks before changing anything. tutorialOnly: the "FIX tutorial" step.
+ipcMain.handle('game:importRevived', async (_e, id, tutorialOnly) => {
+  const v = byId(id); if (!v || !v.package) return { ok: false, error: 'This version is not installed.' };
+  const script = path.join(v.dataDir, 'tools', 'import-revived.ps1');
+  if (!fs.existsSync(script)) return { ok: false, error: 'This version has no Revived import yet. Its server files update when the launcher opens.' };
+  if (R.anyRunning().some(r => String(r.id).split(':')[0] === id && r.kind !== 'stop'))
+    return { ok: false, error: 'Close the game first (and stop hosting): the import changes your save while nothing is using it.' };
+  if (R.isRunning(id + ':import')) return { ok: false, error: 'The import window is already open.' };
+  const code = await R.runVisible(id + ':import', 'import', script, tutorialOnly ? ['-TutorialOnly'] : [],
+    tutorialOnly ? `${v.name} - fix the tutorial after a Revived import` : `${v.name} - bring your Dauntless Revived character`);
+  return { ok: code === 0, code };
+});
+
 ipcMain.handle('game:play', async (_e, id) => {
   const v = byId(id); if (!v || !v.package) return { ok: false };
   if (R.anyRunning().some(r => r.kind === 'play')) return { ok: false, error: 'A game is already running. Close it first.' };
   settings.update(s => { s.lastVersion = id; });
-  const script = path.join(v.dataDir, v.package.play);
+  // Host Mode is running this version: only the game starts, joining the server that is already up on this PC
+  const hostPlay = require('./hostmode').isOn(id) && fs.existsSync(path.join(v.dataDir, 'tools', 'play-162.ps1'));
+  const script = hostPlay ? path.join(v.dataDir, 'tools', 'play-162.ps1') : path.join(v.dataDir, v.package.play);
   send('play:state', { id, state: 'running' });
   let lastError = '';
   const code = await R.runHidden(id, 'play', script, [], (line, isErr) => {
@@ -447,6 +537,12 @@ ipcMain.handle('game:play', async (_e, id) => {
 
 ipcMain.handle('game:stop', async (_e, id) => {
   const v = byId(id); if (!v || !v.package) return { ok: false };
+  // Host Mode keeps its server: only the game closes
+  if (require('./hostmode').isOn(id)) {
+    const k = R.killTree(id);
+    send('log:line', { id, line: k ? 'Game closed. Host Mode keeps running.' : 'No game was running. Host Mode keeps running.', isErr: false, kind: 'stop' });
+    return { ok: true, code: 0 };
+  }
   send('log:line', { id, line: 'Stopping everything this version started...', isErr: false, kind: 'stop' });
   const killed = R.killTree(id);
   const code = await R.runStop(v, (line, isErr) => send('log:line', { id, line, isErr, kind: 'stop' }));

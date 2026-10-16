@@ -2,25 +2,25 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-14.12",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-14.12.zip",
-                         "sha256":  "80cd46daff1d6316911ccf7de64f5f7bf3004d350d4a23b344592a0d3955c0f1",
-                         "date":  "2026-10-14",
-                         "note":  "Hosting always uses standard progression (online.env), solo keeps your own settings; Revived import brings quests too"
+                         "packageVersion":  "2026-10-15",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-15.zip",
+                         "sha256":  "dc47291e848fed15cb6a02a8a82b345306fe4108dd36c649fa66472919a841e0",
+                         "date":  "2026-10-15",
+                         "note":  "Host Mode; Revived import brings quests and fixes the tutorial; bounty settings agree; Host with friends Node.js fix"
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-13.6",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-13.6.zip",
-                         "sha256":  "d5b3e960598a60e6d6ece0684d0eb72d5bf25b0a84f63d0538ba337334ae9b0c",
-                         "date":  "2026-10-13",
-                         "note":  "Fixes the freeze at start-up on some Windows 11 PCs (stuck at Starting the game server)"
+                         "packageVersion":  "2026-10-15",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-15.zip",
+                         "sha256":  "9219bb60a7a5d212c80c055dfa87dbfb69b586113f5445a1123415fab25852e7",
+                         "date":  "2026-10-15",
+                         "note":  "Automatic set-up; Inventory page"
                      }
                  ],
     "launcher":  {
-                     "version":  "0.1.9",
-                     "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.1.9",
-                     "notes":  "Node.js included, download space checks, clearer version on Game Rules and Inventory",
-                     "date":  "2026-10-13"
+                     "version":  "0.2.1",
+                     "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.1",
+                     "notes":  "Host Mode: keep a server running on your PC. Bring your Dauntless Revived (1.4.4) character from the More menu.",
+                     "date":  "2026-10-15"
                  }
 }

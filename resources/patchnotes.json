@@ -2,6 +2,21 @@
   "_comment": "Patch notes shown in the launcher (newest first). The launcher also reads this file from the repo, so new notes need no build.",
   "notes": [
     {
+      "date": "2026-10-15","title": "Host Mode: keep a server running",
+      "items": [
+        "New Host Mode page: this PC keeps a Ramsgate up that players join from their launcher, party up in and start hunts from. No game window opens; press Play to join it from the same PC.",
+        "Private (your friends only) or Public (anyone using Play online), with a server name, a welcome line in chat, a player limit and a ban list.",
+        "For a PC that hosts all day: start with the launcher or with Windows, restart by itself, keep the PC awake, a daily restart and a daily save backup. Each one is an option you switch on."
+      ]
+    },
+    {
+      "date": "2026-10-14","title": "Bring your Revived character, and add gear (1.6.2)",
+      "items": [
+        "New: IMPORT from Dauntless Revived (1.4.4).bat in the 1.6.2 folder brings your 1.4.4 gear, Rams, cells and materials into your 1.6.2 character. Your Revived save is only read; your 1.6.2 save is backed up first.",
+        "Inventory page: a new Gear section lists your weapons, armour and lanterns, adds any 1.6.2 gear by name, and removes gear you are not wearing."
+      ]
+    },
+    {
       "date": "2026-10-13",
       "title": "Downloads: space checks",
       "items": [

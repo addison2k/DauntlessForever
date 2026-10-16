@@ -87,7 +87,7 @@ async function checkAndApply(registry, onEvent, isBusy, onLauncher) {
       const fresh = JSON.parse(fs.readFileSync(path.join(v.dataDir, 'version.json'), 'utf8'));
       for (const k of Object.keys(fresh)) v[k] = fresh[k];
       r.applied = true;
-      onEvent(`${v.id}: server files updated to ${entry.packageVersion}. Run Set up again to put them into the game folder.`);
+      onEvent(`${v.id}: server files updated to ${entry.packageVersion}.`);
     } catch (e) {
       r.error = e.message; onEvent(`${v.id}: update failed: ${e.message}`);
     } finally {

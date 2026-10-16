@@ -3,6 +3,10 @@
 # Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 # start.ps1 - "2 - PLAY.bat": starts the local backend, then the game servers, then the game, in that order.
 # When the game is closed, everything this package started is shut down again.
+# -NoGame (Host Mode, from online-host.ps1 -HostMode): no game window; the backend and game servers stay up until
+# data\hostmode_stop appears or the launcher stops Host Mode. If the backend, the game-server starter or Ramsgate
+# goes down, this stops with an error and the launcher starts Host Mode again.
+param([switch]$NoGame)
 . (Join-Path $PSScriptRoot 'common.ps1')
 
 Say ''
@@ -25,7 +29,7 @@ foreach ($f in @((Join-Path $MetaDir '.env'), (Join-Path $DeployDir '.env'), (Jo
 $missing = @('vcruntime140.dll', 'vcruntime140_1.dll', 'msvcp140.dll', 'xinput1_3.dll', 'x3daudio1_7.dll', 'xapofx1_5.dll') |
     Where-Object { -not (Test-Path -LiteralPath (Join-Path $env:WINDIR "System32\$_")) }
 if (@($missing).Count -gt 0) { Fail "Windows is missing parts the game needs ($(@($missing) -join ', ')). Run set-up again: it installs them." }
-if (@(Get-PlayerGame).Count -gt 0) { Fail 'the game is already running. Close it first (or end Dauntless-Win64-Shipping in Task Manager).' }
+if (-not $NoGame -and @(Get-PlayerGame).Count -gt 0) { Fail 'the game is already running. Close it first (or end Dauntless-Win64-Shipping in Task Manager).' }
 
 New-Item -ItemType Directory -Force $DataDir, $LogDir | Out-Null
 # Your player name comes from the launcher (one name for every version): keep this account's name in step.
@@ -169,11 +173,30 @@ while (-not (Test-UdpPort $RamsgatePort)) {
 }
 Say ("    Game servers: ready after {0} s." -f [int]((Get-Date) - $t0).TotalSeconds) 'Green'
 
-# --- 3. the game (this window waits until it is closed)
-Say '3/3 Starting the game...'
 $playOk = $true
-try { & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'play-162.ps1'); if ($LASTEXITCODE -ne 0) { $playOk = $false } }
-catch { $playOk = $false; Say $_.Exception.Message 'Yellow' }
+if ($NoGame) {
+    # --- 3. Host Mode: no game here. Keep watch until asked to stop; anything going down ends this run with an error,
+    #        and the launcher starts Host Mode again (when "Restart by itself" is on).
+    Say '3/3 Host Mode: the server is up. No game window; press Play in the launcher to join it from this PC.' 'Green'
+    $stopFile = Join-Path $DataDir 'hostmode_stop'
+    Remove-Item -LiteralPath $stopFile -Force -ErrorAction SilentlyContinue
+    $ramsDown = $null
+    while ($true) {
+        if (Test-Path -LiteralPath $stopFile) { Remove-Item -LiteralPath $stopFile -Force -ErrorAction SilentlyContinue; Say 'Host Mode: asked to stop.'; break }
+        if ($meta.HasExited) { Stop-AndFail 'the local backend stopped while hosting.' }
+        if ($deploy.HasExited) { Stop-AndFail 'the program that starts the game servers stopped while hosting.' }
+        # Ramsgate restarts by itself after a crash; if it stays down for 3 minutes, start everything again
+        if (Test-UdpPort $RamsgatePort) { $ramsDown = $null }
+        elseif (-not $ramsDown) { $ramsDown = Get-Date }
+        elseif (((Get-Date) - $ramsDown).TotalSeconds -gt 180) { Stop-AndFail 'Ramsgate has been down for 3 minutes.' }
+        Start-Sleep -Seconds 3
+    }
+} else {
+    # --- 3. the game (this window waits until it is closed)
+    Say '3/3 Starting the game...'
+    try { & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'play-162.ps1'); if ($LASTEXITCODE -ne 0) { $playOk = $false } }
+    catch { $playOk = $false; Say $_.Exception.Message 'Yellow' }
+}
 
 # --- shut down
 Say ''

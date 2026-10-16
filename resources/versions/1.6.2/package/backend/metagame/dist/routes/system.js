@@ -176,7 +176,8 @@ exports.systemRouter.get("/bounty/game-data", HasUndauntedMetagameAuth_1.HasUnda
             token_rollover_warning_days: 1000,
             automatic_draft: false,
             automatic_claim: false,
-            delete_claimed_bounties: false,
+            // Same as the bounty_game_data tuning blob (tuning162.ts): claimed bounties clear at once. Both must agree.
+            delete_claimed_bounties: (process.env.BOUNTY_DELETE_CLAIMED ?? "1") === "1",
         },
     });
 });

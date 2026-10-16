@@ -38,18 +38,18 @@ function showPage(name) {
   if (name === 'patches') renderPatches();
   document.querySelector('.content').scrollTop = 0;
 }
+const DISCORD_INVITE = 'https://discord.gg/sg9J7KshVc';
 async function loadCommunity() {
   let c; try { c = await L.communityInfo(); } catch { return; }
   const links = c.community || {};
   for (const [id, url] of [['lnk-patreon', links.patreon], ['lnk-patreon-2', links.patreon]]) {
     const el = $(id); if (!el) continue; el.dataset.url = url || ''; el.hidden = !url;
   }
-  // the Discord button only shows once there is an invite link in community.json
-  // "Questions?" opens the author's Discord profile once its user id is in community.json
-  const ask = $('lnk-ask'); const uid = String(links.discordUserId || '').trim();
-  ask.hidden = !/^\d{15,22}$/.test(uid); ask.dataset.url = ask.hidden ? '' : `https://discord.com/users/${uid}`;
-  if (links.contactLabel) $('lnk-ask-title').textContent = links.contactLabel;
-  const dc = $('lnk-discord'); dc.dataset.url = links.discord || ''; dc.hidden = !links.discord;
+  // "Join the Discord" at the bottom of the sidebar: the server invite (community.json "discord" can change it)
+  const ask = $('lnk-ask');
+  ask.dataset.url = /^https:\/\/(discord\.gg|discord\.com)\//.test(links.discord || '') ? links.discord : DISCORD_INVITE;
+  ask.hidden = false;
+  const dc = $('lnk-discord'); dc.dataset.url = ''; dc.hidden = true;   // the older plain button: the card above replaces it
   $('lnk-discord-text').textContent = 'Join the Discord';
   if (links.github) $('lnk-source').dataset.url = links.github;
   renderCredits(c.credits || {}, c.supporters || {});
@@ -91,9 +91,9 @@ async function refresh(id) { statuses[id] = await L.status(id); renderShelf(); i
 function stateOf(v) {
   const s = statuses[v.id] || {};
   const b = busy[v.id] || s.busy;
-  if (!v.hasPackage) return { key: 'soon', label: 'Offline package coming soon', step: 'none' };
+  if (!v.hasPackage) return { key: 'soon', label: 'Coming soon', step: 'none' };
   if (b === 'download') return { key: 'busy', busy: b, label: 'Downloading', step: 'game' };
-  if (b === 'setup') return { key: 'busy', busy: b, label: 'Set-up running', step: 'setup' };
+  if (b === 'setup') return { key: 'busy', busy: b, label: 'Setting up', step: 'setup' };
   if (b === 'play') return { key: 'busy', busy: b, label: 'Running', step: 'play' };
   if (s.game === 'missing') return { key: 'attn', label: 'Not downloaded', step: 'game' };
   if (s.game === 'partial') return { key: 'attn', label: 'Download not finished', step: 'game' };
@@ -129,7 +129,7 @@ function renderDetail() {
   $('detail-empty').hidden = true; $('detail-body').hidden = false;
   $('d-ver').textContent = v.id;
   $('d-meta').textContent = `Build ${v.build}, released ${v.released}. ${v.era}.`;
-  $('d-blurb').textContent = v.blurb || '';
+  $('d-blurb').textContent = v.blurb || ''; $('d-blurb').title = v.blurb || '';
   $('d-warn').hidden = !v.warning; $('d-warn').textContent = v.warning || '';
   const pill = $('d-pill'); pill.textContent = st.label; pill.className = 'pill ' + st.key;
 
@@ -138,7 +138,7 @@ function renderDetail() {
   setStep('game', gameDone ? 'done' : (st.step === 'game' ? 'current' : ''),
     gameDone ? shortPath(s.gameDir) : (s.game === 'partial' ? 'Partly downloaded; Download carries on' : (s.game === 'wrong' ? 'That folder has a different build' : `${v.download.downloadGB} GB from Epic's servers`)));
   setStep('setup', setupDone ? 'done' : (st.step === 'setup' ? 'current' : (gameDone ? '' : 'blocked')),
-    setupDone ? (s.config && s.config.PlayerName ? `Player: ${s.config.PlayerName}` : 'Done') : ((s.prereqMissing && s.prereqMissing.length) ? 'Windows parts missing (DirectX / Visual C++)' : 'A window asks one or two questions'));
+    setupDone ? (s.config && s.config.PlayerName ? `Player: ${s.config.PlayerName}` : 'Done') : ((s.prereqMissing && s.prereqMissing.length) ? 'Windows parts missing (DirectX / Visual C++)' : 'Automatic after the download, no questions'));
   setStep('play', st.key === 'busy' && st.step === 'play' ? 'current' : (setupDone ? (st.step === 'play' ? 'current' : '') : 'blocked'),
     s.hasSave ? 'Your save is here; progress carries on' : 'Starts as a new Slayer');
 
@@ -148,18 +148,34 @@ function renderDetail() {
   p.disabled = false;
   if (!v.hasPackage) { p.textContent = 'Coming soon'; p.disabled = true; note.textContent = 'The offline package for this version is still being made. It will show up here when it is ready.'; }
   else if (st.busy === 'download') { p.textContent = 'Downloading'; p.disabled = true; $('btn-cancel').hidden = false; note.textContent = 'You can keep using the launcher. Cancelling keeps what is already downloaded.'; }
-  else if (st.busy === 'setup') { p.textContent = 'Set-up running'; p.disabled = true; note.textContent = 'Answer the questions in the black window, then close it when it says it is finished.'; }
+  else if (st.busy === 'setup') {
+    p.textContent = 'Setting up'; p.disabled = true;
+    note.textContent = setupAuto[v.id] ? 'Getting the game ready. One time, no questions; it takes a minute or two. If Windows asks for permission, that is for parts the game needs (DirectX, Visual C++).'
+      : 'Answer the questions in the black window, then close it when it says it is finished.';
+  }
   else if (st.busy === 'play') { p.textContent = 'Running'; p.disabled = true; $('btn-stop').hidden = false; note.textContent = 'Close the game normally and everything else shuts down by itself.'; }
   else if (st.step === 'game') { p.textContent = s.game === 'partial' ? 'Continue download' : 'Download'; note.textContent = `About ${v.download.downloadGB} GB to download, ${v.download.installedGB} GB installed. Goes to ${info.gamesRoot}\\${v.download.folderName} (change it in Settings). Already have ${v.id}? Use "More".`; }
   else if (st.step === 'setup') {
-    p.textContent = 'Set up';
+    p.textContent = 'Set up';   // one click, no window (setup.ps1 -Auto)
     if (s.prereqMissing && s.prereqMissing.length) note.textContent = `Windows is missing parts the game needs (${s.prereqMissing.join(', ')}). Set up downloads them from Microsoft and installs them; Windows asks for permission once.`;
-    else note.textContent = s.game === 'ok' && s.setup === 'needed' && s.config ? 'Something the set-up put in place is missing (the game may have been repaired). Run it again; it only fixes what is missing.' : 'One-time. Needs the internet once (Node.js and a small data pack).';
+    else note.textContent = s.game === 'ok' && s.setup === 'needed' && s.config ? 'The game files or the server files changed. Set up puts things right again; it only fixes what is missing, and your save stays.' : 'One click, no questions. Needs the internet once (a small data pack).';
   }
-  else { p.textContent = 'Play'; note.textContent = ''; }
+  else {
+    p.textContent = v.canHost ? 'Play solo' : 'Play'; note.textContent = '';
+    // hosting or in a friend's game with this version: Play waits until that game closes
+    const run = (window.dfSocial && window.dfSocial.running) || [];
+    if (run.some(r => r.id === v.id + ':host')) { p.disabled = true; note.textContent = 'You are hosting: friends see you in their Friends panel and press Join. Close your game to stop.'; }
+    else if (run.some(r => r.id === v.id + ':join')) {
+      p.disabled = true;
+      const w = window.dfSocial && window.dfSocial.inGameWith;
+      note.textContent = w ? `You are in ${w.name}'s game${w.public ? ' (open to everyone)' : ''}. Your character is saved home every few minutes. Close the game to play here.` : 'You are in a friend\'s game. Close it to play here.';
+    }
+  }
   // download notes only while they are still news (not after the player moved on or picked another folder)
   if (!st.busy && st.step === 'game' && d && d.state === 'failed' && d.error) { note.textContent = d.error; note.className = 'action-note err'; }
-  if (!st.busy && st.step === 'setup' && d && d.state === 'done' && !(s.prereqMissing && s.prereqMissing.length)) { note.textContent = 'Download finished and checked. Next: Set up.'; }
+  if (!st.busy && st.step === 'setup' && d && d.state === 'done' && !(s.prereqMissing && s.prereqMissing.length)) { note.textContent = 'Download finished and checked. Set up runs by itself next.'; }
+
+  renderHostButton();
 
   // progress
   const pr = $('progress');
@@ -185,10 +201,76 @@ function renderDetail() {
   m.querySelector('[data-act="opengame"]').disabled = !s.gameDir;
   m.querySelector('[data-act="pick"]').disabled = st.key === 'busy';
   m.querySelector('[data-act="delpartial"]').disabled = st.key === 'busy' || s.game === 'ok';
+  // the Revived (1.4.4) import: only for versions whose server files have it, once the game is set up
+  const imp = m.querySelector('[data-act="import"]'), fix = m.querySelector('[data-act="importfix"]');
+  imp.hidden = !s.canImport; imp.disabled = !setupDone || st.key === 'busy';
+  fix.hidden = !(s.canImportFix && s.imported); fix.disabled = !setupDone || st.key === 'busy';
+}
+// "Host with friends": the selected version, hosted through the Dauntless Forever relay (main/social.js). Friends
+// see it in their Friends panel and press Join. Hidden in Offline Forever mode and for versions that cannot host yet.
+function renderHostButton() {
+  const v = versions.find(x => x.id === selected); const hb = $('btn-host'); if (!v || !hb) return;
+  const soc = window.dfSocial || null, st = stateOf(v);
+  const run = (soc && soc.running) || [];
+  const hostingThis = run.some(r => r.id === v.id + ':host');
+  // shown (dim) from the start, lit up once the version is ready to play
+  hb.hidden = !v.canHost || !!(soc && soc.offlineMode);
+  hb.classList.toggle('on', hostingThis);
+  // Host Mode (Host Mode page) runs this version: the server is already up here, so Play only starts the game
+  const hm = soc && soc.hostMode && soc.hostMode.version === v.id ? soc.hostMode : null;
+  hb.lastChild.textContent = hm ? 'Host Mode on' : hostingThis ? 'Hosting' : 'Host with friends';
+  hb.disabled = hostingThis || st.key !== 'ready' || run.length > 0 || !!(soc && soc.onlineOff);
+  const ping = soc && soc.relay ? ` (online server: ${soc.relay.name}, ${soc.relay.ms} ms)` : '';
+  const randoms = !!(soc && soc.allowRandoms);
+  hb.title = st.key !== 'ready' && !hostingThis ? 'Ready once the game is downloaded and set up' : soc && soc.onlineOff ? soc.onlineOff : (hostingThis ? (soc && soc.hostPublic ? 'Your game is open to everyone' : 'Your game is open to your friends')
+    : `Play ${v.id} and let your friends${randoms ? ' (and players using Play online)' : ''} join you${ping}`);
+  renderOnline(v, soc, st, run, hostingThis);
+  if (hm) {
+    hb.title = 'Host Mode is running this version (see the Host Mode page)';
+    const p = $('btn-primary'), n = $('action-note');
+    if (st.busy === 'play') { n.textContent = 'Close the game when you like: Host Mode keeps the server running.'; n.className = 'action-note'; }
+    else if (st.key === 'ready') {
+      p.textContent = 'Play on your server'; p.disabled = hm.phase !== 'running';
+      n.className = 'action-note';
+      n.textContent = hm.phase === 'running' ? `Host Mode is running "${hm.name}". Play starts only the game and joins it; closing the game keeps the server up.`
+        : 'Host Mode is starting. Play works as soon as the server is up.';
+    }
+  }
+}
+window.renderHostButton = renderHostButton;
+// "Play online": join a game on this version that is open to everyone, or host one if none turns up in 40 seconds.
+// "Allow randoms" (under the buttons): a hosted game is open to Play online players too. main/social.js does the work.
+let onlineNote = '';
+function renderOnline(v, soc, st, run, hostingThis) {
+  const ob = $('btn-online'), opt = $('host-opt'), n = $('action-note'); if (!ob || !opt) return;
+  const search = soc && soc.search;
+  const mine = !!(search && search.version === v.id);
+  const off = !v.canHost || !!(soc && soc.offlineMode);
+  ob.hidden = off;   // dim until the version is ready, like Host with friends
+  ob.classList.toggle('on', mine);
+  const lbl = ob.querySelector('.lbl');
+  lbl.textContent = !mine ? 'Play online' : search.phase === 'asking' ? 'Joining' : search.phase === 'hosting' ? 'Starting' : `Searching ${search.left}`;
+  ob.disabled = !mine && (st.key !== 'ready' || run.length > 0 || !!search || !!(soc && soc.onlineOff) || !(soc && soc.signedIn));
+  ob.title = st.key !== 'ready' && !mine ? 'Ready once the game is downloaded and set up' : soc && soc.onlineOff ? soc.onlineOff : mine ? 'Click to stop looking'
+    : !(soc && soc.signedIn) ? 'Signing you in to the online service...' : `Play ${v.id} with anyone online: joins a game that is open to everyone, or hosts one`;
+  // the note under the buttons says what the search is doing, and goes away when it is over
+  if (mine) {
+    onlineNote = search.phase === 'asking' ? `Found ${search.host}'s game. Asking to join...`
+      : search.phase === 'hosting' ? 'No open game right now, so you host one: a window opens, keep it open. Players using Play online join you.'
+      : `Looking for a ${v.id} game that is open to everyone. If none turns up in ${search.left} seconds, you host one and others join you. Click the button to stop.`;
+    n.textContent = onlineNote; n.className = 'action-note';
+  } else if (onlineNote) { if (n.textContent === onlineNote) n.textContent = ''; onlineNote = ''; }
+  // Allow randoms: shown with the Host button; fixed while hosting (it applies when hosting starts)
+  opt.hidden = off;
+  const box = $('opt-randoms');
+  box.checked = !!(soc && soc.allowRandoms);
+  box.disabled = hostingThis;
+  opt.classList.toggle('off', hostingThis);
+  opt.title = hostingThis ? 'Change this before you host: it applies when hosting starts.' : 'Your hosted games show up for players who press Play online. Friends can always join.';
 }
 function setStep(name, cls, sub) { const el = document.querySelector(`.step[data-step="${name}"]`); el.className = 'step ' + cls; $('s-' + name).textContent = sub; }
 function fill(id, items) { const ul = $(id); ul.innerHTML = ''; for (const t of (items || [])) { const li = document.createElement('li'); li.textContent = t; ul.appendChild(li); } }
-function shortPath(p) { if (!p) return ''; return p.length > 48 ? '…' + p.slice(-46) : p; }
+function shortPath(p) { if (!p) return ''; return p.length > 48 ? '...' + p.slice(-46) : p; }
 // ---------------------------------------------------------------- events (Ramsgate decorations)
 let eventVer = null, eventNote = null;
 async function renderEvents() {
@@ -358,9 +440,9 @@ async function renderItems(reload) {
     const r = document.createElement('div'); r.className = 'season-row item-row' + (id in itemPending ? ' active' : '');
     r.innerHTML = `
       <div><div class="season-name">${esc(name)}</div><div class="season-kind">${blurb ? esc(blurb) + ' ' : ''}<code>${esc(id)}</code></div></div>
-      <div class="item-have">${id in itemPending ? `<s>${fmtN(have)}</s> → ` : ''}<b>${fmtN(val)}</b></div>
+      <div class="item-have">${id in itemPending ? `<s>${fmtN(have)}</s> &gt; ` : ''}<b>${fmtN(val)}</b></div>
       <div class="item-edit">
-        <button class="ghost step" data-d="-10" title="10 less">−10</button>
+        <button class="ghost step" data-d="-10" title="10 less">-10</button>
         <input type="number" min="0" max="99999999" value="${val}" aria-label="${esc(name)}">
         <button class="ghost step" data-d="10" title="10 more">+10</button>
         <button class="ghost step" data-d="100" title="100 more">+100</button>
@@ -384,6 +466,7 @@ async function renderItems(reload) {
     for (const it of g.items) { known.add(it.id); list.appendChild(row(it.id, it.name, it.blurb)); }
     host.appendChild(list);
   }
+  renderGear(cur, ch, note);
   const other = $('item-other'); other.innerHTML = '';
   const otherIds = [...new Set([...Object.keys(ch.items), ...Object.keys(itemPending)])].filter(id => !known.has(id)).sort();
   for (const id of otherIds) other.appendChild(row(id, id.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, c => c.toUpperCase()), ''));
@@ -405,6 +488,65 @@ async function renderItems(reload) {
     if (!known.has(id)) $('item-more').open = true;
     renderItems(false);
   };
+}
+
+// Gear part of the Inventory page (versions whose helper returns gear + a gear catalog, 1.6.2 first).
+let gearConfirm = null;
+function renderGear(cur, ch, note) {
+  const cat = cur.d.save && cur.d.save.gearCatalog;
+  $('item-gear').hidden = !(cat && Array.isArray(ch.gear));
+  if ($('item-gear').hidden) return;
+  const names = new Map(cat.map(g => [g[0], g]));
+  const dl = $('gear-options');
+  if (dl.dataset.ver !== itemVer) {
+    dl.innerHTML = cat.map(g => `<option value="${esc(g[1])} (${esc(g[0])})">${esc(g[2])}</option>`).join('');
+    dl.dataset.ver = itemVer;
+  }
+  const act = async (action, ids, what) => {
+    itemNote = 'Saving...'; itemErr = false; note.textContent = itemNote;
+    const r = await L.gearItems(itemVer, itemChar, action, ids);
+    if (!r || !r.ok) { itemNote = (r && r.error) || 'Could not change gear.'; itemErr = true; }
+    else {
+      const nm = (id) => (names.get(id) || [id, id])[1];
+      const parts = [];
+      if (r.added && r.added.length) parts.push('Added ' + r.added.map(nm).join(', '));
+      if (r.removed && r.removed.length) parts.push('Removed ' + r.removed.map(nm).join(', '));
+      if (r.already && r.already.length) parts.push('Already yours: ' + r.already.map(nm).join(', '));
+      if (r.equipped && r.equipped.length) parts.push('Equipped, so kept: ' + r.equipped.map(nm).join(', ') + ' (unequip it in game first)');
+      if (r.unknown && r.unknown.length) parts.push('Not a 1.6.2 gear item: ' + r.unknown.join(', '));
+      itemNote = (parts.join('. ') || what) + `. You will see it the next time you play ${itemVer}.`;
+      itemErr = !(r.added && r.added.length) && !(r.removed && r.removed.length);
+    }
+    gearConfirm = null; renderItems(true);
+  };
+  $('gear-add-btn').onclick = () => {
+    const raw = $('gear-add').value.trim();
+    const m = /\(([A-Za-z0-9_]{3,80})\)\s*$/.exec(raw);
+    let id = m ? m[1] : raw.toUpperCase();
+    if (!names.has(id)) { const hit = cat.find(g => g[1].toLowerCase() === raw.toLowerCase()); if (hit) id = hit[0]; }
+    if (!names.has(id)) { itemNote = 'Pick gear from the list as you type (a name or an ID like WP_IH_ROCK).'; itemErr = true; renderItems(false); return; }
+    $('gear-add').value = '';
+    act('addgear', [id], 'Added');
+  };
+  $('gear-add').onkeydown = (e) => { if (e.key === 'Enter') $('gear-add-btn').click(); };
+  const host = $('gear-list'); host.innerHTML = '';
+  const order = ['Weapons', 'Armour', 'Lanterns', 'Weapon parts', 'Accessories', 'Banners', 'Flares'];
+  const owned = ch.gear.map(g => ({ ...g, name: (names.get(g.id) || [g.id, g.id, 'Other'])[1], type: (names.get(g.id) || [g.id, g.id, 'Other'])[2] }))
+    .sort((a, b) => (order.indexOf(a.type) - order.indexOf(b.type)) || a.name.localeCompare(b.name));
+  if (!owned.length) host.innerHTML = '<div class="season-row"><div class="season-kind">No gear yet.</div></div>';
+  for (const g of owned) {
+    const r = document.createElement('div'); r.className = 'season-row gear-row';
+    r.innerHTML = `<div><div class="season-name">${esc(g.name)}</div><div class="season-kind">${esc(g.type)} <code>${esc(g.id)}</code></div></div>
+      <div class="item-have">${g.level ? 'Level ' + g.level : ''}${g.equipped ? ' <span class="tag ok">Equipped</span>' : ''}</div>
+      <div class="item-edit"></div>`;
+    if (!g.equipped) {
+      const b = document.createElement('button'); b.className = 'ghost gear-rm';
+      b.textContent = gearConfirm === g.instanceId ? 'Remove it?' : 'Remove';
+      b.onclick = () => { if (gearConfirm === g.instanceId) act('removegear', [g.instanceId], 'Removed'); else { gearConfirm = g.instanceId; renderItems(false); } };
+      r.querySelector('.item-edit').appendChild(b);
+    }
+    host.appendChild(r);
+  }
 }
 
 // ---------------------------------------------------------------- patch notes
@@ -472,7 +614,7 @@ async function renderSeasons() {
   const { d } = cur;
   const on = d.seasons.find(x => x.key === d.active) || d.seasons[0];
   $('season-now-title').textContent = on.title;
-  $('season-now-sub').textContent = (on.started ? `Level ${on.level} of ${on.levels}` : `Not started, ${on.levels} levels`) + ` · ${KIND_LABEL[on.kind] || on.kind}`;
+  $('season-now-sub').textContent = (on.started ? `Level ${on.level} of ${on.levels}` : `Not started, ${on.levels} levels`) + `, ${KIND_LABEL[on.kind] || on.kind}`;
   $('season-now-fill').style.width = (on.levels ? Math.round(100 * on.level / on.levels) : 0) + '%';
   const note = $('season-note'); note.className = 'action-note'; note.textContent = seasonNote || '';
 
@@ -490,7 +632,7 @@ async function renderSeasons() {
     const row = document.createElement('div'); row.className = 'season-row' + (x.key === on.key ? ' active' : '');
     const pct = x.levels ? Math.round(100 * x.level / x.levels) : 0;
     row.innerHTML = `
-      <div><div class="season-name">${esc(x.title)}</div><div class="season-kind"><b>${esc(KIND_LABEL[x.kind] || x.kind)}</b> · ${x.levels} levels</div></div>
+      <div><div class="season-name">${esc(x.title)}</div><div class="season-kind"><b>${esc(KIND_LABEL[x.kind] || x.kind)}</b>, ${x.levels} levels</div></div>
       <div class="season-lvl${x.started ? '' : ' none'}">${x.started ? `Level ${x.level} / ${x.levels}<div class="bar"><div class="bar-fill" style="width:${pct}%"></div></div>` : 'Not started'}</div>
       <div class="season-acts"><button class="ghost" data-doc>Rewards</button>${x.key === on.key ? '<span class="season-on">Playing</span>' : '<button class="ghost pick" data-pick>Play this</button>'}</div>`;
     row.querySelector('[data-doc]').addEventListener('click', () => showSeasonDoc(x));
@@ -525,7 +667,7 @@ async function primary() {
   const st = stateOf(v);
   if (st.key === 'busy') return;
   if (st.step === 'game') return startDownload(v);
-  if (st.step === 'setup') return runSetup(v, false);
+  if (st.step === 'setup') return runSetup(v, false, true);
   if (st.step === 'play') return play(v);
 }
 async function startDownload(v) {
@@ -540,18 +682,29 @@ async function startDownload(v) {
   busy[v.id] = null;
   dl[v.id] = { ...(dl[v.id] || {}), state: r.ok ? 'done' : 'failed', error: r.error };
   await refresh(v.id);
+  // straight on to set-up (no window, no questions): the Download button turns into Play by itself
+  const s = statuses[v.id];
+  if (r.ok && s && s.game === 'ok' && s.setup !== 'ready' && !busy[v.id]) await runSetup(v, false, true);
 }
-async function runSetup(v, uninstall) {
+const setupAuto = {};   // id -> true while set-up runs by itself (no window)
+async function runSetup(v, uninstall, auto) {
   if (uninstall) {
     const ok = await confirm('Put the game folder back?', `This takes this version's files out of the game folder again (they are kept in the launcher's backup folder, nothing is deleted). Your offline save stays. You can run Set up again later.`);
     if (!ok) return;
   }
+  setupAuto[v.id] = !!auto && !uninstall;
+  if (setupAuto[v.id]) logs[v.id] = [];
   busy[v.id] = 'setup'; delete dl[v.id]; renderShelf(); renderDetail();
-  const r = await L.setup(v.id, uninstall);
-  busy[v.id] = null;
+  const r = await L.setup(v.id, uninstall, !!auto && !uninstall);
+  busy[v.id] = null; setupAuto[v.id] = false;
   await refresh(v.id);
   const s = statuses[v.id];
-  if (!uninstall && s.setup !== 'ready') { const n = $('action-note'); n.textContent = 'Set-up did not finish. The window that opened said why; fix that and press Set up again.'; n.className = 'action-note err'; }
+  if (!uninstall && s.setup !== 'ready') {
+    const n = $('action-note');
+    n.textContent = auto ? `Set-up did not finish${r && r.error ? ': ' + r.error : '.'} More > "Run set-up again" shows every step in a window.`
+      : 'Set-up did not finish. The window that opened said why; fix that and press Set up again.';
+    n.className = 'action-note err';
+  }
 }
 async function play(v) {
   busy[v.id] = 'play'; logs[v.id] = []; renderShelf(); renderDetail();
@@ -573,9 +726,32 @@ function confirm(title, text) {
 // ---------------------------------------------------------------- wiring
 function wire() {
   $('btn-primary').addEventListener('click', primary);
+  $('btn-host').addEventListener('click', async () => {
+    const v = versions.find(x => x.id === selected); if (!v) return;
+    const hb = $('btn-host'), n = $('action-note');
+    hb.disabled = true; n.className = 'action-note';
+    n.textContent = 'Starting your game as a host. A window opens: keep it open while you play. Friends can join once you reach the main menu.';
+    const r = await L.socialHost(v.id);
+    if (r && r.ok === false) { n.textContent = r.error || 'Could not start hosting.'; n.className = 'action-note err'; hb.disabled = false; }
+  });
+  $('btn-online').addEventListener('click', async () => {
+    const v = versions.find(x => x.id === selected); if (!v) return;
+    const soc = window.dfSocial || {};
+    if (soc.search) { await L.socialCancelOnline(); return; }
+    const ob = $('btn-online'), n = $('action-note');
+    ob.disabled = true;
+    const r = await L.socialPlayOnline(v.id);
+    if (r && r.ok === false) { n.textContent = r.error || 'Could not go online.'; n.className = 'action-note err'; ob.disabled = false; }
+  });
+  $('opt-randoms').addEventListener('change', async (e) => {
+    const s = await L.socialSetAllowRandoms(!!e.target.checked);
+    if (s) { window.dfSocial = Object.assign(window.dfSocial || {}, { allowRandoms: s.allowRandoms }); renderHostButton(); }
+  });
   $('btn-stop').addEventListener('click', async () => {
     const v = versions.find(x => x.id === selected); if (!v) return;
-    const ok = await confirm('Stop everything?', 'This closes the local backend and the hidden game servers. If the game itself is still open, it is closed too (your progress is saved as you play).');
+    const hmOn = window.dfSocial && window.dfSocial.hostMode && window.dfSocial.hostMode.version === v.id;
+    const ok = hmOn ? await confirm('Close the game?', 'This closes your game. Host Mode keeps the server running (stop it on the Host Mode page).')
+      : await confirm('Stop everything?', 'This closes the local backend and the hidden game servers. If the game itself is still open, it is closed too (your progress is saved as you play).');
     if (!ok) return;
     $('btn-stop').disabled = true; await L.stop(v.id); $('btn-stop').disabled = false;
   });
@@ -594,6 +770,19 @@ function wire() {
     }
     if (act === 'setup') runSetup(v, false);
     if (act === 'uninstall') runSetup(v, true);
+    if (act === 'import' || act === 'importfix') {
+      const n = $('action-note');
+      if (act === 'import') {
+        const ok = await confirm('Bring your Dauntless Revived character?', 'A window opens. It finds your Dauntless Revived (1.4.4) save, shows what will come over (gear, Rams, cells, materials, quests) and asks before changing anything. Your Revived save is only read; your 1.6.2 save is backed up first. Make your 1.6.2 character in game first, and close Dauntless Revived.');
+        if (!ok) return;
+      }
+      n.className = 'action-note';
+      n.textContent = act === 'import' ? 'The import window is open: answer it there, then close it. Your character has the items the next time you play.' : 'The fix window is open: it only marks the tutorial and the first mission as done. Close it when it says it is finished.';
+      const r = await L.importRevived(v.id, act === 'importfix');
+      await refresh(v.id);
+      if (r && r.ok === false && r.error) { n.textContent = r.error; n.className = 'action-note err'; }
+      else { n.className = 'action-note'; n.textContent = act === 'import' ? 'Import window closed. If it said it imported, your character has the items the next time you play.' : 'Fix window closed. It said there whether anything was changed.'; }
+    }
     if (act === 'opengame') L.openGameFolder(v.id);
     if (act === 'openver') L.openVersionFolder(v.id);
     if (act === 'logs') { L.openLogs(v.id); const n = $('action-note'); n.textContent = 'Send the two zips in the upload folder (client_logs.zip, server_logs.zip). Your PC name and user name are blanked out in them.'; n.className = 'action-note'; }
@@ -624,7 +813,12 @@ function wire() {
     versions = await L.listVersions(); await refreshAll(); renderShelf(); renderDetail();
     const ok = results.filter(r => r.applied), bad = results.filter(r => !r.applied);
     let text = '';
-    if (ok.length) text += `Server files updated for ${ok.map(r => `${r.id} (${r.to})`).join(', ')}. Run Set up again on ${ok.length > 1 ? 'those versions' : 'that version'} to put the new files into the game folder.`;
+    if (ok.length) {
+      // Only versions whose game folder really needs the new files (new DLLs) need set-up; the rest are ready as they are
+      const need = ok.filter(r => statuses[r.id] && statuses[r.id].game === 'ok' && statuses[r.id].setup !== 'ready').map(r => r.id);
+      text += `Server files updated for ${ok.map(r => `${r.id} (${r.to})`).join(', ')}.`;
+      text += need.length ? ` Press Set up on ${need.join(', ')} to finish; it runs by itself.` : ' Nothing to do, just play.';
+    }
     if (bad.length) text += (text ? ' ' : '') + `Update failed for ${bad.map(r => r.id).join(', ')}: ${bad[0].error}.`;
     if (text) { $('banner-text').textContent = text; $('banner').hidden = false; }
   });
@@ -634,7 +828,7 @@ function wire() {
   const showLauncherUpdate = (u) => {
     if (!u) return; upUrl = u.url;
     $('banner-up-text').textContent = `Dauntless Forever ${u.version} is out` + (u.notes ? `: ${u.notes}` : '.') + ' Your games and saves stay where they are.';
-    $('banner-up').hidden = false; $('set-launcher').textContent = `· ${u.version} is available`;
+    $('banner-up').hidden = false; $('set-launcher').textContent = `(${u.version} is available)`;
   };
   L.onLauncherUpdate(showLauncherUpdate);
   L.newerLauncher().then(showLauncherUpdate).catch(() => {});

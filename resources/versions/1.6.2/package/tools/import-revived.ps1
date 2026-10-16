@@ -7,7 +7,7 @@
 #   2. finds your Revived save (undaunted.db), or lets you pick it,
 #   3. shows what will be imported, and asks before changing anything,
 #   4. imports (your 1.6.2 save is backed up first). Your Revived save is only read, never changed.
-param([string]$Source = '', [switch]$Force)
+param([string]$Source = '', [switch]$Force, [switch]$TutorialOnly)
 $ErrorActionPreference = 'Stop'
 function Say($t, $c = 'Gray') { Write-Host $t -ForegroundColor $c }
 function Fail($t) { Write-Host ''; Write-Host "STOPPED: $t" -ForegroundColor Yellow; Write-Host ''; exit 1 }
@@ -54,8 +54,20 @@ if (-not $Source) {
 }
 if ((Resolve-Path -LiteralPath $Source).Path -ieq (Resolve-Path -LiteralPath (Join-Path $pkg 'data\undaunted.db')).Path) { Fail 'That is your Dauntless Forever save, not the Revived one. Pick the Revived undaunted.db.' }
 
-# 3. What would be imported
 $js = Join-Path $PSScriptRoot 'import-revived.js'
+
+# Already imported, but the game still plays the tutorial: mark it done (nothing else is changed)
+if ($TutorialOnly) {
+    Say ''
+    Say 'Close Dauntless and the Dauntless Forever launcher first.' 'White'
+    & $node $js tutorial $Source --root $pkg
+    if ($LASTEXITCODE -ne 0) { exit 1 }
+    Say ''
+    Say 'Done. Press Play in the launcher, then look in Hunt > Missions.' 'Green'
+    exit 0
+}
+
+# 3. What would be imported
 Say ''
 & $node $js check $Source --root $pkg
 if ($LASTEXITCODE -ne 0) { exit 1 }

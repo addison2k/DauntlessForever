@@ -15,6 +15,8 @@
 //
 //   node tools\import-revived.js check  <path to Revived undaunted.db> [--user <name>] [--root <1.6.2 folder>] [--json]
 //   node tools\import-revived.js import <path to Revived undaunted.db> [--user <name>] [--force] [--json]
+//   node tools\import-revived.js tutorial <path to Revived undaunted.db>   (only marks the tutorial as finished, if it
+//       was finished in Revived; for players who imported with an older version of this tool and still get the tutorial)
 //
 // "import" refuses while the 1.6.2 backend runs (port 61000), backs the save up first (backup\import-revived\),
 // refuses to import the same Revived character twice unless --force, and writes data\import-revived-report.txt.
@@ -34,6 +36,8 @@ const IDS_FILE = path.join(__dirname, "catalog162-ids.txt");
 const MARKER = path.join(DATA, "import-revived.json");
 const REPORT = path.join(DATA, "import-revived-report.txt");
 const MAX = 99999999;
+// The 1.6.2 mission line (Hunt > Missions) with nothing started, from a 1.6.2 save; used when a character has none.
+const CR20_BLANK = "{\"ID\":\"CR20_PJM_Quests\",\"EC1DAE3747C32774109D35BE0A45AC6B\":{\"Status\":0},\"92FF10A74113516A0E1BE98CF4FE17C2\":{\"Status\":0,\"BB60F69042F1165642414C81ADFC0E5C\":{\"Status\":0,\"CurrentAmount\":0}},\"59B10B8243AB597F733BD490FCD964E1\":{\"Status\":0,\"D6D8B073491028C7ED5790AE547B0C61\":{\"Status\":0,\"CurrentAmount\":0}},\"2C1D0E3E4FEFB14950A7CAB813749F80\":{\"Status\":0,\"0460F7A746A28529D46510A34B545915\":{\"Status\":0,\"CurrentAmount\":0,\"CurrentHitsAmount\":0}},\"B2294BD2453A6259AB4F4CAC7727FE89\":{\"Status\":0,\"860162EA4609C6AFC5FD3596BBA4F19F\":{\"Status\":0,\"CurrentAmount\":0}},\"8ED0B3DE4576F3948DA60E991A38F7A4\":{\"Status\":0,\"55234271482C293A940089B75D837754\":{\"Status\":0,\"CurrentAmount\":0}},\"D5B764F94F4632EBAFD20A875BB1D62B\":{\"Status\":0,\"933312C54B8A5827D812C99A19D667B4\":{\"Status\":0,\"CurrentAmount\":0}},\"1DDC8E2443858B2EAFC5098018557DF7\":{\"Status\":0,\"092D87AC43F68889F76E82B6909D8B21\":{\"Status\":0,\"CurrentAmount\":0}},\"DEA71EBF4B04EB1C8E1A4F9F1C920C25\":{\"Status\":0,\"9CC15CA6448BBEFFA90F878176D4A2D9\":{\"Status\":0,\"CurrentAmount\":0}},\"BE36FD95471366763949FAA24E2E4AB7\":{\"Status\":0,\"D627908C4A4926AD1EB10AA1D2770DAC\":{\"Status\":0,\"CurrentAmount\":0}},\"43F90C654606366BFE42E4B97EEC753C\":{\"Status\":0,\"257638E9477A827FCC37E382D7040D81\":{\"Status\":0,\"CurrentAmount\":0}},\"BE2803BD42D3AE57EB5EA6834D630DCF\":{\"Status\":0,\"2132F37A45543C7E991FBB84A4732420\":{\"Status\":0,\"CurrentAmount\":0}},\"48659E0E4C0512BC97B6EFB990CF2498\":{\"Status\":0,\"E83CE102487CF83C184A038E9AF2208C\":{\"Status\":0,\"CurrentAmount\":0,\"84789FB8482CC9B95A5E9D9B088FEB83\":{\"Status\":0,\"CurrentAmount\":0},\"048D6DB246BD2394EDBF1F8C6DE9D2CB\":{\"Status\":0,\"CurrentAmount\":0}}},\"3E578BB64D5B4485D109D9B1A8D696F7\":{\"Status\":0,\"A3AD48FF4D827FCCF42D54910EF6578A\":{\"Status\":0,\"CurrentAmount\":0}},\"F36E60BE44D86C6212D51683B34FD608\":{\"Status\":0,\"C1181F5F44BC1FD4E8387FB34E8196EC\":{\"Status\":0,\"CurrentAmount\":0}},\"0DE0F11548C8F306531323B27A0A0105\":{\"Status\":0,\"9E74A39C42ACAA64E400678FC9B18C74\":{\"Status\":0,\"CurrentAmount\":0}},\"C14153B74793C63A7E9232B3AAE127D5\":{\"Status\":0,\"1E1FF53947E8D59BE8DB1C9E5781435D\":{\"Status\":0,\"CurrentAmount\":0,\"614159134FB07F1132BBC6B31ACFFD9E\":{\"Status\":0,\"CurrentAmount\":0},\"16002FD640B7F8DBCF05ED9A80AA594B\":{\"Status\":0,\"CurrentAmount\":0},\"0DED1F5C4A035D56C8EE20BD46146E0A\":{\"Status\":0,\"CurrentAmount\":0}}},\"7CBFF50242B6FBBA5A07FC8B7A7A246E\":{\"Status\":0,\"7BA7E357478E3F0A85E353B369242115\":{\"Status\":0,\"CurrentAmount\":0}},\"89C1AD2146B362641DA6F281D8447FE8\":{\"Status\":0,\"2AD612C442E5FBDC9F3F4BB547CB3BEE\":{\"Status\":0,\"CurrentAmount\":0,\"DamageDealtToBehemothsThisHunt\":0}},\"834D348247B2C5AB14C2668DD4D5BBDC\":{\"Status\":0,\"BA49CE1B4E824E864DA2359128F1FB8F\":{\"Status\":0,\"CurrentAmount\":0},\"A04DA7254483C7FDB205E6AAD162F9C0\":{\"Status\":0,\"CurrentAmount\":0,\"DamageDealtToBehemothsThisHunt\":0}},\"FA42AFE7495BDD41D6B7A991889423AB\":{\"Status\":0,\"FC6C4D734EC1C1BCA3949087519E71E6\":{\"Status\":0,\"CurrentAmount\":0}},\"5C6AD23446C8042C0F1A05930B03537A\":{\"Status\":0,\"4876F00741F7AA4F3DC7079EE1317ADF\":{\"Status\":0,\"CurrentAmount\":0,\"DamageDealtToBehemothsThisHunt\":0}},\"E4C90B9244E8B0C82C2671AEDFCEE68B\":{\"Status\":0,\"33CECB7A43DBF80BFBB1BBADFDB14906\":{\"Status\":0,\"CurrentAmount\":0,\"DamageDealtToBehemothsThisHunt\":0}},\"2FCEEF4045C79A0558E0708ABEECE629\":{\"Status\":0,\"92DE48F142988056441F0181C7FC0771\":{\"Status\":0,\"CurrentAmount\":0}},\"E2D289B845368B5E66C7BAAEFD35D4C6\":{\"Status\":0,\"CCCDC7724F92CA16AB501F98E9FA07AA\":{\"Status\":0,\"CurrentAmount\":0}},\"01AC9C0A45A36BD513CDE984B1171552\":{\"Status\":0},\"937651B047C627CEDC4C3E80EC2F3D21\":{\"Status\":0,\"1EC8778244FEAAEBD6DE9E88A8F08520\":{\"Status\":0,\"CurrentAmount\":0,\"CurrentHitsAmount\":0}},\"988C05594F7BE3A23E5CE7B875128993\":{\"Status\":0,\"E366A890421990909B50398554DF7E18\":{\"Status\":0,\"CurrentAmount\":0,\"CurrentHitsAmount\":0},\"00A72AE64D4A551DF878EDB3A2487626\":{\"Status\":0,\"CurrentAmount\":0,\"CurrentHitsAmount\":0},\"202878764E6E689F6D6FCC8DF5C1E224\":{\"Status\":0,\"CurrentAmount\":0,\"CurrentHitsAmount\":0}},\"CDFA06D04F094EE8DB1BB985CC92938A\":{\"Status\":0,\"C2E07B51403100F319698E9404A72F43\":{\"Status\":0,\"CurrentAmount\":0},\"5BD3B24A46320DA6F1D41998B63B78F1\":{\"Status\":0,\"CurrentAmount\":0}},\"E8297BAD4716CE5827A9DA8F052A274C\":{\"Status\":0,\"8EFC335E4283030E0278419BC5C2ADAE\":{\"Status\":0,\"CurrentAmount\":0,\"1AE5E9AC4ABD2FDF82A86CA87F3DF62C\":{\"Status\":0,\"CurrentAmount\":0},\"D49777F44F8C6A51624CE086C371C0B9\":{\"Status\":0,\"CurrentAmount\":0},\"71A1CDFD45E100B58ECEE089A01A5B55\":{\"Status\":0,\"CurrentAmount\":0},\"57637D9B4D2D6D231655D898AC5956E7\":{\"Status\":0,\"CurrentAmount\":0}}},\"0A6E8C8548EE348CCB4A4498EF8F2026\":{\"Status\":0,\"F2A60EAB45DB8F91F8F262A5FE09B13E\":{\"Status\":0,\"CurrentAmount\":0}},\"843501784396841F8F2304AC89F3E49D\":{\"Status\":0,\"C2812A7C450B88F82B6F7C935DE4AC03\":{\"Status\":0,\"CurrentAmount\":0}}}";
 
 const args = process.argv.slice(2);
 const cmd = args[0], src = args[1];
@@ -65,7 +69,7 @@ const parse = (s, d) => { try { const v = JSON.parse(s); return v == null ? d : 
 const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && Number.isFinite(Number(d.CurrentLevel)) ? Number(d.CurrentLevel) : (it && it.itemData ? 0 : -1); };
 
 (async () => {
-    if (cmd !== "check" && cmd !== "import") fail("Use: import-revived.js check|import <path to undaunted.db>");
+    if (!["check", "import", "tutorial"].includes(cmd)) fail("Use: import-revived.js check|import|tutorial <path to undaunted.db>");
     if (!src || !fs.existsSync(src)) fail("That Revived save file was not found: " + (src || "(none given)"));
     if (!fs.existsSync(TARGET)) fail("No 1.6.2 save yet. Press Play in Dauntless Forever once and make your character first.");
     let Database;
@@ -161,7 +165,9 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
             const sv = parse(v, null); if (!sv || typeof sv !== "object") continue;
             if (!(k in tData)) { tData[k] = v; quests.added.push(k.slice(6)); continue; }
             const tv = parse(tData[k], null); if (!tv || typeof tv !== "object") continue;
-            const merged = JSON.stringify(mergeNode(tv, sv));
+            const m = mergeNode(tv, sv);
+            if (!("Status" in tv)) delete m.Status;   // 1.6.2 series have no top-level Status; do not add 1.4.4's
+            const merged = JSON.stringify(m);
             if (merged !== tData[k]) { tData[k] = merged; quests.merged.push(k.slice(6)); }
         }
         // Tutorial and one-time flags (CharacterFlagData {"Flags":[{FlagKey, FlagValue}]}): add the ones 1.6.2 lacks
@@ -172,7 +178,52 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
             if (quests.flags) tData.CharacterFlagData = JSON.stringify(tf);
         }
     }
-    const questsChanged = quests.added.length + quests.merged.length + quests.flags > 0;
+    // ---- tutorial: 1.6.2 plays the opening tutorial until the character has HasFinishedTutorial "true" and
+    // PlayerAccountProgressStep "FinishedSecondHunt". A character made just for the import often quit before that.
+    const tut = {};
+    if (String(sData.HasFinishedTutorial).toLowerCase() === "true" && String(tData.HasFinishedTutorial).toLowerCase() !== "true") tut.HasFinishedTutorial = "true";
+    if (sData.PlayerAccountProgressStep === "FinishedSecondHunt" && tData.PlayerAccountProgressStep !== "FinishedSecondHunt") tut.PlayerAccountProgressStep = "FinishedSecondHunt";
+    {   // login flags such as WatchedNewRamsgateCinematic
+        const sl = parse(sData.LoginFlagData, null), tl = parse(tData.LoginFlagData, { Flags: [] });
+        if (sl && Array.isArray(sl.Flags) && tl && Array.isArray(tl.Flags)) {
+            const have = new Set(tl.Flags.map((f) => f && f.FlagKey)); let n = 0;
+            for (const f of sl.Flags) if (f && f.FlagKey && !have.has(f.FlagKey)) { tl.Flags.push(f); n++; }
+            if (n) tut.LoginFlagData = JSON.stringify(tl);
+        }
+    }
+    // 1.6.2 missions (Hunt > Missions) are the cr20_pjm_quests line. Its first mission is finished by the tutorial;
+    // when the tutorial is skipped it stays at Status 2 with nothing active, so the Missions list is empty.
+    // Finish it and make the second mission active, as the game does at the end of the tutorial.
+    // Also remove a top-level Status that an earlier version of this tool copied into 1.6.2's own series.
+    const fixMissions = (data) => {
+        const out = {};
+        const done = String((tut.HasFinishedTutorial || data.HasFinishedTutorial)).toLowerCase() === "true";
+        let m = parse(data.SERIE_cr20_pjm_quests, null);
+        // A character that quit early in the tutorial has no mission line at all: start it from a blank copy
+        if (done && !m) { m = JSON.parse(CR20_BLANK); out.SERIE_cr20_pjm_quests = JSON.stringify(m); }
+        const Q1 = "EC1DAE3747C32774109D35BE0A45AC6B", Q2 = "92FF10A74113516A0E1BE98CF4FE17C2";
+        // Also when the first mission is already done (the game may finish it on login) but no mission is active.
+        const anyActive = m && Object.values(m).some((q) => q && typeof q === "object" && (Number(q.Status) === 1 || Number(q.Status) === 2));
+        const q2Idle = m && m[Q2] && typeof m[Q2] === "object" && !(Number(m[Q2].Status) > 0);
+        if (done && m && m[Q1] && typeof m[Q1] === "object" && (Number(m[Q1].Status) < 3 || (q2Idle && !anyActive))) {
+            m[Q1].Status = 3;
+            if (q2Idle) {
+                m[Q2].Status = 1;
+                for (const [k, v] of Object.entries(m[Q2])) if (v && typeof v === "object" && !(Number(v.Status) > 0)) v.Status = 1;
+            }
+            delete m.Status;
+            out.SERIE_cr20_pjm_quests = JSON.stringify(m);
+        }
+        for (const k of ["SERIE_cr20_pjm_quests", "SERIE_season_09b", "SERIE_archon_tutorial_test"]) {
+            const v = parse(out[k] || data[k], null);
+            if (v && typeof v === "object" && "Status" in v) { delete v.Status; out[k] = JSON.stringify(v); }
+        }
+        return out;
+    };
+    Object.assign(tut, fixMissions({ ...tData }));
+    const tutChanged = Object.keys(tut).length > 0;
+    Object.assign(tData, tut);
+    const questsChanged = quests.added.length + quests.merged.length + quests.flags > 0 || tutChanged;
     const srcUser = (users.find((u) => u.userId === S.userId) || {}).name || "";
     const summary = {
         ok: true, mode: cmd,
@@ -180,7 +231,7 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
         to: { character: T.name },
         gearNew: plan.gearNew.length, gearUpgraded: plan.gearUpgraded.length, gearKept: plan.gearKept.length,
         stacksChanged: plan.stacks.length, skipped: [...new Set(plan.skipped)],
-        questsAdded: quests.added, questsMerged: quests.merged, flagsAdded: quests.flags,
+        tutorialMarked: tutChanged, questsAdded: quests.added, questsMerged: quests.merged, flagsAdded: quests.flags,
         rams: (() => { const r = plan.stacks.find((s) => s.id === "CURRENCY_NOTES"); return r ? r.after - r.before : 0; })(),
     };
     const lines = [
@@ -196,11 +247,43 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
         `  Quest lines added:   ${quests.added.length}${quests.added.length ? "  (" + quests.added.join(", ") + ")" : ""}`,
         `  Quest lines merged:  ${quests.merged.length}${quests.merged.length ? "  (" + quests.merged.join(", ") + ")" : ""}  (experimental)`,
         `  Tutorial flags:      +${quests.flags}`,
+        `  First mission:       ${tut.SERIE_cr20_pjm_quests ? "fixed (finished, next mission active)" : "ok"}`,
+        `  Tutorial finished:   ${tut.HasFinishedTutorial || tut.PlayerAccountProgressStep ? "yes (marked as done, as in Revived)" : String(tData.HasFinishedTutorial).toLowerCase() === "true" ? "already done" : "no (not finished in Revived either)"}`,
         ``,
         `Not carried over yet: loadouts (equip your gear again in game), mastery ranks, Hunt Pass and escalation.`,
     ];
 
     if (cmd === "check") { tdb.close(); done(summary, lines.join("\n")); }
+
+    // ---- tutorial only: mark the tutorial done, nothing else (safe to run after an earlier import)
+    // one line for support: where the 1.6.2 mission line stands
+    const missionLine = (data) => {
+        const m = parse(data.SERIE_cr20_pjm_quests, null);
+        const others = `Other quest lines: ${Object.keys(data).filter((k) => k.startsWith("SERIE_")).map((k) => k.slice(6)).join(", ") || "-"}`;
+        if (!m) return `Missions: no mission line in this save yet. Tutorial: ${data.HasFinishedTutorial || "-"} / ${data.PlayerAccountProgressStep || "-"}. ` + others;
+        const q = Object.entries(m).filter(([, v]) => v && typeof v === "object");
+        const n = (st) => q.filter(([, v]) => Number(v.Status) === st).length;
+        return `Missions: ${n(3)} done, ${n(1)} active, ${n(2)} waiting, ${n(0)} not started (of ${q.length}). Tutorial: ${data.HasFinishedTutorial || "-"} / ${data.PlayerAccountProgressStep || "-"}. ` + others;
+    };
+    if (cmd === "tutorial") {
+        // recompute against the save as it is (not the in-memory quest merge above)
+        const only = parse(T.data, {});
+        for (const k of ["HasFinishedTutorial", "PlayerAccountProgressStep", "LoginFlagData"]) if (k in tut) only[k] = tut[k];
+        const fx = fixMissions(only); Object.assign(only, fx);
+        const changedKeys = Object.keys(only).filter((k) => only[k] !== parse(T.data, {})[k]);
+        if (!changedKeys.length) { tdb.close(); done({ ok: true, mode: cmd, changed: false }, String(tData.HasFinishedTutorial).toLowerCase() === "true" ? "Your 1.6.2 character already has the tutorial and first mission done. Nothing changed.\n" + missionLine(only) : "The tutorial was not finished in Revived either, so nothing was changed."); }
+        if (await backendUp()) { tdb.close(); fail("Dauntless is still running (or the Dauntless Revived server is). Close the game, the launcher's server window and Revived, then try again."); }
+        const bd = path.join(ROOT, "backup", "import-revived"); fs.mkdirSync(bd, { recursive: true });
+        const st = new Date().toISOString().replace(/[-:]/g, "").replace("T", "-").slice(0, 15);
+        tdb.close();
+        fs.copyFileSync(TARGET, path.join(bd, `undaunted.db.${st}`));
+        const w = new Database(TARGET, { fileMustExist: true });
+        w.prepare("UPDATE characters SET data = ?, updateVersion = ?, lastModifiedDate = ? WHERE characterId = ?")
+            .run(JSON.stringify(only), (Number(T.updateVersion) || 0) + 1, new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }), T.characterId);
+        w.close();
+        done({ ok: true, mode: cmd, changed: true, backup: `backup\\import-revived\\undaunted.db.${st}` },
+            `Fixed for ${T.name}: ${[only.HasFinishedTutorial !== parse(T.data, {}).HasFinishedTutorial ? "tutorial marked as done" : "", fx.SERIE_cr20_pjm_quests ? "first mission finished and the next one made active" : "", changedKeys.some((k) => k.startsWith("SERIE_")) && !fx.SERIE_cr20_pjm_quests ? "quest lines tidied" : ""].filter(Boolean).join(", ") || "tutorial settings"}. A backup of your save is in backup\\import-revived\\undaunted.db.${st}\n` + missionLine(only));
+    }
 
     // ---- import
     if (await backendUp()) { tdb.close(); fail("Dauntless is still running (or the Dauntless Revived server is). Close the game, the launcher's server window and Revived, then try again."); }

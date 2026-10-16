@@ -10,35 +10,38 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
 <title>Dauntless Forever</title>
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="friends.css">
+<link rel="stylesheet" href="hostmode.css">
 </head>
 <body>
 <div class="app">
 <aside class="side">
   <div class="side-brand">
     <img class="mark" src="mark.png" alt="" width="40" height="40">
-    <div><div class="brand-name">Dauntless Forever</div><div class="brand-sub">every build, offline</div></div>
+    <div><div class="brand-name">Dauntless Forever</div><div class="brand-sub" id="brand-sub">solo or with friends</div></div>
   </div>
   <nav class="nav" id="nav">
-    <button class="nav-item selected" data-page="play"><span class="nav-ico">▶</span>Play</button>
-    <button class="nav-item" data-page="seasons"><span class="nav-ico">✦</span>Seasons</button>
-    <button class="nav-item" data-page="events"><span class="nav-ico">◆</span>Events</button>
+    <button class="nav-item selected" data-page="play"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M4.5 3v10l8-5z" fill="currentColor"/></svg></span>Play</button>
+    <button class="nav-item" data-page="host"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="2.5" y="2.5" width="11" height="4.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="2.5" y="9" width="11" height="4.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="5.2" cy="4.75" r=".9" fill="currentColor"/><circle cx="5.2" cy="11.25" r=".9" fill="currentColor"/></svg></span>Host Mode<span class="nav-dot" id="nav-host-dot" hidden></span></button>
+    <button class="nav-item" data-page="seasons"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 1.5 9.4 6.6 14.5 8 9.4 9.4 8 14.5 6.6 9.4 1.5 8 6.6 6.6z" fill="currentColor"/></svg></span>Seasons</button>
+    <button class="nav-item" data-page="events"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 2.5 13.5 8 8 13.5 2.5 8z" fill="currentColor"/></svg></span>Events</button>
     <button class="nav-item" data-page="rules"><span class="nav-ico ic-rules" aria-hidden="true"></span>Game Rules</button>
     <button class="nav-item" data-page="items"><span class="nav-ico ic-items" aria-hidden="true"></span>Inventory</button>
-    <button class="nav-item" data-page="mods"><span class="nav-ico">⬡</span>Mods</button>
-    <button class="nav-item" data-page="patches"><span class="nav-ico">≡</span>Patch notes</button>
-    <button class="nav-item" data-page="settings"><span class="nav-ico">⚙</span>Settings</button>
-    <button class="nav-item" data-page="credits"><span class="nav-ico">♥</span>Credits</button>
+    <button class="nav-item" data-page="mods"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 1.8 13.4 4.9v6.2L8 14.2 2.6 11.1V4.9z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></span>Mods</button>
+    <button class="nav-item" data-page="patches"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></span>Patch notes</button>
+    <button class="nav-item" data-page="settings"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M6.7 1.5h2.6l.4 1.8 1.2.7 1.8-.6 1.3 2.2-1.4 1.3v1.4l1.4 1.3-1.3 2.2-1.8-.6-1.2.7-.4 1.8H6.7l-.4-1.8-1.2-.7-1.8.6-1.3-2.2 1.4-1.3V7.6L2 6.3l1.3-2.2 1.8.6 1.2-.7z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="8" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></span>Settings</button>
+    <button class="nav-item" data-page="credits"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 13.6 2.6 8.4A3.2 3.2 0 0 1 8 4.2a3.2 3.2 0 0 1 5.4 4.2z" fill="currentColor"/></svg></span>Credits</button>
     <button class="nav-item" data-page="help"><span class="nav-ico">?</span>Help</button>
   </nav>
   <div class="side-foot">
-    <a class="side-link discord" id="lnk-discord" data-url="" hidden><span class="nav-ico">◉</span><span id="lnk-discord-text">Join the Discord</span></a>
+    <a class="side-link discord" id="lnk-discord" data-url="" hidden><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="8" cy="8" r="2.2" fill="currentColor"/></svg></span><span id="lnk-discord-text">Join the Discord</span></a>
     <div class="side-rule"></div>
     <a class="side-link ask" id="lnk-ask" data-url="" hidden>
-      <span class="ask-ico" aria-hidden="true">?</span>
-      <span class="ask-text"><span class="ask-title" id="lnk-ask-title">Questions?</span><span class="ask-sub">Ask me on Discord</span></span>
+      <span class="ask-ico dc" aria-hidden="true"></span>
+      <span class="ask-text"><span class="ask-title" id="lnk-ask-title">Join the Discord</span><span class="ask-sub">Questions, groups, news</span></span>
     </a>
-    <a class="side-link" id="lnk-patreon" data-url="" hidden><span class="nav-ico">◆</span>Support on Patreon</a>
-    <div class="side-meta"><span id="side-ver">Dauntless Forever</span> · <a href="#" id="lnk-source" data-url="https://github.com/addison2k/DauntlessForever">source</a></div>
+    <a class="side-link" id="lnk-patreon" data-url="" hidden><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 2.5 13.5 8 8 13.5 2.5 8z" fill="currentColor"/></svg></span>Support on Patreon</a>
+    <div class="side-meta"><span id="side-ver">Dauntless Forever</span> - <a href="#" id="lnk-source" data-url="https://github.com/addison2k/DauntlessForever">source</a></div>
   </div>
 </aside>
 
@@ -60,7 +63,6 @@
       </div>
       <p class="meta" id="d-meta"></p>
       <p class="blurb" id="d-blurb"></p>
-      <div class="warn-box" id="d-warn" hidden></div>
     </div>
 
     <ol class="path" id="path">
@@ -70,18 +72,27 @@
     </ol>
 
     <div class="action-row">
-      <button class="primary" id="btn-primary">Play</button>
+      <div class="action-main">
+        <button class="primary" id="btn-primary">Play</button>
+        <button class="host-btn online-btn" id="btn-online" hidden><span class="ic-globe host-ico" aria-hidden="true"></span><span class="lbl">Play online</span></button>
+        <button class="host-btn" id="btn-host" hidden><span class="ic-friends host-ico" aria-hidden="true"></span>Host with friends</button>
+      </div>
       <div class="action-side">
         <button class="ghost" id="btn-stop" hidden>Stop everything</button>
         <button class="ghost" id="btn-cancel" hidden>Cancel download</button>
         <button class="ghost" id="btn-more">More</button>
       </div>
+      <label class="host-opt" id="host-opt" hidden><input type="checkbox" id="opt-randoms"><span><span class="opt-name">Allow randoms</span><span class="opt-sub">Play online players can join you</span></span></label>
+
     </div>
+    <div class="warn-box" id="d-warn" hidden></div>
     <p class="action-note" id="action-note"></p>
 
     <div class="menu" id="more-menu" hidden>
       <button data-act="pick">Use a game folder I already have</button>
       <button data-act="setup">Run set-up again</button>
+      <button data-act="import" hidden>Bring my Dauntless Revived (1.4.4) character</button>
+      <button data-act="importfix" hidden>Fix the tutorial after a Revived import</button>
       <button data-act="opengame">Open the game folder</button>
       <button data-act="openver">Open this version's launcher folder (save, logs)</button>
       <button data-act="logs">Get the logs for asking for help</button>
@@ -108,7 +119,70 @@
   </div>
 </section>
 
+<!-- ============================================================ Host Mode -->
+<section class="page" id="page-host" hidden>
+  <h1 class="page-title">Host Mode</h1>
+  <p class="lead">Keep a server running on this PC: a Ramsgate that players join from their launcher, party up in and start hunts from. No game window opens here, and you can still press Play to join it yourself.</p>
+  <div id="hm-none" class="card" hidden>
+    <div class="card-head"><h2>Host Mode needs a version that can host online</h2><span class="pill">Not yet</span></div>
+    <p id="hm-none-text">Download 1.6.2 on the Play page and let set-up finish. Host Mode comes with its server files (they update by themselves when the launcher opens).</p>
+  </div>
+  <div id="hm-body" hidden>
+    <div class="hm-top">
+      <div class="hm-status">
+        <span class="hm-dot" id="hm-dot" aria-hidden="true"></span>
+        <div class="hm-status-text"><div class="hm-state" id="hm-state">Off</div><div class="hm-sub" id="hm-sub"></div></div>
+      </div>
+      <div class="hm-acts">
+        <label class="hm-ver" id="hm-ver-wrap" hidden>Version <select id="hm-version"></select></label>
+        <button class="primary-sm" id="hm-start">Start Host Mode</button>
+        <button class="ghost" id="hm-stop-later" hidden title="Players in your server get a line in chat and 60 seconds; their characters are saved home">Stop in 60 s</button>
+        <button class="ghost" id="hm-stop" hidden>Stop now</button>
+      </div>
+    </div>
+    <p class="action-note" id="hm-note" aria-live="polite"></p>
+    <div class="hm-stats" id="hm-stats">
+      <div class="hm-tile"><div class="hm-tile-k">Players</div><div class="hm-tile-v" id="hm-t-players">-</div><div class="hm-tile-s" id="hm-t-players-s"></div></div>
+      <div class="hm-tile"><div class="hm-tile-k">Hunts running</div><div class="hm-tile-v" id="hm-t-hunts">-</div><div class="hm-tile-s" id="hm-t-hunts-s"></div></div>
+      <div class="hm-tile"><div class="hm-tile-k">Up for</div><div class="hm-tile-v" id="hm-t-up">-</div><div class="hm-tile-s" id="hm-t-up-s"></div></div>
+      <div class="hm-tile"><div class="hm-tile-k">Relay</div><div class="hm-tile-v" id="hm-t-relay">-</div><div class="hm-tile-s" id="hm-t-relay-s"></div></div>
+      <div class="hm-tile"><div class="hm-tile-k">This PC</div><div class="hm-tile-v" id="hm-t-pc">-</div><div class="hm-tile-s" id="hm-t-pc-s"></div></div>
+      <div class="hm-tile"><div class="hm-tile-k">Last backup</div><div class="hm-tile-v" id="hm-t-backup">-</div><div class="hm-tile-s" id="hm-t-backup-s"></div></div>
+    </div>
+    <div class="hm-cols">
+      <div class="hm-col">
+        <h2 class="list-head">In your server</h2>
+        <div class="season-list hm-list" id="hm-players"></div>
+        <h2 class="list-head">Ban list</h2>
+        <div class="season-list hm-list" id="hm-bans"></div>
+        <p class="small">A ban stops someone joining again, on a public server too. Someone already in stays until they leave.</p>
+      </div>
+      <div class="hm-col">
+        <h2 class="list-head">Server</h2>
+        <div class="settings">
+          <div class="setting hm-setting"><div><div class="setting-name">Who can join</div><div class="setting-sub" id="hm-mode-sub"></div></div>
+            <div class="hm-seg" role="radiogroup" aria-label="Who can join"><button class="hm-seg-b" id="hm-mode-private" role="radio">Private</button><button class="hm-seg-b" id="hm-mode-public" role="radio">Public</button></div></div>
+          <div class="setting hm-setting"><div><div class="setting-name">Server name</div><div class="setting-sub">Shown to players in their Friends panel and in Play online</div></div><input class="fr-input hm-input" id="hm-name" maxlength="32" spellcheck="false" autocomplete="off"></div>
+          <div class="setting hm-setting"><div><div class="setting-name">Welcome line</div><div class="setting-sub">Said in game chat when someone arrives (optional)</div></div><input class="fr-input hm-input" id="hm-welcome" maxlength="140" spellcheck="false" autocomplete="off" placeholder="Be nice, have fun"></div>
+          <div class="setting hm-setting"><div><div class="setting-name">Player limit</div><div class="setting-sub">Players in the server at once, you not counted. Hunts take 4 each; this PC runs up to 6 hunts at a time.</div></div><select class="hm-select" id="hm-limit"></select></div>
+        </div>
+      </div>
+    </div>
+    <h2 class="list-head">This PC</h2>
+    <div class="settings">
+      <label class="setting hm-check"><div><div class="setting-name">Start when the launcher opens</div><div class="setting-sub">Host Mode starts by itself every time</div></div><input type="checkbox" id="hm-autostart"></label>
+      <label class="setting hm-check" id="hm-windows-row"><div><div class="setting-name">Start with Windows</div><div class="setting-sub" id="hm-windows-sub">The launcher opens minimized when you sign in to Windows and starts Host Mode</div></div><input type="checkbox" id="hm-windows"></label>
+      <label class="setting hm-check"><div><div class="setting-name">Restart by itself</div><div class="setting-sub">If the server or the connection stops, start it again (after a short pause)</div></div><input type="checkbox" id="hm-autorestart"></label>
+      <label class="setting hm-check"><div><div class="setting-name">Keep this PC awake</div><div class="setting-sub">Windows does not go to sleep while Host Mode runs (the screen still turns off)</div></div><input type="checkbox" id="hm-awake"></label>
+      <div class="setting hm-check"><label class="hm-check-l" for="hm-daily"><div class="setting-name">Daily restart</div><div class="setting-sub">A fresh start once a day: players get a line in chat and 60 seconds first, and their characters are saved home</div></label><span class="hm-inline"><input type="time" class="hm-time" id="hm-daily-at" step="60"><input type="checkbox" id="hm-daily"></span></div>
+      <div class="setting hm-check"><label class="hm-check-l" for="hm-backup"><div class="setting-name">Daily save backup</div><div class="setting-sub">A copy of the server's save once a day, newest <select class="hm-select hm-keep" id="hm-keep"></select> kept</div></label><span class="hm-inline"><button class="ghost hm-small" id="hm-backup-now">Back up now</button><button class="ghost hm-small" id="hm-backup-open">Open</button><input type="checkbox" id="hm-backup"></span></div>
+    </div>
+    <details class="hm-log-box" id="hm-log-box"><summary>Host Mode log</summary><pre class="hm-log" id="hm-log"></pre></details>
+  </div>
+</section>
+
 <!-- ============================================================ Seasons & mods -->
+<!-- ============================================================ Friends (friends.js / friends.css) -->
 <section class="page" id="page-seasons" hidden>
   <h1 class="page-title">Seasons</h1>
   <p class="lead">Pick the Hunt Pass you want to play on. Every season keeps its own level, so you can switch and come back to where you were.</p>
@@ -187,6 +261,13 @@
       <div class="item-acts"><button class="ghost" id="item-undo" disabled>Undo</button><button class="primary-sm" id="item-save" disabled>Save changes</button></div>
     </div>
     <div id="item-groups"></div>
+    <div id="item-gear" hidden>
+      <h2 class="list-head">Gear</h2>
+      <p class="small">Weapons, armour, lanterns, parts, accessories, banners and flares. New gear starts at level 0. Gear you have equipped can't be removed; unequip it in game first.</p>
+      <div class="item-add-row"><input id="gear-add" list="gear-options" placeholder="Type a name or ID, e.g. Skarn's Vengeance" spellcheck="false" autocomplete="off"><button class="ghost" id="gear-add-btn">Add gear</button></div>
+      <datalist id="gear-options"></datalist>
+      <div class="season-list gear-list" id="gear-list"></div>
+    </div>
     <details class="item-more" id="item-more">
       <summary>Everything else in your save <span class="n" id="item-more-n"></span></summary>
       <div class="season-list" id="item-other"></div>
@@ -231,11 +312,13 @@
 <section class="page" id="page-settings" hidden>
   <h1 class="page-title">Settings</h1>
   <div class="settings">
+    <div class="setting"><div><div class="setting-name">Player name</div><div class="setting-sub"><span id="set-name"></span>, used in every version and on the Friends page</div></div><button class="ghost" id="set-name-change">Change</button></div>
     <div class="setting"><div><div class="setting-name">Downloaded games go to</div><div class="setting-sub" id="set-games"></div></div><button class="ghost" id="set-games-pick">Change folder</button></div>
     <div class="setting"><div><div class="setting-name">Launcher data (saves, settings, logs)</div><div class="setting-sub" id="set-data"></div></div><button class="ghost" id="set-data-open">Open folder</button></div>
     <div class="setting"><div><div class="setting-name">Node.js</div><div class="setting-sub" id="set-node"></div></div></div>
     <div class="setting"><div><div class="setting-name">Download tool</div><div class="setting-sub" id="set-tool"></div></div></div>
     <div class="setting"><div><div class="setting-name">Server files</div><div class="setting-sub" id="set-pkgs"></div></div><button class="ghost" id="set-pkgs-check">Check for updates</button></div>
+    <div class="setting"><div><div class="setting-name">Offline Forever mode</div><div class="setting-sub" id="set-offline-sub">Play only on this PC: no Friends page, nobody sees you online, no hosting or joining. Server-file updates still come in.</div></div><button class="ghost" id="set-offline">Turn on</button></div>
     <div class="setting"><div><div class="setting-name">Background</div><div class="setting-sub">Aurora and snow behind the pages. Paused while a game is running.</div></div><button class="ghost" id="set-sky">Turn off</button></div>
     <div class="setting"><div><div class="setting-name">Launcher</div><div class="setting-sub"><span id="set-ver"></span> <span id="set-launcher"></span></div></div></div>
   </div>
@@ -275,6 +358,56 @@
   <p class="small">Fan project, solo play, unofficial. Built on <a href="#" data-url="https://github.com/SyST3MDeV/Undaunted">Undaunted</a> (AGPL-3.0). Download tool: <a href="#" data-url="https://github.com/meszmate/manifest">meszmate/manifest</a> (MIT). Dauntless belongs to its owners; this includes no game files.</p>
 </section>
 </main>
+<!-- ============================================================ Friends panel (friends.js, voice.js) -->
+<aside class="fp" id="fp" aria-label="Friends" hidden>
+  <div class="fp-rail">
+    <button class="fp-rail-btn" id="fp-open" title="Friends"><span class="ic-friends fp-rail-ico" aria-hidden="true"></span><span class="fp-rail-count" id="fp-rail-count"></span></button>
+    <span class="fp-rail-req" id="fp-rail-req" hidden title="Friend requests"></span>
+    <span class="fp-rail-voice" id="fp-rail-voice" hidden title="In voice"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="5.5" y="1.5" width="5" height="8.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 7.5a5 5 0 0 0 10 0M8 12.5V15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+  </div>
+  <div class="fp-body" id="fp-body">
+    <div class="fp-head">
+      <h2>Friends</h2>
+      <span class="fp-online" id="fp-online"></span>
+      <button class="fp-fold" id="fp-fold" title="Fold the panel" aria-label="Fold the panel"><span class="chev" aria-hidden="true"></span></button>
+    </div>
+    <div class="fp-connecting" id="fr-signup" hidden><p id="fr-signup-text">Signing you in...</p></div>
+    <div class="fp-main" id="fr-main" hidden>
+      <div class="fp-me">Signed in as <span class="fr-me" id="fr-me"></span><span class="fr-code" id="fr-code" title="Your friend code: give it to friends if someone else has the same name"></span><button class="fr-link" id="fr-rename">change name</button></div>
+      <div class="fp-add"><input id="fr-addname" class="fr-input" maxlength="26" placeholder="Add a friend (name or name#1234)" autocomplete="off" spellcheck="false"><button class="fp-add-btn" id="fr-add" title="Send a friend request" aria-label="Send a friend request"><span aria-hidden="true">+</span></button></div>
+      <p class="fp-note" id="fr-note" aria-live="polite"></p>
+      <div class="fp-hosting" id="fp-hosting" hidden></div>
+      <div class="fp-scroll" id="fp-scroll"></div>
+      <div class="fp-foot"><button class="fr-link" id="fp-manage">Manage friends</button></div>
+    </div>
+    <div class="fp-voice" id="vc-card">
+      <div class="vc-bar">
+        <span class="vc-mic" id="vc-mic"><svg viewBox="0 0 16 16" width="18" height="18" aria-hidden="true"><rect x="5.5" y="1.5" width="5" height="8.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 7.5a5 5 0 0 0 10 0M8 12.5V15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+        <div class="vc-bar-text"><div class="vc-title" id="vc-title">Voice</div><div class="vc-status" id="vc-status"></div></div>
+        <button class="vc-icon-btn" id="vc-mute" hidden title="Mute your microphone">Mute</button>
+        <button class="vc-icon-btn vc-gear" id="vc-gear" title="Voice settings" aria-label="Voice settings" aria-expanded="false"><svg viewBox="0 0 16 16" width="17" height="17" aria-hidden="true"><path d="M6.7 1.5h2.6l.4 1.8 1.2.7 1.8-.6 1.3 2.2-1.4 1.3v1.4l1.4 1.3-1.3 2.2-1.8-.6-1.2.7-.4 1.8H6.7l-.4-1.8-1.2-.7-1.8.6-1.3-2.2 1.4-1.3V7.6L2 6.3l1.3-2.2 1.8.6 1.2-.7z" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="8" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.3"/></svg></button>
+      </div>
+      <dialog class="vc-pop" id="vc-pop">
+        <div class="vc-pop-head"><h2 class="vc-pop-title">Voice settings</h2><span class="vc-actions"><button class="ghost fr-small" id="vc-leave" hidden>Leave voice</button><button class="primary-sm" id="vc-join" hidden>Join voice</button></span></div>
+        <div class="vc-people" id="vc-people" hidden></div>
+        <p class="action-note" id="vc-note" aria-live="polite"></p>
+        <div class="vc-set" id="vc-ptt-row">
+          <label class="vc-radio"><input type="radio" name="vc-mode" id="vc-mode-ptt"> Push to talk</label>
+          <span class="vc-keyrow"><span class="vc-key" id="vc-key">not set</span><button class="ghost fr-small" id="vc-setkey">Set key</button><button class="fr-link" id="vc-clearkey">clear</button></span>
+        </div>
+        <div class="vc-set" id="vc-vad-row">
+          <label class="vc-radio"><input type="radio" name="vc-mode" id="vc-mode-vad"> When I speak</label>
+          <div class="vc-level" title="Your microphone level. You are heard while it is right of the line."><div class="vc-meter" id="vc-meter"></div><div class="vc-line" id="vc-line"></div></div>
+          <label class="vc-sens">Sensitivity <input type="range" id="vc-sens" min="0" max="100"></label>
+        </div>
+        <div class="vc-set"><label class="vc-field">Microphone <select id="vc-input" class="fr-input vc-select"></select></label></div>
+        <div class="vc-set"><label class="vc-radio"><input type="checkbox" id="vc-auto"> Join voice by itself when I host or join (not in games open to everyone)</label></div>
+        <p class="small">Push to talk works while you are in the game; the game still sees the key, so pick one it does not use (mouse 4 or 5 work well).</p>
+        <div class="dlg-actions"><button class="ghost" id="vc-close">Done</button></div>
+      </dialog>
+    </div>
+  </div>
+</aside>
 </div>
 
 <dialog id="dlg-readme" class="wide">
@@ -289,6 +422,17 @@
   <form method="dialog"><button class="ghost">Close</button></form>
 </dialog>
 
+<dialog id="dlg-name">
+  <h2 id="name-title">Your player name</h2>
+  <p id="name-text"></p>
+  <div class="fr-line"><input id="name-input" class="fr-input" maxlength="16" autocomplete="off" spellcheck="false" placeholder="Your name"></div>
+  <p class="action-note err" id="name-err" aria-live="polite"></p>
+  <div class="dlg-actions">
+    <button class="ghost" id="name-cancel">Cancel</button>
+    <button class="primary small-btn" id="name-save">Continue</button>
+  </div>
+</dialog>
+
 <dialog id="dlg-confirm">
   <h2 id="confirm-title"></h2>
   <p id="confirm-text"></p>
@@ -300,5 +444,9 @@
 
 <script src="sky.js"></script>
 <script src="app.js"></script>
+<script src="friends.js"></script>
+<script src="voice.js"></script>
+<script src="player.js"></script>
+<script src="hostmode.js"></script>
 </body>
 </html>

@@ -1,0 +1,62 @@
+/*
+  Dauntless Forever - launcher
+  Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
+  Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
+  hostmode.css - the Host Mode page (renderer/hostmode.js)
+*/
+.nav-item { position: relative; }
+.nav-dot { position: absolute; right: 12px; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-radius: 50%; background: var(--aether); box-shadow: 0 0 0 3px rgba(95, 211, 198, .15); }
+.nav-dot.warn { background: var(--brass); box-shadow: 0 0 0 3px rgba(214, 171, 74, .15); }
+
+.hm-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  border: 1px solid var(--line); border-radius: 8px; background: var(--bg-2); padding: 16px 18px; }
+.hm-status { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.hm-dot { flex: 0 0 auto; width: 14px; height: 14px; border-radius: 50%; background: var(--ink-3); }
+.hm-dot.running { background: var(--aether); box-shadow: 0 0 0 4px rgba(95, 211, 198, .16); }
+.hm-dot.starting, .hm-dot.restarting, .hm-dot.stopping { background: var(--brass); box-shadow: 0 0 0 4px rgba(214, 171, 74, .16); }
+.hm-dot.failed { background: var(--ember); }
+.hm-status-text { min-width: 0; }
+.hm-state { font-family: var(--display); font-size: 21px; font-weight: 600; }
+.hm-sub { color: var(--ink-2); font-size: 13.5px; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 560px; }
+.hm-acts { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.hm-ver { color: var(--ink-2); font-size: 13px; display: flex; align-items: center; gap: 6px; }
+.hm-ver select, .hm-select { background: var(--bg); color: var(--ink); border: 1px solid var(--line-2); border-radius: 6px; padding: 5px 8px; font: inherit; font-size: 13px; }
+#hm-note { margin: 10px 0 0; min-height: 0; }
+
+.hm-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
+.hm-tile { border: 1px solid var(--line); border-radius: 8px; background: var(--bg-2); padding: 10px 12px; min-width: 0; }
+.hm-tile-k { color: var(--ink-3); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hm-tile-v { font-family: var(--display); font-size: 18px; margin-top: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hm-tile-s { color: var(--ink-2); font-size: 12.5px; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-height: 1.3em; }
+
+.hm-cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 22px; }
+@media (max-width: 1300px) { .hm-cols { grid-template-columns: minmax(0, 1fr); } }
+.hm-list { border: 1px solid var(--line); border-radius: 8px; background: var(--bg-2); }
+.hm-list .season-row { grid-template-columns: minmax(0, 1fr) auto; }
+.hm-list .empty { padding: 12px 14px; color: var(--ink-3); font-size: 13.5px; }
+.hm-tag { color: var(--ink-3); font-size: 12.5px; margin-left: 4px; }
+.hm-row-acts { display: flex; gap: 8px; justify-content: flex-end; }
+.hm-row-acts .ghost, .hm-small { padding: 4px 10px; font-size: 12.5px; }
+.hm-row-acts .ghost.danger:hover { border-color: var(--ember); color: var(--ember); }
+
+.hm-cols .setting-sub { word-break: normal; overflow-wrap: break-word; }
+.hm-setting { flex-direction: column; align-items: stretch; gap: 8px; }
+.hm-setting .hm-input { width: 100%; max-width: none; }
+.hm-setting .hm-seg, .hm-setting .hm-select { align-self: flex-start; }
+.hm-check { cursor: pointer; }
+.hm-check input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--aether); flex: 0 0 auto; cursor: pointer; }
+.hm-check-l { cursor: pointer; flex: 1 1 auto; min-width: 0; }
+.hm-inline { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+.hm-time { background: var(--bg); color: var(--ink); border: 1px solid var(--line-2); border-radius: 6px; padding: 4px 6px; font: inherit; font-size: 13px; color-scheme: dark; }
+.hm-keep { padding: 1px 4px; margin: 0 2px; }
+.hm-seg { display: inline-flex; border: 1px solid var(--line-2); border-radius: 6px; overflow: hidden; flex: 0 0 auto; }
+.hm-seg-b { padding: 7px 14px; color: var(--ink-2); font-size: 13.5px; }
+.hm-seg-b + .hm-seg-b { border-left: 1px solid var(--line-2); }
+.hm-seg-b.on { background: var(--bg-3); color: var(--ink); box-shadow: inset 0 -2px 0 var(--aether); }
+.hm-seg-b:disabled { cursor: default; opacity: .6; }
+
+.hm-log-box { margin-top: 22px; }
+.hm-log-box summary { cursor: pointer; color: var(--ink-2); font-size: 13.5px; }
+.hm-log { margin: 8px 0 0; max-height: 260px; overflow: auto; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px;
+  font-family: Consolas, "Cascadia Mono", monospace; font-size: 12px; line-height: 1.5; white-space: pre-wrap; color: var(--ink-2); }
+.hm-log .err { color: var(--brass-2); }

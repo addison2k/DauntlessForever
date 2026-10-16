@@ -4,7 +4,9 @@
 # setup.ps1 - one-time set-up for playing Dauntless 1.14.7 offline. Started by "1 - SETUP.bat".
 #   setup.ps1             set up (safe to run again at any time; it only fixes what is missing)
 #   setup.ps1 -Uninstall  put the game folder back the way Epic shipped it
-param([switch]$Uninstall)
+param([switch]$Uninstall, [switch]$Auto)
+# -Auto (DF-AUTO): the launcher runs set-up by itself after the download, without a window. Every question is answered
+# "yes" (use the folder it found, install what is missing); with no game folder found it stops and says so.
 . (Join-Path $PSScriptRoot 'common.ps1')
 
 $standIn = Join-Path $Root 'bin\EOSSDK-Win64-Shipping.dll'
@@ -114,10 +116,11 @@ if (-not $gameDir) {
         $gameDir = $found[0]
         Say "Found it: $gameDir" 'Green'
         if ($found.Count -gt 1) { Say "  (also found: $(($found | Select-Object -Skip 1) -join ', '))" }
-        $a = Read-Host 'Use this folder? Press Enter for yes, or type N to pick another'
+        $a = if ($Auto) { '' } else { Read-Host 'Use this folder? Press Enter for yes, or type N to pick another' }
         if ($a -match '^[nN]') { $gameDir = $null }
     }
 }
+if (-not $gameDir -and $Auto) { Fail 'the game folder was not found. In the launcher use More > "Use a game folder I already have", or Download.' }
 while (-not $gameDir) {
     Say ''
     Say 'Pick the Dauntless 1.14.7 game folder (the one that has the "Archon" folder inside it).' 'White'
@@ -193,7 +196,7 @@ $dxNeeded = @('xinput1_3.dll', 'x3daudio1_7.dll', 'xapofx1_5.dll')    # DirectX 
 function Get-MissingDx { @($dxNeeded | Where-Object { -not (Test-Path -LiteralPath (Join-Path $env:WINDIR "System32\$_")) }) }
 function Install-WithWinget([string]$Id, [string]$What) {
     if (-not (Get-Command winget.exe -ErrorAction SilentlyContinue)) { return $false }
-    $a = Read-Host "Install $What now with winget? Press Enter for yes, or type N for no"
+    $a = if ($Auto) { '' } else { Read-Host "Install $What now with winget? Press Enter for yes, or type N for no" }
     if ($a -match '^[nN]') { return $false }
     Say "  Installing $What (Windows may ask for permission)..."
     & winget.exe install -e --id $Id --accept-package-agreements --accept-source-agreements
@@ -221,7 +224,7 @@ $missDx = Get-MissingDx
 if ($missDx.Count -gt 0) {
     Say "DirectX parts the game needs are missing: $($missDx -join ', ')." 'White'
     Say "  Microsoft's DirectX End-User Runtime (June 2010) adds them. It is about 95 MB."
-    $a = Read-Host 'Download and install it now? Press Enter for yes, or type N for no'
+    $a = if ($Auto) { '' } else { Read-Host 'Download and install it now? Press Enter for yes, or type N for no' }
     if ($a -notmatch '^[nN]') {
         # The offline package: it carries every file inside (the web installer can stop half-way).
         $dxUrl  = 'https://download.microsoft.com/download/8/4/A/84A35BF1-DAFE-4AE8-82AF-AD2AE20B6B14/directx_Jun2010_redist.exe'
@@ -267,7 +270,7 @@ if (-not $node) {
     Say 'Node.js is not installed. It is needed to run the small local backend the game talks to.' 'White'
     $hasWinget = [bool](Get-Command winget.exe -ErrorAction SilentlyContinue)
     if ($hasWinget) {
-        $a = Read-Host 'Install Node.js LTS now with winget? Press Enter for yes, or type N for no'
+        $a = if ($Auto) { '' } else { Read-Host 'Install Node.js LTS now with winget? Press Enter for yes, or type N for no' }
         if ($a -notmatch '^[nN]') {
             & winget.exe install -e --id OpenJS.NodeJS.LTS --accept-package-agreements --accept-source-agreements
             $node = Find-Node
@@ -341,13 +344,17 @@ New-Item -ItemType Directory -Force $eosDir | Out-Null
 $ini = Join-Path $eosDir 'eos_offline.ini'
 $name = $null
 if (Test-Path -LiteralPath $ini) { $m = Select-String -LiteralPath $ini -Pattern '^DisplayName=(.+)$' | Select-Object -First 1; if ($m) { $name = $m.Matches[0].Groups[1].Value.Trim() } }
-if (-not $name) {
-    Say ''
-    $n = Read-Host 'Your player name (3-16 letters/numbers; Enter for "Slayer")'
-    $name = if ($n -match '^[A-Za-z0-9_]{3,16}$') { $n } else { if ($n) { Say '  Not a valid name, using Slayer.' 'Yellow' }; 'Slayer' }
-    $text = "; eos_offline settings. Lines starting with ; are comments.`r`nDisplayName=$name`r`n"
-    [System.IO.File]::WriteAllText($ini, $text, [System.Text.Encoding]::ASCII)
+# One player name for every version: the launcher asks once and passes it in DF_PLAYER_NAME (no question here).
+if ($env:DF_PLAYER_NAME -match '^[A-Za-z0-9_]{3,16}$') { $name = $env:DF_PLAYER_NAME }
+if (-not $name) { $name = 'Slayer' }
+function Set-EosName([string]$Ini, [string]$Name) {
+    $lines = if (Test-Path -LiteralPath $Ini) { @(Get-Content -LiteralPath $Ini) } else { @('; eos_offline settings. Lines starting with ; are comments.') }
+    $done = $false
+    $lines = @(foreach ($l in $lines) { if ($l -match '^DisplayName=') { if (-not $done) { "DisplayName=$Name"; $done = $true } } else { $l } })
+    if (-not $done) { $lines += "DisplayName=$Name" }
+    [System.IO.File]::WriteAllText($Ini, (($lines -join "`r`n") + "`r`n"), [System.Text.Encoding]::ASCII)
 }
+Set-EosName $ini $name
 Say "Player name: $name" 'Green'
 
 # ---------------------------------------------------------------- 7. finish
