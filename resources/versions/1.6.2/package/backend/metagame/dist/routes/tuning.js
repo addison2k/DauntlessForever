@@ -25,7 +25,7 @@ const HEROIC_ROTATION = (process.env.HEROIC_ROTATION ?? [
 ].join(",")).split(",").map((Id) => Id.trim()).filter((Id) => Id.length > 0);
 const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
 const ROTATION_START = Date.UTC(2026, 9, 12); // Monday Oct 12, 2026
-function SeasonalEventSchedule(Now = new Date()) {
+function HeroicEventSchedule(Now = new Date()) {
     if ((process.env.HEROIC_ESCALATION ?? "1") !== "1" || HEROIC_ROTATION.length === 0) {
         return { ScheduledItems: [] };
     }
@@ -44,6 +44,15 @@ function SeasonalEventSchedule(Now = new Date()) {
                 ScheduledItems: [{ ID: HuntId, MaxCompletionPerInterval: 1 }]
             }]
     };
+}
+
+// Trials: one Normal/Dauntless pair per week, changing Monday 00:00 UTC, the same one the menu shows and the hunt
+// launches (tools/trials-schedule.cjs). Fix by KombatKing. If it can't be worked out, Heroic still goes out.
+function SeasonalEventSchedule(Now = new Date()){
+    const schedule = HeroicEventSchedule(Now);
+    try { schedule.ScheduledItems.push(...require(require('node:path').resolve(__dirname,'../../../../tools/trials-schedule.cjs')).schedule(Now)); }
+    catch (e) { console.error("Trials schedule: " + (e && e.message)); }
+    return schedule;
 }
 exports.tuningRouter.get("/game_tuning/seasonal_event_schedule", (req, res) => {
     const Schedule = SeasonalEventSchedule();

@@ -9,6 +9,10 @@ import { GetNotesForUser } from "../controllers/store";
 
 export const storeRouter = Router();
 
+// Lady Luck / Trials shop (trials-shop162.js, by KombatKing): 56 offers paid with Steel/Gilded Marks, Champion stock
+// unlocked. Its routes run first and pass anything that is not theirs on to the routes below, unchanged.
+storeRouter.use(require("../trials-shop162").router);
+
 storeRouter.post("/reconcile", HasUndauntedMetagameAuth, async (req: any, res) => {
     const Notes = await GetNotesForUser(req.AuthData.userId);
 

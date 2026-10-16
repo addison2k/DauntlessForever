@@ -6,6 +6,8 @@ Made by Addison2k: the port of Undaunted's server DLL and backend to Dauntless 1
 the Hunt Pass seasons system, bounties, progression, cooldowns and mastery rewards.
 Based on Undaunted by gwog and contributors (AGPL-3.0), https://github.com/SyST3MDeV/Undaunted .
 bin\dxgi.dll is Undaunted's own loader, unchanged. MinHook by Tsuda Kageyu (BSD-2-Clause).
+By KombatKing (from his Consolidated Patches 0.2, AGPL-3.0): the Lady Luck / Trials shop, daily
+Ramsgate shard pickups, the weekly Trials rotation and the safer port check. Credited in those files too.
 Source: backend\*\src and source\ in this folder.
 
 WHAT THE LICENCE ASKS OF ANYONE WHO REUSES THIS

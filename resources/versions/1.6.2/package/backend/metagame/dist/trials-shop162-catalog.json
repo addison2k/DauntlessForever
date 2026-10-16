@@ -1,0 +1,1142 @@
+[
+  {
+    "id": "ladyluck_cell_epic_01",
+    "displayName": "+3 Berserker Cell",
+    "displayDescription": "Repeatable purchase.",
+    "displayPriority": 1,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 150,
+    "items": [
+      {
+        "catalogId": "CELL_TRIALS_01_E",
+        "quantity": 1,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": true,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_cell_epic_02",
+    "displayName": "+3 Strategist Cell",
+    "displayDescription": "Repeatable purchase.",
+    "displayPriority": 2,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 150,
+    "items": [
+      {
+        "catalogId": "CELL_TRIALS_02_E",
+        "quantity": 1,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": true,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_cell_epic_03",
+    "displayName": "+3 Engineer Cell",
+    "displayDescription": "Repeatable purchase.",
+    "displayPriority": 3,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 150,
+    "items": [
+      {
+        "catalogId": "CELL_TRIALS_03_E",
+        "quantity": 1,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": true,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_cell_epic_04",
+    "displayName": "+3 Discipline Cell",
+    "displayDescription": "Repeatable purchase.",
+    "displayPriority": 4,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 150,
+    "items": [
+      {
+        "catalogId": "CELL_TRIALS_05_E",
+        "quantity": 1,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": true,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_cell_epic_05",
+    "displayName": "+3 Sprinter Cell",
+    "displayDescription": "Repeatable purchase.",
+    "displayPriority": 5,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 150,
+    "items": [
+      {
+        "catalogId": "CELL_TRIALS_04_E",
+        "quantity": 1,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": true,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_cell_epic_06",
+    "displayName": "+3 Mender Cell",
+    "displayDescription": "Repeatable purchase.",
+    "displayPriority": 6,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 150,
+    "items": [
+      {
+        "catalogId": "CELL_TRIALS_06_E",
+        "quantity": 1,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": true,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_mod_axe",
+    "displayName": "Furious Axecore",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 7,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 250,
+    "items": [
+      {
+        "catalogId": "PART_GA_PASSIVE_TRIALS_02",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_mod_axe_1_fixed",
+    "displayName": "Railsplitter's Canteen",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 8,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 250,
+    "items": [
+      {
+        "catalogId": "PART_GA_PASSIVE_TRIALS_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_mod_chainblade",
+    "displayName": "Momentum Blades",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 9,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 250,
+    "items": [
+      {
+        "catalogId": "PART_CB_PASSIVE_TRIALS_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_cb_passive_trials_02",
+    "displayName": "Demolition Blades",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 10,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 250,
+    "items": [
+      {
+        "catalogId": "PART_CB_PASSIVE_TRIALS_02",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_mod_hammer",
+    "displayName": "Turbine Trigger",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 11,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 250,
+    "items": [
+      {
+        "catalogId": "PART_IH_PASSIVE_TRIALS_02",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_mod_hammer_1_fixed",
+    "displayName": "Antique Clip",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 12,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 250,
+    "items": [
+      {
+        "catalogId": "PART_IH_PASSIVE_TRIALS_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_mod_repeater",
+    "displayName": "Tactician's Magazine",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 13,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 250,
+    "items": [
+      {
+        "catalogId": "PART_DP_PASSIVE_TRIALS_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_mod_repeaters",
+    "displayName": "Demolition Sights",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 14,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 250,
+    "items": [
+      {
+        "catalogId": "PART_DP_PASSIVE_TRIALS_02",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_mod_spear",
+    "displayName": "Barbed Spearhead",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 15,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 250,
+    "items": [
+      {
+        "catalogId": "PART_MS_PASSIVE_TRIALS_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_mod_spear_2",
+    "displayName": "Executioner's Spearhead",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 16,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 250,
+    "items": [
+      {
+        "catalogId": "PART_MS_PASSIVE_TRIALS_02",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_mod_sword_1",
+    "displayName": "Keen Edge",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 17,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 250,
+    "items": [
+      {
+        "catalogId": "PART_EB_PASSIVE_TRIALS_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_mod_sword_3",
+    "displayName": "Dynamic Bladecore",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 18,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 250,
+    "items": [
+      {
+        "catalogId": "PART_EB_PASSIVE_TRIALS_02",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_special_axe",
+    "displayName": "Relentless Onslaught",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 19,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "PART_GA_SPECIAL_SKILLSHOT_RESET",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_special_cb",
+    "displayName": "Insatiable Dance",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 20,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "PART_CB_SPECIAL_INSATIABLE_DANCE",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_special_hammer",
+    "displayName": "Ironheart Landbreaker",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 21,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "PART_IH_SPECIAL_ISLANDCRACKER_DEFENSIVE",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_special_sword",
+    "displayName": "Avenging Overdrive",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 22,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "PART_EB_SPECIAL_PARRY",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_weapon_pike_special",
+    "displayName": "Reckless Leap",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 23,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "PART_MS_SPECIAL_ROCKETLUNGE",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_lantern",
+    "displayName": "Broadsides Lantern",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 24,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "LT_TRIALS_00",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_exotic_repeaters",
+    "displayName": "The Twin Suns",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 25,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "WP_DP_EXOTIC_BOMBS",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_core_silver_slayer",
+    "displayName": "Uncommon Cell Core",
+    "displayDescription": "Repeatable purchase.",
+    "displayPriority": 26,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 150,
+    "items": [
+      {
+        "catalogId": "CONTAINER_CORE_SILVER_CELLCORE",
+        "quantity": 1,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": true,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_core_gold_slayer",
+    "displayName": "Rare Cell Core",
+    "displayDescription": "Repeatable purchase.",
+    "displayPriority": 27,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 150,
+    "items": [
+      {
+        "catalogId": "CONTAINER_CORE_GOLD_CELLCORE",
+        "quantity": 1,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": true,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_bundle_consumables_00",
+    "displayName": "Silver Tonic Pack",
+    "displayDescription": "Repeatable purchase.",
+    "displayPriority": 28,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 150,
+    "items": [
+      {
+        "catalogId": "QI_ATTACK_SPEED_POTION",
+        "quantity": 25,
+        "kind": "stacked"
+      },
+      {
+        "catalogId": "QI_LANTERN_POTION",
+        "quantity": 25,
+        "kind": "stacked"
+      },
+      {
+        "catalogId": "QI_DAMAGE_ENRAGEBONUS_POTION",
+        "quantity": 25,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": true,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_bundle_consumables_01",
+    "displayName": "Gold Tonic Pack",
+    "displayDescription": "Repeatable purchase.",
+    "displayPriority": 29,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 150,
+    "items": [
+      {
+        "catalogId": "QI_ATTACK_SPEED_POTION",
+        "quantity": 50,
+        "kind": "stacked"
+      },
+      {
+        "catalogId": "QI_LANTERN_POTION",
+        "quantity": 50,
+        "kind": "stacked"
+      },
+      {
+        "catalogId": "QI_DAMAGE_ENRAGEBONUS_POTION",
+        "quantity": 50,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": true,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_armor_helm",
+    "displayName": "Victorious Helm",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 30,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "AR_TRIALS_HELM_00",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_armor_helm_prestige",
+    "displayName": "Champion's Helm",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 31,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "AR_TRIALS_HELM_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_armor_chest",
+    "displayName": "Victorious Plate",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 32,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "AR_TRIALS_CHEST_00",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_armor_chest_prestige",
+    "displayName": "Champion's Plate",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 33,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "AR_TRIALS_CHEST_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_armor_arms",
+    "displayName": "Victorious Gauntlets",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 34,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "AR_TRIALS_ARMS_00",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_armor_arms_prestige",
+    "displayName": "Champion's Gauntlets",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 35,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "AR_TRIALS_ARMS_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_armor_legs",
+    "displayName": "Victorious Greaves",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 36,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "AR_TRIALS_LEGS_00",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_armor_legs_prestige",
+    "displayName": "Champion's Greaves",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 37,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "AR_TRIALS_LEGS_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_weapon_axe_normal",
+    "displayName": "Victorious Axe",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 38,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "WP_GA_TRIALS_00",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_weapon_axe_prestige",
+    "displayName": "Champion's Axe",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 39,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "WP_GA_TRIALS_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_weapon_chainblade_normal",
+    "displayName": "Victorious Chain Blades",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 40,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "WP_CB_TRIALS_00",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_weapon_chainblade_prestige",
+    "displayName": "Champion's Chain Blades",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 41,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "WP_CB_TRIALS_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_weapon_hammer_normal",
+    "displayName": "Victorious Hammer",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 42,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "WP_IH_TRIALS_00",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_weapon_hammer_prestige",
+    "displayName": "Champion's Hammer",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 43,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "WP_IH_TRIALS_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_weapon_repeaters_normal",
+    "displayName": "Victorious Repeaters",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 44,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "WP_DP_TRIALS_00",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_weapon_repeaters_prestige",
+    "displayName": "Champion's Repeaters",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 45,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "WP_DP_TRIALS_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_weapon_spear_normal",
+    "displayName": "Victorious War Pike",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 46,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "WP_MS_TRIALS_00",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_weapon_spear_prestige",
+    "displayName": "Champion's War Pike",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 47,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "WP_MS_TRIALS_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_weapon_sword_normal",
+    "displayName": "Victorious Sword",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 48,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "WP_EB_TRIALS_00",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_weapon_sword_prestige",
+    "displayName": "Champion's Sword",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 49,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "WP_EB_TRIALS_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_weapon_strikers_normal",
+    "displayName": "Victorious Aether Strikers",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 50,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "WP_AC_TRIALS_00",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_weapon_strikers_prestige",
+    "displayName": "Champion's Aether Strikers",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 51,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "WP_AC_TRIALS_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_weapon_banner_normal",
+    "displayName": "Victorious Standard",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 52,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "BNC_STANDARD_TRIALS_00",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_weapon_banner_prestige",
+    "displayName": "Champion's Standard",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 53,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "BNC_STANDARD_TRIALS_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_headbling_normal",
+    "displayName": "Crown of the Victor",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 54,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 500,
+    "items": [
+      {
+        "catalogId": "AC_HEAD_TRIALS_00",
+        "quantity": 1,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_headbling_prestige",
+    "displayName": "Crown of the Champion",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 55,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "AC_HEAD_TRIALS_01",
+        "quantity": 1,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "ladyluck_lantern_01",
+    "displayName": "Champion's Light",
+    "displayDescription": "Permanent unlock; already owned items cannot be purchased again.",
+    "displayPriority": 56,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "gildedmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "LT_TRIALS_01",
+        "quantity": 1,
+        "kind": "instanced"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  }
+]

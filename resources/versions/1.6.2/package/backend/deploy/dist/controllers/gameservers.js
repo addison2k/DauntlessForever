@@ -203,6 +203,16 @@ function GetGameModeOverrideFromMatchmakerHuntId(MatchmakerHuntId) {
     const MatchmakerHuntObject = matchmaker_hunts_table_json_1.default[0].Rows[MatchmakerHuntId];
     return MatchmakerHuntObject.GameModeOverride.replaceAll("Archon/Content", "/Game");
 }
+// Trials: this week's pair (tools/trials-schedule.cjs, fix by KombatKing), so the hunt matches what the menu
+// shows. Anything it does not know falls back to the old random pick.
+function ScheduledTrialsData(HuntId) {
+    try { return require(require('node:path').resolve(__dirname,'../../../../tools/trials-schedule.cjs')).launch(HuntId); }
+    catch (e) {
+        console.error("Trials schedule: " + (e && e.message) + "; using a random Trial");
+        return RandomlyGenTrialsData(HuntId.includes("Elite"));
+    }
+}
+
 function RandomlyGenTrialsData(IsElite) {
     const RandomTrialNum = String(node_crypto_1.default.randomInt(1, 89)).padStart(3, "0");
     const Difficulty = IsElite ? "Elite" : "Hard";
@@ -215,7 +225,7 @@ function RandomlyGenTrialsData(IsElite) {
     };
 }
 async function StartupGameserverWithHuntIdAndPlayers(HuntId, ExpectedPlayers) {
-    const TrialsData = HuntId.includes("Arena") ? RandomlyGenTrialsData(HuntId.includes("Elite")) : undefined;
+    const TrialsData = HuntId.includes("Arena") ? ScheduledTrialsData(HuntId) : undefined;
     const MatchmakerHuntId = TrialsData == undefined ? GetMatchmakerHuntIdFromPlayerHuntId(HuntId) : TrialsData.TrialsHuntId;
     let BehemothPath = TrialsData == undefined ? GetBehemothPathFromMatchmakerHuntId(MatchmakerHuntId) : TrialsData.Behemoth;
     let MapPath = TrialsData == undefined ? GetMapPathFromMatchmakerHuntId(MatchmakerHuntId) : TRIALS_MAP_PATH;

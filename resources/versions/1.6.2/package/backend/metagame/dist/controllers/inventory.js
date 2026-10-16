@@ -72,6 +72,77 @@ function ClampCellExchangeItem(Item) {
     }
     return Item;
 }
+// [cell-exchange] One saved fusion per slot.
+// The game saves every slot's fusion with the same instanceId ("TOKEN_CELL_EXCHANGE"), so a second fusion
+// overwrote the first and the first slot's cells were lost. The backend files each one under its own id,
+// TOKEN_CELL_EXCHANGE_SLOT_<SlotID>, taking SlotID from itemData. Writes that arrive without itemData (a remove,
+// usually when a finished fusion is claimed) are matched to the slot whose fusion is due first.
+// Tested in game Oct 12 on the dev backend (all three slots fusing and claiming).
+function CellExchangeSlotOf(ItemData) {
+    if (ItemData == null)
+        return null;
+    try {
+        const Data = typeof ItemData === "string" ? JSON.parse(ItemData) : ItemData;
+        const Slot = Number(Data?.SlotID);
+        return Number.isInteger(Slot) && Slot >= 0 ? Slot : null;
+    }
+    catch {
+        return null;
+    }
+}
+function CellExchangeEndMs(Item) {
+    try {
+        const Data = typeof Item?.itemData === "string" ? JSON.parse(Item.itemData) : Item?.itemData;
+        const Ms = Date.parse(Data?.EndTime);
+        return Number.isNaN(Ms) ? Number.MAX_SAFE_INTEGER : Ms;
+    }
+    catch {
+        return Number.MAX_SAFE_INTEGER;
+    }
+}
+function CellExchangeSlotInstanceId(Slot) {
+    return `${CELL_EXCHANGE_TOKEN_ID}_SLOT_${Slot}`;
+}
+// Gives an incoming token its per-slot instanceId (when its itemData names a slot). Returns the same object.
+function AssignCellExchangeSlotId(Item) {
+    if (!IsCellExchangeToken(Item))
+        return Item;
+    const Slot = CellExchangeSlotOf(Item.itemData);
+    if (Slot != null) {
+        const Wanted = CellExchangeSlotInstanceId(Slot);
+        if (Item.instanceId !== Wanted) {
+            Item.instanceId = Wanted;
+        }
+    }
+    return Item;
+}
+// Index of the stored item a write refers to. For TOKEN_CELL_EXCHANGE: the stored token of the same slot
+// (including an old shared-id token of that slot), or for a slot-less remove the token due first.
+function FindItemIndexForWrite(InstancedItems, Item, Operation) {
+    const Direct = FindInstancedItemIndex(InstancedItems, Item.instanceId);
+    if (!IsCellExchangeToken(Item))
+        return Direct;
+    const Slot = CellExchangeSlotOf(Item.itemData);
+    const Tokens = InstancedItems.map((Stored, Index) => ({ Stored, Index })).filter(({ Stored }) => IsCellExchangeToken(Stored));
+    if (Slot != null) {
+        const SameSlot = Tokens.find(({ Stored }) => CellExchangeSlotOf(Stored.itemData) === Slot);
+        const Index = SameSlot ? SameSlot.Index : -1;
+        logger_1.logger.info(`[cell-exchange] ${Operation} slot ${Slot} -> ${Index >= 0 ? InstancedItems[Index].instanceId : "new"}`);
+        return Index;
+    }
+    if (Direct >= 0 && InstancedItems[Direct].instanceId !== CELL_EXCHANGE_TOKEN_ID) {
+        return Direct; // already a per-slot id (the game loaded it that way)
+    }
+    if (Operation === "remove") {
+        if (Tokens.length === 0)
+            return -1;
+        const DueFirst = Tokens.sort((A, B) => CellExchangeEndMs(A.Stored) - CellExchangeEndMs(B.Stored))[0];
+        logger_1.logger.info(`[cell-exchange] remove without slot -> ${DueFirst.Stored.instanceId} (due first of ${Tokens.length})`);
+        return DueFirst.Index;
+    }
+    logger_1.logger.warn(`[cell-exchange] ${Operation} of ${Item.instanceId} has no SlotID; left as sent`);
+    return Direct;
+}
 function MakeEmptyInventoryRow(CharacterId) {
     return {
         characterId: CharacterId,
@@ -134,7 +205,9 @@ async function UpdateInstancedItem(CharacterId, UserId, InstanceId, CatalogId, I
                 tx.insert(schema_1.inventory).values(CurrentInventory).run();
             }
             const InstancedItems = JSON.parse(CurrentInventory.instancedItems);
-            const ItemIndex = InstancedItems.findIndex((Item) => Item.catalogId === CatalogId && Item.instanceId === InstanceId);
+            const ItemIndex = CatalogId === CELL_EXCHANGE_TOKEN_ID
+                ? FindItemIndexForWrite(InstancedItems, { catalogId: CatalogId, instanceId: InstanceId, itemData: ItemData }, "update")
+                : InstancedItems.findIndex((Item) => Item.catalogId === CatalogId && Item.instanceId === InstanceId);
             if (ItemIndex < 0) {
                 return { success: false, error: "not_found" };
             }
@@ -202,7 +275,7 @@ async function RunInventoryTransaction(UserId, CharacterId, TransactionId, Insta
                 const InstancedItems = JSON.parse(CurrentInventory.instancedItems);
                 let DidUpdateInstancedItems = false;
                 for (const ItemToRemove of InstancedItemsToRemove) {
-                    const ItemIndex = FindInstancedItemIndex(InstancedItems, ItemToRemove.instanceId);
+                    const ItemIndex = FindItemIndexForWrite(InstancedItems, ItemToRemove, "remove");
                     if (ItemIndex >= 0) {
                         AssertExistingInstancedItemWrite(InstancedItems[ItemIndex], ItemToRemove, "remove");
                         InstancedItems.splice(ItemIndex, 1);
@@ -210,7 +283,8 @@ async function RunInventoryTransaction(UserId, CharacterId, TransactionId, Insta
                     }
                 }
                 for (const ItemToSave of InstancedItemsToSave) {
-                    const ItemIndex = FindInstancedItemIndex(InstancedItems, ItemToSave.instanceId);
+                    const ItemIndex = FindItemIndexForWrite(InstancedItems, ItemToSave, "save");
+                    AssignCellExchangeSlotId(ItemToSave);
                     if (ItemIndex >= 0) {
                         if (AssertExistingInstancedItemWrite(InstancedItems[ItemIndex], ItemToSave, "save") === "skip") {
                             continue;
@@ -225,7 +299,8 @@ async function RunInventoryTransaction(UserId, CharacterId, TransactionId, Insta
                     }
                 }
                 for (const ItemToAdd of InstancedItemsToAdd) {
-                    const ItemIndex = FindInstancedItemIndex(InstancedItems, ItemToAdd.instanceId);
+                    const ItemIndex = FindItemIndexForWrite(InstancedItems, ItemToAdd, "add");
+                    AssignCellExchangeSlotId(ItemToAdd);
                     if (ItemIndex >= 0) {
                         if (AssertExistingInstancedItemWrite(InstancedItems[ItemIndex], ItemToAdd, "add") === "skip") {
                             continue;

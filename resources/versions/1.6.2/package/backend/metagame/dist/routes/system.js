@@ -151,6 +151,25 @@ exports.systemRouter.put("/cooldown/batch/:userId", HasUndauntedMetagameAuth_1.H
         payload: (0, cooldowns162_1.ApplyCooldownBatch)(String(req.params.userId), req.body)
     });
 });
+// One cooldown at a time: PUT /cooldown/<uid>/<cooldown id>. The game sends this when you pick up a daily Ramsgate
+// shard, often with an empty body (= started now). Without it the pickup was not saved and the shard came back.
+// Fix by KombatKing (from his Consolidated Patches 0.2).
+exports.systemRouter.put("/cooldown/:userId/:cooldownId", HasUndauntedMetagameAuth_1.HasUndauntedMetagameAuth, (req, res) => {
+    const uid = String(req.params.userId);
+    const id = String(req.params.cooldownId);
+    if (!/^[-A-Za-z0-9_.:{}]{1,200}$/.test(id)) { res.status(400).send(); return; }
+    const b = req.body?.payload ?? req.body;
+    const isEmpty = b == null || (typeof b === "object" && !Array.isArray(b) && Object.keys(b).length === 0);
+    let date = new Date().toISOString();
+    if (!isEmpty) {
+        const v = typeof b === "string" ? b : (b?.cooldown_started_date ?? b?.cooldown_start_date ?? b?.started_date ?? b?.start_date ?? b?.date ?? b?.[id]);
+        if (typeof v === "string" && Number.isFinite(Date.parse(v))) date = v; // anything else: started now
+    }
+    (0, cooldowns162_1.ApplyCooldownBatch)(uid, { cooldowns: [{ cooldown_id: id, cooldown_started_date: date }] });
+    res.status(200);
+    res.json(isEmpty ? {} : { code: null, message: "OK", payload: (0, cooldowns162_1.CooldownMap)(uid) });
+});
+
 exports.systemRouter.get("/bounty/game-data", HasUndauntedMetagameAuth_1.HasUndauntedMetagameAuth, (req, res) => {
     logger_1.logger.info("Bounty game data (stubbed)");
     res.status(200);

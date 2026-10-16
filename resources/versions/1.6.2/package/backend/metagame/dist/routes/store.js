@@ -10,6 +10,10 @@ const logger_1 = require("../logger");
 const HasUndauntedMetagameAuth_1 = require("../middleware/HasUndauntedMetagameAuth");
 const store_1 = require("../controllers/store");
 exports.storeRouter = (0, express_1.Router)();
+
+// Lady Luck / Trials shop (trials-shop162.js, by KombatKing): 56 offers paid with Steel/Gilded Marks, Champion stock
+// unlocked. Its routes run first and pass anything that is not theirs on to the routes below, unchanged.
+exports.storeRouter.use(require("../trials-shop162").router);
 exports.storeRouter.post("/reconcile", HasUndauntedMetagameAuth_1.HasUndauntedMetagameAuth, async (req, res) => {
     const Notes = await (0, store_1.GetNotesForUser)(req.AuthData.userId);
     logger_1.logger.info(`Retrieved notes balance of ${Notes} for ${req.AuthData.userId}`);

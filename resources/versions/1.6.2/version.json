@@ -8,7 +8,7 @@
     "works":  [
                   "Log in, the tutorial hunt, Ramsgate, hunts",
                   "Weapon XP and mastery, the Slayer\u0027s Path, crafting, cores, bounties",
-                  "Cell fusion (middle slot)",
+                  "Cell fusion (all three slots)",
                   "Play with friends: host or join from the Friends panel (parties, voice)",
                   "Play online: join a game that is open to everyone, or host one"
               ],
@@ -27,7 +27,7 @@
                  },
     "package":  {
                     "dir":  "package",
-                    "packageVersion":  "2026-10-15",
+                    "packageVersion":  "2026-10-15.3",
                     "setup":  "tools/setup.ps1",
                     "uninstallArgs":  [
                                           "-Uninstall"

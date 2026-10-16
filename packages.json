@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-15",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-15.zip",
-                         "sha256":  "dc47291e848fed15cb6a02a8a82b345306fe4108dd36c649fa66472919a841e0",
+                         "packageVersion":  "2026-10-15.3",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-15.3.zip",
+                         "sha256":  "043804be2055551b06b63c6ca746dfff72d96abfe8f53d419fe3fb9d4693d0e4",
                          "date":  "2026-10-15",
-                         "note":  "Host Mode; Revived import brings quests and fixes the tutorial; bounty settings agree; Host with friends Node.js fix"
+                         "note":  "Lady Luck / Trials shop (56 offers, Champion stock unlocked), all 3 Middleman slots, daily shards stay picked, weekly Trials rotation, safer port check. Shop and fixes w/help KombatKing."
                      },
                      {
                          "id":  "1.14.7",

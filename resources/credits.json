@@ -12,6 +12,16 @@
       ]
     },
     {
+      "title": "Community fixes",
+      "people": [
+        {
+          "name": "KombatKing",
+          "role": "Contributor",
+          "what": "1.6.2: the Lady Luck / Trials shop (56 offers), daily Ramsgate shard pickups, the weekly Trials rotation and the safer port check."
+        }
+      ]
+    },
+    {
       "title": "Manifest archive contributors",
       "people": [
         {

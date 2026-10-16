@@ -85,8 +85,11 @@ function Clear-DauntlessPorts([int[]]$TcpPorts = @(), [int[]]$UdpPorts = @()) {
         $w = Get-CimInstance Win32_Process -Filter "ProcessId=$id" -ErrorAction SilentlyContinue
         $pname = if ($w) { $w.Name } else { "process $id" }
         $cmd = if ($w -and $w.CommandLine) { $w.CommandLine } else { '' }
-        $isBackend = ($pname -eq 'node.exe' -and $cmd -match 'dist[\\/]server\.js')
-        $isServerCopy = ($pname -eq 'Dauntless-Win64-Shipping.exe')
+        # Only Dauntless servers are closed (fix by KombatKing): a Dauntless backend, or a game copy started as a server.
+        # (Ours start as 'node --env-file=.env dist/server.js' from the backend folder.) Any other program on the port, and
+        # the player's own game, gets the message below instead.
+        $isBackend = ($pname -eq 'node.exe' -and $cmd -match 'dist[\\/]server\.js' -and $cmd -match 'DauntlessForever|DauntlessOffline|Dauntless.Revived|UndauntedMetagame|UndauntedDeployServer|[\\/]backend[\\/](metagame|deploy)[\\/]|--env-file=\.env\s+"?dist[\\/]server\.js')
+        $isServerCopy = ($pname -eq 'Dauntless-Win64-Shipping.exe' -and $cmd -match '(^|\s)-server(\s|$)')
         if ($isBackend -or $isServerCopy) {
             $what = if ($isBackend) { 'Dauntless server' } else { 'Dauntless game server' }
             Say "    Closing another $what that was using port $($owners[$id]) (often Dauntless Revived or an old copy; it is not harmed)." 'Yellow'
