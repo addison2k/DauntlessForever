@@ -18,9 +18,15 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.2.3",
-                     "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.3",
-                     "notes":  "Game language setting, new title bar, part-break fix for non-English Windows",
-                     "date":  "2026-10-16"
+                     "version":  "0.2.4",
+                     "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.4",
+                     "notes":  "Small automatic launcher updates from now on, please-wait window, Chinese language option",
+                     "date":  "2026-10-16",
+                     "app":  {
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/v0.2.4/app-0.2.4.asar",
+                                 "sha256":  "caf82750a61f2fa0ba182a79cea46e180234f47684f07d01d2264d0781384d20",
+                                 "size":  654344,
+                                 "minShell":  "0.2.4"
+                             }
                  }
 }

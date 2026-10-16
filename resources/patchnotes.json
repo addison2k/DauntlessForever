@@ -2,8 +2,12 @@
   "_comment": "Patch notes shown in the launcher (newest first). The launcher also reads this file from the repo, so new notes need no build.",
   "notes": [
     {
-      "date": "2026-10-16","title": "A please-wait window after updates",
+      "date": "2026-10-16","title": "Small launcher updates, a please-wait window, and more for 1.6.2",
       "items": [
+        "From this version on, most launcher updates download by themselves in the background (a few MB instead of the whole launcher). When one is ready, the banner says so: press Restart now, or it is used the next time you open the launcher.",
+        "1.6.2 server files: Unlimited Resupply Beacons (Game Rules, solo only) and the All Dyes Collection in the store, by KombatKing; the free store pack is on.",
+        "Settings: Chinese (community translation) as a game language, by zgh95. It downloads once (33 MB) the first time you pick it.",
+        "1.6.2: the Slayer's Path total no longer lags behind in hunts (thanks to KombatKing's XP captures).",
         "After a launcher update, the first start copies the new server files before the launcher opens. That can take a minute; a small window now says so, instead of nothing showing up.",
         "Game Rules: 10x is now a choice for Weapon XP, Hunt Pass XP and Loot (1.6.2 server files)."
       ]
