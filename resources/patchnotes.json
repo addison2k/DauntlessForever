@@ -2,6 +2,14 @@
   "_comment": "Patch notes shown in the launcher (newest first). The launcher also reads this file from the repo, so new notes need no build.",
   "notes": [
     {
+      "date": "2026-10-16","title": "Pick the game's main menu background (1.6.2)",
+      "items": [
+        "Settings: a new Main menu background setting changes the art behind the game's start screen to any of 12 Hunt Pass seasons, from Myth & Legend to Time Strike.",
+        "Your own picture: choose any PNG, JPG or BMP and it shows behind the start screen. It is cropped to a wide shape from the middle and built on your PC from your own game files.",
+        "Picking another background takes your picture out of the game folder again, and Uninstall removes it too."
+      ]
+    },
+    {
       "date": "2026-10-15","title": "Host Mode: keep a server running",
       "items": [
         "New Host Mode page: this PC keeps a Ramsgate up that players join from their launcher, party up in and start hunts from. No game window opens; press Play to join it from the same PC.",

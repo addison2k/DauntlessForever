@@ -22,6 +22,7 @@ $privCfg = Join-Path $HomeDir 'AppData\Local\Archon\Saved\Config\WindowsClient'
 foreach ($d in @($privCfg, (Join-Path $HomeDir 'AppData\Roaming'), (Join-Path $HomeDir 'Documents'))) { New-Item -ItemType Directory -Force $d | Out-Null }
 Copy-Item -LiteralPath (Join-Path $Root 'profile\Game.ini') -Destination (Join-Path $privCfg 'Game.ini') -Force
 Set-ChatConfig $privCfg '127.0.0.1' $MetaPort
+Set-MenuBackground $privCfg   # main menu background picked in the launcher (Settings)
 
 # The first argument is the backend address; the DLL in client mode points the game at it.
 $gameArgs = @("127.0.0.1:$MetaPort", "-AUTH_PASSWORD=$key", '-AUTH_LOGIN=unused', '-AUTH_TYPE=exchangecode',

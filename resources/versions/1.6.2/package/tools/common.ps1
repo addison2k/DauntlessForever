@@ -198,3 +198,39 @@ function Set-ChatConfig([string]$CfgDir, [string]$ChatHost, [int]$ChatPort) {
     $xmpp = @('[OnlineSubsystemMcp.XMPP]', "ServerAddr=`"ws://$ChatHost`"", "ServerPort=$ChatPort", 'bUseSSL=false', '')
     Set-Content -LiteralPath $eng -Encoding ASCII -Value ($xmpp + $keep)
 }
+
+# Main menu background (1.6.2): data\menu_background.txt (written by the launcher, Settings page) has on=/off= lines of
+# Hunt Pass feature flags. The login screen shows the art of the season whose flag is on. They go into the game's private
+# Engine.ini as LocalMapOptions, which only the menu map's URL gets; Ramsgate and hunts are unchanged.
+# No file (or no on= line) = the section is removed and the game shows its own default.
+function Set-MenuBackground([string]$CfgDir) {
+    try {
+        $eng = Join-Path $CfgDir 'Engine.ini'
+        $lines = if (Test-Path -LiteralPath $eng) { @(Get-Content -LiteralPath $eng) } else { @() }
+        $keep = New-Object System.Collections.Generic.List[string]; $skip = $false
+        foreach ($l in $lines) {
+            if ($l -match '^\[/Script/EngineSettings\.GameMapsSettings\]') { $skip = $true; continue }
+            if ($skip -and $l -match '^\[') { $skip = $false }
+            if (-not $skip) { $keep.Add($l) }
+        }
+        $on = @(); $off = @()
+        $src = Join-Path $DataDir 'menu_background.txt'
+        if (Test-Path -LiteralPath $src) {
+            foreach ($l in @(Get-Content -LiteralPath $src)) {
+                if ($l -match '^\s*(on|off)\s*=(.*)$') {
+                    $kind = $Matches[1]; $list = $Matches[2]   # read before the next -match replaces $Matches
+                    $names = @($list.Split(',') | ForEach-Object { $_.Trim() } | Where-Object { $_ -match '^[A-Za-z0-9_]+$' } |
+                        ForEach-Object { "/Game/Features/HuntPass/$_.${_}_C" })
+                    if ($kind -eq 'on') { $on += $names } else { $off += $names }
+                }
+            }
+        }
+        if ($on.Count) {
+            $opt = '?OverridenFeaturesOn=' + ($on -join ',')
+            if ($off.Count) { $opt += '?OverridenFeaturesOff=' + ($off -join ',') }
+            $keep.Add('[/Script/EngineSettings.GameMapsSettings]'); $keep.Add("LocalMapOptions=$opt"); $keep.Add('')
+            Say "Main menu background: $(($on | ForEach-Object { ($_ -split '\.')[-1] -replace '_bpff_C$','' }) -join ', ')"
+        }
+        Set-Content -LiteralPath $eng -Encoding ASCII -Value $keep
+    } catch { Say "Main menu background not changed: $($_.Exception.Message)" 'Yellow' }
+}

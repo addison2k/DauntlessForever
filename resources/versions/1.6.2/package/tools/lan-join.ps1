@@ -95,6 +95,7 @@ foreach ($d in @($privCfg, (Join-Path $HomeDir 'AppData\Roaming'), (Join-Path $H
 $ini = (Get-Content -LiteralPath (Join-Path $Root 'profile\Game.ini') -Raw) -replace "127\.0\.0\.1:$MetaPort", "${hostIp}:$hostPort"
 [IO.File]::WriteAllText((Join-Path $privCfg 'Game.ini'), $ini)
 Set-ChatConfig $privCfg $hostIp $hostPort
+Set-MenuBackground $privCfg   # main menu background picked in the launcher (Settings)
 
 $gameArgs = @("${hostIp}:$hostPort", "-AUTH_PASSWORD=$key", '-AUTH_LOGIN=unused', '-AUTH_TYPE=exchangecode',
     '-epicapp=appidlol', '-epicenv=Prod', '-EpicPortal', '-epicusername=usernamelol', '-epicuserid=useridlol',

@@ -51,6 +51,12 @@ if ($Uninstall) {
             Say 'The dxgi.dll in the game folder is not this package''s loader (maybe a mod like ReShade, or an older loader). Left in place.' 'Yellow'
         }
     }
+    # the launcher's custom main menu picture (a mod pak of ours; the file name is ours alone)
+    $uart = Join-Path $ugame 'Archon\Content\Paks\zzzz_DauntlessForever_MenuArt_P.pak'
+    if (Test-Path -LiteralPath $uart) {
+        Move-Item -LiteralPath $uart -Destination (Join-Path $ubak "removed_${ustamp}_MenuArt_P.pak")
+        Say 'Custom main menu picture taken out of the game folder (kept in the backup folder).' 'Green'
+    }
     Say ''
     Say 'Done. Your offline progress stays in the data folder of this package.' 'Green'
     exit 0

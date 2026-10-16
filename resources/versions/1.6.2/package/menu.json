@@ -1,0 +1,124 @@
+{
+ "_comment": [
+  "Main menu (login screen) backgrounds for 1.6.2. The game takes the login art from the Hunt Pass season whose",
+  "feature flag is on (HuntPass_SeasonXX_Assets.LoginTexture). The launcher writes the choice to data/menu_background.txt;",
+  "play-162.ps1 and lan-join.ps1 put it in the game's private Engine.ini as [/Script/EngineSettings.GameMapsSettings]",
+  "LocalMapOptions=?OverridenFeaturesOn=...?OverridenFeaturesOff=... (only the menu map's URL; Ramsgate is unchanged).",
+  "tested=false: the art is in the game files and switched this way, not yet seen in game."
+ ],
+ "backgrounds": [
+  {
+   "key": "default",
+   "title": "Default (Time Strike)",
+   "season": "13a",
+   "flag": null,
+   "tested": true
+  },
+  {
+   "key": "s12b",
+   "title": "Realm of Ice",
+   "season": "12b",
+   "flag": "hunt_pass_s12b_bpff",
+   "tested": true
+  },
+  {
+   "key": "s12a",
+   "title": "Cold Front",
+   "season": "12a",
+   "flag": "hunt_pass_s12a_bpff",
+   "tested": false
+  },
+  {
+   "key": "s11b",
+   "title": "Alchemy of War",
+   "season": "11b",
+   "flag": "hunt_pass_s11b_bpff",
+   "tested": false
+  },
+  {
+   "key": "s11a",
+   "title": "Strange Horizons",
+   "season": "11a",
+   "flag": "hunt_pass_s11a_bpff",
+   "tested": false
+  },
+  {
+   "key": "s10c",
+   "title": "Farslayer's Fall",
+   "season": "10c",
+   "flag": "hunt_pass_s10c_bpff",
+   "tested": false
+  },
+  {
+   "key": "s10b",
+   "title": "Clear Skies",
+   "season": "10b",
+   "flag": "hunt_pass_s10b_bpff",
+   "tested": false
+  },
+  {
+   "key": "s10a",
+   "title": "Relics & Ruin",
+   "season": "10a",
+   "flag": "hunt_pass_s10a_bpff",
+   "tested": false
+  },
+  {
+   "key": "s09b",
+   "title": "Rogue Elements",
+   "season": "09b",
+   "flag": "hunt_pass_s09b_bpff",
+   "tested": false
+  },
+  {
+   "key": "s09a",
+   "title": "Searing Talons",
+   "season": "09a",
+   "flag": "hunt_pass_s09a_bpff",
+   "tested": false
+  },
+  {
+   "key": "s08b",
+   "title": "Aetherpunk",
+   "season": "08b",
+   "flag": "hunt_pass_s08b_bpff",
+   "tested": false
+  },
+  {
+   "key": "s08a",
+   "title": "Myth & Legend",
+   "season": "08a",
+   "flag": "hunt_pass_s08a_bpff",
+   "tested": false
+  }
+ ],
+ "huntPassFlags": [
+  "hunt_pass_s03_bpff",
+  "hunt_pass_s04_bpff",
+  "hunt_pass_s05_bpff",
+  "hunt_pass_s06_1_bpff",
+  "hunt_pass_s06b_bpff",
+  "hunt_pass_s07a_bpff",
+  "hunt_pass_s07b_bpff",
+  "hunt_pass_s08a_bpff",
+  "hunt_pass_s08a_frostfall_bpff",
+  "hunt_pass_s08b_bpff",
+  "hunt_pass_s08b_saints_bond_bpff",
+  "hunt_pass_s09a_bpff",
+  "hunt_pass_s09b_bpff",
+  "hunt_pass_s10a_bpff",
+  "hunt_pass_s10b_bpff",
+  "hunt_pass_s10c_bpff",
+  "hunt_pass_s11a_bpff",
+  "hunt_pass_s11b_bpff",
+  "hunt_pass_s12a_bpff",
+  "hunt_pass_s12b_bpff",
+  "hunt_pass_s13a_bpff"
+ ],
+ "custom": {
+  "flag": "hunt_pass_s08a_bpff",
+  "title": "Your own picture",
+  "note": "Built by the launcher from the player's picture into season 08a's login texture (taken from their own game files); written as Archon/Content/Paks/zzzz_DauntlessForever_MenuArt_P.pak. Other choices remove that pak.",
+  "tested": true
+ }
+}

@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-15.3",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-15.3.zip",
-                         "sha256":  "043804be2055551b06b63c6ca746dfff72d96abfe8f53d419fe3fb9d4693d0e4",
-                         "date":  "2026-10-15",
-                         "note":  "Lady Luck / Trials shop (56 offers, Champion stock unlocked), all 3 Middleman slots, daily shards stay picked, weekly Trials rotation, safer port check. Shop and fixes w/help KombatKing."
+                         "packageVersion":  "2026-10-16.2",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.2.zip",
+                         "sha256":  "e747d7c2c9bd875e6a704086ad4dc1204db0fcab026b11d2c1d01f7873f66342",
+                         "date":  "2026-10-16",
+                         "note":  "Main menu background: pick any of 12 Hunt Pass seasons or your own picture (needs launcher 0.2.2)."
                      },
                      {
                          "id":  "1.14.7",
@@ -18,9 +18,9 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.2.1",
-                     "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.1",
-                     "notes":  "Host Mode: keep a server running on your PC. Bring your Dauntless Revived (1.4.4) character from the More menu.",
-                     "date":  "2026-10-15"
+                     "version":  "0.2.2",
+                     "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.2",
+                     "notes":  "Main menu background in Settings: 12 Hunt Pass seasons or your own picture.",
+                     "date":  "2026-10-16"
                  }
 }

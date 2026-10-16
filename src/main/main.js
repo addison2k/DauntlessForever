@@ -289,6 +289,90 @@ ipcMain.handle('events:set', (_e, id, eventKey, dressingKey) => {
   return { ok: true, running: R.isRunning(v.id) };
 });
 
+// ---------------------------------------------------------------- Main menu background (package file menu.json)
+// The choice is written to data/menu_background.txt: a "# keys" line for the launcher, then on=/off= Hunt Pass flags that
+// play-162.ps1 / lan-join.ps1 put in the game's private Engine.ini (LocalMapOptions of the menu map). Takes effect at the
+// next game start. Versions without menu.json don't show the setting.
+// "Your own picture" (menu.json "custom"): menuart.js puts the picture into one season's login texture taken from the
+// player's own game files and writes a small mod pak next to the game's paks; the setting then picks that season.
+// Any other choice takes the mod pak out again. The pak can't be changed while the game or a server of it is running.
+const MenuArt = require('./menuart');
+function menuDef(v) {
+  try { return JSON.parse(fs.readFileSync(path.join(v.dataDir, 'menu.json'), 'utf8').replace(/^\uFEFF/, '')); } catch { return null; }
+}
+const menuBusy = (v) => R.isRunning(v.id) || R.isRunning(v.id + ':host') || R.isRunning(v.id + ':setup');
+const menuPreviewFile = (v) => path.join(v.dataDir, 'data', 'menu_custom.jpg');
+function menuGameDir(v) { try { return V.knownGameDir(v) || ''; } catch { return ''; } }
+function menuHasPak(v) { const g = menuGameDir(v); return !!g && fs.existsSync(MenuArt.modPakPath(g)); }
+function readMenu(v) {
+  if (!v || !v.package) return null;
+  const def = menuDef(v); if (!def) return null;
+  let background = 'default';
+  try {
+    const m = /#\s*keys:\s*background=([\w-]+)/.exec(fs.readFileSync(path.join(v.dataDir, 'data', 'menu_background.txt'), 'utf8'));
+    if (m) background = m[1];
+  } catch {}
+  const list = (def.backgrounds || []).filter(b => b && b.key && b.title);
+  const custom = def.custom && /^[A-Za-z0-9_]+$/.test(def.custom.flag || '') ? def.custom : null;
+  const hasPak = custom ? menuHasPak(v) : false;
+  if (background === 'custom' ? !(custom && hasPak) : !list.some(b => b.key === background)) background = 'default';
+  let preview = '';
+  if (custom && hasPak) { try { preview = 'data:image/jpeg;base64,' + fs.readFileSync(menuPreviewFile(v)).toString('base64'); } catch {} }
+  return { id: v.id, backgrounds: list, background, custom: !!custom, hasPicture: hasPak, preview, running: menuBusy(v) };
+}
+function writeMenuChoice(v, def, key, flag) {
+  const lines = [`# keys: background=${key}`, '# written by the launcher (Settings, main menu background)'];
+  if (flag && /^[A-Za-z0-9_]+$/.test(flag)) {
+    lines.push('on=' + flag);
+    const off = (def.huntPassFlags || []).filter(f => f !== flag && /^[A-Za-z0-9_]+$/.test(f));
+    if (off.length) lines.push('off=' + off.join(','));
+  }
+  fs.mkdirSync(path.join(v.dataDir, 'data'), { recursive: true });
+  fs.writeFileSync(path.join(v.dataDir, 'data', 'menu_background.txt'), lines.join('\r\n') + '\r\n');
+}
+ipcMain.handle('menu:list', (_e, id) => {
+  if (id) return readMenu(byId(id));
+  return registry.map(v => readMenu(v)).filter(Boolean);
+});
+ipcMain.handle('menu:set', (_e, id, key) => {
+  const v = byId(id); if (!v) return { ok: false, error: 'Unknown version.' };
+  const def = menuDef(v); if (!def) return { ok: false, error: 'This version has no menu backgrounds.' };
+  if (key === 'custom') {
+    if (!def.custom || !menuHasPak(v)) return { ok: false, needPicture: true, error: 'Choose a picture first.' };
+    writeMenuChoice(v, def, 'custom', def.custom.flag);
+    return { ok: true, running: menuBusy(v) };
+  }
+  if (menuHasPak(v)) {
+    if (menuBusy(v)) return { ok: false, error: 'Close the game (and Host Mode) first: your own picture is in use.' };
+    try { fs.unlinkSync(MenuArt.modPakPath(menuGameDir(v))); } catch (e) { return { ok: false, error: 'Could not take your picture out of the game folder: ' + e.message }; }
+  }
+  const bg = (def.backgrounds || []).find(b => b.key === key) || { key: 'default', flag: null };
+  writeMenuChoice(v, def, bg.key, bg.flag);
+  return { ok: true, running: menuBusy(v) };
+});
+ipcMain.handle('menu:pickCustom', async (_e, id) => {
+  const v = byId(id); if (!v) return { ok: false, error: 'Unknown version.' };
+  const def = menuDef(v); if (!def || !def.custom) return { ok: false, error: 'This version has no custom background.' };
+  if (menuBusy(v)) return { ok: false, error: 'Close the game (and Host Mode) first, then choose the picture.' };
+  const gameDir = menuGameDir(v);
+  if (!gameDir || !fs.existsSync(path.join(gameDir, 'Archon', 'Content', 'Paks'))) return { ok: false, error: 'The game folder was not found. Download or set up the game first.' };
+  const r = await dialog.showOpenDialog(win, { title: 'Choose a picture for the main menu (it is cropped to a wide 2:1 shape)', properties: ['openFile'],
+    filters: [{ name: 'Pictures', extensions: ['png', 'jpg', 'jpeg', 'bmp'] }] });
+  if (r.canceled || !r.filePaths[0]) return { ok: false, canceled: true };
+  try {
+    const pic = MenuArt.loadPicture(require('electron').nativeImage, r.filePaths[0]);
+    const template = MenuArt.findTemplate(gameDir);
+    if (!template) return { ok: false, error: 'The menu texture was not found in the game files.' };
+    const pak = MenuArt.buildPak(template, pic.rgba);
+    const dst = MenuArt.modPakPath(gameDir), tmp = dst + '.tmp';
+    fs.writeFileSync(tmp, pak); fs.renameSync(tmp, dst);
+    fs.mkdirSync(path.join(v.dataDir, 'data'), { recursive: true });
+    fs.writeFileSync(menuPreviewFile(v), pic.preview);
+    writeMenuChoice(v, def, 'custom', def.custom.flag);
+    return { ok: true, name: path.basename(r.filePaths[0]) };
+  } catch (e) { return { ok: false, error: e.message || String(e) }; }
+});
+
 // ---------------------------------------------------------------- Game Rules (package file rules.json)
 // The picks are written to data/rules.txt as key=value lines; start.ps1 reads them (defaults come from rules.json).
 function readRuleDefs(v) {

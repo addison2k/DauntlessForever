@@ -83,6 +83,45 @@ async function fillSettings() {
   $('set-tool').textContent = info.toolOk ? 'manifest.exe (meszmate/manifest with the plain-chunk fix), checked' : 'Missing or damaged. Reinstall the launcher.';
   $('set-ver').textContent = `Dauntless Forever ${info.version}`;
   $('set-pkgs').textContent = versions.filter(v => v.hasPackage).map(v => `${v.id}: ${v.package.packageVersion}`).join(', ') + (updateLog.length ? ` (last check: ${updateLog[updateLog.length - 1]})` : '');
+  fillMenuBackground();
+}
+// Main menu background (menu.json in the server files; 1.6.2 for now). Hidden when no version has it.
+let menuVer = null;
+async function fillMenuBackground() {
+  let all = [];
+  try { all = (await L.menuBackgrounds()) || []; } catch {}
+  const m = all.find(x => x.id === '1.6.2') || all[0];
+  $('set-menu-row').hidden = !m;
+  if (!m) { menuVer = null; return; }
+  menuVer = m.id;
+  $('set-menu-ver').textContent = m.id;
+  const sel = $('set-menu'); sel.innerHTML = '';
+  for (const b of m.backgrounds) {
+    const o = document.createElement('option');
+    o.value = b.key; o.textContent = b.title + (b.season && b.key !== 'default' ? ` (season ${b.season})` : '') + (b.tested === false ? ' - experimental' : '');
+    sel.appendChild(o);
+  }
+  if (m.custom) { const o = document.createElement('option'); o.value = 'custom'; o.textContent = 'Your own picture...'; sel.appendChild(o); }
+  sel.value = m.background;
+  menuShowCustom(m);
+  $('set-menu-sub').textContent = 'The art behind the game\'s start and login screen, from any Hunt Pass season or your own picture. Changes at the next game start.';
+}
+function menuShowCustom(m) {
+  const isCustom = $('set-menu').value === 'custom';
+  $('set-menu-pick').hidden = !isCustom;
+  $('set-menu-pick').textContent = m && m.hasPicture ? 'Change picture' : 'Choose picture';
+  $('set-menu-preview').hidden = !(isCustom && m && m.preview);
+  if (m && m.preview) $('set-menu-preview').src = m.preview;
+}
+async function menuPickPicture() {
+  $('set-menu-sub').textContent = 'Choose a picture. It is cropped to a wide 2:1 shape from the middle.';
+  $('set-menu-pick').disabled = true;
+  let r; try { r = await L.pickMenuPicture(menuVer); } finally { $('set-menu-pick').disabled = false; }
+  const m = await L.menuBackgrounds(menuVer);
+  if (m) { $('set-menu').value = m.background === 'custom' || !r || !r.ok ? m.background : 'custom'; menuShowCustom(m); }
+  if (r && r.ok) $('set-menu-sub').textContent = `Saved: ${r.name}. You will see it the next time you start the game.`;
+  else if (r && r.canceled) $('set-menu-sub').textContent = m && m.hasPicture ? 'Kept your current picture.' : 'No picture chosen.';
+  else $('set-menu-sub').textContent = (r && r.error) || 'Could not use that picture.';
 }
 async function refreshAll() { for (const v of versions) statuses[v.id] = await L.status(v.id); }
 async function refresh(id) { statuses[id] = await L.status(id); renderShelf(); if (selected === id) renderDetail(); }
@@ -797,6 +836,16 @@ function wire() {
   });
   $('btn-log-clear').addEventListener('click', () => { if (selected) { logs[selected] = []; renderDetail(); } });
   $('set-sky').addEventListener('click', () => { const on = Sky.toggle(); $('set-sky').textContent = on ? 'Turn off' : 'Turn on'; });
+  $('set-menu').addEventListener('change', async () => {
+    if (!menuVer) return;
+    const r = await L.setMenuBackground(menuVer, $('set-menu').value);
+    if (r && r.needPicture) { await menuPickPicture(); return; }
+    const m = await L.menuBackgrounds(menuVer);
+    if (m) { if (!r || !r.ok) $('set-menu').value = m.background; menuShowCustom(m); }
+    $('set-menu-sub').textContent = !r || !r.ok ? ((r && r.error) || 'Could not save that.') :
+      (r.running ? 'Saved. The game is running: you will see it the next time you start the game.' : 'Saved. You will see it the next time you start the game.');
+  });
+  $('set-menu-pick').addEventListener('click', () => { if (menuVer) menuPickPicture(); });
   $('nav').addEventListener('click', (e) => { const b = e.target.closest('.nav-item'); if (b) showPage(b.dataset.page); });
   $('set-games-pick').addEventListener('click', async () => { const p = await L.pickGamesRoot(); if (p) { info.gamesRoot = p; $('set-games').textContent = p; renderDetail(); } });
   $('set-data-open').addEventListener('click', () => L.openPath(info.dataRoot));
