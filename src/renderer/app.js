@@ -85,6 +85,15 @@ async function fillSettings() {
   $('set-pkgs').textContent = versions.filter(v => v.hasPackage).map(v => `${v.id}: ${v.package.packageVersion}`).join(', ') + (updateLog.length ? ` (last check: ${updateLog[updateLog.length - 1]})` : '');
   fillMenuBackground();
   fillGameLanguage();
+  fillKeepFiles();
+}
+// "Keep my server files" (for modders): no server-file updates while it is on
+async function fillKeepFiles() {
+  let on = false; try { on = await L.keepFiles(); } catch {}
+  $('set-keep').textContent = on ? 'Turn off' : 'Turn on';
+  $('set-keep-sub').textContent = on
+    ? 'On: the launcher does not update or replace your installed server files. Updates that come out are listed above but not applied. Turn it off to get them.'
+    : 'For modders: the launcher stops updating or replacing the installed server files (backend, tools, paks), so your own changes stay. Turn it off to get the latest server files again.';
 }
 // Game language (-CULTURE= on the game's command line; the server files do it). Hidden until a version supports it.
 const LANG_SUB = "The language of the game's text and voices. Windows and the launcher stay as they are. Changes at the next game start.";
@@ -910,6 +919,11 @@ function wire() {
     if (r && !r.ok) $('banner-up-text').textContent = r.error;
   });
   $('banner-up-close').addEventListener('click', () => { $('banner-up').hidden = true; });
+  $('set-keep').addEventListener('click', async () => {
+    const b = $('set-keep'); b.disabled = true;
+    try { const on = await L.keepFiles(); if (on) $('set-pkgs').textContent = 'Getting the latest server files...'; await L.setKeepFiles(!on); } catch {}
+    b.disabled = false; await fillSettings();
+  });
   $('set-pkgs-check').addEventListener('click', async () => { $('set-pkgs').textContent = 'Checking...'; await L.checkUpdates(); await fillSettings(); if (!updateLog.length) $('set-pkgs').textContent += ' (up to date)'; });
 
   // while set-up runs in its own window, re-check every few seconds so the steps tick over as it goes

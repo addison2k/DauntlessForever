@@ -36,8 +36,12 @@ const send = (ch, payload) => { if (win && !win.isDestroyed()) win.webContents.s
 
 // After a launcher update the bundled server files are copied into the player's folders before the launcher opens.
 // That can take a minute (thousands of files, antivirus), so a small window says so instead of showing nothing.
+// "Keep my server files" (Settings, for modders): installed server files are never replaced, neither by updates
+// nor by the copy that comes with a new launcher. A version that is not installed yet is still copied in.
+const keepFiles = () => { try { return !!settings.load().keepServerFiles; } catch { return false; } };
+const kept = (v) => keepFiles() && !!v.package && fs.existsSync(path.join(v.dataDir, v.package.play));
 async function syncWithPleaseWait() {
-  const todo = registry.filter(v => { try { return V.needsSync(v); } catch { return false; } });
+  const todo = registry.filter(v => { try { return V.needsSync(v) && !kept(v); } catch { return false; } });
   if (!todo.length) return null;
   let wait = null;
   try {
@@ -153,7 +157,8 @@ ipcMain.handle('launcher:newer', () => newerLauncher);
 async function checkUpdates() {
   try {
     const results = await U.checkAndApply(registry, (msg) => { log('updates', msg); send('updates:event', { msg }); },
-      (id) => R.isRunning(id) || R.isRunning(id + ':setup') || R.isRunning(id + ':host') || D.isDownloading(id), launcherUpdate);
+      (id) => R.isRunning(id) || R.isRunning(id + ':setup') || R.isRunning(id + ':host') || D.isDownloading(id), launcherUpdate,
+      (id) => { const v = byId(id); return !!v && kept(v); });
     if (P.MOCK && process.env.DL_MOCK_LAUNCHER) launcherUpdate({ version: process.env.DL_MOCK_LAUNCHER, url: 'https://github.com/addison2k/DauntlessForever/releases', notes: 'Test notes.' });
     if (results.length) send('updates:done', { results });
   } catch (e) { log('updates', e.message); }
@@ -162,6 +167,17 @@ async function checkUpdates() {
 }
 let autoStarted = false;
 ipcMain.handle('updates:check', () => checkUpdates());
+ipcMain.handle('settings:keepFiles', () => keepFiles());
+// Turning it off fetches what was held back straight away (the window hears about it like any update)
+ipcMain.handle('settings:setKeepFiles', async (_e, on) => {
+  settings.update(s => { s.keepServerFiles = !!on; });
+  log('settings', 'keep server files: ' + (on ? 'on' : 'off'));
+  if (!on) {
+    for (const v of registry) { try { if (!R.isRunning(v.id) && !R.isRunning(v.id + ':host') && V.needsSync(v)) await V.syncPackageAsync(v, () => {}); } catch (e) { log('syncPackage', v.id, e.message); } }
+    checkUpdates();
+  }
+  return keepFiles();
+});
 
 // ---------------------------------------------------------------- credits, community links, supporters
 function readJson(f, fallback) { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return fallback; } }

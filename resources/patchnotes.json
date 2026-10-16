@@ -2,6 +2,13 @@
   "_comment": "Patch notes shown in the launcher (newest first). The launcher also reads this file from the repo, so new notes need no build.",
   "notes": [
     {
+      "date": "2026-10-16","title": "Keep my server files (for modders)",
+      "items": [
+        "Settings: Keep my server files. While it is on, the launcher does not update or replace your installed server files, so changes you made yourself (backend, tools, paks) stay. Updates that come out are listed but not applied; turn it off to get them.",
+        "This is the first launcher update that downloads by itself (a few MB)."
+      ]
+    },
+    {
       "date": "2026-10-16","title": "Small launcher updates, a please-wait window, and more for 1.6.2",
       "items": [
         "From this version on, most launcher updates download by themselves in the background (a few MB instead of the whole launcher). When one is ready, the banner says so: press Restart now, or it is used the next time you open the launcher.",

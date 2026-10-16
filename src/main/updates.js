@@ -51,7 +51,8 @@ function unzip(zip, dir) {
 
 // Returns a list of { id, from, to, applied, error } ; onEvent(msg) for the log.
 // onLauncher(info) hears about packages.json's "launcher" block: { version, url, notes } of the newest launcher.
-async function checkAndApply(registry, onEvent, isBusy, onLauncher) {
+// isHeld(id): the player keeps their own server files (Settings): say an update is there, don't apply it.
+async function checkAndApply(registry, onEvent, isBusy, onLauncher, isHeld) {
   const results = [];
   if (MOCK) return results;
   let index;
@@ -64,6 +65,7 @@ async function checkAndApply(registry, onEvent, isBusy, onLauncher) {
     if (!v || !v.package || !entry.packageVersion || !entry.url || !entry.sha256) continue;
     const have = V.installedPackageVersion(v) || v.package.packageVersion;
     if (V.cmpPackageVersion(entry.packageVersion, have) <= 0) continue;
+    if (isHeld && isHeld(v.id)) { onEvent(`${v.id}: server files ${entry.packageVersion} are available but not applied (Keep my server files is on in Settings).`); continue; }
     if (isBusy(v.id)) { onEvent(`${v.id}: an update is available (${entry.packageVersion}) but the version is in use; next start.`); continue; }
     const r = { id: v.id, from: have, to: entry.packageVersion, applied: false, error: '' };
     results.push(r);
