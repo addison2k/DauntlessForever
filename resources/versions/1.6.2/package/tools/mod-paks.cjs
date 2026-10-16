@@ -86,6 +86,9 @@ async function main() {
   if (!off) {
     try { built.set('zzzzzzzzzzzzzzz_DF_EventIslandFix_P.pak', require(path.join(__dirname, 'event-island-fix.cjs')).build(game)); }
     catch (e) { say('Add-ons: Dark Harvest island fix skipped (' + e.message + ').'); }
+    // Trials: the game's own weekly Trials dates ended in 2021; this moves them to now (trials-fix.cjs).
+    try { built.set('zzzzzzzzzzzzzzz_DF_TrialsSchedule_P.pak', require(path.join(__dirname, 'trials-fix.cjs')).build(game)); }
+    catch (e) { say('Add-ons: Trials schedule skipped (' + e.message + ').'); }
     for (const [name, buf] of built) want.set(name, { buf, hash: crypto.createHash('sha256').update(buf).digest('hex') });
   }
   // The translation for the picked game language, if it is one of ours.

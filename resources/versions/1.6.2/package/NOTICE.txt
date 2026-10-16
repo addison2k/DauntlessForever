@@ -19,6 +19,8 @@ Also by KombatKing (Inventory Editor Cosmetics 162, AGPL-3.0): cosmetics added o
 format the game uses, and the extra rare materials on that page (tools\items.js, items.json).
 Also by KombatKing (Inventory Expansion 162 R1, AGPL-3.0): 868 more dyes, emotes, titles, emojis and other
 cosmetics in the Inventory picker (tools\gear-162.json).
+Trials schedule fix (tools\trials-fix.cjs): the idea of moving the game's expired weekly Trials rows to now is
+from Dauntless Revived (mixutin/dauntless-revived, TrialsSchedule.h); done here as a pak built from your own game files.
 Chinese text: zgh95's translation ("Zhongwen buding" 1.0), given to the project; downloaded only when
 picked as the game language (paks\paks.json).
 Source: backend\*\src and source\ in this folder.

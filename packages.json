@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-16.10",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.10.zip",
-                         "sha256":  "d8fa68345b71746b283c7875d167c6369d516bb2a30d04c656a9b70dd93cfa7f",
+                         "packageVersion":  "2026-10-16.11",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.11.zip",
+                         "sha256":  "b94e188a0aeb6252f9734c0cc85b6aceea5d6ab146bf28ef8414073cb6b191c8",
                          "date":  "2026-10-16",
-                         "note":  "Inventory: Unlock all cosmetics, 868 more cosmetics in the picker (KombatKing)"
+                         "note":  "Trials work again (weekly Trial rotation)"
                      },
                      {
                          "id":  "1.14.7",

@@ -42,12 +42,12 @@ function read(file, e) {
     return Buffer.concat(parts);
   } finally { fs.closeSync(fd); }
 }
-function find(gameDir) {
+function find(gameDir, asset = ASSET) {   // asset: another table to read (trials-fix.cjs)
   const dir = path.join(gameDir, 'Archon', 'Content', 'Paks');
   for (const f of fs.readdirSync(dir).filter(f => /^Archon_\d+-WindowsClient\.pak$/i.test(f))) {
     const full = path.join(dir, f); let ix; try { ix = index(full); } catch { continue; } if (!ix) continue;
-    const mount = ix.mount.replace(/^(\.\.\/)+/, ''); if (!ASSET.startsWith(mount)) continue;
-    const rel = ASSET.slice(mount.length), ua = ix.entries.get(rel + '.uasset'), ue = ix.entries.get(rel + '.uexp');
+    const mount = ix.mount.replace(/^(\.\.\/)+/, ''); if (!asset.startsWith(mount)) continue;
+    const rel = asset.slice(mount.length), ua = ix.entries.get(rel + '.uasset'), ue = ix.entries.get(rel + '.uexp');
     if (ua && ue) return { uasset: read(full, ua), uexp: read(full, ue) };
   }
   return null;
@@ -115,4 +115,4 @@ function build(gameDir) {
   const base = path.posix.basename(ASSET), dir = path.posix.dirname(ASSET).replace(/^Archon\/Content\//, '') + '/';
   return makePak([[base + '.uasset', r.uasset], [base + '.uexp', r.uexp]], '../../../Archon/Content/' + dir);
 }
-module.exports = { build, find, patch, names };
+module.exports = { build, find, patch, names, tagAt, props, makePak };
