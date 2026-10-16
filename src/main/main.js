@@ -168,6 +168,10 @@ async function checkUpdates() {
 let autoStarted = false;
 ipcMain.handle('updates:check', () => checkUpdates());
 ipcMain.handle('settings:keepFiles', () => keepFiles());
+// "Light hosting" (Play page): Host with friends uses the old way (the server runs only while your game is open)
+// instead of starting this PC's server first (Host Mode, private) and then the game.
+ipcMain.handle('settings:lightHost', () => { try { return !!settings.load().lightHost; } catch { return false; } });
+ipcMain.handle('settings:setLightHost', (_e, on) => { settings.update(s => { s.lightHost = !!on; }); return !!on; });
 // Turning it off fetches what was held back straight away (the window hears about it like any update)
 ipcMain.handle('settings:setKeepFiles', async (_e, on) => {
   settings.update(s => { s.keepServerFiles = !!on; });
@@ -536,6 +540,7 @@ ipcMain.handle('items:gear', async (_e, id, characterId, action, list) => {
   const v = byId(id); if (!v || !v.package) return { ok: false, error: 'Unknown version.' };
   if (R.isRunning(v.id) || R.isRunning(v.id + ':setup')) return { ok: false, error: 'Close the game first (press Stop), then change gear.' };
   if (!/^[\w-]{1,64}$/.test(String(characterId))) return { ok: false, error: 'Unknown character.' };
+  if (action === 'unlockall') return runItems(v, ['addcosmetic', String(characterId), 'all']);
   if (action !== 'addgear' && action !== 'removegear') return { ok: false, error: 'Unknown action.' };
   const clean = (Array.isArray(list) ? list : []).map(String).filter(x => /^[\w-]{1,80}$/.test(x)).slice(0, 500);
   if (!clean.length) return { ok: false, error: 'Nothing to change.' };

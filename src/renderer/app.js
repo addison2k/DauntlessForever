@@ -269,8 +269,19 @@ function renderDetail() {
 }
 // "Host with friends": the selected version, hosted through the Dauntless Forever relay (main/social.js). Friends
 // see it in their Friends panel and press Join. Hidden in Offline Forever mode and for versions that cannot host yet.
+// Host with friends starts this PC's own server first (Host Mode, private: your friends list; public with Allow
+// randoms), then opens your game on it, so friends can join even before you are in. "Light hosting" (or a version
+// without Host Mode) keeps the old way: one window that hosts while your game is open.
+let hostCan = null, hostCanAt = 0, lightHost = false, pendingPlay = null;
+function refreshHostCan() {
+  hostCanAt = Date.now();
+  Promise.all([L.hostState().catch(() => null), L.lightHost().catch(() => false)]).then(([s, light]) => {
+    hostCan = new Set((s && s.versions) || []); lightHost = !!light; renderHostButton();
+  });
+}
 function renderHostButton() {
   const v = versions.find(x => x.id === selected); const hb = $('btn-host'); if (!v || !hb) return;
+  if (!hostCanAt || Date.now() - hostCanAt > 30000) refreshHostCan();
   const soc = window.dfSocial || null, st = stateOf(v);
   const run = (soc && soc.running) || [];
   const hostingThis = run.some(r => r.id === v.id + ':host');
@@ -286,10 +297,23 @@ function renderHostButton() {
   hb.title = st.key !== 'ready' && !hostingThis ? 'Ready once the game is downloaded and set up' : soc && soc.onlineOff ? soc.onlineOff : (hostingThis ? (soc && soc.hostPublic ? 'Your game is open to everyone' : 'Your game is open to your friends')
     : `Play ${v.id} and let your friends${randoms ? ' (and players using Play online)' : ''} join you${ping}`);
   renderOnline(v, soc, st, run, hostingThis);
+  // Light hosting: under the Host button, only where Host Mode can run this version
+  const lo = $('host-light-opt'), lbox = $('opt-light');
+  const canHM = !!(hostCan && hostCan.has(v.id));
+  lo.hidden = hb.hidden || !canHM;
+  lbox.checked = lightHost; lbox.disabled = hostingThis || !!hm;
+  lo.classList.toggle('off', hostingThis || !!hm);
+  lo.title = 'Off (recommended): your server starts first and stays up until you press Stop hosting, so friends can always get in. On: the old way, lighter on your PC; the server stops when you close the game.';
   if (hm) {
-    hb.title = 'Host Mode is running this version (see the Host Mode page)';
+    // the server is up (or starting): the yellow button stops it
+    hb.lastChild.textContent = hm.phase === 'stopping' ? 'Stopping' : 'Stop hosting';
+    hb.disabled = hm.phase === 'stopping';
+    hb.classList.toggle('on', true);
+    hb.title = `Your server "${hm.name}" is ${hm.phase === 'running' ? 'up' : 'starting'} (${hm.mode === 'public' ? 'open to everyone' : 'friends only'}). Click to stop it.`;
     const p = $('btn-primary'), n = $('action-note');
-    if (st.busy === 'play') { n.textContent = 'Close the game when you like: Host Mode keeps the server running.'; n.className = 'action-note'; }
+    // started with the Host button: open the game as soon as the server is up
+    if (pendingPlay === v.id && hm.phase === 'running' && st.key === 'ready' && st.busy !== 'play') { pendingPlay = null; play(v); }
+    if (st.busy === 'play') { n.textContent = 'Your server stays up for your friends when you close the game. Press Stop hosting when you are done.'; n.className = 'action-note'; }
     else if (st.key === 'ready') {
       p.textContent = 'Play on your server'; p.disabled = hm.phase !== 'running';
       n.className = 'action-note';
@@ -590,6 +614,18 @@ function renderGear(cur, ch, note) {
     act('addgear', [id], 'Added');
   };
   $('gear-add').onkeydown = (e) => { if (e.key === 'Enter') $('gear-add-btn').click(); };
+  // Unlock all cosmetics (server files .10 and newer say they can with unlockAll)
+  $('gear-all-row').hidden = !cur.d.save.unlockAll;
+  const allBtn = $('gear-all-btn');
+  allBtn.textContent = gearConfirm === '*all' ? 'Unlock all of them?' : 'Unlock all cosmetics';
+  allBtn.onclick = async () => {
+    if (gearConfirm !== '*all') { gearConfirm = '*all'; renderItems(false); return; }
+    allBtn.disabled = true; itemNote = 'Unlocking every cosmetic. This takes a few seconds...'; itemErr = false; note.textContent = itemNote;
+    const r = await L.gearItems(itemVer, itemChar, 'unlockall', ['all']);
+    if (!r || !r.ok) { itemNote = (r && r.error) || 'Could not unlock cosmetics.'; itemErr = true; }
+    else { itemNote = `Unlocked ${r.addedCount} cosmetics (${r.alreadyCount} you already had). You will see them the next time you play ${itemVer}. (Backup kept in backup\\inventory.)`; itemErr = false; }
+    allBtn.disabled = false; gearConfirm = null; renderItems(true);
+  };
   const host = $('gear-list'); host.innerHTML = '';
   const order = ['Weapons', 'Armour', 'Lanterns', 'Weapon parts', 'Accessories', 'Banners', 'Flares'];
   const owned = ch.gear.map(g => ({ ...g, name: (names.get(g.id) || [g.id, g.id, 'Other'])[1], type: (names.get(g.id) || [g.id, g.id, 'Other'])[2] }))
@@ -790,6 +826,30 @@ function wire() {
   $('btn-host').addEventListener('click', async () => {
     const v = versions.find(x => x.id === selected); if (!v) return;
     const hb = $('btn-host'), n = $('action-note');
+    const soc = window.dfSocial || {};
+    const hm = soc.hostMode && soc.hostMode.version === v.id ? soc.hostMode : null;
+    if (hm) {
+      // Stop hosting: friends still in get 60 seconds and their characters are saved home
+      let players = 0; try { players = ((await L.hostState()).players || []).length; } catch {}
+      const ok = await confirm('Stop hosting?', players ? `${players} friend${players > 1 ? 's are' : ' is'} in your game. They get 60 seconds and their characters are saved home. Your game closes too.` : 'This closes your server. If your game is open, it closes too.');
+      if (!ok) return;
+      pendingPlay = null; hb.disabled = true;
+      const r = await L.hostStop(players > 0);
+      if (r && r.ok === false) { n.textContent = r.error || 'Could not stop hosting.'; n.className = 'action-note err'; hb.disabled = false; }
+      return;
+    }
+    if (!lightHost && hostCan && hostCan.has(v.id)) {
+      hb.disabled = true; n.className = 'action-note';
+      let friends = 0; try { friends = (await L.hostState()).friends || 0; } catch {}
+      n.textContent = soc.allowRandoms ? 'Starting your server (open to everyone: your friends and Play online players). Your game opens by itself in a moment.'
+        : friends ? `Starting your server. Only the ${friends} ${friends === 1 ? 'person' : 'people'} on your Friends list can join (tick Allow randoms to open it to everyone). Your game opens by itself in a moment.`
+        : 'Starting your server, but your Friends list is empty, so nobody can join yet. Add friends on the Friends page, or tick Allow randoms. Your game opens by itself in a moment.';
+      try { await L.hostSet({ version: v.id, mode: soc.allowRandoms ? 'public' : 'private' }); } catch {}
+      const r = await L.hostStart(v.id);
+      if (r && r.ok === false) { n.textContent = r.error || 'Could not start your server.'; n.className = 'action-note err'; hb.disabled = false; return; }
+      pendingPlay = v.id;
+      return;
+    }
     hb.disabled = true; n.className = 'action-note';
     n.textContent = 'Starting your game as a host. A window opens: keep it open while you play. Friends can join once you reach the main menu.';
     const r = await L.socialHost(v.id);
@@ -803,6 +863,10 @@ function wire() {
     ob.disabled = true;
     const r = await L.socialPlayOnline(v.id);
     if (r && r.ok === false) { n.textContent = r.error || 'Could not go online.'; n.className = 'action-note err'; ob.disabled = false; }
+  });
+  $('opt-light').addEventListener('change', async (e) => {
+    try { lightHost = await L.setLightHost(!!e.target.checked); } catch {}
+    renderHostButton();
   });
   $('opt-randoms').addEventListener('change', async (e) => {
     const s = await L.socialSetAllowRandoms(!!e.target.checked);

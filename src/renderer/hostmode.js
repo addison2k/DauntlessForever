@@ -152,7 +152,10 @@
   function wire() {
     $('hm-start').onclick = async () => {
       $('hm-start').disabled = true;
-      note('Starting Host Mode. No game window opens; this page shows when it is up.');
+      const pub = ((S && S.settings) || {}).mode === 'public', n = (S && S.friends) || 0;
+      note(pub ? 'Starting Host Mode (Public: anyone using Play online can join, plus your friends). No game window opens; this page shows when it is up.'
+        : n ? `Starting Host Mode (Private: only the ${n} ${n === 1 ? 'person' : 'people'} on your Friends list can join). Switch to Public to let anyone join. No game window opens.`
+        : 'Starting Host Mode (Private), but your Friends list is empty, so nobody can join yet. Add friends on the Friends page, or switch to Public.', !pub && !n);
       await act(L.hostStart($('hm-version').value || undefined));
     };
     $('hm-stop').onclick = () => act(L.hostStop(false), 'Host Mode stopped.');

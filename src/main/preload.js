@@ -42,6 +42,8 @@ contextBridge.exposeInMainWorld('launcher', {
   restartLauncher: invoke('launcher:restart'),
   checkUpdates: invoke('updates:check'),
   keepFiles: invoke('settings:keepFiles'),
+  lightHost: invoke('settings:lightHost'),
+  setLightHost: invoke('settings:setLightHost'),
   setKeepFiles: invoke('settings:setKeepFiles'),
   communityInfo: invoke('community:info'),
   seasons: invoke('seasons:list'),

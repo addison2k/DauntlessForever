@@ -325,7 +325,7 @@ async function poll() {
 
 // ------------------------------------------------------------------ public games
 const SEARCH_MS = 40000;
-const allowRandoms = () => { try { return !!settings.load().allowRandoms; } catch { return false; } };
+const allowRandoms = () => { try { return settings.load().allowRandoms !== false; } catch { return true; } };   // on unless the player unticked it
 const sleep = (ms) => new Promise(res => setTimeout(res, ms));
 // Host a version: friends only, or open to everyone (pub: Play online, or "Allow randoms" ticked)
 function startHost(versionId, pub) {

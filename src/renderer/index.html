@@ -84,6 +84,7 @@
         <button class="ghost" id="btn-more">More</button>
       </div>
       <label class="host-opt" id="host-opt" hidden><input type="checkbox" id="opt-randoms"><span><span class="opt-name">Allow randoms</span><span class="opt-sub">Play online players can join you</span></span></label>
+      <label class="host-opt" id="host-light-opt" hidden><input type="checkbox" id="opt-light"><span><span class="opt-name">Light hosting</span><span class="opt-sub">For older PCs: the server only runs while your game is open</span></span></label>
 
     </div>
     <div class="warn-box" id="d-warn" hidden></div>
@@ -263,8 +264,9 @@
     </div>
     <div id="item-groups"></div>
     <div id="item-gear" hidden>
-      <h2 class="list-head">Gear</h2>
-      <p class="small">Weapons, armour, lanterns, parts, accessories, banners and flares. New gear starts at level 0. Gear you have equipped can't be removed; unequip it in game first.</p>
+      <h2 class="list-head">Gear and cosmetics</h2>
+      <p class="small">Weapons, armour, lanterns, parts, accessories, banners, flares, dyes, emotes, titles and other cosmetics. New gear starts at level 0. Gear you have equipped can't be removed; unequip it in game first.</p>
+      <div class="item-add-row" id="gear-all-row" hidden><button class="ghost" id="gear-all-btn">Unlock all cosmetics</button><span class="small">Every dye, emote, title, skin, banner and flare in the list below, for this character.</span></div>
       <div class="item-add-row"><input id="gear-add" list="gear-options" placeholder="Type a name or ID, e.g. Skarn's Vengeance" spellcheck="false" autocomplete="off"><button class="ghost" id="gear-add-btn">Add gear</button></div>
       <datalist id="gear-options"></datalist>
       <div class="season-list gear-list" id="gear-list"></div>

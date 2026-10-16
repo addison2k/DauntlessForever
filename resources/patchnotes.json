@@ -2,14 +2,26 @@
   "_comment": "Patch notes shown in the launcher (newest first). The launcher also reads this file from the repo, so new notes need no build.",
   "notes": [
     {
-      "date": "2026-10-16","title": "Keep my server files (for modders)",
+      "date": "2026-10-16",
+      "title": "Host with friends: your server starts first",
+      "items": [
+        "Host with friends now starts your own server first, then opens your game on it. Friends can join as soon as it is up, even before you are in, and it stays up until you press Stop hosting.",
+        "Allow randoms moved under Play online. New option under Host with friends: Light hosting, the old way for older PCs (the server only runs while your game is open).",
+        "Host Mode and Host with friends start Public by default (anyone using Play online can join). Starting Private tells you how many people on your Friends list can join.",
+        "Inventory page: new Unlock all cosmetics button, and 868 more dyes, emotes, titles and emojis to pick from (thanks KombatKing). Needs 1.6.2 server files .10."
+      ]
+    },
+    {
+      "date": "2026-10-16",
+      "title": "Keep my server files (for modders)",
       "items": [
         "Settings: Keep my server files. While it is on, the launcher does not update or replace your installed server files, so changes you made yourself (backend, tools, paks) stay. Updates that come out are listed but not applied; turn it off to get them.",
         "This is the first launcher update that downloads by itself (a few MB)."
       ]
     },
     {
-      "date": "2026-10-16","title": "Small launcher updates, a please-wait window, and more for 1.6.2",
+      "date": "2026-10-16",
+      "title": "Small launcher updates, a please-wait window, and more for 1.6.2",
       "items": [
         "From this version on, most launcher updates download by themselves in the background (a few MB instead of the whole launcher). When one is ready, the banner says so: press Restart now, or it is used the next time you open the launcher.",
         "1.6.2 server files: Unlimited Resupply Beacons (Game Rules, solo only) and the All Dyes Collection in the store, by KombatKing; the free store pack is on.",
@@ -20,7 +32,8 @@
       ]
     },
     {
-      "date": "2026-10-16","title": "Play the game in your language, and a new title bar",
+      "date": "2026-10-16",
+      "title": "Play the game in your language, and a new title bar",
       "items": [
         "Settings: a new Game language setting starts the game in English, German, Spanish, French, Italian, Portuguese (Brazil), Russian, Polish, Turkish, Japanese, Korean or Chinese. Windows stays as it is.",
         "Part breaks work again on non-English Windows (French, German, Italian...): tails sever and grey damage shows (1.6.2 server files).",
@@ -28,7 +41,8 @@
       ]
     },
     {
-      "date": "2026-10-16","title": "Pick the game's main menu background (1.6.2)",
+      "date": "2026-10-16",
+      "title": "Pick the game's main menu background (1.6.2)",
       "items": [
         "Settings: a new Main menu background setting changes the art behind the game's start screen to any of 12 Hunt Pass seasons, from Myth & Legend to Time Strike.",
         "Your own picture: choose any PNG, JPG or BMP and it shows behind the start screen. It is cropped to a wide shape from the middle and built on your PC from your own game files.",
@@ -36,7 +50,8 @@
       ]
     },
     {
-      "date": "2026-10-15","title": "Host Mode: keep a server running",
+      "date": "2026-10-15",
+      "title": "Host Mode: keep a server running",
       "items": [
         "New Host Mode page: this PC keeps a Ramsgate up that players join from their launcher, party up in and start hunts from. No game window opens; press Play to join it from the same PC.",
         "Private (your friends only) or Public (anyone using Play online), with a server name, a welcome line in chat, a player limit and a ban list.",
@@ -44,7 +59,8 @@
       ]
     },
     {
-      "date": "2026-10-14","title": "Bring your Revived character, and add gear (1.6.2)",
+      "date": "2026-10-14",
+      "title": "Bring your Revived character, and add gear (1.6.2)",
       "items": [
         "New: IMPORT from Dauntless Revived (1.4.4).bat in the 1.6.2 folder brings your 1.4.4 gear, Rams, cells and materials into your 1.6.2 character. Your Revived save is only read; your 1.6.2 save is backed up first.",
         "Inventory page: a new Gear section lists your weapons, armour and lanterns, adds any 1.6.2 gear by name, and removes gear you are not wearing."

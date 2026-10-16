@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-16.9",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.9.zip",
-                         "sha256":  "9a5d2eb81e61db104eb62b5e920d0009d01cf438a8e58032a40fae8f9b227f7e",
+                         "packageVersion":  "2026-10-16.10",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.10.zip",
+                         "sha256":  "d8fa68345b71746b283c7875d167c6369d516bb2a30d04c656a9b70dd93cfa7f",
                          "date":  "2026-10-16",
-                         "note":  "Inventory page stores cosmetics the way the game does, rare materials (thanks KombatKing)"
+                         "note":  "Inventory: Unlock all cosmetics, 868 more cosmetics in the picker (KombatKing)"
                      },
                      {
                          "id":  "1.14.7",
@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.2.5",
+                     "version":  "0.2.6",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.4",
-                     "notes":  "Keep my server files setting for modders",
+                     "notes":  "",
                      "date":  "2026-10-16",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.2.5.asar",
-                                 "sha256":  "9108088deb81d32de54bfa3194eca6192e9ee42bc8ed72714708c8321b7d207f",
-                                 "size":  657644,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.2.6.asar",
+                                 "sha256":  "9c2133ffe676778dfda7879185fca37054a6ebd3c73e9765f00add07215bafa2",
+                                 "size":  665507,
                                  "minShell":  "0.2.4"
                              }
                  }

@@ -21,7 +21,7 @@ const settings = require('./settings');
 const { IS_WIN } = require('./paths');
 
 const DEFAULTS = {
-  version: '', mode: 'private', name: '', welcome: '', limit: 8, bans: [],
+  version: '', mode: 'public', name: '', welcome: '', limit: 8, bans: [],
   autoStart: false, autoRestart: true, keepAwake: true, startWithWindows: false,
   dailyRestart: false, restartAt: '05:00', dailyBackup: true, backupKeep: 7,
 };
@@ -49,13 +49,15 @@ let cpuPrev = null, cpuPct = null, huntsNow = null, huntsAt = 0;
 // ------------------------------------------------------------------ settings
 const cfg = () => {
   const s = settings.load().hostMode || {};
-  return { ...DEFAULTS, ...s, bans: Array.isArray(s.bans) ? s.bans : [] };
+  const c = { ...DEFAULTS, ...s, bans: Array.isArray(s.bans) ? s.bans : [] };
+  if (!s.modeChosen) c.mode = 'public';   // 0.2.5 and older saved 'private' by default; Public is the default now
+  return c;
 };
 const cleanText = (t, max) => String(t || '').replace(/[^\x20-\x7e]/g, '').replace(/\s+/g, ' ').trim().slice(0, max);
 function setCfg(patch) {
   const c = cfg(), p = patch || {};
   if (typeof p.version === 'string') c.version = p.version;
-  if (p.mode === 'public' || p.mode === 'private') c.mode = p.mode;
+  if (p.mode === 'public' || p.mode === 'private') { c.mode = p.mode; c.modeChosen = true; }
   if (typeof p.name === 'string') c.name = cleanText(p.name, 32);
   if (typeof p.welcome === 'string') c.welcome = cleanText(p.welcome, 140);
   if (p.limit !== undefined) { const n = Math.round(Number(p.limit)); if (n >= LIMIT_MIN && n <= LIMIT_MAX) c.limit = n; }

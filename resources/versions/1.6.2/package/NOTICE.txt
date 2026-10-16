@@ -17,6 +17,8 @@ Also by KombatKing (All-in-One R10, AGPL-3.0): no duplicate one-copy items on a 
 (tools\import-singletons162.json) and the duplicate cleanup (tools\inventory-deduplicate162.cjs, FIX duplicate items.bat).
 Also by KombatKing (Inventory Editor Cosmetics 162, AGPL-3.0): cosmetics added on the Inventory page are stored in the
 format the game uses, and the extra rare materials on that page (tools\items.js, items.json).
+Also by KombatKing (Inventory Expansion 162 R1, AGPL-3.0): 868 more dyes, emotes, titles, emojis and other
+cosmetics in the Inventory picker (tools\gear-162.json).
 Chinese text: zgh95's translation ("Zhongwen buding" 1.0), given to the project; downloaded only when
 picked as the game language (paks\paks.json).
 Source: backend\*\src and source\ in this folder.

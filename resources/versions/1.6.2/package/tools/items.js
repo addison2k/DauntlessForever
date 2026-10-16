@@ -17,6 +17,8 @@
 //       unlocks cosmetics (dyes, emotes, titles, emojis, armour and weapon skins, banner parts, flares, character
 //       creator options) the way the game keeps each one: most are an unlock (a count of 1), some are one-of-a-kind
 //       items. Which is which comes from tools\cosmetics-162.json. Cosmetics you already have are left as they are.
+//   node tools\items.js addcosmetic <characterId|*> all
+//       unlocks every cosmetic in the Inventory picker (tools\gear-162.json) at once. Curiosity charges are left out.
 // Typing it yourself (PowerShell drops the quotes inside JSON): the list can also be plain words after the character,
 //   node tools\items.js set * CURRENCY_NOTES=50000 TOKEN_BOUNTY_DRAFT=10
 //   node tools\items.js addcosmetic * DYE_BLUE01_DURABLE EM_CHEER_01
@@ -57,6 +59,8 @@ function mentioned(text, id) {
 function addUnlockStack(stacks, inst, id, loadout) {
     const held = stacks.filter((x) => x && x.catalogId === id);
     if (held.some((x) => !Number.isSafeInteger(x.quantity) || x.quantity < 0)) throw Error("Invalid cosmetic quantity: " + id);
+    // curiosity charges (TY_) are counted, not unlocked: never cut a stack of 5 down to 1
+    if (/^TY_/.test(id) && held.some((x) => x.quantity > 0)) return { stacks, inst, changed: false };
     const already = held.some((x) => x.quantity > 0);
     const next = stacks.filter((x) => !x || x.catalogId !== id); next.push({ catalogId: id, quantity: 1 });
     // Repair only the exact stateless entry the old editor made; equipped or stateful entries stay.
@@ -148,7 +152,7 @@ function backup() {
                 if (gear) for (const i of JSON.parse(r.stackedItems || "[]")) if (i && i.quantity > 0 && gearIds.has(i.catalogId) && stackedUnlocks.has(i.catalogId) && !gear.some((g) => g.id === i.catalogId)) gear.push({ id: i.catalogId, instanceId: i.catalogId, level: 0, equipped: lt.includes('"' + i.catalogId + '"') });
                 return { id: r.characterId, name: names[r.characterId] || "", items, gear };
             });
-            out({ ok: true, characters, gearCatalog: cat || undefined });
+            out({ ok: true, characters, gearCatalog: cat || undefined, unlockAll: !!(cat && COS.stacked.length) });
         } finally { db.close(); }
         return;
     }
@@ -254,9 +258,18 @@ function backup() {
         return;
     }
     if (cmd === "addcosmetic") {
-        const list = argList("list");
-        if (!Array.isArray(list) || !list.length || list.length > 3000) fail("Nothing to change.");
         const cat = cosmeticCatalog();
+        let list = argList("list");
+        // "all": every cosmetic that is also in the Inventory picker (ids outside the game's catalog are never in it),
+        // without curiosity charges. Answers with counts, not 2000+ names.
+        const all = Array.isArray(list) && list.length === 1 && String(list[0]).toLowerCase() === "all";
+        if (all) {
+            const g = gearCatalog();
+            if (!g || !cat) fail("This version's server files have no cosmetics list. Update the server files.");
+            const pick = new Set(g.filter((x) => x[2] !== "Curiosities (charges)").map((x) => x[0]));
+            list = [...(cat.stacked || []), ...(cat.instanced || [])].filter((id) => pick.has(id) && !/^TY_/.test(id));
+        }
+        if (!Array.isArray(list) || !list.length || list.length > 3000) fail("Nothing to change.");
         if (!cat || !Array.isArray(cat.stacked) || !Array.isArray(cat.instanced)) fail("This version's server files have no cosmetics list (tools\\cosmetics-162.json). Update the server files.");
         const stackedIds = new Set(cat.stacked), instancedIds = new Set(cat.instanced);
         if (await backendUp()) fail("Dauntless is still running. Close the game (and the launcher's server window), then try again.");
@@ -292,7 +305,8 @@ function backup() {
             const w = new Database(DB, { fileMustExist: true });
             try { const u = w.prepare("update inventories set stackedItems=?, instancedItems=? where characterId=?"); w.transaction(() => { for (const x of writes) u.run(...x); })(); } finally { w.close(); }
         }
-        out({ ok: true, ...result });
+        if (all) out({ ok: true, all: true, addedCount: result.added.length, alreadyCount: result.already.length, characters: writes.length });
+        else out({ ok: true, ...result });
         return;
     }
     fail("Unknown command.");

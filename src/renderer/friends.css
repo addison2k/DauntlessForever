@@ -197,6 +197,7 @@ dialog.vc-pop .dlg-actions { margin-top: 12px; }
 #btn-host { grid-column: 3; grid-row: 1; }
 .action-side { grid-column: 1; grid-row: 2; justify-self: start; align-self: start; align-items: center; gap: 10px; }
 .action-row > .host-opt { grid-column: 3; grid-row: 2; justify-self: start; align-self: start; padding-top: 2px; }
+.action-row > #host-opt { grid-column: 2; }   /* Allow randoms under Play online; Light hosting under Host with friends */
 .action-main .primary { min-width: 0; padding: 0 30px; height: 56px; font-size: 20px; }
 .action-main .host-btn { height: 56px; padding: 0 20px; font-size: 16px; gap: 10px; }
 /* the buttons light up when the version is ready (dim before: download and set-up first) */
