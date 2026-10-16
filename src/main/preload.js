@@ -39,6 +39,7 @@ contextBridge.exposeInMainWorld('launcher', {
   onUpdatesDone: on('updates:done'),
   onLauncherUpdate: on('launcher:update'),
   newerLauncher: invoke('launcher:newer'),
+  restartLauncher: invoke('launcher:restart'),
   checkUpdates: invoke('updates:check'),
   communityInfo: invoke('community:info'),
   seasons: invoke('seasons:list'),

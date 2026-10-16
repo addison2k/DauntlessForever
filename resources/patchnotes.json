@@ -2,6 +2,13 @@
   "_comment": "Patch notes shown in the launcher (newest first). The launcher also reads this file from the repo, so new notes need no build.",
   "notes": [
     {
+      "date": "2026-10-16","title": "A please-wait window after updates",
+      "items": [
+        "After a launcher update, the first start copies the new server files before the launcher opens. That can take a minute; a small window now says so, instead of nothing showing up.",
+        "Game Rules: 10x is now a choice for Weapon XP, Hunt Pass XP and Loot (1.6.2 server files)."
+      ]
+    },
+    {
       "date": "2026-10-16","title": "Play the game in your language, and a new title bar",
       "items": [
         "Settings: a new Game language setting starts the game in English, German, Spanish, French, Italian, Portuguese (Brazil), Russian, Polish, Turkish, Japanese, Korean or Chinese. Windows stays as it is.",

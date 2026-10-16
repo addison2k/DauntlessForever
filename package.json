@@ -1,9 +1,9 @@
 {
   "name": "dauntless-forever-launcher",
   "productName": "Dauntless Forever",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Pick a Dauntless version, download it from Epic's own servers, set it up and play it offline.",
-  "main": "src/main/main.js",
+  "main": "src/boot.js",
   "author": "Addison2k",
   "license": "AGPL-3.0",
   "private": true,
@@ -29,7 +29,11 @@
     },
     "files": [
       "src/**/*",
-      "package.json"
+      "package.json",
+      "resources/credits.json",
+      "resources/community.json",
+      "resources/patchnotes.json",
+      "supporters.json"
     ],
     "extraResources": [
       {

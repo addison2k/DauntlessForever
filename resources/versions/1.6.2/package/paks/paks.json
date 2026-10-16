@@ -41,5 +41,16 @@
     "sha256": "21a17fa7cbc7c19b70ff22a4d350b1a98e2a6b8bd86003a59b60552edb37382d"
    }
   }
+ },
+ "languages": {
+  "zh-Hans-mod": {
+   "title": "Chinese text (community translation)",
+   "name": "zzzzzzzzzzzzzzzz_DF_ChineseText_P.pak",
+   "file": "CNLoc_P.pak",
+   "url": "https://github.com/addison2k/DauntlessForever/releases/download/packages/CNLoc_P.pak",
+   "sha256": "8c791908f84bb20a0f4100249aee13b96c24e1232610e996c7dd43a6d45657e5",
+   "size": 33542646,
+   "_comment": "Community Chinese translation for 1.6.2 (zgh95's translation, mod Zhongwen buding 1.0). Replaces the English text (Localization/Game/en-US) and the Korean/Japanese font slots with a Chinese one, so it is only put in while this language is picked."
+  }
  }
 }

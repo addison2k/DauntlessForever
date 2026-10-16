@@ -206,7 +206,9 @@ function Set-ChatConfig([string]$CfgDir, [string]$ChatHost, [int]$ChatPort) {
 # Game language picked in the launcher (Settings): data\game_language.txt holds one of the game's own language
 # codes. The game gets it as -CULTURE=<code> (text and voice language; -epiclocale follows). Empty or missing = the
 # game's default. Hunt servers are not affected: they always run with -CULTURE=en-US (the server DLL).
-$GameLanguages = @('en', 'de', 'es', 'fr', 'it', 'pt-BR', 'ru', 'pl', 'tr', 'ja', 'ko', 'zh-Hans')
+# zh-Hans-mod = the community Chinese translation (paks/paks.json "languages"): its text replaces the English text,
+# so the game keeps the English culture and tools\mod-paks.cjs puts the translation pak in (downloaded once).
+$GameLanguages = @('en', 'de', 'es', 'fr', 'it', 'pt-BR', 'ru', 'pl', 'tr', 'ja', 'ko', 'zh-Hans', 'zh-Hans-mod')
 function Get-GameLanguage {
     try {
         $f = Join-Path $DataDir 'game_language.txt'
@@ -223,6 +225,7 @@ function Get-GameLanguage {
 function Add-GameLanguage([string]$GameArgs) {
     $lang = Get-GameLanguage
     if (-not $lang) { return $GameArgs }
+    if ($lang -eq 'zh-Hans-mod') { Say 'Game language: Chinese (community translation)' 'Gray'; return $GameArgs }
     Say "Game language: $lang" 'Gray'
     return ($GameArgs -replace '-epiclocale=en-US', "-epiclocale=$lang") + " -CULTURE=$lang"
 }

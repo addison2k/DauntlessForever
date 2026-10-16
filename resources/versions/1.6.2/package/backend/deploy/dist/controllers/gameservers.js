@@ -164,6 +164,9 @@ async function StartServer(Map, Behemoth, MatchmakerHuntId, ExpectedPlayers, IsR
         logger_1.logger.error(`Could not start the game server on port ${Port}: ${e && e.code ? e.code : "error"} (${GAMESERVER_BINARY_PATH})`);
     });
     Child.unref();
+    // Game Rule "Unlimited Resupply Beacons" (solo play, hunts only; resupply162.js). Never stops or delays the server.
+    if (!IsRamsgate && !IsTrainingDojo)
+        require("../resupply162").Apply(Child, GAMESERVER_BINARY_PATH, Port, logger_1.logger);
     const NewGameserver = {
         id: Id,
         port: Port,

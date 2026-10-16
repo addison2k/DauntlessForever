@@ -15,6 +15,15 @@ const MOCK = !!process.env.DL_MOCK;
 function bundledRoot() {
   return app.isPackaged ? process.resourcesPath : path.join(__dirname, '..', '..', 'resources');
 }
+// Texts that also ship inside the launcher's own code (credits, patch notes, ...), so a small launcher update brings
+// the new ones: the copy next to the running code first, then the install's resources folder.
+function appResource(name) {
+  const root = path.join(__dirname, '..', '..');
+  for (const p of [path.join(root, 'resources', name), path.join(root, name), path.join(bundledRoot(), name)]) {
+    try { if (fs.statSync(p).isFile()) return p; } catch {}
+  }
+  return path.join(bundledRoot(), name);
+}
 function bundledVersionsDir() { return path.join(bundledRoot(), 'versions'); }
 function bundledToolsDir() { return path.join(bundledRoot(), 'tools'); }
 // The official portable Node.js shipped with the launcher (tools/fetch-node.ps1 puts it in resources/runtime/node).
@@ -36,4 +45,4 @@ function launcherLog() { return path.join(dataRoot(), 'launcher.log'); }
 
 function ensureDir(p) { fs.mkdirSync(p, { recursive: true }); return p; }
 
-module.exports = { IS_WIN, MOCK, bundledRoot, bundledVersionsDir, bundledToolsDir, bundledNode, dataRoot, versionsDataDir, settingsFile, launcherLog, ensureDir };
+module.exports = { IS_WIN, MOCK, bundledRoot, appResource, bundledVersionsDir, bundledToolsDir, bundledNode, dataRoot, versionsDataDir, settingsFile, launcherLog, ensureDir };

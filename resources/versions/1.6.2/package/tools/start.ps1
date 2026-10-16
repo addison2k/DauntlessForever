@@ -118,7 +118,7 @@ if (Test-Path -LiteralPath $rulesDef) {
             if ($picked.ContainsKey($r.key) -and ($ok -contains $picked[$r.key])) { $val = $picked[$r.key] }
             Set-Item -Path "Env:$($r.env)" -Value $val
             $label = ($r.choices | Where-Object { [string]$_[0] -eq $val } | Select-Object -First 1)
-            if ($val -ne '1' -or $r.key -eq 'free_crafting') { if ($val -ne '0') { $shown += "$($r.title) $(if ($label) { $label[1] } else { $val })" } }
+            if ($val -ne '1' -or $r.key -eq 'free_crafting' -or $r.key -eq 'unlimited_resupply') { if ($val -ne '0') { $shown += "$($r.title) $(if ($label) { $label[1] } else { $val })" } }
         }
         if ($shown.Count) { Say "    Game Rules: $($shown -join ', ')" }
     } catch { Say "    Could not read the Game Rules; playing with normal rules. ($($_.Exception.Message))" 'Yellow' }

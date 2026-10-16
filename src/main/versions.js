@@ -51,14 +51,37 @@ function cmpVersion(a, b) {
 function installedPackageVersion(v) {
   try { return fs.readFileSync(path.join(v.dataDir, '.package-version'), 'utf8').trim(); } catch { return ''; }
 }
-function syncPackage(v) {
-  if (!v.package) return;
+// Does this version's data folder need the bundled package copied in? (the player has nothing, or something older)
+function needsSync(v) {
+  if (!v.package) return false;
   const src = path.join(v.bundledDir, v.package.dir);
-  if (!fs.existsSync(src)) return;   // registry entry came from an update newer than the bundle; nothing to copy
+  if (!fs.existsSync(src)) return false;   // registry entry came from an update newer than the bundle; nothing to copy
   const have = installedPackageVersion(v);
-  // only copy the bundled package in when the player has nothing, or something older than what is bundled
-  if (have && cmpPackageVersion(have, v.package.packageVersion) >= 0 && fs.existsSync(path.join(v.dataDir, v.package.play))) return;
-  applyPackage(v, src, v.package.packageVersion);
+  return !(have && cmpPackageVersion(have, v.package.packageVersion) >= 0 && fs.existsSync(path.join(v.dataDir, v.package.play)));
+}
+function syncPackage(v) {
+  if (!needsSync(v)) return;
+  applyPackage(v, path.join(v.bundledDir, v.package.dir), v.package.packageVersion);
+}
+// The same copy without freezing the launcher (start-up shows a "please wait" window meanwhile). onFile(n) after each file.
+// .package-version is written last, so a copy that gets cut off simply runs again next time.
+async function syncPackageAsync(v, onFile) {
+  if (!needsSync(v)) return;
+  const dst = ensureDir(v.dataDir);
+  const keep = PRESERVE_PATHS.concat((v.package && v.package.saveFiles) || []).map(p => p.replace(/\\/g, '/').replace(/\/+$/, ''));
+  let n = 0;
+  const walk = async (src, d0, rel) => {
+    for (const ent of await fs.promises.readdir(src, { withFileTypes: true })) {
+      const r = rel ? rel + '/' + ent.name : ent.name;
+      const s = path.join(src, ent.name), d = path.join(d0, ent.name);
+      if ((PRESERVE_NAMES.has(ent.name) || keep.includes(r)) && fs.existsSync(d)) continue;
+      if (ent.isDirectory()) { await fs.promises.mkdir(d, { recursive: true }); await walk(s, d, r); }
+      else { await fs.promises.copyFile(s, d); n++; if (onFile) onFile(n); }
+    }
+  };
+  await walk(path.join(v.bundledDir, v.package.dir), dst, '');
+  fs.writeFileSync(path.join(dst, '.package-version'), v.package.packageVersion);
+  hashCache.clear();
 }
 // Put a package (from the bundle, or an update that was just unzipped) into the version's data folder.
 function applyPackage(v, srcDir, packageVersion) {
@@ -190,4 +213,4 @@ function seedConfig(v, gameDir) {
 
 // "0.1.10" > "0.1.9"
 function cmpVersionStr(a, b) { return cmpVersion(String(a).replace(/^v/, ''), String(b).replace(/^v/, '')); }
-module.exports = { cmpVersionStr, missingPrereqs, loadRegistry, syncPackage, applyPackage, installedPackageVersion, cmpPackageVersion, status, sha256, resolveGameDir, knownGameDir, seedConfig, readPkgConfig };
+module.exports = { cmpVersionStr, missingPrereqs, loadRegistry, syncPackage, syncPackageAsync, needsSync, applyPackage, installedPackageVersion, cmpPackageVersion, status, sha256, resolveGameDir, knownGameDir, seedConfig, readPkgConfig };

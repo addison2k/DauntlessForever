@@ -210,6 +210,32 @@ export function ReforgeReward(times: number) {
 
 // [reforge] Hearts already paid inside the game's own spark transaction (routes/inventory.ts), so the game shows
 // them at once. The PrestigeTrack post that follows within a minute then doesn't pay again.
+// [slayer-reply] A kill sends two grants with the same amount, in either order: the weapon's
+// (ExperienceTrack_Weapon_X/300) and the Slayer's Path total (ExperienceTrack_PlayerLevel/300). The total is the sum
+// of the weapon tracks, so its own grant is never stored. When it arrives FIRST, the reply used to show the old total
+// and the game kept that stale number until the next town visit. Now the two are paired: a total grant with no
+// matching weapon grant yet counts "ahead" (added to replies) until its weapon grant lands, at most GRANT_PAIR_MS.
+// Nothing is stored twice, and no reply waits.
+const GRANT_PAIR_MS = 5000;
+const pendingTotalXp = new Map<string, { amount: number; added: number; t: number }[]>();
+const recentWeaponXp = new Map<string, { amount: number; added: number; t: number }[]>();
+function FreshPairs(map: Map<string, { amount: number; added: number; t: number }[]>, accountId: string) {
+    const now = Date.now();
+    const list = (map.get(accountId) ?? []).filter(e => now - e.t < GRANT_PAIR_MS);
+    map.set(accountId, list);
+    return list;
+}
+function TakePair(map: Map<string, { amount: number; added: number; t: number }[]>, accountId: string, amount: number) {
+    const list = FreshPairs(map, accountId);
+    const i = list.findIndex(e => e.amount === amount);
+    if (i < 0) return false;
+    list.splice(i, 1);
+    return true;
+}
+export function PendingTotalXp(accountId: string) {
+    return FreshPairs(pendingTotalXp, accountId).reduce((sum, e) => sum + e.added, 0);
+}
+
 const prepaidReforges = new Map<string, number[]>();
 export function NoteReforgePrepaid(accountId: string) {
     const now = Date.now();
@@ -271,6 +297,17 @@ export function GrantTrackXp(accountId: string, trackId: string, amountRaw: any)
         return;
     }
     if (trackId === "ExperienceTrack_PlayerLevel" || trackId === "MasteryTrack_PlayerLevel") {
+        // [slayer-reply] paired with its weapon grant (see GRANT_PAIR_MS)
+        if (trackId === "ExperienceTrack_PlayerLevel" && PROGRESSION_MODE === "real") {
+            if (TakePair(recentWeaponXp, accountId, amount)) {
+                logger.info(`Progression: grant ${trackId} +${amount} not stored (its weapon grant already counted)`);
+            } else {
+                const ahead = Rules.weaponXp !== 1 ? ScaleXp(amount, Rules.weaponXp) : amount;
+                FreshPairs(pendingTotalXp, accountId).push({ amount, added: ahead, t: Date.now() });
+                logger.info(`Progression: grant ${trackId} +${amount} not stored; counted ahead (+${ahead}) until its weapon grant arrives`);
+            }
+            return;
+        }
         logger.info(`Progression: grant ${trackId} +${amount} not stored (it is the sum of the weapon tracks)`);
         return;
     }
@@ -292,6 +329,10 @@ export function GrantTrackXp(accountId: string, trackId: string, amountRaw: any)
     const before = DeriveTotals(state, bonus.xp);
     bonus.xp[trackId] = (bonus.xp[trackId] ?? 0) + added;
     SaveBonus(accountId, bonus);
+    // [slayer-reply] the matching Slayer's Path grant, if it came first, stops counting ahead now that this is stored
+    if (trackId.startsWith("ExperienceTrack_Weapon_") && !TakePair(pendingTotalXp, accountId, amount)) {
+        FreshPairs(recentWeaponXp, accountId).push({ amount, added, t: Date.now() });
+    }
     const after = DeriveTotals(state, bonus.xp);
 
     if (trackId.startsWith("ExperienceTrack_Weapon_")) {
@@ -532,7 +573,7 @@ export function BuildProgressTracks(accountId: string, filter?: (p: ProgressionP
         const isPlayerXp = p.progression_id === "ExperienceTrack_PlayerLevel";
         if (totals && (isWeaponXp || isPlayerXp || p.progression_id.startsWith("MasteryTrack_"))) {
             const xp = isPlayerXp
-                ? Object.values(totals.weaponXp).reduce((sum, v) => sum + v, 0) + reforgedTotal
+                ? Object.values(totals.weaponXp).reduce((sum, v) => sum + v, 0) + reforgedTotal + PendingTotalXp(accountId)
                 : isWeaponXp ? (totals.weaponXp[p.progression_id] ?? 0) : (totals.tracks[p.progression_id] ?? 0);
             const rank = RankForXp(p.progression_id, xp);
             return {

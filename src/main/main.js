@@ -14,6 +14,7 @@ const V = require('./versions');
 const R = require('./runner');
 const D = require('./downloader');
 const U = require('./updates');
+const AU = require('./appupdate');
 
 let win = null;
 let registry = [];
@@ -33,6 +34,41 @@ let closeOk = false;   // Host Mode was stopped on the way out: the window may c
 const log = (...a) => { try { fs.appendFileSync(P.launcherLog(), new Date().toISOString() + ' ' + a.join(' ') + '\n'); } catch {} };
 const send = (ch, payload) => { if (win && !win.isDestroyed()) win.webContents.send(ch, payload); };
 
+// After a launcher update the bundled server files are copied into the player's folders before the launcher opens.
+// That can take a minute (thousands of files, antivirus), so a small window says so instead of showing nothing.
+async function syncWithPleaseWait() {
+  const todo = registry.filter(v => { try { return V.needsSync(v); } catch { return false; } });
+  if (!todo.length) return null;
+  let wait = null;
+  try {
+    wait = new BrowserWindow({ width: 440, height: 150, frame: false, resizable: false, show: false, center: true, skipTaskbar: false,
+      title: 'Dauntless Forever', backgroundColor: '#0f1419', icon: path.join(P.bundledRoot(), app.isPackaged ? 'icon.png' : '../build/icon.png'),
+      webPreferences: { contextIsolation: true, nodeIntegration: false, sandbox: true } });
+    const page = '<!doctype html><meta charset="utf-8"><body style="margin:0;background:#0f1419;color:#e6edf3;font:14px Segoe UI,sans-serif;display:flex;' +
+      'flex-direction:column;justify-content:center;height:100vh;padding:0 26px;box-sizing:border-box;border:1px solid #27333f">' +
+      '<div style="font-size:16px;font-weight:600;margin-bottom:6px">Dauntless Forever is updating</div>' +
+      '<div style="color:#9fb0c2">Copying the new server files. This can take a minute, please wait.</div>' +
+      '<div id="n" style="color:#66788c;margin-top:10px;font-size:12px">&nbsp;</div></body>';
+    await wait.loadURL('data:text/html;charset=utf-8,' + encodeURIComponent(page));
+    wait.show();
+  } catch { wait = null; }
+  let shown = 0;
+  for (const v of todo) {
+    try {
+      await V.syncPackageAsync(v, (n) => {
+        if (!wait || wait.isDestroyed() || n - shown < 150) return;
+        shown = n;
+        wait.webContents.executeJavaScript(`document.getElementById('n').textContent = ${JSON.stringify(`${v.name || v.id}: ${n} files copied`)}`).catch(() => {});
+      });
+    } catch (e) { log('syncPackage', v.id, e.message); try { V.syncPackage(v); } catch (e2) { log('syncPackage', v.id, e2.message); } }
+    shown = 0;
+  }
+  if (wait && !wait.isDestroyed()) {
+    wait.webContents.executeJavaScript(`document.getElementById('n').textContent = 'Done. Opening the launcher...'`).catch(() => {});
+    return wait;
+  }
+  return null;
+}
 function createWindow() {
   win = new BrowserWindow({
     width: 1340, height: 800, minWidth: 940, minHeight: 620,
@@ -45,7 +81,7 @@ function createWindow() {
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, sandbox: true, backgroundThrottling: false },
   });
   win.loadFile(path.join(__dirname, '..', 'renderer', 'index.html'));
-  win.once('ready-to-show', () => { if (FROM_WINDOWS) { win.showInactive(); win.minimize(); } else win.show(); });
+  win.once('ready-to-show', () => { try { AU.markGood(); } catch {} if (FROM_WINDOWS) { win.showInactive(); win.minimize(); } else win.show(); });
   // never leave a game orphaned without saying so
   win.on('close', (e) => {
     // Host Mode runs without a window of its own: closing the launcher would leave a server nobody can stop
@@ -66,13 +102,15 @@ function createWindow() {
   win.webContents.setWindowOpenHandler(({ url }) => { if (/^https:/.test(url)) shell.openExternal(url); return { action: 'deny' }; });
 }
 
-app.whenReady().then(() => {
+app.whenReady().then(async () => {
   P.ensureDir(P.dataRoot());
   // voice chat: the window may use the microphone (it only ever shows the launcher's own pages)
   require('electron').session.defaultSession.setPermissionRequestHandler((_wc, perm, cb) => cb(perm === 'media' || perm === 'clipboard-sanitized-write' || perm === 'fullscreen'));
   registry = V.loadRegistry();
-  for (const v of registry) { try { V.syncPackage(v); } catch (e) { log('syncPackage', v.id, e.message); } }
+  const pleaseWait = await syncWithPleaseWait();   // after an update: copy the new server files in, with a "please wait" window
   createWindow();
+  // closed only once the launcher's own window exists (closing the last window would quit the app)
+  if (pleaseWait) win.once('ready-to-show', () => { if (!pleaseWait.isDestroyed()) pleaseWait.destroy(); });
   // Friends page: its own IPC handlers and the online-status poll (social.js)
   require('./social').init({ get registry() { return registry; }, byId: (id) => byId(id), runner: R, send, log: (t) => log('social', t) });
   // One player name for every version and the Friends page (player.js)
@@ -91,14 +129,26 @@ app.whenReady().then(() => {
   // server-file updates: after the window is up, quietly; the window hears about anything that changed
   win.webContents.once('did-finish-load', () => setTimeout(checkUpdates, 1500));
 });
-// A newer launcher: tell the window (it shows a banner with a Download button). Never downloads by itself.
+// A newer launcher. Small launcher updates (appupdate.js) download by themselves and are used from the next start:
+// the banner offers "Restart now". A launcher too old for them shows the banner with a Download button, as before.
 let newerLauncher = null;
-function launcherUpdate(l) {
-  if (!l || !l.version || !/^https:\/\/github\.com\/addison2k\//.test(l.url || '')) return;
-  if (V.cmpVersionStr(String(l.version), app.getVersion()) <= 0) return;
-  newerLauncher = { version: String(l.version), url: l.url, notes: String(l.notes || '') };
-  send('launcher:update', newerLauncher);
+async function launcherUpdate(l) {
+  try {
+    if (!l || !l.version || !/^https:\/\/github\.com\/addison2k\//.test(l.url || '')) return;
+    if (V.cmpVersionStr(String(l.version), AU.info().version) <= 0) return;
+    const how = await AU.consider(l, (t) => log('launcher', t));
+    if (!how) return;
+    newerLauncher = { version: String(l.version), url: l.url, notes: String(l.notes || ''), ready: how === 'ready' };
+    send('launcher:update', newerLauncher);
+  } catch (e) { log('launcher', 'update check: ' + e.message); }
 }
+// "Restart now": only when nothing of the game is running (closing would otherwise stop or orphan it)
+ipcMain.handle('launcher:restart', () => {
+  try { if (require('./hostmode').isWanted()) return { ok: false, error: 'Host Mode is running. Stop it first, or just keep going: the update is used the next time the launcher starts.' }; } catch {}
+  if (R.anyRunning().length) return { ok: false, error: 'A game or server is still running. Close it first, or just keep going: the update is used the next time the launcher starts.' };
+  app.relaunch(); app.quit();
+  return { ok: true };
+});
 ipcMain.handle('launcher:newer', () => newerLauncher);
 async function checkUpdates() {
   try {
@@ -116,10 +166,9 @@ ipcMain.handle('updates:check', () => checkUpdates());
 // ---------------------------------------------------------------- credits, community links, supporters
 function readJson(f, fallback) { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return fallback; } }
 ipcMain.handle('community:info', async () => {
-  const root = P.bundledRoot();
-  const credits = readJson(path.join(root, 'credits.json'), { intro: '', sections: [] });
-  const community = readJson(path.join(root, 'community.json'), {});
-  let supporters = readJson(path.join(root, 'supporters.json'), { supporters: [], anonymous: 0 });
+  const credits = readJson(P.appResource('credits.json'), { intro: '', sections: [] });
+  const community = readJson(P.appResource('community.json'), {});
+  let supporters = readJson(P.appResource('supporters.json'), { supporters: [], anonymous: 0 });
   // the live list from the repo wins when it can be fetched, so a new supporter needs no new build
   try { const live = await U.fetchJson(U.SUPPORTERS_URL); if (live && Array.isArray(live.supporters)) supporters = live; } catch {}
   try { const live = await U.fetchJson(U.COMMUNITY_URL); if (live && typeof live === 'object') Object.assign(community, live); } catch {}
@@ -183,7 +232,7 @@ ipcMain.handle('versions:status', (_e, id) => {
   return s;
 });
 ipcMain.handle('launcher:info', async () => ({
-  version: app.getVersion(), dataRoot: P.dataRoot(), gamesRoot: defaultGamesRoot(),
+  version: AU.info().version, dataRoot: P.dataRoot(), gamesRoot: defaultGamesRoot(),
   node: await findNode(), toolOk: D.toolOk(), platform: process.platform, mock: P.MOCK,
   lastVersion: settings.load().lastVersion,
 }));
@@ -338,7 +387,8 @@ function writeMenuChoice(v, def, key, flag) {
 // Add-GameLanguage reads data\game_language.txt). One choice for every version whose server files support it.
 const GAME_LANGUAGES = [['', 'Game default'], ['en', 'English'], ['de', 'Deutsch (German)'], ['es', 'Espanol (Spanish)'],
   ['fr', 'Francais (French)'], ['it', 'Italiano (Italian)'], ['pt-BR', 'Portugues do Brasil (Portuguese)'], ['ru', 'Russkiy (Russian)'],
-  ['pl', 'Polski (Polish)'], ['tr', 'Turkce (Turkish)'], ['ja', 'Nihongo (Japanese)'], ['ko', 'Hangugeo (Korean)'], ['zh-Hans', 'Zhongwen (Chinese)']];
+  ['pl', 'Polski (Polish)'], ['tr', 'Turkce (Turkish)'], ['ja', 'Nihongo (Japanese)'], ['ko', 'Hangugeo (Korean)'], ['zh-Hans', 'Zhongwen (Chinese)'],
+  ['zh-Hans-mod', 'Zhongwen (Chinese, community translation)']];
 const langFile = (v) => path.join(v.dataDir, 'data', 'game_language.txt');
 const langSupported = (v) => { try { return /Add-GameLanguage/.test(fs.readFileSync(path.join(v.dataDir, 'tools', 'common.ps1'), 'utf8')); } catch { return false; } };
 function readLang(v) {
@@ -487,7 +537,7 @@ ipcMain.handle('items:set', async (_e, id, characterId, changes) => {
 
 // ---------------------------------------------------------------- patch notes (bundled, the repo's copy wins)
 ipcMain.handle('patchnotes:list', async () => {
-  let notes = readJson(path.join(P.bundledRoot(), 'patchnotes.json'), { notes: [] });
+  let notes = readJson(P.appResource('patchnotes.json'), { notes: [] });
   try { const live = await U.fetchJson(U.PATCHNOTES_URL); if (live && Array.isArray(live.notes)) notes = live; } catch {}
   return notes.notes || [];
 });

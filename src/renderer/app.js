@@ -893,14 +893,22 @@ function wire() {
   $('banner-close').addEventListener('click', () => { $('banner').hidden = true; });
   // a newer launcher: a banner with a Download button (opens the release page; the player unzips it over this one)
   let upUrl = '';
+  let upReady = false;
   const showLauncherUpdate = (u) => {
-    if (!u) return; upUrl = u.url;
-    $('banner-up-text').textContent = `Dauntless Forever ${u.version} is out` + (u.notes ? `: ${u.notes}` : '.') + ' Your games and saves stay where they are.';
-    $('banner-up').hidden = false; $('set-launcher').textContent = `(${u.version} is available)`;
+    if (!u) return; upUrl = u.url; upReady = !!u.ready;
+    $('banner-up-text').textContent = upReady
+      ? `Dauntless Forever ${u.version} is ready` + (u.notes ? `: ${u.notes}` : '.') + ' Restart the launcher to use it (or it starts next time).'
+      : `Dauntless Forever ${u.version} is out` + (u.notes ? `: ${u.notes}` : '.') + ' Your games and saves stay where they are.';
+    $('banner-up-get').textContent = upReady ? 'Restart now' : 'Download';
+    $('banner-up').hidden = false; $('set-launcher').textContent = upReady ? `(${u.version} is ready: restart the launcher)` : `(${u.version} is available)`;
   };
   L.onLauncherUpdate(showLauncherUpdate);
   L.newerLauncher().then(showLauncherUpdate).catch(() => {});
-  $('banner-up-get').addEventListener('click', () => { if (upUrl) L.openUrl(upUrl); });
+  $('banner-up-get').addEventListener('click', async () => {
+    if (!upReady) { if (upUrl) L.openUrl(upUrl); return; }
+    const r = await L.restartLauncher().catch(() => null);
+    if (r && !r.ok) $('banner-up-text').textContent = r.error;
+  });
   $('banner-up-close').addEventListener('click', () => { $('banner-up').hidden = true; });
   $('set-pkgs-check').addEventListener('click', async () => { $('set-pkgs').textContent = 'Checking...'; await L.checkUpdates(); await fillSettings(); if (!updateLog.length) $('set-pkgs').textContent += ' (up to date)'; });
 
