@@ -7,7 +7,7 @@
         {
           "name": "Addison2k",
           "role": "Maintainer",
-          "what": "Ported the server code and backends to 1.6.2, 1.12 and 1.14.7, wrote the offline sign-in stand-in, the two-click packages, this launcher, and keeps the manifest archive."
+          "what": "Ported the server code and backends to 1.6.2, 1.12 and 1.14.7, wrote the offline sign-in stand-in, the two-click packages and this launcher, and keeps the manifest archive. Also built online play (relay servers, hosting, friends, voice chat) and the 1.6.2 extras: Hunt Pass, bounties, events, Game Rules, the Inventory editor and the Revived import."
         }
       ]
     },
@@ -24,6 +24,11 @@
     {
       "title": "Manifest archive contributors",
       "people": [
+        {
+          "name": "Addison2k",
+          "role": "Maintainer",
+          "what": "Saved the 1.6.2 and 2.1.1 manifests."
+        },
         {
           "name": "zgh95",
           "role": "Contributor",

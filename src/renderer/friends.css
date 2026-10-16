@@ -64,7 +64,7 @@
 
 /* ================================================================ Friends panel (right side; folds to a rail) */
 .app { grid-template-columns: 236px minmax(0, 1fr) auto; }
-.fp { position: relative; display: flex; height: 100vh; background: var(--bg-2); border-left: 1px solid var(--line); z-index: 5; }
+.fp { position: relative; display: flex; height: calc(100vh - var(--tb)); background: var(--bg-2); border-left: 1px solid var(--line); z-index: 5; }
 .fp[hidden] { display: none; }
 .fp-rail { display: none; width: 52px; flex-direction: column; align-items: center; gap: 12px; padding-top: 18px; }
 .fp-rail-btn { position: relative; width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; color: var(--ink-2); border: 1px solid var(--line-2); background: var(--bg-3); }

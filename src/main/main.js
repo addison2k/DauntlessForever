@@ -39,6 +39,9 @@ function createWindow() {
     title: 'Dauntless Forever', backgroundColor: '#0f1419', show: false,
     icon: path.join(P.bundledRoot(), app.isPackaged ? 'icon.png' : '../build/icon.png'),
     autoHideMenuBar: true,
+    // our own dark title bar (index.html .titlebar); Windows still draws the minimise / maximise / close buttons,
+    // so dragging, double-click to maximise and snap layouts work as before
+    titleBarStyle: 'hidden', titleBarOverlay: { color: '#0b1015', symbolColor: '#9fb0c2', height: 34 },
     webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, sandbox: true, backgroundThrottling: false },
   });
   win.loadFile(path.join(__dirname, '..', 'renderer', 'index.html'));

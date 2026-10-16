@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-16.4",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.4.zip",
-                         "sha256":  "1bcef0dce4e41d086fa240f29392017c9d23b2efc5c392d860ce4a4e0fb58afe",
+                         "packageVersion":  "2026-10-16.5",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.5.zip",
+                         "sha256":  "70d5ed9c0857d44efe55eda56639ceadabc0605eb211350204f5a06f6c842974",
                          "date":  "2026-10-16",
-                         "note":  "Revived import: bring your character from a Revived server, weapon levels now carry over."
+                         "note":  "Part breaks fixed on non-English Windows (French, German, Italian...): tails sever and grey damage shows again."
                      },
                      {
                          "id":  "1.14.7",

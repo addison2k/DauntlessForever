@@ -22,6 +22,7 @@
   /* small text in Segoe UI: Windows' own UI font has hinting for small sizes and stays sharp on any screen
      (Bahnschrift, a variable font, goes soft at 12-15 px on many PCs). Bahnschrift stays for big titles and buttons. */
   --font: "Segoe UI", system-ui, sans-serif;
+  --tb: 34px; /* the title bar (main.js titleBarOverlay height) */
   --display: "Bahnschrift SemiCondensed", "Bahnschrift", "Segoe UI Variable Display", "Segoe UI", system-ui, sans-serif;
 }
 * { box-sizing: border-box; }
@@ -44,8 +45,18 @@ p { margin: 0; }
 ul, ol { margin: 0; padding: 0; list-style: none; }
 
 
+/* ================================================================ title bar */
+/* Drawn by the page; the window buttons on the right are Windows' own (titleBarOverlay), in the same colour. */
+.titlebar { position: fixed; top: 0; left: 0; right: 0; height: var(--tb); z-index: 1000; display: flex; align-items: center; gap: 9px;
+  padding-left: 14px; background: #0b1015; border-bottom: 1px solid var(--line); -webkit-app-region: drag; user-select: none; }
+.titlebar::after { content: ""; position: absolute; left: 0; bottom: -1px; width: 236px; height: 1px;
+  background: linear-gradient(90deg, rgba(214,171,74,0), rgba(214,171,74,.45) 40%, rgba(214,171,74,0)); pointer-events: none; }
+.titlebar-mark { width: 16px; height: 16px; border-radius: 4px; opacity: .9; }
+.titlebar-name { font-family: var(--display); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); }
+body { padding-top: var(--tb); }
+
 /* ================================================================ app frame */
-.app { display: grid; grid-template-columns: 236px 1fr; height: 100vh; }
+.app { display: grid; grid-template-columns: 236px 1fr; height: calc(100vh - var(--tb)); }
 .side { background: var(--bg-2); border-right: 1px solid var(--line); display: flex; flex-direction: column; padding: 22px 14px 16px; min-height: 0; }
 .side-brand { display: flex; align-items: center; gap: 12px; padding: 0 8px 22px; }
 .mark { width: 40px; height: 40px; border-radius: 10px; }
@@ -67,7 +78,7 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
 .side-meta { color: var(--ink-3); font-size: 12px; padding: 10px 12px 0; }
 .side-meta a { color: var(--ink-3); }
 .content { min-height: 0; overflow-y: auto; position: relative; isolation: isolate; scrollbar-gutter: stable; }   /* room for the scrollbar always: nothing shifts sideways when it comes and goes */
-.sky { position: fixed; left: 236px; top: 0; right: 0; bottom: 0; width: calc(100vw - 236px); height: 100vh; z-index: 0; pointer-events: none; }
+.sky { position: fixed; left: 236px; top: var(--tb); right: 0; bottom: 0; width: calc(100vw - 236px); height: calc(100vh - var(--tb)); z-index: 0; pointer-events: none; }
 .page, .banner { position: relative; z-index: 1; }
 @media (max-width: 1000px) { .sky { left: 200px; width: calc(100vw - 200px); } }
 .page { padding: 30px 40px 48px; max-width: 1040px; }
