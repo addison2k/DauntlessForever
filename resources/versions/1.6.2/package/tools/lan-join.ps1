@@ -101,6 +101,7 @@ if ($node) { & $node (Join-Path $PSScriptRoot 'mod-paks.cjs') $cfg.GameDir }   #
 $gameArgs = @("${hostIp}:$hostPort", "-AUTH_PASSWORD=$key", '-AUTH_LOGIN=unused', '-AUTH_TYPE=exchangecode',
     '-epicapp=appidlol', '-epicenv=Prod', '-EpicPortal', '-epicusername=usernamelol', '-epicuserid=useridlol',
     '-epiclocale=en-US', '-epicsandboxid=sandboxidlol', '-epicdeploymentid=deploymentidlol') -join ' '
+$gameArgs = Add-GameLanguage $gameArgs   # language picked in the launcher (Settings)
 $psi = New-Object System.Diagnostics.ProcessStartInfo
 $psi.FileName = $Exe
 $psi.Arguments = $gameArgs

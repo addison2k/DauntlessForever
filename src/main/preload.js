@@ -47,6 +47,8 @@ contextBridge.exposeInMainWorld('launcher', {
   events: invoke('events:list'),
   setEvents: invoke('events:set'),
   menuBackgrounds: invoke('menu:list'),
+  gameLanguage: invoke('lang:get'),        // {languages: [[code, name]], current, versions}
+  setGameLanguage: invoke('lang:set'),     // (code) -> {ok, versions, running}
   setMenuBackground: invoke('menu:set'),
   pickMenuPicture: invoke('menu:pickCustom'),
   rules: invoke('rules:list'),

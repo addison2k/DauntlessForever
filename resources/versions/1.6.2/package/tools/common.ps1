@@ -203,6 +203,30 @@ function Set-ChatConfig([string]$CfgDir, [string]$ChatHost, [int]$ChatPort) {
 # Hunt Pass feature flags. The login screen shows the art of the season whose flag is on. They go into the game's private
 # Engine.ini as LocalMapOptions, which only the menu map's URL gets; Ramsgate and hunts are unchanged.
 # No file (or no on= line) = the section is removed and the game shows its own default.
+# Game language picked in the launcher (Settings): data\game_language.txt holds one of the game's own language
+# codes. The game gets it as -CULTURE=<code> (text and voice language; -epiclocale follows). Empty or missing = the
+# game's default. Hunt servers are not affected: they always run with -CULTURE=en-US (the server DLL).
+$GameLanguages = @('en', 'de', 'es', 'fr', 'it', 'pt-BR', 'ru', 'pl', 'tr', 'ja', 'ko', 'zh-Hans')
+function Get-GameLanguage {
+    try {
+        $f = Join-Path $DataDir 'game_language.txt'
+        if (-not (Test-Path -LiteralPath $f)) { return '' }
+        foreach ($l in @(Get-Content -LiteralPath $f)) {
+            $t = $l.Trim(); if (-not $t -or $t.StartsWith('#')) { continue }
+            $hit = $GameLanguages | Where-Object { $_ -ieq $t } | Select-Object -First 1
+            if ($hit) { return $hit }
+        }
+    } catch {}
+    return ''
+}
+# The game's arguments with the language added (the first argument, the backend address, stays first)
+function Add-GameLanguage([string]$GameArgs) {
+    $lang = Get-GameLanguage
+    if (-not $lang) { return $GameArgs }
+    Say "Game language: $lang" 'Gray'
+    return ($GameArgs -replace '-epiclocale=en-US', "-epiclocale=$lang") + " -CULTURE=$lang"
+}
+
 function Set-MenuBackground([string]$CfgDir) {
     try {
         $eng = Join-Path $CfgDir 'Engine.ini'

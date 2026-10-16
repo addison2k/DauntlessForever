@@ -334,6 +334,32 @@ function writeMenuChoice(v, def, key, flag) {
   fs.mkdirSync(path.join(v.dataDir, 'data'), { recursive: true });
   fs.writeFileSync(path.join(v.dataDir, 'data', 'menu_background.txt'), lines.join('\r\n') + '\r\n');
 }
+// Game language (Settings): the server files pass it to the game as -CULTURE=<code> (tools\common.ps1
+// Add-GameLanguage reads data\game_language.txt). One choice for every version whose server files support it.
+const GAME_LANGUAGES = [['', 'Game default'], ['en', 'English'], ['de', 'Deutsch (German)'], ['es', 'Espanol (Spanish)'],
+  ['fr', 'Francais (French)'], ['it', 'Italiano (Italian)'], ['pt-BR', 'Portugues do Brasil (Portuguese)'], ['ru', 'Russkiy (Russian)'],
+  ['pl', 'Polski (Polish)'], ['tr', 'Turkce (Turkish)'], ['ja', 'Nihongo (Japanese)'], ['ko', 'Hangugeo (Korean)'], ['zh-Hans', 'Zhongwen (Chinese)']];
+const langFile = (v) => path.join(v.dataDir, 'data', 'game_language.txt');
+const langSupported = (v) => { try { return /Add-GameLanguage/.test(fs.readFileSync(path.join(v.dataDir, 'tools', 'common.ps1'), 'utf8')); } catch { return false; } };
+function readLang(v) {
+  try { for (const l of fs.readFileSync(langFile(v), 'utf8').split(/\r?\n/)) { const t = l.trim(); if (t && !t.startsWith('#')) return (GAME_LANGUAGES.find(x => x[0] && x[0].toLowerCase() === t.toLowerCase()) || [''])[0]; } } catch {}
+  return '';
+}
+ipcMain.handle('lang:get', () => {
+  const vs = registry.filter(langSupported);
+  return { languages: GAME_LANGUAGES, current: vs.length ? readLang(vs[0]) : '', versions: vs.map(v => v.id) };
+});
+ipcMain.handle('lang:set', (_e, code) => {
+  const hit = GAME_LANGUAGES.find(x => x[0] === code); if (!hit) return { ok: false, error: 'Unknown language.' };
+  const vs = registry.filter(langSupported);
+  if (!vs.length) return { ok: false, error: 'Your server files do not support this yet. They update when the launcher starts.' };
+  for (const v of vs) {
+    fs.mkdirSync(path.join(v.dataDir, 'data'), { recursive: true });
+    fs.writeFileSync(langFile(v), ['# game language picked in the launcher (Settings); empty = the game default', code].join('\r\n') + '\r\n');
+  }
+  const running = vs.some(v => { try { return menuBusy(v); } catch { return false; } });
+  return { ok: true, versions: vs.map(v => v.id), running };
+});
 ipcMain.handle('menu:list', (_e, id) => {
   if (id) return readMenu(byId(id));
   return registry.map(v => readMenu(v)).filter(Boolean);

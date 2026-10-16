@@ -84,6 +84,19 @@ async function fillSettings() {
   $('set-ver').textContent = `Dauntless Forever ${info.version}`;
   $('set-pkgs').textContent = versions.filter(v => v.hasPackage).map(v => `${v.id}: ${v.package.packageVersion}`).join(', ') + (updateLog.length ? ` (last check: ${updateLog[updateLog.length - 1]})` : '');
   fillMenuBackground();
+  fillGameLanguage();
+}
+// Game language (-CULTURE= on the game's command line; the server files do it). Hidden until a version supports it.
+const LANG_SUB = "The language of the game's text and voices. Windows and the launcher stay as they are. Changes at the next game start.";
+async function fillGameLanguage() {
+  let g = null; try { g = await L.gameLanguage(); } catch {}
+  const row = $('set-lang-row');
+  if (!g || !g.versions || !g.versions.length) { row.hidden = true; return; }
+  row.hidden = false;
+  const sel = $('set-lang');
+  if (!sel.options.length) for (const [code, name] of g.languages) { const o = document.createElement('option'); o.value = code; o.textContent = name; sel.appendChild(o); }
+  sel.value = g.current || '';
+  $('set-lang-sub').textContent = LANG_SUB;
 }
 // Main menu background (menu.json in the server files; 1.6.2 for now). Hidden when no version has it.
 let menuVer = null;
@@ -836,6 +849,12 @@ function wire() {
   });
   $('btn-log-clear').addEventListener('click', () => { if (selected) { logs[selected] = []; renderDetail(); } });
   $('set-sky').addEventListener('click', () => { const on = Sky.toggle(); $('set-sky').textContent = on ? 'Turn off' : 'Turn on'; });
+  $('set-lang').addEventListener('change', async () => {
+    const r = await L.setGameLanguage($('set-lang').value);
+    $('set-lang-sub').textContent = !r || !r.ok ? ((r && r.error) || 'Could not save that.') :
+      (r.running ? 'Saved. The game is running: it changes the next time you start the game.' : 'Saved. It changes the next time you start the game.');
+    if (!r || !r.ok) fillGameLanguage();
+  });
   $('set-menu').addEventListener('change', async () => {
     if (!menuVer) return;
     const r = await L.setMenuBackground(menuVer, $('set-menu').value);
