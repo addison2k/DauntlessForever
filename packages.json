@@ -23,7 +23,7 @@
                      "notes":  "Keep my server files setting for modders",
                      "date":  "2026-10-16",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/v0.2.5/app-0.2.5.asar",
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.2.5.asar",
                                  "sha256":  "9108088deb81d32de54bfa3194eca6192e9ee42bc8ed72714708c8321b7d207f",
                                  "size":  657644,
                                  "minShell":  "0.2.4"

@@ -13,6 +13,14 @@
 //       tools\gear-162.json (the 1.6.2 catalog); gear you already own is left as it is.
 //   node tools\items.js removegear <characterId> <JSON ["<instanceId>", ...]>
 //       removes gear; gear that is in one of your loadouts (equipped) is refused.
+//   node tools\items.js addcosmetic <characterId|*> <JSON ["DYE_BLUE01_DURABLE", ...]>
+//       unlocks cosmetics (dyes, emotes, titles, emojis, armour and weapon skins, banner parts, flares, character
+//       creator options) the way the game keeps each one: most are an unlock (a count of 1), some are one-of-a-kind
+//       items. Which is which comes from tools\cosmetics-162.json. Cosmetics you already have are left as they are.
+// Typing it yourself (PowerShell drops the quotes inside JSON): the list can also be plain words after the character,
+//   node tools\items.js set * CURRENCY_NOTES=50000 TOKEN_BOUNTY_DRAFT=10
+//   node tools\items.js addcosmetic * DYE_BLUE01_DURABLE EM_CHEER_01
+//   node tools\items.js addgear * WP_IH_ROCK          ("*" = every character of yours)
 // Refuses while the backend is running (port 61000), so a running game can't overwrite the change.
 "use strict";
 const crypto = require("crypto");
@@ -28,6 +36,20 @@ const MAX = 99999999;
 const KEEP_BACKUPS = 10;
 const GEAR_FILE = path.join(__dirname, "gear-162.json");   // [[id, name, type], ...] from the 1.6.2 catalog
 function gearCatalog() { try { return JSON.parse(fs.readFileSync(GEAR_FILE, "utf8")); } catch { return null; } }
+const COSMETIC_FILE = path.join(__dirname, "cosmetics-162.json");   // {stacked: [ids], instanced: [ids]}
+function cosmeticCatalog() { try { return JSON.parse(fs.readFileSync(COSMETIC_FILE, "utf8")); } catch { return null; } }
+// The change list: one JSON argument (the launcher), or plain words (typed by hand): ID=count for set, IDs otherwise
+function argList(kind) {
+    const rest = process.argv.slice(4);
+    const raw = rest.join(" ").trim();
+    if (raw.startsWith("{") || raw.startsWith("[")) { try { return JSON.parse(raw); } catch { return null; } }
+    if (kind === "set") {
+        const o = {};
+        for (const w of rest) { const m = /^([A-Z0-9_]{3,80})=(\d+)$/.exec(w.trim()); if (!m) return null; o[m[1]] = Number(m[2]); }
+        return o;
+    }
+    return rest.map((w) => w.trim()).filter(Boolean);
+}
 
 // Your own account: the one data\player.key belongs to (same rule as tools\travel.js). While you host, the backend also
 // holds an account per friend (and characters that travelled here); those are never listed or changed here.
@@ -70,7 +92,7 @@ function backup() {
 }
 
 (async () => {
-    const [cmd, who, json] = process.argv.slice(2);
+    const [cmd, who] = process.argv.slice(2);
     if (!fs.existsSync(DB)) fail("No save yet. Press Play once and make a character first.");
     let Database;
     try { Database = require(SQLITE); } catch { fail("The server files are not set up yet. Run Set up first."); }
@@ -100,8 +122,8 @@ function backup() {
     }
 
     if (cmd === "set") {
-        let want;
-        try { want = JSON.parse(json || "{}"); } catch { fail("Bad change list."); }
+        const want = argList("set");
+        if (!want || typeof want !== "object" || Array.isArray(want)) fail("Bad change list. Use ID=count, for example CURRENCY_NOTES=50000.");
         const changes = Object.entries(want).filter(([id, n]) => ID_OK.test(id) && Number.isFinite(Number(n)));
         if (!changes.length) fail("Nothing to change.");
         if (await backendUp()) fail("Dauntless is still running. Close the game (and the launcher's server window), then try again.");
@@ -134,8 +156,7 @@ function backup() {
         return;
     }
     if (cmd === "addgear" || cmd === "removegear") {
-        let list;
-        try { list = JSON.parse(json || "[]"); } catch { fail("Bad gear list."); }
+        const list = argList("list");
         if (!Array.isArray(list) || !list.length || list.length > 500) fail("Nothing to change.");
         const cat = gearCatalog();
         if (!cat) fail("This version's server files have no gear list (tools\\gear-162.json).");
@@ -146,6 +167,29 @@ function backup() {
         try {
             const mine = myCharacterIds(db);
             if (!mine) fail("Could not tell which account is yours (data\\player.key). Run Set up again.");
+            if (who === "*" && cmd === "addgear") {
+                // every character of yours
+                const rows = db.prepare("select characterId, instancedItems from inventories").all().filter((r) => mine.has(r.characterId));
+                if (!rows.length) fail("Character not found.");
+                const writes = [];
+                for (const r of rows) {
+                    const inst = JSON.parse(r.instancedItems || "[]"); let n = 0;
+                    for (const id of list) {
+                        if (typeof id !== "string" || !gearIds.has(id)) { if (!result.unknown.includes(String(id))) result.unknown.push(String(id)); continue; }
+                        if (inst.some((i) => i && i.catalogId === id)) { result.already.push(id); continue; }
+                        inst.push({ catalogId: id, updateVersion: 0, instanceId: inst.some((i) => i && i.instanceId === id) ? crypto.randomUUID() : id });
+                        result.added.push(id); n++;
+                    }
+                    if (n) writes.push([JSON.stringify(inst), r.characterId]);
+                }
+                if (writes.length) {
+                    db.close(); backup();
+                    const w = new Database(DB, { fileMustExist: true });
+                    try { const u = w.prepare("update inventories set instancedItems=? where characterId=?"); w.transaction(() => { for (const x of writes) u.run(...x); })(); } finally { w.close(); }
+                }
+                out({ ok: true, ...result });
+                return;
+            }
             if (!mine.has(who)) fail("Character not found.");
             const row = db.prepare("select instancedItems from inventories where characterId = ?").get(who);
             if (!row) fail("Character not found.");
@@ -175,6 +219,48 @@ function backup() {
                 try { w.prepare("update inventories set instancedItems=? where characterId=?").run(JSON.stringify(inst), who); } finally { w.close(); }
             }
         } finally { try { db.close(); } catch {} }
+        out({ ok: true, ...result });
+        return;
+    }
+    if (cmd === "addcosmetic") {
+        const list = argList("list");
+        if (!Array.isArray(list) || !list.length || list.length > 3000) fail("Nothing to change.");
+        const cat = cosmeticCatalog();
+        if (!cat || !Array.isArray(cat.stacked) || !Array.isArray(cat.instanced)) fail("This version's server files have no cosmetics list (tools\\cosmetics-162.json). Update the server files.");
+        const stackedIds = new Set(cat.stacked), instancedIds = new Set(cat.instanced);
+        if (await backendUp()) fail("Dauntless is still running. Close the game (and the launcher's server window), then try again.");
+        const db = new Database(DB, { fileMustExist: true });
+        const result = { added: [], already: [], unknown: [] };
+        const writes = [];
+        try {
+            const mine = myCharacterIds(db);
+            if (!mine) fail("Could not tell which account is yours (data\\player.key). Run Set up again.");
+            const rows = db.prepare("select characterId, stackedItems, instancedItems from inventories").all()
+                .filter((r) => mine.has(r.characterId) && (who === "*" || r.characterId === who));
+            if (!rows.length) fail("Character not found.");
+            for (const r of rows) {
+                const st = JSON.parse(r.stackedItems || "[]"), inst = JSON.parse(r.instancedItems || "[]");
+                let n = 0;
+                for (const id of list) {
+                    if (typeof id !== "string" || (!stackedIds.has(id) && !instancedIds.has(id))) { if (!result.unknown.includes(String(id))) result.unknown.push(String(id)); continue; }
+                    if (instancedIds.has(id)) {
+                        if (inst.some((i) => i && i.catalogId === id)) { result.already.push(id); continue; }
+                        inst.push({ catalogId: id, instanceId: inst.some((i) => i && i.instanceId === id) ? crypto.randomUUID() : id, itemData: null, updateVersion: 0 });
+                    } else {
+                        const it = st.find((i) => i && i.catalogId === id);
+                        if (it && Number(it.quantity) > 0) { result.already.push(id); continue; }
+                        if (it) it.quantity = 1; else st.push({ catalogId: id, quantity: 1 });
+                    }
+                    result.added.push(id); n++;
+                }
+                if (n) writes.push([JSON.stringify(st), JSON.stringify(inst), r.characterId]);
+            }
+        } finally { try { db.close(); } catch {} }
+        if (writes.length) {
+            backup();
+            const w = new Database(DB, { fileMustExist: true });
+            try { const u = w.prepare("update inventories set stackedItems=?, instancedItems=? where characterId=?"); w.transaction(() => { for (const x of writes) u.run(...x); })(); } finally { w.close(); }
+        }
         out({ ok: true, ...result });
         return;
     }
