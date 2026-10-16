@@ -2,122 +2,170 @@
 
 <h1 align="center">Dauntless Forever</h1>
 
-One window to pick a Dauntless build, download it from Epic's own servers, set it up and play it offline.
+<p align="center"><b>Play Dauntless again: solo or with friends, on the build you love.</b><br>
+No keys, no accounts to buy, no paid advantages. A free fan preservation project.</p>
 
-It wraps the per-version "two-click" packages (`1 - SETUP.bat` / `2 - PLAY.bat`) without changing them: each version is a folder under `resources/versions/<id>/` with a `version.json` and the untouched package. The launcher adds the download step (via [DauntlessManifestArchive](https://github.com/addison2k/DauntlessManifestArchive) + `manifest.exe`), shows where the player is in the three steps, runs the package scripts and shows what they print.
+<p align="center">
+  <a href="https://github.com/addison2k/DauntlessForever/releases/latest"><b>Download the latest launcher</b></a> &nbsp;|&nbsp;
+  <a href="https://discord.gg/sg9J7KshVc"><b>Join the Discord</b></a>
+</p>
 
-No game files are included. Fan project, solo play, unofficial.
+---
 
-## For players
+## What it does
 
-1. Unzip `DauntlessForever-<version>-x64.zip` anywhere (e.g. `C:\Games\DauntlessForever`) and run `Dauntless Forever.exe`.
-   (Or run the installer, once it is built on Windows - see below.)
-2. Pick a build on the left.
-3. Press the big button. It is always the next step: **Download** (11-15 GB from Epic), then **Set up** (a black window asks one or two questions), then **Play**.
+One launcher that downloads an old Dauntless build from Epic's own servers, sets it up by itself and lets you play it,
+offline or online with other people. No game files are shipped here; the game comes straight from Epic.
 
-Already have the game? "More" -> "Use a game folder I already have".
+| Build | Era | Status |
+|---|---|---|
+| **1.6.2** | Reforged (early 2021) | **Ready**: solo and online. The most complete. |
+| **1.14.7** | Last pre-Awakening build (April 2024) | **Experimental**: solo |
+| 1.12.0 | Late Reforged (October 2022) | Coming soon |
+| 2.1.1 | Awakening (December 2024) | Coming soon |
 
-Saves, settings, logs: `%LOCALAPPDATA%\DauntlessForever\ (DauntlessOffline\ for players from before the rename) versions\<id>\` (`data\` is the save; `upload\` has the two log zips for asking for help, with PC and user names blanked out). Nothing is written into your Windows Dauntless settings. Uninstalling the launcher does not delete that folder.
+### Play together, no port forwarding
+- **Friends panel**: add friends by name (or `name#1234`), see who is online, playing or hosting, press **Join**.
+- **Host with friends**: one click opens your game to your friends through the Dauntless Forever relay (US and EU,
+  the nearest is picked for you). No router settings, nothing to install.
+- **Play online**: joins a game that is open to everyone, or hosts one if nobody is on. **Allow randoms** opens your
+  own hosted game to Play online players.
+- **Your character comes with you** when you join someone, and is saved home every few minutes while you play.
+- **Parties** (invite, party hunts, Return with Party), **text chat** in game and **voice chat** in the launcher
+  (push to talk or voice activation).
+- Hosted games always use normal progression, so everyone levels up the same way.
 
-## Building
+### Host Mode
+Keep a server running on your PC: a Ramsgate that players join from their launcher, party up in and start hunts
+from. No game window needed; press **Play on your server** to join it yourself.
+- **Private** (your friends list is the whitelist) or **Public** (anyone using Play online).
+- Server name, a welcome line in game chat, a player limit and a ban list.
+- For a PC that hosts all day, each one an option: start with Windows, restart by itself, keep the PC awake,
+  a daily restart and a daily save backup. A small dashboard shows players, hunts, uptime and the PC's load.
 
-Needs Node.js 20+ and npm.
+### Your way
+- **Game Rules**: weapon XP and Hunt Pass speed, loot, free crafting.
+- **Seasons**: 36 Hunt Passes to pick from, including a 400-level Mega pass.
+- **Events**: Ramsgate event decorations.
+- **Inventory**: change currencies and tokens, add or remove gear.
+- **Bring your Dauntless Revived (1.4.4) character**: More > "Bring my Dauntless Revived (1.4.4) character" moves your
+  gear, Rams, cells, materials and quest progress into 1.6.2. Your Revived save is only read.
+- **Offline Forever mode**: play only on your PC, nobody sees you online.
+
+## Getting started
+
+1. Download `DauntlessForever-<version>-x64.exe` (installer) or the `.zip` (unzip anywhere) from
+   [Releases](https://github.com/addison2k/DauntlessForever/releases/latest) and run it.
+2. Pick your player name (one name for every build and for your friends).
+3. Pick a build at the top, press **Download** (about 11-15 GB from Epic). Set-up runs by itself afterwards, then the
+   button turns into **Play**.
+
+Already have the game folder? More > "Use a game folder I already have".
+
+**Needs**: Windows 10 or 11 (64-bit) and free space for the game (about twice its size while it downloads).
+Node.js, DirectX and the Visual C++ runtime are included or installed by set-up.
+
+**Updates** come by themselves: server files when you open the launcher, and a banner with a Download button when a
+new launcher is out.
+
+**Where things are**: `%LOCALAPPDATA%\DauntlessForever\` (`DauntlessOffline\` for players from before the rename),
+one folder per build under `versions\<id>\`. `data\` is your save; `upload\` has the log zips for asking for help
+(More > "Get the logs"; your PC and user names are blanked out). Nothing is written into your Windows Dauntless
+settings, and uninstalling the launcher keeps that folder.
+
+**Help**: the Help page in the launcher, or the [Discord](https://discord.gg/sg9J7KshVc).
+
+---
+
+## For developers
+
+### Building
+
+Needs Node.js 20+ and npm, on Windows for the installer.
 
 ```
 npm install
 npm start            # run from source
-npm run dist         # Windows: dist\DauntlessForever-<ver>-x64.exe (installer) and ...-x64.zip (portable)
+npm run dev          # mock mode (Linux/macOS shell): fake statuses and downloads, no PowerShell
+npm run dist         # dist\DauntlessForever-<ver>-x64.exe (installer) and -x64.zip (portable)
+npm run dist:dir     # dist\win-unpacked only (quick test build)
 ```
 
-On Linux/macOS only the `zip` target builds (`npx electron-builder --win zip --x64`); the NSIS installer and the exe icon need Wine there. Build on Windows for the full result.
+`predist` runs `tools/check-ascii.js` (the launcher's text must be plain ASCII) and `tools/fetch-node.ps1` (the bundled
+official Node.js in `resources/runtime/node`).
 
-`npm run dev` runs it in mock mode on any OS: fake statuses, fake download, no PowerShell. Good for working on the UI.
-
-## Layout
+### Layout
 
 ```
 src/main/
-  main.js        window + IPC (status, download, set-up, play, stop, uninstall)
-  versions.js    reads resources/versions/*/version.json; copies each package to the data folder
-                 (never touching config.json, data, home, logs, backup, eos, captures, node_modules);
-                 status = exe hash + installed DLL hashes + set-up marker files
-  runner.js      set-up/uninstall in a visible PowerShell window (they ask questions);
-                 play hidden with every line streamed to the window; stop = the package's own stop
-  downloader.js  manifest.exe download <manifestUrl> --base-url <Epic CDN> --output <folder>;
-                 progress parsed from its progress bar; cancel keeps .manifest-cache so it resumes
-  settings.js    %LOCALAPPDATA%\DauntlessForever\ (DauntlessOffline\ for players from before the rename) launcher.json (games folder, game folder per version)
-  paths.js       all paths; no drive letters anywhere
-  preload.js     the window's bridge (contextIsolation, sandbox)
-src/renderer/    index.html, styles.css, app.js (plain HTML/CSS/JS, no framework)
+  main.js        window + IPC (status, download, set-up, play, stop, uninstall, Revived import)
+  versions.js    reads resources/versions/*/version.json; copies each package to the data folder without
+                 touching saves; status = exe hash + installed DLL hashes + set-up marker files
+  runner.js      runs the package scripts (set-up in a window, play hidden with every line streamed)
+  downloader.js  manifest.exe download from Epic's CDN, with progress, cancel and resume
+  updates.js     packages.json: server-file updates and the "new launcher" banner
+  social.js      Friends, hosting and joining through the relay, Play online (talks to the friends service)
+  hostmode.js    Host Mode: the server that stays up, options, ban list, player limit, backups
+  voice.js       voice chat signalling (WebRTC, peer to peer, TURN fallback)
+  player.js      the one player name
+  settings.js    launcher.json;  paths.js  every path, no drive letters;  preload.js  the window's bridge
+src/renderer/    index.html, app.js (Play page and the other pages), friends.js, voice.js, hostmode.js,
+                 player.js, sky.js, styles.css, friends.css, hostmode.css (plain HTML/CSS/JS, no framework)
 resources/
-  versions/<id>/version.json + package/   one folder per build (see below)
-  tools/manifest.exe                      meszmate/manifest v0.1.0 + plain-chunk fix (MIT), sha256-checked
+  versions/<id>/version.json + package/   one folder per build: scripts, server DLL, backends, source
+  tools/manifest.exe                      meszmate/manifest + plain-chunk fix (MIT), sha256-checked
+  runtime/node/                           bundled Node.js (fetched by tools/fetch-node.ps1, not in git)
+  community.json, credits.json, patchnotes.json   read live from the repo too, so they change without a build
+packages.json    the newest server files per build and the newest launcher (read by every launcher on start)
+network.json     where the online services are (relays per region, friends service) and an online on/off switch
+tools/           pack-version.ps1, update-dll.ps1, release-launcher.ps1, fetch-node.ps1, check-ascii.js,
+                 revived-export/ (export a character from a Dauntless Revived server)
 build/icon.*     the launcher icon (original mark)
 ```
 
-## Links, credits and supporters
-
-- `resources/community.json`: Discord invite, Patreon page, repo links. The sidebar buttons appear once the URLs are filled in. The launcher also reads the copy in the repo on start, so changing a link does not need a build.
-- `resources/credits.json`: the Credits page (people, what they did, what the project is built on).
-- `supporters.json` (repo root): Patreon supporters to thank by name, read live from the repo: `{"supporters": ["name", {"name": "name", "top": true}], "anonymous": 2}`. Ask new supporters how they want to be credited (or "anonymous") in the Patreon welcome message.
-
-## Updating a version's server files (no launcher rebuild)
-
-Patched a DLL or a backend script? Test the package the normal way, then from the repo folder:
+### Releasing new server files (no launcher rebuild)
 
 ```
-tools\pack-version.ps1 -Id 1.6.2 -From "D:\d162\package\Dauntless-1.6.2-Offline" -Note "what changed"
+tools\pack-version.ps1 -Id 1.6.2 -From "resources\versions\1.6.2\package" -Note "what changed"
+gh release upload packages "dist\packages\1.6.2-<date>.zip" --clobber
+git add -A; git commit -m "1.6.2 server files <date>"; git push
 ```
 
-It copies the package in (leaving out anything personal), refreshes the DLL hashes and `packageVersion` in `version.json`, checks they agree with the package's own `common.ps1`, writes `dist\packages\1.6.2-<date>.zip` and records it in `packages.json`. Then, in this order: upload the zip to the GitHub release tagged `packages` (`gh release upload packages <zip> --clobber`; create that release once), and push. Every launcher reads `packages.json` on start, fetches changed zips (hash-checked), applies them over the player's copy without touching saves, and shows "run Set up again" so the new files go into the game folder. Rebuild the launcher only when you want the bundled copy refreshed too.
+`pack-version.ps1` refuses anything personal, refreshes the DLL hashes and `packageVersion`, writes the zip and
+records it in `packages.json`. Launchers download it on their next start (hash-checked) and apply it without touching
+saves; set-up only runs again when the game DLLs changed. A rebuilt server DLL goes in with
+`tools\update-dll.ps1 -Id 1.6.2 -Dll <dll> -Note "what changed" -Pack`.
 
-### A rebuilt DLL
+### Releasing a new launcher
 
-```
-tools\update-dll.ps1 -Id 1.6.2 -Dll "D:\...\x64\Release\UndauntedInternalServer.dll" -Note "what changed" -Pack
-```
+1. Raise `version` in package.json, then `npm run dist`.
+2. `powershell -ExecutionPolicy Bypass -File tools\release-launcher.ps1 -Notes "what changed"` writes the
+   `launcher` block in packages.json and prints the release command.
+3. Push first, then create the release, so the tag lands on the new commit:
+   `git add -A; git commit -m "Launcher X.Y.Z"; git push`, then
+   `gh release create vX.Y.Z dist\DauntlessForever-X.Y.Z-x64.zip dist\DauntlessForever-X.Y.Z-x64.exe --title "Dauntless Forever X.Y.Z" --notes "..."`.
 
-Copies the DLL into the package's `bin\`, swaps its hash in the package's `tools\common.ps1`, then runs `pack-version.ps1` on the package in place. Players see "Set-up needed" once (set-up puts the new DLL into the game folder; the old one goes to `backup\`).
+Older launchers then show "Dauntless Forever X.Y.Z is out" with a Download button.
 
-## Adding a version
+### Adding a build
 
-1. Make and test the two-click package for it the normal way (recipe doc: "easy two-click package recipe").
-2. Copy the finished package folder to `resources/versions/<id>/package/` (the whole thing: `tools\`, `bin\`, `backend\`, `source\`, README, licence, .bat files).
-3. Write `resources/versions/<id>/version.json` next to it. Copy `1.14.7/version.json` and change:
-   - `id`, `name`, `build`, `released`, `era`, `blurb`, `works`, `notWorking`
-   - `exeSha256` (from `$ExeHash` in the package's `common.ps1`)
-   - `download`: the manifest URL and sizes from the archive README
-   - `package.installedFiles`: every file set-up puts into the game folder, with its sha256 (`bin\` hashes)
-   - `package.setupDoneFiles`: files/folders set-up creates in the package folder when it is done (used to tell "Set-up needed" from "Ready")
-   - `package.stop`: the package's stop scripts and backend pid files
-   - `package.packageVersion`: bump it whenever the package changes; the launcher re-copies it on next start
-4. Keep `"package": null` for a build that is archived but has no offline package yet (it shows as "coming soon").
-
-That is all. The launcher itself does not change.
+1. Make and test the package for it (`tools\`, `bin\`, `backend\`, `source\`, README, licence, .bat files).
+2. Copy it to `resources/versions/<id>/package/` and write `resources/versions/<id>/version.json` (copy 1.14.7's):
+   `id`, `name`, `build`, `released`, `era`, `blurb`, `works`, `notWorking`, `exeSha256`, `download` (manifest URL
+   and sizes), `package.installedFiles` (with sha256), `package.setupDoneFiles`, `package.stop`, `packageVersion`.
+3. `"package": null` keeps a build listed as "Coming soon". The launcher itself does not change.
 
 ## Credits and licences
 
-- Built on [Undaunted](https://github.com/SyST3MDeV/Undaunted) by gwog and contributors (AGPL-3.0). The per-version server DLLs, loaders and backends are modified versions, with full source in each package's `source\` and `backend\` folders.
-- Download tool: [meszmate/manifest](https://github.com/meszmate/manifest) (MIT), with the uncompressed-chunk fix from DauntlessManifestArchive.
+- Built on [Undaunted](https://github.com/SyST3MDeV/Undaunted) by gwog and contributors (AGPL-3.0). The server DLLs,
+  loaders and backends are modified versions, with full source in each package's `source\` and `backend\` folders.
+- In-game chat server and parts of the party code from the Dauntless Revived project (AGPL-3.0), credited in those files.
+- [MinHook](https://github.com/TsudaKageyu/minhook) (BSD-2) in the loaders, and
+  [DauntlessEndpointDocumentation](https://github.com/EisigesEis/DauntlessEndpointDocumentation) for the backend work.
+- Download tool: [meszmate/manifest](https://github.com/meszmate/manifest) (MIT), with the uncompressed-chunk fix from
+  [DauntlessManifestArchive](https://github.com/addison2k/DauntlessManifestArchive).
+- Bundled [Node.js](https://nodejs.org) (MIT); `ws` and `ltx` (MIT) in the 1.6.2 backend.
+- Everyone on the Credits page in the launcher.
 - Launcher: AGPL-3.0, Addison2k, 2026.
-- Dauntless belongs to its owners. This project is not affiliated with them.
 
-## Releasing a new launcher
-
-1. Raise `version` in package.json, then `npm run dist`.
-2. `powershell -ExecutionPolicy Bypass -File tools\release-launcher.ps1 -Notes "what changed"` writes the `launcher` block in packages.json.
-3. On GitHub, Releases > Draft a new release: tag `vX.Y.Z` (the new version), title `Dauntless Forever X.Y.Z`,
-   attach `dist\DauntlessForever-X.Y.Z-x64.zip` (and the `.exe` installer if you want), Publish.
-   (Or run the `gh release create ...` command the script prints.)
-4. `git add -A`, `git commit -m "Launcher X.Y.Z"`, `git push`.
-
-Every launcher reads packages.json on start; older ones show "Dauntless Forever X.Y.Z is out" with a Download
-button that opens the release page.
-
-## Releasing new server files
-
-1. `powershell -ExecutionPolicy Bypass -File tools\pack-version.ps1 -Id 1.6.2 -From resources\versions\1.6.2\package -Note "what changed"`
-2. On GitHub, open the `packages` release, click the pencil, attach the new zip from `dist\packages`, Update release.
-3. `git add -A`, `git commit -m "1.6.2 server files"`, `git push`.
-
-Launchers download and apply it on their next start.
+Dauntless belongs to its owners. This is an unofficial fan project, not affiliated with or endorsed by Phoenix Labs.
