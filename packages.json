@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-16.2",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.2.zip",
-                         "sha256":  "e747d7c2c9bd875e6a704086ad4dc1204db0fcab026b11d2c1d01f7873f66342",
+                         "packageVersion":  "2026-10-16.3",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.3.zip",
+                         "sha256":  "f0e8761955a74bb53cb79a19d062c51e6179c885c5095b100eb50b79e66eeb8c",
                          "date":  "2026-10-16",
-                         "note":  "Main menu background: pick any of 12 Hunt Pass seasons or your own picture (needs launcher 0.2.2)."
+                         "note":  "Holidays by the calendar (Dark Harvest now), event mail, daily Ramsgate gift, Mega Hunt Pass (Expanded), goat petting fix. w/help KombatKing."
                      },
                      {
                          "id":  "1.14.7",

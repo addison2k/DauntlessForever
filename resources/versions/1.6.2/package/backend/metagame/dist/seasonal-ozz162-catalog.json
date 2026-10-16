@@ -1,0 +1,401 @@
+[
+  {
+    "id": "holiday_ozz_162_ty_xform_dh2020",
+    "event": "Dark_Harvest",
+    "displayName": "Be On Your Gourd",
+    "displayDescription": "5 consumable charges. Available during this holiday.",
+    "displayPriority": 1,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_XFORM_DH2020",
+        "quantity": 5,
+        "maxStack": 0
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_firework_dh2020",
+    "event": "Dark_Harvest",
+    "displayName": "Unseen Beacon",
+    "displayDescription": "10 consumable charges. Available during this holiday.",
+    "displayPriority": 2,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_FIREWORK_DH2020",
+        "quantity": 10,
+        "maxStack": 0
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_thrown_dh2020",
+    "event": "Dark_Harvest",
+    "displayName": "Sinister Squash",
+    "displayDescription": "10 consumable charges. Available during this holiday.",
+    "displayPriority": 3,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_THROWN_DH2020",
+        "quantity": 10,
+        "maxStack": 0
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_gift_greatpumpkin",
+    "event": "Dark_Harvest",
+    "displayName": "Gift of the Grand Pumpkin",
+    "displayDescription": "1 consumable charge. Available during this holiday.",
+    "displayPriority": 4,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_GIFT_GREATPUMPKIN",
+        "quantity": 1,
+        "maxStack": 0
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_gift_frostfall2020_red",
+    "event": "Frostfall",
+    "displayName": "Exquisite Frostfall Gift",
+    "displayDescription": "1 consumable charge. Available during this holiday.",
+    "displayPriority": 1,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_GIFT_FROSTFALL2020_RED",
+        "quantity": 1,
+        "maxStack": 0
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_gift_frostfall2020_green",
+    "event": "Frostfall",
+    "displayName": "Frostfall Gift",
+    "displayDescription": "1 consumable charge. Available during this holiday.",
+    "displayPriority": 2,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_GIFT_FROSTFALL2020_GREEN",
+        "quantity": 1,
+        "maxStack": 0
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_firework_frostfall2020",
+    "event": "Frostfall",
+    "displayName": "Frostfall Beacon",
+    "displayDescription": "10 consumable charges. Available during this holiday.",
+    "displayPriority": 3,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_FIREWORK_FROSTFALL2020",
+        "quantity": 10,
+        "maxStack": 0
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_gift_frostfall2020_cauldron",
+    "event": "Frostfall",
+    "displayName": "Frostfall Cauldron",
+    "displayDescription": "1 consumable charge. Available during this holiday.",
+    "displayPriority": 4,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_GIFT_FROSTFALL2020_CAULDRON",
+        "quantity": 1,
+        "maxStack": 0
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_xform_frostfallfall2020_snowman",
+    "event": "Frostfall",
+    "displayName": "Adorable Snowperson",
+    "displayDescription": "5 consumable charges. Available during this holiday.",
+    "displayPriority": 5,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_XFORM_FROSTFALLFALL2020_SNOWMAN",
+        "quantity": 5,
+        "maxStack": 0
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_emote_frostfall2020_cheers",
+    "event": "Frostfall",
+    "displayName": "Winter Warmer",
+    "displayDescription": "1 consumable charge. Available during this holiday.",
+    "displayPriority": 6,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_EMOTE_FROSTFALL2020_CHEERS",
+        "quantity": 1,
+        "maxStack": 0
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_firework_rams2020",
+    "event": "Ramsgiving",
+    "displayName": "Benson's Beacon",
+    "displayDescription": "10 consumable charges. Available during this holiday.",
+    "displayPriority": 1,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_FIREWORK_RAMS2020",
+        "quantity": 10,
+        "maxStack": 0
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_xform_rams2020",
+    "event": "Ramsgiving",
+    "displayName": "Li'l Big Ram",
+    "displayDescription": "5 consumable charges. Available during this holiday.",
+    "displayPriority": 2,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_XFORM_RAMS2020",
+        "quantity": 5,
+        "maxStack": 0
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_xform_saintsbond2021",
+    "event": "Saints_Bond_2021",
+    "displayName": "Slayer Presentation",
+    "displayDescription": "5 consumable charges. Available during this holiday.",
+    "displayPriority": 1,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_XFORM_SAINTSBOND2021",
+        "quantity": 5,
+        "maxStack": 0
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_gift_saintsbond2021_red",
+    "event": "Saints_Bond_2021",
+    "displayName": "Gift of Friendship",
+    "displayDescription": "1 consumable charge. Available during this holiday.",
+    "displayPriority": 2,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_GIFT_SAINTSBOND2021_RED",
+        "quantity": 1,
+        "maxStack": 0
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_gift_saintsbond2021_pink",
+    "event": "Saints_Bond_2021",
+    "displayName": "Gift of Naming",
+    "displayDescription": "1 consumable charge. Available during this holiday.",
+    "displayPriority": 3,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_GIFT_SAINTSBOND2021_PINK",
+        "quantity": 1,
+        "maxStack": 3
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_firework_saintsbond2021",
+    "event": "Saints_Bond_2021",
+    "displayName": "Saint's Beacon",
+    "displayDescription": "10 consumable charges. Available during this holiday.",
+    "displayPriority": 4,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_FIREWORK_SAINTSBOND2021",
+        "quantity": 10,
+        "maxStack": 0
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_xform_springtide_pufflehop",
+    "event": "Spring_Event_2020",
+    "displayName": "Puffle Party",
+    "displayDescription": "5 consumable charges. Available during this holiday.",
+    "displayPriority": 1,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_XFORM_SPRINGTIDE_PUFFLEHOP",
+        "quantity": 5,
+        "maxStack": 0
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_gift_springtide_00",
+    "event": "Spring_Event_2020",
+    "displayName": "Gift of Springtide",
+    "displayDescription": "1 consumable charge. Available during this holiday.",
+    "displayPriority": 2,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_GIFT_SPRINGTIDE_00",
+        "quantity": 1,
+        "maxStack": 0
+      }
+    ]
+  },
+  {
+    "id": "holiday_ozz_162_ty_firework_springtide",
+    "event": "Spring_Event_2020",
+    "displayName": "Springtide Beacon",
+    "displayDescription": "10 consumable charges. Available during this holiday.",
+    "displayPriority": 3,
+    "price": 10,
+    "currency": "event01",
+    "tags": [
+      "SEASONALEVENTS",
+      "seasonal_event"
+    ],
+    "repeatable": true,
+    "items": [
+      {
+        "catalogId": "TY_FIREWORK_SPRINGTIDE",
+        "quantity": 10,
+        "maxStack": 0
+      }
+    ]
+  }
+]

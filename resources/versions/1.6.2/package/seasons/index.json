@@ -18,6 +18,17 @@
       "xp_per_level": 100
     },
     {
+      "key": "mega_expanded",
+      "title": "Mega Hunt Pass (Expanded)",
+      "kind": "mega",
+      "levels": 400,
+      "file": "mega_expanded.json",
+      "doc": "docs/MEGA_EXPANDED_LEVELS.md",
+      "source": "KombatKing: the Mega Hunt Pass with every cosmetic once (2164), up to six rewards a tier, five-dye bundles. Shares the Mega pass's progress.",
+      "save_key": "season13a",
+      "xp_per_level": 100
+    },
+    {
       "key": "reimagined_frost18",
       "title": "Frostfall (2018)",
       "kind": "reimagined",

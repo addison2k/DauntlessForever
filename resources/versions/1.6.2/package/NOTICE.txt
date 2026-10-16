@@ -8,6 +8,9 @@ Based on Undaunted by gwog and contributors (AGPL-3.0), https://github.com/SyST3
 bin\dxgi.dll is Undaunted's own loader, unchanged. MinHook by Tsuda Kageyu (BSD-2-Clause).
 By KombatKing (from his Consolidated Patches 0.2, AGPL-3.0): the Lady Luck / Trials shop, daily
 Ramsgate shard pickups, the weekly Trials rotation and the safer port check. Credited in those files too.
+Also by KombatKing (from his All-in-One R4, AGPL-3.0): the holiday calendar, event mail, Ozz holiday shop, daily
+Ramsgate gift, the Mega Hunt Pass (Expanded) and its reward helper, and the add-on paks in paks\ (goat fix, holiday
+quests, art and maps, Mega dye bundles). Their builders are in his published source.
 Source: backend\*\src and source\ in this folder.
 
 WHAT THE LICENCE ASKS OF ANYONE WHO REUSES THIS

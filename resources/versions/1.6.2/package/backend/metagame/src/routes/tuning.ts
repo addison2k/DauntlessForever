@@ -53,6 +53,9 @@ export function SeasonalEventSchedule(Now = new Date()){
     const schedule = HeroicEventSchedule(Now);
     try { schedule.ScheduledItems.push(...require(require('node:path').resolve(__dirname,'../../../../tools/trials-schedule.cjs')).schedule(Now)); }
     catch (e: any) { console.error("Trials schedule: " + (e && e.message)); }
+    // Holidays (tools/holiday-schedule.cjs, by KombatKing): each event and its event hunts during its month.
+    try { schedule.ScheduledItems.push(...require(require('node:path').resolve(__dirname,'../../../../tools/holiday-schedule.cjs')).schedule(Now)); }
+    catch (e: any) { console.error("Holiday schedule: " + (e && e.message)); }
     return schedule;
 }
 

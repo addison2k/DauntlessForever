@@ -376,6 +376,12 @@ function AddItems(into: Map<string, number>, list: RewardShort[] | undefined, ti
 }
 
 async function DoGrant(accountId: string) {
+    // Mega Hunt Pass (Expanded) (by KombatKing): its six-slot rewards and dye bundles are paid by mega400.js
+    if((cfg as any)._mega400_revision) return require("./mega400").grant({
+        accountId,cfg,load:()=>LoadStateFile(accountId),state:PassStateOf,position:PassLevel,
+        db:GetDb(),eq:eq,schema:require("./db/schema"),transaction:RunInventoryTransaction,logger:logger,
+        save:(file: any,next: any)=>{file.passes[STATE_KEY]=next;SaveStateFile(accountId,file);}
+    });
     const s = PassStateOf(LoadStateFile(accountId));
     const { level, prestige } = PassLevel(s.xp);
     const fromLevel = s.granted_level ?? 0;

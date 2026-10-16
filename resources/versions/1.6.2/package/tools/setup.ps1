@@ -51,6 +51,9 @@ if ($Uninstall) {
             Say 'The dxgi.dll in the game folder is not this package''s loader (maybe a mod like ReShade, or an older loader). Left in place.' 'Yellow'
         }
     }
+    # the add-on paks this package put in (tools\mod-paks.cjs keeps the list in data\mod_paks.json)
+    $unode = if ($ucfg -and $ucfg.Node -and (Test-Path -LiteralPath $ucfg.Node)) { $ucfg.Node } else { Find-Node }
+    if ($unode) { & $unode (Join-Path $PSScriptRoot 'mod-paks.cjs') $ugame remove }
     # the launcher's custom main menu picture (a mod pak of ours; the file name is ours alone)
     $uart = Join-Path $ugame 'Archon\Content\Paks\zzzz_DauntlessForever_MenuArt_P.pak'
     if (Test-Path -LiteralPath $uart) {

@@ -1,9 +1,17 @@
 {
   "_comment": [
     "Ramsgate events for 1.6.2. The launcher writes the choice to data/city_events.txt (on=/off= feature flags);",
-    "start.ps1 hands it to the deploy server, which adds it to the Ramsgate map URL. tested=false: in the game files and switched the same way, not yet seen in game."
+    "start.ps1 hands it to the deploy server, which adds it to the Ramsgate map URL. tested=false: in the game files and switched the same way, not yet seen in game.",
+      "auto: start.ps1 sets CITY_EVENTS_AUTO=1 (also when no choice was saved) and the deploy server adds the month's holiday flags (tools/holiday-schedule.cjs)."
   ],
   "events": [
+    {
+      "key": "auto",
+      "title": "Automatic (holidays by the calendar)",
+      "blurb": "The default: Ramsgate follows the holidays by itself. Saint's Bond in February, Springtide around Easter, Dark Harvest in October, Ramsgiving in November, Frostfall in December, with the event hunts and a letter in your mailbox. Holiday calendar by KombatKing.",
+      "on": [],
+      "tested": false
+    },
     {
       "key": "none",
       "title": "No event",

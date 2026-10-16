@@ -41,6 +41,9 @@ if ($env:DF_PLAYER_NAME -match '^[A-Za-z0-9_]{3,16}$' -and $env:DF_PLAYER_NAME -
 # --- leftovers from a run that did not close properly
 Stop-Everything -Quiet
 Clear-DauntlessPorts -TcpPorts @($MetaPort, $DeployPort) -UdpPorts (8770..8777)
+# Add-on paks (goat fix, holiday quests/art/maps, this month's holiday; by KombatKing): same files for the game and
+# the hunt servers, put in place while nothing of the game runs. Never stops the start (it only prints a line).
+& $node (Join-Path $PSScriptRoot 'mod-paks.cjs') $cfg.GameDir
 foreach ($port in @($MetaPort, $DeployPort)) {
     $owner = Get-ListenerPid $port
     if ($owner) {
@@ -67,14 +70,20 @@ Say '1/3 Starting the local backend...'
 # Ramsgate events (decorations): data\city_events.txt, lines "on=flag1,flag2" and "off=flag3" (feature flag class names,
 # e.g. on=city_event_Springtide_bpff_C). The deploy server adds them to the Ramsgate map URL.
 $env:CITY_EVENTS_ON = ''; $env:CITY_EVENTS_OFF = ''
+# Automatic (the default, or "# keys: event=auto"): the deploy server dresses Ramsgate for the holiday of the month
+# (tools/holiday-schedule.cjs, by KombatKing). A season dressing picked on the Events page still applies on top.
+$env:CITY_EVENTS_AUTO = '1'
 $eventsFile = Join-Path $DataDir 'city_events.txt'
 if (Test-Path -LiteralPath $eventsFile) {
+    $keysLine = @(Get-Content -LiteralPath $eventsFile -ErrorAction SilentlyContinue) | Where-Object { $_ -match '#\s*keys:\s*event=' } | Select-Object -First 1
+    if (-not ($keysLine -match 'event=auto\b')) { $env:CITY_EVENTS_AUTO = '' }
     foreach ($line in Get-Content -LiteralPath $eventsFile -ErrorAction SilentlyContinue) {
         if ($line -match '^\s*on\s*=\s*([A-Za-z0-9_,/.\s]+)$') { $env:CITY_EVENTS_ON = ($Matches[1] -replace '\s', '') }
         elseif ($line -match '^\s*off\s*=\s*([A-Za-z0-9_,/.\s]+)$') { $env:CITY_EVENTS_OFF = ($Matches[1] -replace '\s', '') }
     }
     if ($env:CITY_EVENTS_ON -or $env:CITY_EVENTS_OFF) { Say "    Ramsgate events: on [$($env:CITY_EVENTS_ON)] off [$($env:CITY_EVENTS_OFF)]" }
 }
+if ($env:CITY_EVENTS_AUTO) { Say '    Ramsgate events: automatic (holidays by the calendar)' }
 # Hunt Pass season: the launcher writes the chosen key to data\season.txt (Seasons page). Each season keeps its own save.
 $seasonsDir = Join-Path $Root 'seasons'
 if (Test-Path -LiteralPath (Join-Path $seasonsDir 'index.json')) {

@@ -34,6 +34,7 @@ app.use((req, res, next) => {
 });
 
 app.use("/", travelRouter); // your character travels with you to a friend's game
+app.use("/", require("./daily-gift").router); // Daily Ramsgate Gift (daily-gift.js, by KombatKing)
 app.use("/", socialRouter); // before eosRouter: account lookups for other players, friends
 app.use("/", loginRouter);
 app.use("/", eosRouter);

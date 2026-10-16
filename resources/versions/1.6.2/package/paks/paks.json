@@ -1,0 +1,45 @@
+{
+ "_comment": [
+  "Add-on paks for Dauntless 1.6.2 (by KombatKing, from his All-in-One R4; AGPL-3.0-only builders in his source).",
+  "tools/mod-paks.cjs copies them into the game's Archon/Content/Paks before the servers and the game start, and takes out the",
+  "ones it put there that are no longer wanted. 'always' are always in; 'holiday' is one file whose content follows the calendar",
+  "(tools/holiday-schedule.cjs; 'none' outside the holidays). data/mod_paks.json remembers what was put in (Uninstall removes it)."
+ ],
+ "always": {
+  "zzzzzz_Mega400DyeBundles_P.pak": "8291300d8945e1853addcbe282abe01550bbd6d75c5158050a5895b07d655b00",
+  "zzzzzzzzzz_GoatRecovery162_P.pak": "7712a5fa24841eb218cb8b1e685a2801e15bb24f2e3f2d69adfa0fa658c31e5e",
+  "zzzzzzzzzzz_HolidayQuestGates162_P.pak": "e93ebc30fd9d498077cbcaa174917952387c7388453a2902780a433776ce6921",
+  "zzzzzzzzzzzz_HolidayArtwork162_P.pak": "0f240bce5bb40e900aa1e3abf484871ddffa487217c245aafcbe676966da572f",
+  "zzzzzzzzzzzz_HolidayMaps162_P.pak": "8dbfb168d23b3a5d86eed3bede3494d120eb0226aa6081701089b28c3a429fd2",
+  "zzzzzzzzzzzzz_HolidayOzzQuests162_P.pak": "5e4b7636dfeaadcdee3ae560fc74cbcbd517bdfce13d98e59e4058a24c3de501"
+ },
+ "holiday": {
+  "name": "zzzzzzzzzzzzzz_HolidayIntegration162_P.pak",
+  "themes": {
+   "Dark_Harvest": {
+    "file": "holiday/HolidayIntegration162_Dark_Harvest.pak",
+    "sha256": "72496f30d30b5b4f078bd975f356063902c44c0c323b5d51f81b6cc4df3d596c"
+   },
+   "Frostfall": {
+    "file": "holiday/HolidayIntegration162_Frostfall.pak",
+    "sha256": "2301c61bd252e509158de2bcb6580d797da32332fad155ee05194add372268f5"
+   },
+   "Ramsgiving": {
+    "file": "holiday/HolidayIntegration162_Ramsgiving.pak",
+    "sha256": "e77ed0d8f0a110c03be6786d5831d58ddf7318d3353d621d8174b02eb7a40bcd"
+   },
+   "Saints_Bond_2021": {
+    "file": "holiday/HolidayIntegration162_Saints_Bond_2021.pak",
+    "sha256": "0bbcf0a3ff9ca975e91607c91a7ca73562fcd8896ca0936eeb33fd1d9cd52604"
+   },
+   "Spring_Event_2020": {
+    "file": "holiday/HolidayIntegration162_Spring_Event_2020.pak",
+    "sha256": "07eb4e5bd1fa4b90697d951f6127db83264156285e81703e436d2bc0ffdc99e0"
+   },
+   "none": {
+    "file": "holiday/HolidayIntegration162_none.pak",
+    "sha256": "21a17fa7cbc7c19b70ff22a4d350b1a98e2a6b8bd86003a59b60552edb37382d"
+   }
+  }
+ }
+}

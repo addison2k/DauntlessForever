@@ -39,6 +39,7 @@ exports.app.use((req, res, next) => {
     next();
 });
 exports.app.use("/", require("./routes/travel162.js").travelRouter); // your character travels with you to a friend's game
+exports.app.use("/", require("./daily-gift").router); // Daily Ramsgate Gift (daily-gift.js, by KombatKing)
 exports.app.use("/", social162_js_1.socialRouter); // before eosRouter: account lookups for other players, friends
 exports.app.use("/", login_js_1.loginRouter);
 exports.app.use("/", eos_js_1.eosRouter);

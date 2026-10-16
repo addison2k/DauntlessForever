@@ -367,6 +367,12 @@ function AddItems(into, list, times = 1) {
     }
 }
 async function DoGrant(accountId) {
+    // Mega Hunt Pass (Expanded) (by KombatKing): its six-slot rewards and dye bundles are paid by mega400.js
+    if(cfg._mega400_revision) return require("./mega400").grant({
+        accountId,cfg,load:()=>LoadStateFile(accountId),state:PassStateOf,position:PassLevel,
+        db:(0, db_1.GetDb)(),eq:drizzle_orm_1.eq,schema:require("./db/schema"),transaction:inventory_1.RunInventoryTransaction,logger:logger_1.logger,
+        save:(file,next)=>{file.passes[STATE_KEY]=next;SaveStateFile(accountId,file);}
+    });
     const s = PassStateOf(LoadStateFile(accountId));
     const { level, prestige } = PassLevel(s.xp);
     const fromLevel = s.granted_level ?? 0;

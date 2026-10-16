@@ -29,6 +29,24 @@ const CITY_EVENTS_ON = FlagList(process.env.CITY_EVENTS_ON);
 const CITY_EVENTS_OFF = FlagList(process.env.CITY_EVENTS_OFF);
 const RAMSGATE_MAP_PATH = "/Game/Maps/ramsgate/ramsgate_01_persistent" +
     (CITY_EVENTS_ON ? `?OverridenFeaturesOn=${CITY_EVENTS_ON}` : "") + (CITY_EVENTS_OFF ? `?OverridenFeaturesOff=${CITY_EVENTS_OFF}` : "");
+// Automatic holidays (the Events page default; start.ps1 sets CITY_EVENTS_AUTO=1): the holiday of the month is switched
+// on in Ramsgate by tools/holiday-schedule.cjs (by KombatKing), worked out each time Ramsgate starts. Flags picked by
+// hand (a season dressing) still apply. Anything wrong there: Ramsgate starts as before.
+const RAMSGATE_BASE = RAMSGATE_MAP_PATH.split("?OverridenFeatures")[0];
+function RamsgateMapPath(): string {
+    if (process.env.CITY_EVENTS_AUTO !== "1") return RAMSGATE_MAP_PATH;
+    try {
+        const p: string = require(require("node:path").resolve(__dirname, "../../../../tools/holiday-schedule.cjs")).ramsgate(new Date(), CITY_EVENTS_ON, CITY_EVENTS_OFF);
+        const at = p.indexOf("?");
+        const url = RAMSGATE_BASE + (at < 0 ? "" : p.slice(at));
+        console.log("Ramsgate (automatic holidays): " + url.replace(/\/Game\/Features\/HuntPass\//g, ""));
+        return url;
+    }
+    catch (e: any) {
+        console.error("Holiday calendar: " + (e && e.message) + "; Ramsgate without holiday");
+        return RAMSGATE_MAP_PATH;
+    }
+}
 const TRAINING_DOJO_MAP_PATH = "/Game/Maps/islands/dojo/training_dojo_persistent";
 const TRIALS_MAP_PATH = "/Game/Maps/islands/arenas/arena_ramsgate_00";
 
@@ -108,7 +126,7 @@ export async function CleanupServer(ServerToShutdown: Gameserver){
     if(ServerToShutdown.isRamsgate){
         logger.warn("RAMSGATE HAS FALLEN! Restarting!");
 
-        await StartServer(RAMSGATE_MAP_PATH, undefined, undefined, undefined, true, false);
+        await StartServer(RamsgateMapPath(), undefined, undefined, undefined, true, false);
     }
     else if(ServerToShutdown.isTrainingDojo){
         logger.warn("Training Dojo Crashed! Restarting!");
@@ -324,7 +342,7 @@ export async function Startup(){
         FreePorts.push(i);
     }
 
-    RamsgateServer = await StartServer(RAMSGATE_MAP_PATH, undefined, undefined, undefined, true, false);
+    RamsgateServer = await StartServer(RamsgateMapPath(), undefined, undefined, undefined, true, false);
 
     TrainingDojoServer = await StartServer(TRAINING_DOJO_MAP_PATH, undefined, undefined, undefined, false, true);
 }

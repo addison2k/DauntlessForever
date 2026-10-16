@@ -269,6 +269,11 @@ systemRouter.delete("/bounty/:userId", HasUndauntedMetagameAuth, (req: any, res)
 	res.json({ code: null, message: "OK", payload: RemoveBounties(String(req.params.userId), undefined, req.body) });
 });
 
+// Mailbox: a letter when a holiday starts, read/deleted state kept per account in data/mailbox (event-mail162.cjs,
+// by KombatKing). Registered first, so the empty mailbox below only answers if this ever fails to load.
+try { require("../../event-mail162.cjs").routes(systemRouter, HasUndauntedMetagameAuth, require("node:path").resolve(__dirname, "../../../..")); }
+catch (e: any) { console.error("Event mailbox: " + (e && e.message)); }
+
 systemRouter.get("/all/", HasUndauntedMetagameAuth, (req: any, res) => {
 	logger.info("Mailbox (stubbed)");
 

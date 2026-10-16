@@ -264,7 +264,8 @@ function readEvents(v) {
   if (!v || !v.package) return null;
   let def;
   try { def = JSON.parse(fs.readFileSync(path.join(v.dataDir, 'events.json'), 'utf8').replace(/^﻿/, '')); } catch { return null; }
-  let event = 'none', dressing = 'default';
+  // No choice saved: Automatic (holidays by the calendar) when the server files have it, as start.ps1 does.
+  let event = (def.events || []).some(e => e.key === 'auto') && !fs.existsSync(path.join(v.dataDir, 'data', 'city_events.txt')) ? 'auto' : 'none', dressing = 'default';
   try {
     const m = /#\s*keys:\s*event=([\w-]+);\s*dressing=([\w-]+)/.exec(fs.readFileSync(path.join(v.dataDir, 'data', 'city_events.txt'), 'utf8'));
     if (m) { event = m[1]; dressing = m[2]; }
