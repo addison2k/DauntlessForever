@@ -14,8 +14,8 @@
     },
     {
       "id": "eu",
-      "name": "EU",
-      "host": "169.58.75.86",
+      "name": "EU (London)",
+      "host": "94.72.96.110",
       "controlPort": 7000
     },
     {
