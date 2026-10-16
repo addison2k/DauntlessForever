@@ -10,7 +10,8 @@
         { "id": "CURRENCY_PJM_PRESTIGE_FILLED", "name": "Aetherhearts", "blurb": "Reforging and power surging." },
         { "id": "CURRENCY_PJM_PRESTIGE_EMPTY", "name": "Aethersparks", "blurb": "Weapon mastery reward, turns into Aetherhearts." },
         { "id": "CURRENCY_PRESTIGE", "name": "Vault Coins", "blurb": "Vault currency." },
-        { "id": "CURRENCY_MARKS_STEEL", "name": "Marks of Steel", "blurb": "Trials currency (Hard Trials unlock)." }
+        { "id": "CURRENCY_MARKS_STEEL", "name": "Marks of Steel", "blurb": "Trials currency (Hard Trials unlock)." },
+        { "id": "CURRENCY_MARKS_GILDED", "name": "Gilded Marks", "blurb": "Gold Trials currency, spent at Lady Luck's shop." }
       ]
     },
     {

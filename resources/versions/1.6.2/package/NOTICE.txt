@@ -13,6 +13,8 @@ Ramsgate gift, the Mega Hunt Pass (Expanded) and its reward helper, and the add-
 quests, art and maps, Mega dye bundles). Their builders are in his published source.
 Also by KombatKing (AGPL-3.0): the All Dyes Collection store offer and Unlimited Resupply Beacons (his "Resupply
 Beacons 162": tools\resupply162.*, backend\deploy\*\resupply162.js), and the hunt XP captures behind the Slayer's Path fix.
+Also by KombatKing (All-in-One R10, AGPL-3.0): no duplicate one-copy items on a Revived import
+(tools\import-singletons162.json) and the duplicate cleanup (tools\inventory-deduplicate162.cjs, FIX duplicate items.bat).
 Chinese text: zgh95's translation ("Zhongwen buding" 1.0), given to the project; downloaded only when
 picked as the game language (paks\paks.json).
 Source: backend\*\src and source\ in this folder.

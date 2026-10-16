@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-16.7",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.7.zip",
-                         "sha256":  "e7b89001edf8747f2da22d10f3a1be0a238455eab3ad3c6bdb84a4065127266e",
+                         "packageVersion":  "2026-10-16.8",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.8.zip",
+                         "sha256":  "690e8a5dec126697a0830f7de6622c4d6f326ca35c62b0602f2b058cc1851d59",
                          "date":  "2026-10-16",
-                         "note":  "Unlimited Resupply Beacons rule and All Dyes store (KombatKing), Chinese text option (zgh95), free store pack on, 10x rules, Slayer\u0027s Path fix (thanks KombatKing) and daily gift fix"
+                         "note":  "No duplicates on Revived import, FIX duplicate items, Gilded Marks, addcosmetic (thanks KombatKing)"
                      },
                      {
                          "id":  "1.14.7",
