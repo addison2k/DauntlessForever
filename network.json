@@ -17,6 +17,12 @@
       "name": "EU",
       "host": "169.58.75.86",
       "controlPort": 7000
+    },
+    {
+      "id": "au",
+      "name": "Australia",
+      "host": "46.250.241.191",
+      "controlPort": 7000
     }
   ],
   "relay": {
