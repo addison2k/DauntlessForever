@@ -18,9 +18,9 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.2.2",
-                     "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.2",
-                     "notes":  "Main menu background in Settings: 12 Hunt Pass seasons or your own picture.",
+                     "version":  "0.2.3",
+                     "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.3",
+                     "notes":  "Game language setting, new title bar, part-break fix for non-English Windows",
                      "date":  "2026-10-16"
                  }
 }
