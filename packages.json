@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-16.3",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.3.zip",
-                         "sha256":  "f0e8761955a74bb53cb79a19d062c51e6179c885c5095b100eb50b79e66eeb8c",
+                         "packageVersion":  "2026-10-16.4",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.4.zip",
+                         "sha256":  "1bcef0dce4e41d086fa240f29392017c9d23b2efc5c392d860ce4a4e0fb58afe",
                          "date":  "2026-10-16",
-                         "note":  "Holidays by the calendar (Dark Harvest now), event mail, daily Ramsgate gift, Mega Hunt Pass (Expanded), goat petting fix. w/help KombatKing."
+                         "note":  "Revived import: bring your character from a Revived server, weapon levels now carry over."
                      },
                      {
                          "id":  "1.14.7",

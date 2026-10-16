@@ -2,7 +2,8 @@
 // Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
 // Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 //
-// Reads a Revived undaunted.db (opened from a temporary copy, never changed) and adds that character's items to
+// Reads a Revived undaunted.db (opened from a temporary copy, never changed), or a character file read from a Revived
+// server (the "fetch" command below, or tools\revived-export), and adds that character's items to
 // YOUR character in this package's save (data\undaunted.db, the account data\player.key belongs to):
 //   - gear (weapons, armour, lanterns, parts, emotes, banners, flares) with its level, cells and dyes;
 //   - stacked items (Rams, cells, materials, dyes, tokens, cores);
@@ -11,10 +12,17 @@
 // Only items that exist in 1.6.2 are imported (tools\catalog162-ids.txt); the rest are listed in the report.
 // Gear you already have is kept unless the imported copy has a higher level. Stacks are added together, except
 // TOKEN_* counters and flags, which take the higher of the two.
+//   - weapon levels: 1.4.4 levels each weapon, 1.6.2 levels each weapon type (Weapon Skill). Per type, the highest
+//     1.4.4 weapon level becomes that type's XP in data\progression\<account>.bonus.json (only ever raised).
 // Not imported (yet): loadouts, mastery ranks, Hunt Pass, escalation. Your 1.6.2 name and character stay as they are.
 //
 //   node tools\import-revived.js check  <path to Revived undaunted.db> [--user <name>] [--root <1.6.2 folder>] [--json]
 //   node tools\import-revived.js import <path to Revived undaunted.db> [--user <name>] [--force] [--json]
+//   node tools\import-revived.js fetch --out <file.json> [--port 61000]
+//       reads YOUR characters from a Revived server through the Revived launcher's connection (the game must be
+//       running with the Revived launcher). Account keys come in on stdin, one per line; the first one the server
+//       accepts is used. Only your own account is read, nothing is changed there, and no key is written anywhere.
+//       The file it writes is a <source> for check / import / tutorial.
 //   node tools\import-revived.js tutorial <path to Revived undaunted.db>   (only marks the tutorial as finished, if it
 //       was finished in Revived; for players who imported with an older version of this tool and still get the tutorial)
 //
@@ -66,21 +74,75 @@ function myAccount(db) {
     return row ? row.userId : null;
 }
 const parse = (s, d) => { try { const v = JSON.parse(s); return v == null ? d : v; } catch { return d; } };
-const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && Number.isFinite(Number(d.CurrentLevel)) ? Number(d.CurrentLevel) : (it && it.itemData ? 0 : -1); };
-
-(async () => {
-    if (!["check", "import", "tutorial"].includes(cmd)) fail("Use: import-revived.js check|import|tutorial <path to undaunted.db>");
-    if (!src || !fs.existsSync(src)) fail("That Revived save file was not found: " + (src || "(none given)"));
-    if (!fs.existsSync(TARGET)) fail("No 1.6.2 save yet. Press Play in Dauntless Forever once and make your character first.");
-    let Database;
-    try { Database = require(SQLITE); } catch { fail("The 1.6.2 server files are not set up yet. Run Set up first."); }
-    const known = new Set(fs.readFileSync(IDS_FILE, "utf8").split(/\r?\n/).filter((l) => l && !l.startsWith("#")));
-
-    // ---- read the Revived save from a temporary copy (with its -wal file, so the newest changes are included)
+// ---- fetch: read your own account from a Revived server, through the Revived launcher's relay on 127.0.0.1
+function httpJson(port, method, p, headers, body) {
+    return new Promise((resolve) => {
+        const http = require("http");
+        const req = http.request({ host: "127.0.0.1", port, method, path: p, headers: { "User-Agent": "DauntlessForever-RevivedImport", ...headers }, timeout: 60000 }, (res) => {
+            const parts = []; res.on("data", (d) => parts.push(d));
+            res.on("end", () => { const t = Buffer.concat(parts).toString("utf8"); resolve({ status: res.statusCode, text: t, json: parse(t, null) }); });
+        });
+        req.on("timeout", () => req.destroy(new Error("timed out")));
+        req.on("error", (e) => resolve({ status: 0, error: e.message }));
+        if (body) req.write(body);
+        req.end();
+    });
+}
+const pause = (ms) => new Promise((r) => setTimeout(r, ms));
+async function fetchFromServer() {
+    const port = Number(opt("--port")) || 61000, out = opt("--out");
+    if (!out) fail("Use: import-revived.js fetch --out <file.json> [--port 61000]  (account keys on stdin)");
+    const ping = await httpJson(port, "GET", "/", {});
+    if (!ping.status) fail("Dauntless Revived is not running. Start the game with the Dauntless Revived launcher, wait until you are in game, then try again.");
+    const input = fs.readFileSync(0, "utf8");
+    const keys = [...new Set((input.match(/UUK_[0-9A-Za-z_-]{16,120}/g) || []).concat(input.split(/\r?\n/).map((l) => l.trim()).filter((l) => /^[A-Za-z0-9_-]{8,128}$/.test(l) && !/^DRK\d$/.test(l))))].slice(0, 5);
+    if (!keys.length) fail("No account key was given.");
+    let tok = null;
+    for (const k of keys) {
+        const r = await httpJson(port, "POST", "/account/api/oauth/token", { "Content-Type": "application/x-www-form-urlencoded" },
+            new URLSearchParams({ grant_type: "exchange_code", exchange_code: k, token_type: "eg1" }).toString());
+        if (r.status === 200 && r.json && r.json.access_token && r.json.account_id) { tok = r.json; break; }
+        if (r.status === 429) fail("The Revived server says too many logins. Wait ten minutes and try again.");
+        await pause(400);
+    }
+    if (!tok) fail(keys.length > 1 ? "The Revived server did not accept any of your saved account keys. Paste the key for the server you play on." : "The Revived server did not accept that key. Check it is the key for the server you play on.");
+    const uid = String(tok.account_id), auth = { Authorization: "bearer " + tok.access_token };
+    const get = async (p) => { await pause(400); const r = await httpJson(port, "GET", p, auth); return r.status === 200 ? r.json : null; };
+    const chars = await get("/character");
+    if (!Array.isArray(chars) || !chars.length) fail("The Revived server has no characters for this account.");
+    const exp = { format: "dauntless-forever-revived-export", version: 2, source: "Dauntless Revived (1.4.4) server", exportedAt: new Date().toISOString(),
+        accountId: uid, progression: await get(`/progression/${encodeURIComponent(uid)}`), objectives: await get(`/progression/objectives/${encodeURIComponent(uid)}`), characters: [] };
+    for (const c of chars) {
+        const cid = String(c.id);
+        exp.characters.push({ character: c, inventory: await get(`/inventory/${encodeURIComponent(uid)}/${encodeURIComponent(cid)}`), loadouts: await get(`/loadout/${encodeURIComponent(uid)}/${encodeURIComponent(cid)}/all`) });
+    }
+    const n = exp.characters.reduce((a, e) => a + (e.inventory ? (e.inventory.instancedItems || []).length + (e.inventory.stackedItems || []).length : 0), 0);
+    if (!n) fail("The Revived server answered, but sent no inventory. Try again in a minute.");
+    fs.mkdirSync(path.dirname(path.resolve(out)), { recursive: true });
+    fs.writeFileSync(out, JSON.stringify(exp, null, 1));
+    done({ ok: true, mode: "fetch", file: path.resolve(out), characters: chars.map((c) => c.name), entries: n },
+        `Read from the Revived server: ${chars.map((c) => c.name).join(", ")} (${n} inventory entries).\nSaved to ${path.resolve(out)}`);
+}
+// ---- the source: a Revived undaunted.db, or a character file from "fetch" / tools\revived-export
+function loadSource(file, Database) {
+    const head = fs.readFileSync(file).subarray(0, 64).toString("utf8").replace(/^\uFEFF/, "").trimStart();
+    if (head.startsWith("{")) {
+        const e = parse(fs.readFileSync(file, "utf8").replace(/^\uFEFF/, ""), null);
+        if (!e || e.format !== "dauntless-forever-revived-export" || !Array.isArray(e.characters)) fail("That file is not a Dauntless Revived character file.");
+        const uid = String(e.accountId || "");
+        const users = [{ userId: uid, name: e.accountName || "" }];
+        const asText = (v, d) => (typeof v === "string" ? v : JSON.stringify(v == null ? d : v));
+        const chars = e.characters.filter((x) => x && x.character && x.inventory).map((x) => ({
+            characterId: String(x.character.id), userId: String(x.character.accountId || uid), name: x.character.name,
+            data: asText(x.character.data, {}), instancedItems: asText(x.inventory.instancedItems, []), stackedItems: asText(x.inventory.stackedItems, []),
+        }));
+        return { users, chars, kind: "file" };
+    }
+    // a database: read it from a temporary copy (with its -wal file, so the newest changes are included)
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "df-revived-"));
     const copy = path.join(tmp, "source.db");
-    fs.copyFileSync(src, copy);
-    for (const ext of ["-wal", "-shm"]) if (fs.existsSync(src + ext)) fs.copyFileSync(src + ext, copy + ext);
+    fs.copyFileSync(file, copy);
+    for (const ext of ["-wal", "-shm"]) if (fs.existsSync(file + ext)) fs.copyFileSync(file + ext, copy + ext);
     let sdb;
     try { sdb = new Database(copy, { readonly: true, fileMustExist: true }); }
     catch (e) { fail("That file is not a Dauntless save (" + e.message + ")."); }
@@ -91,6 +153,57 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
     } catch (e) { fail("That file does not look like a Dauntless Revived save (" + e.message + ")."); }
     sdb.close();
     try { fs.rmSync(tmp, { recursive: true, force: true }); } catch {}
+    return { users, chars, kind: "db" };
+}
+// ---- weapon levels. 1.4.4: a level on each weapon (itemData.CurrentLevel, CurrentXP). 1.6.2: one Weapon Skill level
+// per weapon type, kept as XP in data\progression\<account>.bonus.json (xp.ExperienceTrack_Weapon_<Type>).
+const WEAPON_TYPES = { AC: "Strikers", CB: "ChainBlades", DP: "Repeaters", EB: "Sword", GA: "Axe", IH: "Hammer", MS: "Spear" };
+const LEVEL_STEPS = [300, 400, 600, 1000, 1400, 1800, 2300, 2800, 3300, 3800, 4200, 4600, 4900, 5100, 5300, 5500, 5600, 5700, 5800];
+const xpForLevel = (l) => LEVEL_STEPS.slice(0, Math.max(0, Math.min(20, l) - 1)).reduce((a, b) => a + b, 0);
+const levelForXp = (x) => { let l = 1, t = 0; for (const st of LEVEL_STEPS) { if (x >= t + st) { t += st; l++; } else break; } return l; };
+function weaponPlan(sInst, accountId) {
+    const best = {};
+    for (const it of sInst) {
+        const m = it && /^WP_([A-Z]+)_/.exec(it.catalogId || ""); const type = m && WEAPON_TYPES[m[1]];
+        if (!type) continue;
+        const d = parse(it.itemData, null); if (!d) continue;
+        const lvl = Math.max(1, Math.min(20, Math.floor(Number(d.CurrentLevel) || 0)));
+        const xp = xpForLevel(lvl) + (lvl < 20 ? Math.min(Math.max(0, Math.floor(Number(d.CurrentXP) || 0)), LEVEL_STEPS[lvl - 1] - 1) : 0);
+        if (!best[type] || xp > best[type].xp) best[type] = { lvl, xp };
+    }
+    const file = path.join(DATA, "progression", `${String(accountId).replace(/[^\w-]/g, "_")}.bonus.json`);
+    const bonus = parse(fs.existsSync(file) ? fs.readFileSync(file, "utf8").replace(/^\uFEFF/, "") : "", null) || {};
+    const out = { ...bonus, xp: { ...(bonus.xp || {}) } };
+    const changes = [];
+    for (const [type, b] of Object.entries(best)) {
+        const k = `ExperienceTrack_Weapon_${type}`;
+        const have = Number(out.xp[k]) || 0, reforged = Number((bonus.reforgedXp || {})[k]) || 0;
+        const counted = Math.max(0, have - reforged);
+        if (b.xp > counted) { out.xp[k] = b.xp + reforged; changes.push({ type, from: levelForXp(counted), to: b.lvl }); }
+    }
+    return { file, out, changes, line: changes.length ? changes.map((c) => `${c.type} ${c.from}->${c.to}`).join(", ") : (Object.keys(best).length ? "already as high as in Revived" : "none found") };
+}
+function writeBonus(w, stamp) {
+    if (!w.changes.length) return null;
+    const bd = path.join(ROOT, "backup", "import-revived"); fs.mkdirSync(bd, { recursive: true });
+    let backup = null;
+    if (fs.existsSync(w.file)) { backup = path.join(bd, `${path.basename(w.file)}.${stamp}`); fs.copyFileSync(w.file, backup); }
+    fs.mkdirSync(path.dirname(w.file), { recursive: true });
+    fs.writeFileSync(w.file, JSON.stringify(w.out, null, 2));
+    return backup;
+}
+const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && Number.isFinite(Number(d.CurrentLevel)) ? Number(d.CurrentLevel) : (it && it.itemData ? 0 : -1); };
+
+(async () => {
+    if (cmd === "fetch") return fetchFromServer();
+    if (!["check", "import", "tutorial"].includes(cmd)) fail("Use: import-revived.js check|import|tutorial <path to undaunted.db or character file> | fetch --out <file>");
+    if (!src || !fs.existsSync(src)) fail("That Revived save file was not found: " + (src || "(none given)"));
+    if (!fs.existsSync(TARGET)) fail("No 1.6.2 save yet. Press Play in Dauntless Forever once and make your character first.");
+    let Database;
+    try { Database = require(SQLITE); } catch { fail("The 1.6.2 server files are not set up yet. Run Set up first."); }
+    const known = new Set(fs.readFileSync(IDS_FILE, "utf8").split(/\r?\n/).filter((l) => l && !l.startsWith("#")));
+
+    const { users, chars, kind: srcKind } = loadSource(src, Database);
     if (!chars.length) fail("That save has no character with items.");
     const wanted = opt("--user");
     let pick = chars;
@@ -109,6 +222,7 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
     const T = tdb.prepare("SELECT c.characterId, c.name, c.data, c.updateVersion, i.instancedItems, i.stackedItems FROM characters c JOIN inventories i ON i.characterId = c.characterId WHERE c.userId = ? ORDER BY c.createdDate LIMIT 1").get(me);
     if (!T) { tdb.close(); fail("You have no 1.6.2 character yet. Press Play once, make your character, close the game, then import."); }
     const tInst = parse(T.instancedItems, []), tStack = parse(T.stackedItems, []);
+    const weapons = weaponPlan(sInst, me);
 
     // ---- plan
     const plan = { gearNew: [], gearUpgraded: [], gearKept: [], stacks: [], skipped: [] };
@@ -231,11 +345,11 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
         to: { character: T.name },
         gearNew: plan.gearNew.length, gearUpgraded: plan.gearUpgraded.length, gearKept: plan.gearKept.length,
         stacksChanged: plan.stacks.length, skipped: [...new Set(plan.skipped)],
-        tutorialMarked: tutChanged, questsAdded: quests.added, questsMerged: quests.merged, flagsAdded: quests.flags,
+        tutorialMarked: tutChanged, weaponLevels: weapons.changes, questsAdded: quests.added, questsMerged: quests.merged, flagsAdded: quests.flags,
         rams: (() => { const r = plan.stacks.find((s) => s.id === "CURRENCY_NOTES"); return r ? r.after - r.before : 0; })(),
     };
     const lines = [
-        `From Dauntless Revived: ${srcUser} / ${S.name} (${sInst.length} gear, ${sStack.length} stacks)`,
+        `From Dauntless Revived${srcKind === "file" ? " (server)" : ""}: ${srcUser ? srcUser + " / " : ""}${S.name} (${sInst.length} gear, ${sStack.length} stacks)`,
         `Into your 1.6.2 character: ${T.name}`,
         ``,
         `  New gear:            ${plan.gearNew.length}`,
@@ -248,6 +362,7 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
         `  Quest lines merged:  ${quests.merged.length}${quests.merged.length ? "  (" + quests.merged.join(", ") + ")" : ""}  (experimental)`,
         `  Tutorial flags:      +${quests.flags}`,
         `  First mission:       ${tut.SERIE_cr20_pjm_quests ? "fixed (finished, next mission active)" : "ok"}`,
+        `  Weapon levels:       ${weapons.line}`,
         `  Tutorial finished:   ${tut.HasFinishedTutorial || tut.PlayerAccountProgressStep ? "yes (marked as done, as in Revived)" : String(tData.HasFinishedTutorial).toLowerCase() === "true" ? "already done" : "no (not finished in Revived either)"}`,
         ``,
         `Not carried over yet: loadouts (equip your gear again in game), mastery ranks, Hunt Pass and escalation.`,
@@ -271,18 +386,21 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
         for (const k of ["HasFinishedTutorial", "PlayerAccountProgressStep", "LoginFlagData"]) if (k in tut) only[k] = tut[k];
         const fx = fixMissions(only); Object.assign(only, fx);
         const changedKeys = Object.keys(only).filter((k) => only[k] !== parse(T.data, {})[k]);
-        if (!changedKeys.length) { tdb.close(); done({ ok: true, mode: cmd, changed: false }, String(tData.HasFinishedTutorial).toLowerCase() === "true" ? "Your 1.6.2 character already has the tutorial and first mission done. Nothing changed.\n" + missionLine(only) : "The tutorial was not finished in Revived either, so nothing was changed."); }
+        if (!changedKeys.length && !weapons.changes.length) { tdb.close(); done({ ok: true, mode: cmd, changed: false }, String(tData.HasFinishedTutorial).toLowerCase() === "true" ? "Your 1.6.2 character already has the tutorial and first mission done, and its weapon levels are as high as in Revived. Nothing changed.\n" + missionLine(only) : "The tutorial was not finished in Revived either, so nothing was changed. Weapon levels: " + weapons.line + "."); }
         if (await backendUp()) { tdb.close(); fail("Dauntless is still running (or the Dauntless Revived server is). Close the game, the launcher's server window and Revived, then try again."); }
         const bd = path.join(ROOT, "backup", "import-revived"); fs.mkdirSync(bd, { recursive: true });
         const st = new Date().toISOString().replace(/[-:]/g, "").replace("T", "-").slice(0, 15);
         tdb.close();
         fs.copyFileSync(TARGET, path.join(bd, `undaunted.db.${st}`));
-        const w = new Database(TARGET, { fileMustExist: true });
-        w.prepare("UPDATE characters SET data = ?, updateVersion = ?, lastModifiedDate = ? WHERE characterId = ?")
-            .run(JSON.stringify(only), (Number(T.updateVersion) || 0) + 1, new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }), T.characterId);
-        w.close();
+        if (changedKeys.length) {
+            const w = new Database(TARGET, { fileMustExist: true });
+            w.prepare("UPDATE characters SET data = ?, updateVersion = ?, lastModifiedDate = ? WHERE characterId = ?")
+                .run(JSON.stringify(only), (Number(T.updateVersion) || 0) + 1, new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }), T.characterId);
+            w.close();
+        }
+        writeBonus(weapons, st);
         done({ ok: true, mode: cmd, changed: true, backup: `backup\\import-revived\\undaunted.db.${st}` },
-            `Fixed for ${T.name}: ${[only.HasFinishedTutorial !== parse(T.data, {}).HasFinishedTutorial ? "tutorial marked as done" : "", fx.SERIE_cr20_pjm_quests ? "first mission finished and the next one made active" : "", changedKeys.some((k) => k.startsWith("SERIE_")) && !fx.SERIE_cr20_pjm_quests ? "quest lines tidied" : ""].filter(Boolean).join(", ") || "tutorial settings"}. A backup of your save is in backup\\import-revived\\undaunted.db.${st}\n` + missionLine(only));
+            `Fixed for ${T.name}: ${[only.HasFinishedTutorial !== parse(T.data, {}).HasFinishedTutorial ? "tutorial marked as done" : "", fx.SERIE_cr20_pjm_quests ? "first mission finished and the next one made active" : "", changedKeys.some((k) => k.startsWith("SERIE_")) && !fx.SERIE_cr20_pjm_quests ? "quest lines tidied" : "", weapons.changes.length ? "weapon levels " + weapons.line : ""].filter(Boolean).join(", ") || "tutorial settings"}. A backup of your save is in backup\\import-revived\\undaunted.db.${st}\n` + missionLine(only));
     }
 
     // ---- import
@@ -308,12 +426,15 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
         }
     })();
     wdb.close();
-    marker.push({ source: key, account: srcUser, character: S.name, into: T.characterId, at: new Date().toISOString() });
+    const bonusBackup = writeBonus(weapons, stamp);
+    marker.push({ source: key, account: srcUser, character: S.name, into: T.characterId, at: new Date().toISOString(), file: path.resolve(src), kind: srcKind });
     fs.writeFileSync(MARKER, JSON.stringify(marker, null, 2));
     const report = [
         `Dauntless Revived import, ${new Date().toString()}`, ...lines, ``,
         `Backup of your save before the import: backup\\import-revived\\undaunted.db.${stamp}`,
-        `To undo: close the game, copy that file over data\\undaunted.db, and delete data\\import-revived.json.`, ``,
+        `To undo: close the game, copy that file over data\\undaunted.db, and delete data\\import-revived.json.`,
+        ...(bonusBackup ? [`Weapon levels before the import: ${path.relative(ROOT, bonusBackup)} (copy it back over ${path.relative(ROOT, weapons.file)} to undo those too).`]
+            : weapons.changes.length ? [`Weapon levels were new: to undo them, delete ${path.relative(ROOT, weapons.file)}.`] : []), ``,
         `New gear: ${plan.gearNew.join(", ") || "-"}`,
         `Gear levelled up: ${plan.gearUpgraded.join(", ") || "-"}`,
         `Stacks: ${plan.stacks.map((s) => `${s.id} ${s.before}->${s.after}`).join(", ") || "-"}`,

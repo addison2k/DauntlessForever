@@ -812,7 +812,7 @@ function wire() {
     if (act === 'import' || act === 'importfix') {
       const n = $('action-note');
       if (act === 'import') {
-        const ok = await confirm('Bring your Dauntless Revived character?', 'A window opens. It finds your Dauntless Revived (1.4.4) save, shows what will come over (gear, Rams, cells, materials, quests) and asks before changing anything. Your Revived save is only read; your 1.6.2 save is backed up first. Make your 1.6.2 character in game first, and close Dauntless Revived.');
+        const ok = await confirm('Bring your Dauntless Revived character?', 'A window opens and asks where your Dauntless Revived (1.4.4) character is: on a Revived server (it reads your own account through the Revived launcher while the game runs) or in a Revived save on this PC. It shows what will come over (gear, Rams, cells, materials, quests, weapon levels) and asks before changing anything. Nothing on the Revived side is changed; your 1.6.2 save is backed up first. Make your 1.6.2 character in game first.');
         if (!ok) return;
       }
       n.className = 'action-note';
