@@ -15,6 +15,7 @@
 #   stops it. Exit codes: 0 stopped on request, 3 the relay connection was lost, else start.ps1's. (Oct 17)
 param([switch]$Public, [switch]$HostMode)
 . (Join-Path $PSScriptRoot 'common.ps1')
+. (Join-Path $PSScriptRoot 'relay-failover.ps1')
 $DataDir = Join-Path $Root 'data'
 $DefaultRelay = '209.145.57.41'          # the Dauntless Forever relay; data\relay_host.txt overrides it
 $RelayControlPort = 7000
@@ -45,28 +46,9 @@ if ($net -and $net.online -and ($net.online.enabled -eq $false)) {
     $why = if ($net.online.message) { "$($net.online.message)" } else { 'The Dauntless Forever online server is being worked on.' }
     Fail "online play is switched off right now: $why Solo play (PLAY) still works."
 }
-function Measure-Relay([string]$H, [int]$Port) {
-    $best = $null
-    for ($i = 0; $i -lt 3; $i++) {
-        $c = New-Object System.Net.Sockets.TcpClient
-        $sw = [Diagnostics.Stopwatch]::StartNew()
-        try { $t = $c.ConnectAsync($H, $Port); if ($t.Wait(2000) -and $c.Connected) { $ms = $sw.ElapsedMilliseconds; if ($best -eq $null -or $ms -lt $best) { $best = $ms } } } catch {} finally { $c.Close() }
-    }
-    return $best
-}
-if ($net -and $net.relays -and @($net.relays).Count -gt 0) {
-    $picked = $null
-    foreach ($r in @($net.relays)) {
-        $port = if ($r.controlPort) { [int]$r.controlPort } else { 7000 }
-        $ms = Measure-Relay "$($r.host)" $port
-        $label = if ($r.name) { "$($r.name)" } else { "$($r.host)" }
-        if ($ms -ne $null) { Say "  Relay ${label}: $ms ms" } else { Say "  Relay ${label}: no answer" 'Yellow' }
-        if ($ms -ne $null -and ($picked -eq $null -or $ms -lt $picked.ms)) { $picked = @{ host = "$($r.host)"; port = $port; ms = $ms; label = $label } }
-    }
-    if ($picked) { $relayHost = $picked.host; $RelayControlPort = $picked.port; Say "Using the $($picked.label) relay ($($picked.ms) ms)." 'Green' }
-}
-$hostFile = Join-Path $DataDir 'relay_host.txt'
-if (Test-Path -LiteralPath $hostFile) { $t = ((Get-Content -LiteralPath $hostFile -Raw) + '').Trim(); if ($t) { $relayHost = $t; Say "Using the relay in data\relay_host.txt: $relayHost" } }
+# Several relays ("relays": [...], one per region): fastest first, your preferred server (launcher Settings) first,
+# and the next one when a relay does not hand out a slot (tools\relay-failover.ps1).
+$relayCands = Get-RelayCandidates $net $relayHost $RelayControlPort $DataDir
 
 # --- 1. the gateway, then the relay connection
 $logDir = Join-Path $Root 'logs'
@@ -79,16 +61,10 @@ Start-Sleep -Milliseconds 800
 if ($gateway.HasExited) { Fail 'the backend gateway did not start (port 63099 in use?). See logs\gateway.log.' }
 $env:LOCAL_BACKEND_PORT = "$GatewayPort"          # relay-client.js: friends' backend connections go to the gateway
 $env:LOCAL_GAME_PORT_BASE = '8780'                # ...and game traffic to this version's servers (UDP 8780-8787)
-Say "Connecting to the Dauntless Forever relay ($relayHost)..."
-$relay = Start-Process -FilePath $node -PassThru -WindowStyle Hidden -WorkingDirectory $Root `
-    -ArgumentList @("`"$(Join-Path $PSScriptRoot 'relay-client.js')`"", $relayHost, "$RelayControlPort", "`"$StatusFile`"") `
-    -RedirectStandardOutput (Join-Path $logDir 'relay.log') -RedirectStandardError (Join-Path $logDir 'relay.err')
-$t0 = Get-Date
-while (-not (Test-Path -LiteralPath $StatusFile)) {
-    if ($relay.HasExited) { try { $gateway.Kill() } catch {}; Fail 'could not start the relay connection. See logs\relay.log.' }
-    if (((Get-Date) - $t0).TotalSeconds -gt 20) { try { $relay.Kill() } catch {}; try { $gateway.Kill() } catch {}; Fail "the relay at $relayHost did not answer. Is this PC online? (Details: logs\relay.log)" }
-    Start-Sleep -Milliseconds 300
-}
+Say 'Connecting to the Dauntless Forever relay...'
+$conn = Connect-Relay $relayCands $node $Root $logDir $StatusFile -Live:(-not $HostMode)
+if (-not $conn) { try { $gateway.Kill() } catch {}; Fail "no relay server answered (tried: $RelayTried). Is this PC online? (Details: logs\relay.log)" }
+$relay = $conn.proc; $relayHost = $conn.host; $RelayControlPort = $conn.port
 $st = Get-Content -LiteralPath $StatusFile -Raw | ConvertFrom-Json
 $ip = "$($st.ip)"; $base = [int]$st.base
 if (-not ($ip -match '^\d{1,3}(\.\d{1,3}){3}$')) { $ip = $relayHost }
