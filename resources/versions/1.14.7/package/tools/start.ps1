@@ -46,7 +46,14 @@ $recProc = $null
 if (Test-Recorder) { Say '1/3 Local backend: already running.' 'Green' }
 else {
     Say '1/3 Starting the local backend (a small minimized window)...'
-    $recProc = Start-Process -FilePath $node -ArgumentList ('"' + $recorder + '"') -WorkingDirectory $Root -WindowStyle Minimized -PassThru
+    if ($NoGame) {
+        # Host Mode: no window at all (a minimized console can be closed by hand, which kills the backend and kicks every
+        # player); what the backend prints goes to logs\recorder.out.log / recorder.err.log instead
+        $recProc = Start-Process -FilePath $node -ArgumentList ('"' + $recorder + '"') -WorkingDirectory $Root -WindowStyle Hidden -PassThru `
+            -RedirectStandardOutput (Join-Path $Root 'logs\recorder.out.log') -RedirectStandardError (Join-Path $Root 'logs\recorder.err.log')
+    } else {
+        $recProc = Start-Process -FilePath $node -ArgumentList ('"' + $recorder + '"') -WorkingDirectory $Root -WindowStyle Minimized -PassThru
+    }
     $t0 = Get-Date
     while (-not (Test-Recorder)) {
         if ($recProc.HasExited) { Fail "the local backend stopped right away. Another program may be using ports 63000-63027. Restart the PC and try again." }
@@ -59,7 +66,8 @@ else {
 # --- 2. game server (hidden; its PowerShell window is minimized)
 Say '2/3 Starting the game server. This takes about a minute, please wait...'
 $serverPs1 = Join-Path $PSScriptRoot 'server-1147.ps1'
-$srvWin = Start-Process -FilePath 'powershell.exe' -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $serverPs1 + '"'), '-Run') -WindowStyle Minimized -PassThru
+$srvStyle = if ($NoGame) { 'Hidden' } else { 'Minimized' }   # Host Mode: nothing to close by accident
+$srvWin = Start-Process -FilePath 'powershell.exe' -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', ('"' + $serverPs1 + '"'), '-Run') -WindowStyle $srvStyle -PassThru
 $marker = Join-Path $dataDir 'server.json'
 $t0 = Get-Date; $dots = 0
 while (-not (Test-Path -LiteralPath $marker)) {
@@ -83,10 +91,10 @@ if ($NoGame) {
     $recMiss = 0
     while ($true) {
         if (Test-Path -LiteralPath $stopFile) { Remove-Item -LiteralPath $stopFile -Force -ErrorAction SilentlyContinue; Say 'Host Mode: asked to stop.'; break }
-        if ($recProc -and $recProc.HasExited) { $hostFail = 'the local backend stopped while hosting.'; break }
+        if ($recProc -and $recProc.HasExited) { $hostFail = "the local backend stopped while hosting (exit code $($recProc.ExitCode); see logs\recorder.err.log)."; break }
         # a backend we did not start: only three missed answers in a row count (one slow answer under load must not restart the server)
         if (-not $recProc) { if (Test-Recorder) { $recMiss = 0 } else { $recMiss++ }; if ($recMiss -ge 3) { $hostFail = 'the local backend stopped answering while hosting.'; break } }
-        if ($srvWin.HasExited) { $hostFail = 'the game server stopped while hosting.'; break }
+        if ($srvWin.HasExited) { $hostFail = "the game server stopped while hosting (exit code $($srvWin.ExitCode); see logs\server_8780.log)."; break }
         Start-Sleep -Seconds 3
     }
 } else {

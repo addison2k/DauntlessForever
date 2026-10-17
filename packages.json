@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-17.10",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-17.10.zip",
-                         "sha256":  "fe63829e17d93df1ab8bda40f3f5a58ec39b1c6d7553b79abf5e82ab5190a389",
+                         "packageVersion":  "2026-10-17.11",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-17.11.zip",
+                         "sha256":  "f4f501c8ff2e5003f8221d121371cf842edfb874b7be505b715930e51c160300",
                          "date":  "2026-10-17",
-                         "note":  "Your character is saved home every 3 minutes while you play with friends; the backend no longer stops on an unexpected error"
+                         "note":  "Host Mode: the server runs with no windows, so nothing can be closed by accident"
                      }
                  ],
     "launcher":  {
