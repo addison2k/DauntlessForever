@@ -46,7 +46,7 @@ const PID_FILE = path.join(DATA_DIR, 'recorder.pid');
 const SERVER_FILE = path.join(DATA_DIR, 'server.json');   // written by server-211.ps1 while the city (Ramsgate) server is listening
 const WANTED_FILE = path.join(DATA_DIR, 'wanted.json');   // written here: the place outside the city the player asked to go to
 const HUNT_SERVER_FILE = path.join(DATA_DIR, 'server_hunt.json');   // written by server-211.ps1 while the second server is listening
-const MAX_BODY = 1024 * 1024;
+const MAX_BODY = 8 * 1024 * 1024;   // a travelling character (DF-TRAVEL-1147) is a few hundred KB
 
 // ---------------------------------------------------------------- redaction
 const JWT_RE = /eyJ[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]{8,}\.[A-Za-z0-9_-]*/g;
@@ -155,6 +155,31 @@ function destinationFor(b) {
   else if (MAP_BY_GAME_TYPE[type]) url = `${MAP_BY_GAME_TYPE[type]}?MaxPlayers=1${/^[A-Za-z0-9_]+$/.test(hunt) ? '?HuntID=' + hunt : ''}`;
   if (!url || !URL_OK.test(url)) return { city: true, label, note: 'this destination is not available yet: staying in Ramsgate' };
   return { city: false, label, url };
+}
+// DF-TRAVEL-1147: a LAN guest's own character travels to the host for the session and back home afterwards
+// (same idea as 1.6.2's travel.js). The guest's LAN - JOIN sends the record of its home save here before the game
+// starts (PUT) and takes it back when the game closes (GET). The key is the guest's LAN sign-in
+// (sha256('epic:' + its LAN Epic id), the same key the game's sign-in gives it here). Home networks only.
+function travel(method, key, body) {
+  if (method === 'GET') {
+    const p = state.players[key];
+    if (!p) return { status: 404, json: { error: 'no character of this player here' }, note: 'travel: nothing to send home' };
+    const out = Object.assign({}, p); delete out.candidate; delete out.partyId;
+    return J({ player: out, at: new Date().toISOString() }, `travel: ${key.slice(0, 8)} goes home (${(out.characters || []).length} character(s))`);
+  }
+  if (method === 'PUT') {
+    const rec = body && body.player;
+    if (!rec || typeof rec !== 'object' || !Array.isArray(rec.characters) || !rec.characters.length) return { status: 400, json: { error: 'no character in the request' }, note: 'travel: refused, empty' };
+    const p = Object.assign({}, rec);
+    delete p.candidate; delete p.partyId;
+    p.accountId = idFrom('account:' + key);          // the host's id for this guest (home ids can be the same on every PC)
+    p.travelledIn = new Date().toISOString();
+    if (state.players[key]) state.travelBackups = Object.assign(state.travelBackups || {}, { [key]: state.players[key] });
+    state.players[key] = p;
+    saveState();
+    return J({ ok: true, accountId: p.accountId }, `travel: ${key.slice(0, 8)} arrived with ${p.characters.length} character(s)`);
+  }
+  return { status: 405, json: {}, note: 'travel: GET or PUT' };
 }
 // DF-LAN-1147: the place outside the city that the second server is for, and who is (going) there.
 let place = null;
@@ -837,6 +862,7 @@ function handle(svc, port, req, res, bodyBuf) {
 
   let reply = null, known = false;
   if (pathName === '/_recorder/ping') { reply = J({ ok: true, service: svc.service, port }); known = true; }
+  else if (/^\/_travel\/[0-9a-f]{32}$/.test(pathName)) { reply = travel(req.method, pathName.slice(9), body); known = true; }
   else {
     for (const [rSvc, rMethod, rPath, fn] of routes) {
       if (rSvc !== svc.service || rMethod !== req.method) continue;
@@ -863,7 +889,7 @@ function handle(svc, port, req, res, bodyBuf) {
       t: new Date().toISOString(), port, svc: svc.service, m: req.method, path: pathName,
       q: redactQuery(url.search), status: reply.status, known, note: reply.note,
       auth: b ? `bearer(len ${b.length}, id ${shortHash(b)}${sessions.has(b) ? ', ours' : ''})` : undefined,
-      reqLen: bodyBuf.length, body: redactBody(bodyBuf, req.headers['content-type']),
+      reqLen: bodyBuf.length, body: pathName.startsWith('/_travel/') ? undefined : redactBody(bodyBuf, req.headers['content-type']),
       resLen: Buffer.byteLength(payload),
     });
   }

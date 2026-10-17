@@ -67,6 +67,46 @@ elseif (Test-Path -LiteralPath $soloIni) { $m = Select-String -LiteralPath $solo
 if ($name) { $lines = @($lines | Where-Object { $_ -notmatch '^DisplayName=' }) + @("DisplayName=$name") }
 [System.IO.File]::WriteAllText($lanIni, (($lines -join "`r`n") + "`r`n"), [System.Text.Encoding]::ASCII)
 
+# --- your own character travels with you (gear, quests, progress) and comes home when the game closes
+#     (tools\travel-1147.js; the same idea as 1.6.2). Your home save is backed up first (backup\travel\).
+$lanId = (@($lines | Where-Object { $_ -match '^EpicAccountId=' })[0] -split '=', 2)[1].Trim()
+$node = $cfg.Node; if (-not $node -or -not (Test-Path -LiteralPath $node)) { $node = Find-Node }
+$travelJs = Join-Path $PSScriptRoot 'travel-1147.js'
+$pendingFile = Join-Path $DataDir 'travel_pending.json'
+$travelling = $false
+function Invoke-Travel([string]$What) {
+    $out = & $node $travelJs $What $addr $lanId $Root 2>&1
+    $c = $LASTEXITCODE
+    foreach ($l in @($out)) { if ("$l".Trim()) { Say "  $l" } }
+    return $c
+}
+if ($node -and (Test-Path -LiteralPath $travelJs)) {
+    if (Test-Recorder) { Fail 'Dauntless 1.14.7 is still running on THIS PC (its backend answers). Close PLAY here first, then join again.' }
+    $pending = $null; try { $pending = Get-Content -LiteralPath $pendingFile -Raw | ConvertFrom-Json } catch {}
+    if ($pending -and $pending.host -eq $addr) {
+        Say 'Your last game with this host did not bring your character home. Doing that first...'
+        $c = Invoke-Travel 'home'
+        if ($c -eq 1) { Fail 'could not bring your character home from the host. Try again in a moment (your home save was not changed).' }
+    } elseif ($pending) {
+        Say "Note: your character is still at another host ($($pending.host)). Join that host once to bring it home." 'Yellow'
+    }
+    if (-not (Test-Path -LiteralPath $pendingFile)) {
+        Say 'Sending your character to the host...'
+        $c = Invoke-Travel 'send'
+        if ($c -eq 0) { $travelling = $true }
+        elseif ($c -eq 2) { Say '  (You play with a new character on the host.)' }
+        else { Say '  You play with the host''s copy of your character this time.' 'Yellow' }
+    }
+} else { Say 'Node.js or tools\travel-1147.js not found: you play with a character kept on the host.' 'Yellow' }
+
 Say ''
-Say "Joining $addr. Your character on the host's game is kept on the host's PC for now." 'Green'
-& (Join-Path $PSScriptRoot 'play-1147.ps1') -JoinHost $addr -EosDirOverride $eosLan
+Say "Joining $addr..." 'Green'
+try {
+    & (Join-Path $PSScriptRoot 'play-1147.ps1') -JoinHost $addr -EosDirOverride $eosLan
+} finally {
+    if ($travelling -or (Test-Path -LiteralPath $pendingFile)) {
+        Say 'Bringing your character home...'
+        $c = Invoke-Travel 'home'
+        if ($c -ne 0 -and $c -ne 2) { Say 'Your character could not come home just now. The next LAN - JOIN with this host brings it home first.' 'Yellow' }
+    }
+}

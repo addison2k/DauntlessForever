@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-17.3",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-17.3.zip",
-                         "sha256":  "1c1200170e68c68f165ce1dadca64477c44554be660a664c238305d925eb048b",
+                         "packageVersion":  "2026-10-17.4",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-17.4.zip",
+                         "sha256":  "9756b17131a315d8ce0faae036841c2c1286cc53f23d2465a42ea994352e238e",
                          "date":  "2026-10-17",
-                         "note":  "LAN test: LAN - HOST / LAN - JOIN"
+                         "note":  "LAN test: your own character travels with you"
                      }
                  ],
     "launcher":  {
