@@ -82,13 +82,16 @@ function itemCount(p) {
     const before = itemCount(mine), after = itemCount(back);
     if (before >= 20 && after < before / 2) problems.push(`items dropped from ${before} to ${after}`);
     if (problems.length) { console.log('The copy from the host looks wrong (' + problems.join('; ') + '). Your home save was NOT changed.'); process.exit(3); }
-    const saved = backup(keep ? 'before-save' : 'before-home');
     const home = Object.assign({}, back, { accountId: mine.accountId, epicId: mine.epicId, username: mine.username || back.username });
     delete home.travelledIn; delete home.candidate; delete home.partyId;
+    // save (every 3 minutes while playing, as 1.6.2 does): nothing written when nothing changed, and no backup each
+    // time (the backup from before the join stays; 20 autosave backups would push it out)
+    if (keep && JSON.stringify(home) === JSON.stringify(mine)) { console.log('Nothing new to save home.'); process.exit(0); }
+    const saved = keep ? '' : backup('before-home');
     st.players[hk] = home;
     const tmp = stateFile + '.tmp';
     fs.writeFileSync(tmp, JSON.stringify(st, null, 2)); fs.renameSync(tmp, stateFile);
-    if (keep) { console.log(`Saved your character home (it is still at the host; backup of the save before: ${path.relative(root, saved)}).`); process.exit(0); }
+    if (keep) { console.log('Saved your character home (it stays at the host until you leave).'); process.exit(0); }
     try { fs.unlinkSync(pendingFile); } catch (e) {}
     console.log(`Your character is home again (backup of the save before: ${path.relative(root, saved)}).`);
     process.exit(0);

@@ -75,7 +75,12 @@ function Stop-Proxy { if ($proxy) { try { if (-not $proxy.HasExited) { $proxy.Ki
 # --- is the host there?
 Say "Checking the host at $addr..."
 $ok = $false
-try { Invoke-RestMethod -Uri "http://${gameHost}:63000/_recorder/ping" -TimeoutSec 10 | Out-Null; $ok = $true } catch {}
+$hostLabel = $addr
+try {
+    $pong = Invoke-RestMethod -Uri "http://${gameHost}:63000/_recorder/ping" -TimeoutSec 10; $ok = $true
+    # the host's own id (server files .8 and newer): the join code changes every session, this id does not
+    if ("$($pong.host)" -match '^[0-9a-f]{16}$') { $hostLabel = "host:$($pong.host)" }
+} catch {}
 if (-not $ok) {
     Stop-Proxy
     if ($relayPort) {
@@ -114,7 +119,7 @@ $node = $cfg.Node; if (-not $node -or -not (Test-Path -LiteralPath $node)) { $no
 $travelJs = Join-Path $PSScriptRoot 'travel-1147.js'
 $pendingFile = Join-Path $DataDir 'travel_pending.json'
 $travelling = $false
-$env:TRAVEL_LABEL = $addr
+$env:TRAVEL_LABEL = $hostLabel
 function Invoke-Travel([string]$What) {
     $out = & $node $travelJs $What $gameHost $lanId $Root 2>&1
     $c = $LASTEXITCODE
@@ -124,12 +129,16 @@ function Invoke-Travel([string]$What) {
 if ($node -and (Test-Path -LiteralPath $travelJs)) {
     if (-not $relayPort -and (Test-Recorder)) { Fail 'Dauntless 1.14.7 is still running on THIS PC (its backend answers). Close PLAY here first, then join again.' }
     $pending = $null; try { $pending = Get-Content -LiteralPath $pendingFile -Raw | ConvertFrom-Json } catch {}
-    if ($pending -and $pending.host -eq $addr) {
+    if ($pending -and ($pending.host -eq $hostLabel -or $pending.host -eq $addr)) {
         Say 'Your last game with this host did not bring your character home. Doing that first...'
         $c = Invoke-Travel 'home'
         if ($c -eq 1) { Stop-Proxy; Fail 'could not bring your character home from the host. Try again in a moment (your home save was not changed).' }
     } elseif ($pending) {
-        Say "Note: your character is still at another host ($($pending.host)). Join that host once to bring it home." 'Yellow'
+        # another host has a copy from a game that ended without coming home. Your home save was kept up to date
+        # while you played there (every 3 minutes), so it travels from here, as 1.6.2 does. The old copy stays on
+        # that host; nothing on this PC is lost (backup\travel has the saves from before each join).
+        Say "Your last game ($($pending.host)) did not bring your character home at the end; using the copy saved home while you played." 'Yellow'
+        Remove-Item -LiteralPath $pendingFile -Force -ErrorAction SilentlyContinue
     }
     if (-not (Test-Path -LiteralPath $pendingFile)) {
         Say 'Sending your character to the host...'
@@ -147,13 +156,20 @@ $saveNow = Join-Path $DataDir 'travel_save_now'
 Remove-Item -LiteralPath $saveNow -Force -ErrorAction SilentlyContinue
 $saver = $null
 if ($travelling) {
-    $saver = Start-Job -ArgumentList $saveNow, $node, $travelJs, $gameHost, $lanId, $Root, $addr -ScriptBlock {
+    # while you play: your character is saved home every 3 minutes, and at once when the host says they are
+    # closing, so a host who drops out costs you minutes at most (as 1.6.2). A copy that looks wrong (exit 3)
+    # pauses this for the rest of the game; your home save stays as it was.
+    $saver = Start-Job -ArgumentList $saveNow, $node, $travelJs, $gameHost, $lanId, $Root, $hostLabel -ScriptBlock {
         param($flag, $node, $js, $gh, $id, $root, $label)
         $env:TRAVEL_LABEL = $label
+        $last = Get-Date
         while ($true) {
-            if (Test-Path -LiteralPath $flag) {
+            $now = Test-Path -LiteralPath $flag
+            if ($now -or ((Get-Date) - $last).TotalSeconds -ge 180) {
                 Remove-Item -LiteralPath $flag -Force -ErrorAction SilentlyContinue
+                $last = Get-Date
                 & $node $js 'save' $gh $id $root 2>&1 | Out-Null
+                if ($LASTEXITCODE -eq 3) { break }
             }
             Start-Sleep -Seconds 2
         }

@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-17.9",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-17.9.zip",
-                         "sha256":  "cadb65b96b4a96dd96eecf8f005a98f826d4d1953f15a17dc991246157abb7a8",
+                         "packageVersion":  "2026-10-17.10",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-17.10.zip",
+                         "sha256":  "fe63829e17d93df1ab8bda40f3f5a58ec39b1c6d7553b79abf5e82ab5190a389",
                          "date":  "2026-10-17",
-                         "note":  "Players show their launcher name instead of Slayer"
+                         "note":  "Your character is saved home every 3 minutes while you play with friends; the backend no longer stops on an unexpected error"
                      }
                  ],
     "launcher":  {

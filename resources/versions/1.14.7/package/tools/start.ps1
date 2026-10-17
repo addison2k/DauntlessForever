@@ -80,10 +80,12 @@ if ($NoGame) {
     Say '3/3 Host Mode: the server is up. No game window; press Play in the launcher to join it from this PC.' 'Green'
     $stopFile = Join-Path $dataDir 'hostmode_stop'
     Remove-Item -LiteralPath $stopFile -Force -ErrorAction SilentlyContinue
+    $recMiss = 0
     while ($true) {
         if (Test-Path -LiteralPath $stopFile) { Remove-Item -LiteralPath $stopFile -Force -ErrorAction SilentlyContinue; Say 'Host Mode: asked to stop.'; break }
         if ($recProc -and $recProc.HasExited) { $hostFail = 'the local backend stopped while hosting.'; break }
-        if (-not $recProc -and -not (Test-Recorder)) { $hostFail = 'the local backend stopped answering while hosting.'; break }
+        # a backend we did not start: only three missed answers in a row count (one slow answer under load must not restart the server)
+        if (-not $recProc) { if (Test-Recorder) { $recMiss = 0 } else { $recMiss++ }; if ($recMiss -ge 3) { $hostFail = 'the local backend stopped answering while hosting.'; break } }
         if ($srvWin.HasExited) { $hostFail = 'the game server stopped while hosting.'; break }
         Start-Sleep -Seconds 3
     }

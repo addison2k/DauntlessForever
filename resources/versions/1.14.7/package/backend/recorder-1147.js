@@ -112,6 +112,9 @@ const sessions = new Map(); // session token -> player key (kept in memory only)
 function loadState() {
   try { state = JSON.parse(fs.readFileSync(STATE_FILE, 'utf8')); } catch (e) { /* first run */ }
   if (!state.players) state.players = {};
+  // DF-HOSTID-1147: this server's own id (made once). Joiners remember which host has their character by it, not by
+  // the join code, which changes every time the host goes online.
+  if (!/^[0-9a-f]{16}$/.test(state.hostId || '')) state.hostId = crypto.randomBytes(8).toString('hex');
 }
 function liveServer(file) {
   try {
@@ -174,6 +177,11 @@ function travel(method, key, body) {
   if (method === 'PUT') {
     const rec = body && body.player;
     if (!rec || typeof rec !== 'object' || !Array.isArray(rec.characters) || !rec.characters.length) return { status: 400, json: { error: 'no character in the request' }, note: 'travel: refused, empty' };
+    // every character must be a real record (an object with a name and, when present, JSON in data): junk never replaces a save here
+    for (const ch of rec.characters) {
+      if (!ch || typeof ch !== 'object' || typeof ch.name !== 'string') return { status: 400, json: { error: 'a character in the request is not a character' }, note: 'travel: refused, bad character' };
+      if (ch.data !== undefined && ch.data !== null) { try { JSON.parse(ch.data); } catch (e) { return { status: 400, json: { error: `character ${ch.name} has broken data` }, note: 'travel: refused, broken data' }; } }
+    }
     const p = Object.assign({}, rec);
     delete p.candidate; delete p.partyId;
     p.accountId = idFrom('account:' + key);          // the host's id for this guest (home ids can be the same on every PC)
@@ -879,7 +887,7 @@ function handle(svc, port, req, res, bodyBuf) {
   req._pkey = keyFromIds(pathName, body);   // DF-LAN-1147: which player a server request is about
 
   let reply = null, known = false;
-  if (pathName === '/_recorder/ping') { reply = J({ ok: true, service: svc.service, port }); known = true; }
+  if (pathName === '/_recorder/ping') { reply = J({ ok: true, service: svc.service, port, host: state.hostId }); known = true; }
   else if (/^\/_travel\/[0-9a-f]{32}$/.test(pathName)) { reply = travel(req.method, pathName.slice(9), body); known = true; }
   else {
     for (const [rSvc, rMethod, rPath, fn] of routes) {
@@ -933,6 +941,12 @@ function start() {
   catch (e) { console.error(`Cannot read ${SERVICES_FILE}. Run make-gameini-1147.ps1 first.\n${e.message}`); process.exit(1); }
   fs.mkdirSync(LOG_DIR, { recursive: true });
   fs.mkdirSync(DATA_DIR, { recursive: true });
+  // DF-KEEPALIVE-1147: an unexpected error must not take the backend down (that kicks every player and makes
+  // Host Mode restart the whole server). It is written to logs\recorder-errors.log and the backend carries on.
+  const crashLog = path.join(LOG_DIR, 'recorder-errors.log');
+  const noteError = (what, e) => { try { fs.appendFileSync(crashLog, `${new Date().toISOString()} ${what}: ${(e && e.stack) || e}\n`); } catch (x) {} };
+  process.on('uncaughtException', (e) => noteError('uncaught', e));
+  process.on('unhandledRejection', (e) => noteError('unhandled', e));
   loadState();
   capRoot = findCaptures();
   BASE_PORT = (services.find((x) => x.service === '_external') || services[0]).port;
@@ -959,10 +973,10 @@ function start() {
     const server = http.createServer((req, res) => {
       const chunks = []; let size = 0;
       req.on('data', (c) => { size += c.length; if (size <= MAX_BODY) chunks.push(c); });
-      req.on('end', () => handle(svc, svc.port, req, res, Buffer.concat(chunks)));
+      req.on('end', () => { try { handle(svc, svc.port, req, res, Buffer.concat(chunks)); } catch (e) { noteError('handle ' + req.url, e); try { res.writeHead(500, { 'Content-Length': 0 }); res.end(); } catch (x) {} } });
       req.on('error', () => {});
     });
-    server.on('upgrade', (req, socket) => onUpgrade(svc, svc.port, req, socket));
+    server.on('upgrade', (req, socket) => { try { onUpgrade(svc, svc.port, req, socket); } catch (e) { noteError('upgrade ' + req.url, e); try { socket.destroy(); } catch (x) {} } });
     server.on('error', (e) => { failed.push({ port: svc.port, service: svc.service, error: e.code || e.message }); done(); });
     server.listen(svc.port, BIND_HOST, () => { servers.push(server); done(); });
   }
