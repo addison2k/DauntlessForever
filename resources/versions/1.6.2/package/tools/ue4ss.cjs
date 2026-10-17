@@ -33,7 +33,7 @@ const fail = (error) => { out({ ok: false, error }); process.exit(0); };
 const sha = (f) => { try { return crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex'); } catch { return null; } };
 
 function gameDir() {
-  try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'config.json'), 'utf8').replace(/^﻿/, '')).GameDir || null; } catch { return null; }
+  try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'config.json'), 'utf8').replace(/^\uFEFF/, '')).GameDir || null; } catch { return null; }
 }
 function places() {
   const g = gameDir(); if (!g) fail('The game folder is not known yet. Run Set up first.');
@@ -117,6 +117,24 @@ function proxyBack(p) {
   return false;
 }
 
+// Mods that come with this package (package\mods\<name>, e.g. DamageMeter). Put into ue4ss\Mods when missing and
+// switched on the first time; kept up to date while their df-bundled.txt is there (delete it to keep your own edits).
+// Never removes anything.
+function bundledMods(p) {
+  const src = path.join(ROOT, 'mods'); if (!fs.existsSync(src) || !fs.existsSync(p.dir)) return [];
+  const done = [];
+  for (const d of fs.readdirSync(src, { withFileTypes: true })) {
+    if (!d.isDirectory()) continue;
+    const from = path.join(src, d.name), to = path.join(p.mods, d.name), isNew = !fs.existsSync(to);
+    if (!isNew && !fs.existsSync(path.join(to, 'df-bundled.txt'))) continue;   // the player's own copy: left alone
+    const copy = (a, b) => { fs.mkdirSync(b, { recursive: true }); for (const e of fs.readdirSync(a, { withFileTypes: true })) {
+      const x = path.join(a, e.name), y = path.join(b, e.name);
+      if (e.isDirectory()) copy(x, y); else if (sha(x) !== sha(y)) fs.copyFileSync(x, y); } };
+    try { copy(from, to); if (isNew) { fs.mkdirSync(p.mods, { recursive: true }); if (!fs.existsSync(p.list)) fs.writeFileSync(p.list, ''); setListEntry(p, d.name, true); } done.push(d.name); } catch {}
+  }
+  return done;
+}
+
 function download(url, file, redirects = 5) {
   return new Promise((resolve, reject) => {
     https.get(url, { headers: { 'User-Agent': 'DauntlessForever' }, timeout: 60000 }, (res) => {
@@ -137,7 +155,7 @@ function copyMissing(from, to) {
 }
 async function install() {
   const p = places();
-  if (fs.existsSync(p.dll)) { hideConsoles(p); return { ok: true, installed: true, already: true }; }
+  if (fs.existsSync(p.dll)) { hideConsoles(p); bundledMods(p); return { ok: true, installed: true, already: true }; }
   const dl = path.join(DATA, 'downloads'); fs.mkdirSync(dl, { recursive: true });
   const zip = path.join(dl, 'UE4SS_' + RELEASE.version + '.zip');
   if (sha(zip) !== RELEASE.sha256) {
@@ -152,6 +170,7 @@ async function install() {
   } catch (e) { fail('Could not unpack UE4SS: ' + e.message); }
   finally { try { fs.rmSync(tmp, { recursive: true, force: true }); } catch {} }
   hideConsoles(p);
+  bundledMods(p);
   return { ok: true, installed: fs.existsSync(p.dll), version: RELEASE.version };
 }
 
@@ -186,7 +205,9 @@ async function install() {
     if (!fs.existsSync(p.dll)) return out({ ok: false, on: true, error: 'UE4SS is not installed (launcher: 1.6.2 > Mods).' });
     hideConsoles(p);
     const moved = proxyAside(p);
-    return out({ ok: true, on: true, servers: m.servers, movedProxy: moved });
+    bundledMods(p);
+    const meter = !!readList(p).on.get('DamageMeter') && fs.existsSync(path.join(p.mods, 'DamageMeter'));
+    return out({ ok: true, on: true, servers: m.servers, movedProxy: moved, meter });
   }
   fail('Use status | install | set | mod | prepare');
 })().catch((e) => fail(String(e && e.message || e)));

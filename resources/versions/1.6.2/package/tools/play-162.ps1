@@ -39,12 +39,13 @@ $psi.UseShellExecute = $false
 $psi.EnvironmentVariables['USERPROFILE']  = $HomeDir
 $psi.EnvironmentVariables['LOCALAPPDATA'] = Join-Path $HomeDir 'AppData\Local'
 $psi.EnvironmentVariables['APPDATA']      = Join-Path $HomeDir 'AppData\Roaming'
+Start-ModsExtras $psi   # modded mode: damage meter folder and window
 $startTime = Get-Date
 $p = [Diagnostics.Process]::Start($psi)
 $key = $null
 Say ''
 Say 'THE GAME IS STARTING (it can take a minute to show up). Have fun!' 'Green'
-Say 'A small black text window opens with the game: that is normal, leave it open.'
+Say 'The game log is written to Archon\Binaries\Win64\UndauntedClient.log (no extra window any more).'
 Say 'If a popup about anti-cheat or "IGameClient" appears, click OK: that is normal offline.'
 Say 'This window waits until you close the game, then shuts everything down for you.'
 $p.WaitForExit()
@@ -63,6 +64,9 @@ try {
                 Where-Object { $_.LastWriteTime -ge $startTime.AddMinutes(-1) } | ForEach-Object { $_.FullName }
         }
     })
+    # the game's own log from our DLL (it used to be the black console window)
+    $own = Join-Path $Bin 'UndauntedClient.log'
+    if (Test-Path -LiteralPath $own) { $files = @($files) + $own }
     Save-LogZip $files 'client_logs.zip'
 } catch { Say "Could not collect the logs: $($_.Exception.Message)" 'Yellow' }
 exit 0

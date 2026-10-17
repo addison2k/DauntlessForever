@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-16.16",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.16.zip",
-                         "sha256":  "7457119aea5c8d628614cd6e11f81bd0aabe2b2fc201c0e4454d7756dc1696fa",
-                         "date":  "2026-10-16",
-                         "note":  "Modded mode: UE4SS mods from the launcher"
+                         "packageVersion":  "2026-10-17",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-17.zip",
+                         "sha256":  "701e00aac3d70a1c35fac69a72cfec44b220d4024b4172a8acdec4349904e8c0",
+                         "date":  "2026-10-17",
+                         "note":  "No more black console window (fixes the game freezing when it was clicked); Modded mode no longer hangs; DamageMeter included"
                      },
                      {
                          "id":  "1.14.7",

@@ -27,7 +27,7 @@
                  },
     "package":  {
                     "dir":  "package",
-                    "packageVersion":  "2026-10-16.16",
+                    "packageVersion":  "2026-10-17",
                     "setup":  "tools/setup.ps1",
                     "uninstallArgs":  [
                                           "-Uninstall"
@@ -50,7 +50,7 @@
                                            },
                                            {
                                                "rel":  "Archon/Binaries/Win64/UndauntedInternalServer.dll",
-                                               "sha256":  "CD1B998FA729B7850C7913C189291BA223F015BD94DF1D9402F7FBD9BD5C4CFD"
+                                               "sha256":  "332708E7660110E8B9669654708C81A1F3CB2B90E78A163082EE376223BE2FF2"
                                            }
                                        ],
                     "setupDoneFiles":  [

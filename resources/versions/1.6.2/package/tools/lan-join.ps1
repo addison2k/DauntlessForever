@@ -111,6 +111,7 @@ $psi.UseShellExecute = $false
 $psi.EnvironmentVariables['USERPROFILE']  = $HomeDir
 $psi.EnvironmentVariables['LOCALAPPDATA'] = Join-Path $HomeDir 'AppData\Local'
 $psi.EnvironmentVariables['APPDATA']      = Join-Path $HomeDir 'AppData\Roaming'
+Start-ModsExtras $psi   # modded mode: damage meter folder and window
 $startTime = Get-Date
 $p = [Diagnostics.Process]::Start($psi)
 $key = $null

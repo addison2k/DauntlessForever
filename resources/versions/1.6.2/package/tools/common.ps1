@@ -9,7 +9,7 @@ $ConfigFile = Join-Path $Root 'config.json'
 # The one game build this package works with, and the two files it puts into the game folder.
 $ExeHash     = 'E7ACBA587320491B71CB53BB8F8CBF5F3760BB52F78E74A82384B8BC42D05FD6'   # Dauntless 1.6.2, CL 271281
 $LoaderHash  = '89F34F6CB1B442B8456420A3DA2E3EC78C894B095D21D752D79FB20D1E95878B'   # bin\dxgi.dll (Undaunted loader)
-$ServerHash  = 'CD1B998FA729B7850C7913C189291BA223F015BD94DF1D9402F7FBD9BD5C4CFD'   # bin\UndauntedInternalServer.dll (1.6.2 port)
+$ServerHash  = '332708E7660110E8B9669654708C81A1F3CB2B90E78A163082EE376223BE2FF2'   # bin\UndauntedInternalServer.dll (1.6.2 port)
 $ExeRel      = 'Archon\Binaries\Win64\Dauntless-Win64-Shipping.exe'
 $MetaPort    = 61000
 $DeployPort  = 61001
@@ -246,13 +246,14 @@ function Get-ModsMode {
     return $m
 }
 function Invoke-ModsPrepare {
+    $script:ModsMeter = $false
     $nd = $null
     try { $nd = (Get-Config).Node } catch {}
     if (-not $nd -or -not (Test-Path -LiteralPath $nd)) { $nd = Find-Node }
     if (-not $nd) { return $false }
     try {
         $r = (& $nd (Join-Path $PSScriptRoot 'ue4ss.cjs') prepare | Out-String) | ConvertFrom-Json
-        if ($r.ok -and $r.on) { return $true }
+        if ($r.ok -and $r.on) { $script:ModsMeter = [bool]$r.meter; return $true }
         if ($r.error) { Say "Mods: $($r.error) Starting without mods." 'Yellow' }
     } catch { Say 'Mods: could not get UE4SS ready. Starting without mods.' 'Yellow' }
     return $false
@@ -263,6 +264,20 @@ function Add-GameMods([string]$GameArgs) {
     if (-not (Invoke-ModsPrepare)) { return $GameArgs }
     Say 'Modded mode: UE4SS mods on (their windows stay hidden).' 'Gray'
     return "$GameArgs -dfmods"
+}
+# Modded mode extras for the game process: where the DamageMeter mod writes (DF_METER_DIR), and its window
+# (tools\meter-overlay.ps1: on top of the game in borderless/windowed mode; closes when the game closes)
+function Start-ModsExtras($psi) {
+    if ($psi.Arguments -notmatch '(^|\s)-dfmods(\s|$)') { return }
+    $meterDir = Join-Path $DataDir 'meter'
+    New-Item -ItemType Directory -Force $meterDir | Out-Null
+    $psi.EnvironmentVariables['DF_METER_DIR'] = $meterDir
+    if (-not $script:ModsMeter) { return }
+    try {
+        Start-Process -FilePath 'powershell.exe' -WindowStyle Hidden -ArgumentList @('-NoProfile', '-STA', '-ExecutionPolicy', 'Bypass',
+            '-File', "`"$(Join-Path $PSScriptRoot 'meter-overlay.ps1')`"", '-Dir', "`"$meterDir`"") | Out-Null
+        Say 'Damage meter window: on (play in borderless or windowed mode to see it; Ctrl+Shift+M locks it).' 'Gray'
+    } catch {}
 }
 
 function Set-MenuBackground([string]$CfgDir) {

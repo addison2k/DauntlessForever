@@ -8,7 +8,7 @@
         "New Mods page (1.6.2): turn on Modded mode to play with UE4SS mods. It loads only in your own game, with no extra windows, and turning it off gives you the normal game.",
         "Get UE4SS with one button, open the mods folder, and switch each mod on or off. Mods are never deleted.",
         "Also run mods on my servers: for gameplay mods. Friends who join your server play with them too. Other people's servers are never affected.",
-        "Needs 1.6.2 server files .15."
+        "Comes with the DamageMeter mod: a small damage meter window on top of the game (play in borderless or windowed mode to see it). Needs 1.6.2 server files .17."
       ]
     },
     {

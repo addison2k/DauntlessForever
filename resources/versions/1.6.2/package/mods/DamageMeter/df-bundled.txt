@@ -1,0 +1,1 @@
+Bundled with Dauntless Forever (1.6.2 package, mods\DamageMeter). While this file is here the launcher keeps this mod up to date; delete it to keep your own changes.
