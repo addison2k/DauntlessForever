@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-17.11",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-17.11.zip",
-                         "sha256":  "f4f501c8ff2e5003f8221d121371cf842edfb874b7be505b715930e51c160300",
+                         "packageVersion":  "2026-10-17.12",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-17.12.zip",
+                         "sha256":  "f1e19c94a8863b5b2c2a8d412e7073fd4d828babf5460c5ecfe468a09aed8825",
                          "date":  "2026-10-17",
-                         "note":  "Host Mode: the server runs with no windows, so nothing can be closed by accident"
+                         "note":  "Second player no longer kicked: each player\u0027s own items only go to that player"
                      }
                  ],
     "launcher":  {
