@@ -8,6 +8,7 @@
     "warning":  "Experimental. 1.14.7 is much less complete than 1.6.2: expect missing features, odd behaviour and the occasional crash. Play 1.6.2 for the full experience.",
     "works":  [
                   "Sign in offline, Ramsgate, NPCs and quests (quest progress is saved)",
+                  "Quest and dialogue text (fix by KombatKing)",
                   "Training grounds, sprint, attacking",
                   "Hunts (tested: the first Embermane hunt)"
               ],
@@ -26,7 +27,7 @@
                  },
     "package":  {
                     "dir":  "package",
-                    "packageVersion":  "2026-10-15",
+                    "packageVersion":  "2026-10-17",
                     "setup":  "tools/setup.ps1",
                     "uninstallArgs":  [
                                           "-Uninstall"
@@ -51,6 +52,10 @@
                                            {
                                                "rel":  "Archon/Binaries/Win64/dxgi.dll",
                                                "sha256":  "176CB7AD849A9E213D884510416BBC1FB2BF4B56EF9561EE554A0ABFBD6AC208"
+                                           },
+                                           {
+                                               "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_QuestDialogueFallback1147_P.pak",
+                                               "sha256":  "6F12AA1B3856D2A485851A4857150DCC072B2461128F862E3C351B796E33A00E"
                                            }
                                        ],
                     "setupDoneFiles":  [

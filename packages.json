@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-15",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-15.zip",
-                         "sha256":  "9219bb60a7a5d212c80c055dfa87dbfb69b586113f5445a1123415fab25852e7",
-                         "date":  "2026-10-15",
-                         "note":  "Automatic set-up; Inventory page"
+                         "packageVersion":  "2026-10-17",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-17.zip",
+                         "sha256":  "73b2e84df77c6c9591e0756d4930d490c469ad862ce0310ebb2e281cb8544306",
+                         "date":  "2026-10-17",
+                         "note":  "Quest and dialogue text (KombatKing)"
                      }
                  ],
     "launcher":  {

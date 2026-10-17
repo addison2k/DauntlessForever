@@ -11,6 +11,7 @@ param([switch]$Uninstall, [switch]$Auto)
 
 $standIn = Join-Path $Root 'bin\EOSSDK-Win64-Shipping.dll'
 $loader  = Join-Path $Root 'bin\dxgi.dll'
+$questPak = Join-Path $Root "bin\$QuestPakName"
 $backup  = Join-Path $Root 'backup'
 
 Say ''
@@ -55,13 +56,22 @@ if ($Uninstall) {
             Say 'The dxgi.dll in the game folder is not this package''s loader (maybe a mod like ReShade, or an older loader). Left in place.' 'Yellow'
         }
     }
+    # quest text fix (a pak of ours in Archon\Content\Paks): only taken out when it is exactly our file
+    $upak = Join-Path $ugame $QuestPakRel
+    if (Test-Path -LiteralPath $upak) {
+        $uph = Hash256 $upak
+        if ($uph -eq $QuestPakHash -or $QuestPakOld -contains $uph) {
+            Move-Item -LiteralPath $upak -Destination (Join-Path $ubak "removed_${ustamp}_$QuestPakName")
+            Say 'Quest text fix taken out of the game folder (kept in the backup folder).' 'Green'
+        } else { Say "The $QuestPakName in the game folder is not this package's file. Left in place." 'Yellow' }
+    }
     Say ''
     Say 'Done. Your offline progress stays in the data folder of this package.' 'Green'
     exit 0
 }
 
 
-if ((Hash256 $standIn) -ne $StandInHash -or (Hash256 $loader) -ne $LoaderHash) {
+if ((Hash256 $standIn) -ne $StandInHash -or (Hash256 $loader) -ne $LoaderHash -or (Hash256 $questPak) -ne $QuestPakHash) {
     Fail "files in the bin folder are missing or damaged. Unzip the package again (all of it) and re-run set-up."
 }
 if (@(Get-PlayerGame).Count -gt 0 -or @(Get-ServerCopies).Count -gt 0) {
@@ -314,6 +324,25 @@ else {
     Copy-Item -LiteralPath $loader -Destination $dxgi
     if ((Hash256 $dxgi) -ne $LoaderHash) { Fail 'copying the server loader failed.' }
     Say 'Server loader: installed. (It does nothing unless PLAY starts a server copy.)' 'Green'
+}
+
+# ---------------------------------------------------------------- 4b. quest text fix (KombatKing): one pak in Archon\Content\Paks
+# The game itself is not changed: the pak only adds text lines the game asks for but never shipped. Uninstall takes it out.
+$paksDir = Join-Path $gameDir 'Archon\Content\Paks'
+$pakDst  = Join-Path $gameDir $QuestPakRel
+$h = Hash256 $pakDst
+if ($h -eq $QuestPakHash) { Say 'Quest text fix: already in place.' 'Green' }
+else {
+    if (-not (Test-Path -LiteralPath $paksDir)) { Fail "there is no Archon\Content\Paks folder in $gameDir. Re-download or verify the game, then run set-up again." }
+    if ($h -ne '(missing)') {
+        $park = Join-Path $backup ('questpak_replaced_' + (Get-Date -Format 'yyyyMMdd_HHmmss') + '.pak')
+        Move-Item -LiteralPath $pakDst -Destination $park
+        if ($QuestPakOld -contains $h) { Say "  The older quest text fix (R1, crashes the game at start) was replaced. Kept as $park" 'Yellow' }
+        else { Say "  A different file with the same name was in the Paks folder. Kept as $park" 'Yellow' }
+    }
+    Copy-Item -LiteralPath $questPak -Destination $pakDst
+    if ((Hash256 $pakDst) -ne $QuestPakHash) { Fail 'copying the quest text fix failed.' }
+    Say 'Quest text fix: installed (quests and dialogue show their text; by KombatKing).' 'Green'
 }
 
 # ---------------------------------------------------------------- 5. backend replies recorded from the live servers (public, downloaded once)

@@ -13,6 +13,9 @@ $bin = Join-Path $cfg.GameDir 'Archon\Binaries\Win64'
 if ((Hash256 (Join-Path $bin 'EOSSDK-Win64-Shipping.dll')) -ne $StandInHash -or (Hash256 (Join-Path $bin 'dxgi.dll')) -ne $LoaderHash) {
     Fail 'the game folder is missing files this package puts there (maybe the game was updated or verified). Run "1 - SETUP.bat" again.'
 }
+if ((Hash256 (Join-Path $cfg.GameDir $QuestPakRel)) -ne $QuestPakHash) {
+    Fail 'the quest text fix is not in the game folder yet (new in these server files). Run "1 - SETUP.bat" again.'
+}
 $node = $cfg.Node
 if (-not $node -or -not (Test-Path -LiteralPath $node)) { $node = Find-Node }
 if (-not $node) { Fail 'Node.js was not found. Run "1 - SETUP.bat" again.' }

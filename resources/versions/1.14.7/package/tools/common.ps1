@@ -11,6 +11,12 @@ $ExeHash      = 'F3F95FBF22709EF077A11632ED95D675B7209B7E0172D9ECB9BA7D02A1FBB66
 $EpicEosHash  = 'CBC0E5C922CEB88A9FA99121008AE9CD76244B17753701D9D25C6B596EA2FBFC'   # Epic's EOSSDK-Win64-Shipping.dll
 $StandInHash  = '4113C9EEBFBAC08532B6566A48F69E4F64A6B8E18A18AAFBA43F62F8F7DFDF70'   # bin\EOSSDK-Win64-Shipping.dll (offline sign-in)
 $LoaderHash   = '176CB7AD849A9E213D884510416BBC1FB2BF4B56EF9561EE554A0ABFBD6AC208'    # bin\dxgi.dll (server loader)
+# Quest text fix by KombatKing (AGPL-3.0, source\QuestDialogue1147-R2-source.zip): adds the missing "Unspecified"
+# addressee lines to the game's own text, so quests and dialogue show real sentences. Copied into Archon\Content\Paks.
+$QuestPakName = 'zzzzzzzzzzzzzzzz_QuestDialogueFallback1147_P.pak'
+$QuestPakHash = '6F12AA1B3856D2A485851A4857150DCC072B2461128F862E3C351B796E33A00E'   # bin\zzzzzzzzzzzzzzzz_QuestDialogueFallback1147_P.pak (R2)
+$QuestPakOld  = @('ECB2D6960527073B8EDC9932BD9562A3DC78E1C4EAD8945A178AA85AC3C34A44')   # his R1 (crashes the game at start)
+$QuestPakRel  = "Archon\Content\Paks\$QuestPakName"
 $ExeRel       = 'Archon\Binaries\Win64\Dauntless-Win64-Shipping.exe'
 $CapturesUrl  = 'https://github.com/EisigesEis/DauntlessEndpointDocumentation/archive/refs/heads/main.zip'
 

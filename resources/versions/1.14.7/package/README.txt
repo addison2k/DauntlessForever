@@ -6,6 +6,7 @@ It is a fan project, early and unofficial. Back up anything you care about.
 
 WHAT WORKS (so far)
   - Sign in offline, Ramsgate, NPCs and quests (quest progress is saved)
+  - Quest and dialogue text (fix by KombatKing: one extra pak set-up puts in Archon\Content\Paks)
   - Training grounds, sprint, attacking
   - Hunts (tested: the first Embermane hunt)
   - Solo only. Much else may not work yet.
