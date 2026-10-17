@@ -527,6 +527,37 @@ async function runItems(v, args) {
     });
   });
 }
+// Modded mode (UE4SS) for versions whose server files have tools\ue4ss.cjs (1.6.2 first). The helper does the work;
+// the start scripts read data\mods.txt and give the game -dfmods (see tools\ue4ss.cjs).
+async function runModsTool(v, args, timeout = 30000) {
+  let node = null;
+  try { node = JSON.parse(fs.readFileSync(path.join(v.dataDir, 'config.json'), 'utf8').replace(/^\uFEFF/, '')).Node; } catch {}
+  if (!node || !fs.existsSync(node)) node = (await findNode() || {}).path;
+  if (!node) return { ok: false, error: 'Node.js was not found. Run Set up first.' };
+  return new Promise((resolve) => {
+    execFile(node, [path.join(v.dataDir, 'tools', 'ue4ss.cjs'), ...args], { cwd: v.dataDir, timeout, windowsHide: true }, (e, out) => {
+      try { resolve(JSON.parse(String(out || '').trim())); }
+      catch { resolve({ ok: false, error: e ? `Mods helper failed (${e.message.split('\n')[0]}).` : 'Mods helper failed.' }); }
+    });
+  });
+}
+ipcMain.handle('mods:status', async (_e, id) => {
+  const v = byId(id); if (!v || !v.package || !fs.existsSync(path.join(v.dataDir, 'tools', 'ue4ss.cjs'))) return null;
+  const r = await runModsTool(v, ['status']);
+  return { ...r, running: R.isRunning(v.id) };
+});
+ipcMain.handle('mods:act', async (_e, id, action, a, b) => {
+  const v = byId(id); if (!v || !v.package || !fs.existsSync(path.join(v.dataDir, 'tools', 'ue4ss.cjs'))) return { ok: false, error: 'Unknown version.' };
+  if (action === 'install') return runModsTool(v, ['install'], 300000);
+  if (action === 'set' && ['on', 'off', 'servers-on', 'servers-off'].includes(a)) return runModsTool(v, ['set', a]);
+  if (action === 'mod' && /^[\w .-]{1,80}$/.test(String(a)) && (b === 'on' || b === 'off')) return runModsTool(v, ['mod', String(a), b]);
+  if (action === 'folder') {
+    const r = await runModsTool(v, ['status']);
+    if (r && r.ok && r.folder && fs.existsSync(r.folder)) { shell.openPath(r.folder); return { ok: true }; }
+    return { ok: false, error: (r && r.error) || 'Get UE4SS first: the mods folder comes with it.' };
+  }
+  return { ok: false, error: 'Unknown action.' };
+});
 ipcMain.handle('items:list', async (_e, id) => {
   const v = byId(id); if (!v || !v.package) return null;
   let catalog;

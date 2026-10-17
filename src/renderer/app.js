@@ -35,6 +35,7 @@ function showPage(name) {
   if (name === 'events') renderEvents();
   if (name === 'rules') renderRules();
   if (name === 'items') renderItems(true);
+  if (name === 'mods') renderMods();
   if (name === 'patches') renderPatches();
   document.querySelector('.content').scrollTop = 0;
 }
@@ -471,6 +472,72 @@ async function renderRules() {
     list.appendChild(row);
   }
   $('rule-reset').onclick = () => apply(Object.fromEntries(d.rules.map(x => [x.key, x.default])), 'Back to the defaults');
+}
+
+// ---------------------------------------------------------------- Mods (UE4SS modded mode; tools\ue4ss.cjs)
+let modsVer = null, modsNote = null, modsErr = false, modsBusy = false;
+async function renderMods() {
+  const all = versions.filter(x => x.hasPackage);
+  const found = [];
+  for (const v of all) { let d = null; try { d = await L.modsStatus(v.id); } catch {} if (d) found.push({ v, d }); }
+  const supported = new Set(found.map(x => x.v.id));
+  modsVer = pickVersion(all, modsVer, supported);
+  const cur = found.find(x => x.v.id === modsVer);
+  versionPicker('mods-vtabs', 'mods-vbanner', all, modsVer, supported, (id) => { modsVer = id; modsNote = null; modsErr = false; renderMods(); },
+    cur ? `Mods for <b>Dauntless ${esc(modsVer)}</b>. Every version keeps its own mods.` : `Mods are not available for Dauntless ${esc(modsVer || '')} yet.`);
+  const d = cur && cur.d, ok = d && d.ok;
+  $('mods-none').hidden = !!ok; $('mods-body').hidden = !ok;
+  if (!ok) {
+    $('mods-none-title').textContent = d ? 'Mods are not ready yet' : `No mods for ${modsVer || 'this version'} yet`;
+    $('mods-none-text').textContent = d ? (d.error || 'Run Set up first.') : 'Modded mode is ready for 1.6.2 first. Other versions get it through a server-file update.';
+    return;
+  }
+  const note = $('mods-note');
+  note.textContent = modsNote || (d.running && d.on ? 'The game is running: mod changes apply the next time you press Play.' : '');
+  note.classList.toggle('err', modsErr);
+  const act = async (what, a, b, done) => {
+    if (modsBusy) return; modsBusy = true;
+    if (what === 'install') { modsNote = 'Downloading UE4SS...'; modsErr = false; note.textContent = modsNote; note.classList.remove('err'); }
+    let r; try { r = await L.modsAct(modsVer, what, a, b); } catch (e) { r = { ok: false, error: String(e && e.message || e) }; }
+    modsBusy = false;
+    if (!r || !r.ok) { modsNote = (r && r.error) || 'Could not change it.'; modsErr = true; }
+    else { modsNote = done; modsErr = false; }
+    renderMods();
+  };
+  $('mods-get-row').hidden = !!d.installed;
+  $('mods-get').onclick = () => act('install', null, null, 'UE4SS is ready. Turn on Modded mode to use it.');
+  const pick = (onId, offId, isOn, enabled, onClick) => {
+    for (const [id, val] of [[onId, true], [offId, false]]) {
+      const el = $(id); el.setAttribute('aria-pressed', String(isOn === val)); el.disabled = !enabled;
+      el.onclick = isOn === val ? null : () => onClick(val);
+    }
+  };
+  pick('mods-on-btn', 'mods-off-btn', !!d.on, !!d.installed, (v) => act('set', v ? 'on' : 'off', null,
+    v ? `Modded mode on: your next ${modsVer} game loads your mods.` : `Modded mode off: your next ${modsVer} game is the normal game.`));
+  $('mods-srv-row').hidden = !d.on;
+  pick('mods-srv-on', 'mods-srv-off', !!d.servers, !!d.on, (v) => act('set', v ? 'servers-on' : 'servers-off', null,
+    v ? 'Your servers will run your mods too (next start).' : 'Your servers run without mods (next start).'));
+  $('mods-folder').disabled = !d.installed;
+  $('mods-folder').onclick = () => act('folder', null, null, modsNote || '');
+  const list = $('mods-list'); list.innerHTML = '';
+  const mods = d.mods || [];
+  if (!d.installed) list.innerHTML = '<div class="season-row"><div class="season-kind">Get UE4SS first. Your mods are listed here after that.</div></div>';
+  else if (!mods.some(m => !m.builtin)) list.insertAdjacentHTML('beforeend', '<div class="season-row"><div class="season-kind">No mods of your own yet. Press "Open the mods folder" and put a mod\'s folder in it, then come back here.</div></div>');
+  let toolsHead = false;
+  for (const m of mods) {
+    if (m.builtin && !toolsHead) { toolsHead = true; list.insertAdjacentHTML('beforeend', '<div class="season-row"><div class="season-kind"><b>Comes with UE4SS</b> (tools for mod makers; leave them as they are if you are not sure)</div></div>'); }
+    const row = document.createElement('div'); row.className = 'season-row rule-row' + (m.on ? ' active' : '');
+    row.innerHTML = `<div><div class="season-name">${esc(m.name)}</div><div class="season-kind">${m.scripts ? (m.builtin ? 'UE4SS tool' : 'Mod') : 'This folder has no Scripts or dlls folder, so UE4SS may not load it.'}</div></div>
+      <div class="rule-choices" role="group" aria-label="${esc(m.name)}"></div>`;
+    const host = row.querySelector('.rule-choices');
+    for (const [val, label] of [[false, 'Off'], [true, 'On']]) {
+      const b = document.createElement('button'); b.className = 'season-filter rule-choice'; b.textContent = label;
+      b.setAttribute('aria-pressed', String(!!m.on === val));
+      if (!!m.on !== val) b.onclick = () => act('mod', m.name, val ? 'on' : 'off', `${m.name} ${val ? 'on' : 'off'}: applies the next time you press Play.`);
+      host.appendChild(b);
+    }
+    list.appendChild(row);
+  }
 }
 
 // ---------------------------------------------------------------- Inventory (add / remove items in the save)

@@ -293,22 +293,34 @@
 <!-- ============================================================ Mods -->
 <section class="page" id="page-mods" hidden>
   <h1 class="page-title">Mods</h1>
-  <p class="lead">Small, optional changes you switch on per build. Each one says exactly which files it touches, and switching it off puts them back.</p>
-  <div class="cards">
-    <div class="card">
-      <div class="card-head"><h2>Quality of life</h2><span class="pill">Planned</span></div>
-      <p>Skip the intro movie, faster Ramsgate loads, bigger text: the small fixes people asked for during the live years.</p>
-    </div>
-    <div class="card">
-      <div class="card-head"><h2>Balance experiments</h2><span class="pill">Planned</span></div>
-      <p>Tweaks to behemoth and weapon tuning, each one a separate switch, so you can test an idea without committing to it.</p>
-    </div>
-    <div class="card">
-      <div class="card-head"><h2>Cosmetic swaps</h2><span class="pill">Planned</span></div>
-      <p>Alternate looks and dyes that never made it into a build, or ones from a different build than the one you are playing.</p>
-    </div>
+  <p class="lead">Play with UE4SS mods: Lua and Blueprint mods made by the community. Turn on Modded mode, put mods in the mods folder, and pick which ones run. Changes apply the next time you press Play.</p>
+  <div class="season-tabs" id="mods-vtabs" role="tablist" aria-label="Version"></div>
+  <div class="ver-banner" id="mods-vbanner"></div>
+  <div id="mods-none" class="card" hidden>
+    <div class="card-head"><h2 id="mods-none-title">No mods for this version yet</h2><span class="pill">Planned</span></div>
+    <p id="mods-none-text">Modded mode is ready for 1.6.2 first. Other versions get it through a server-file update.</p>
   </div>
-  <p class="small">Nothing to install yet. Mods will be listed here per build with an on/off switch; the launcher fetches them like server-file updates.</p>
+  <div id="mods-body" hidden>
+    <p class="action-note" id="mods-note" aria-live="polite"></p>
+    <div class="season-list">
+      <div class="season-row rule-row" id="mods-get-row">
+        <div><div class="season-name">UE4SS</div><div class="season-kind">The mod loader (RE-UE4SS, free and open source). Downloaded once, about 6 MB, into the game folder.</div></div>
+        <div class="rule-choices"><button class="primary-sm" id="mods-get">Get UE4SS</button></div>
+      </div>
+      <div class="season-row rule-row" id="mods-on-row">
+        <div><div class="season-name">Modded mode</div><div class="season-kind">Loads UE4SS in your game only, with its windows hidden. Off = the normal game, nothing loaded.</div></div>
+        <div class="rule-choices" role="group" aria-label="Modded mode"><button class="season-filter rule-choice" id="mods-off-btn">Off</button><button class="season-filter rule-choice" id="mods-on-btn">On</button></div>
+      </div>
+      <div class="season-row rule-row" id="mods-srv-row">
+        <div><div class="season-name">Also run mods on my servers</div><div class="season-kind">For mods that change gameplay. Your servers decide hunts for everyone on them, so friends who join your server play with these mods too. Other people's servers are never affected.</div></div>
+        <div class="rule-choices" role="group" aria-label="Server mods"><button class="season-filter rule-choice" id="mods-srv-off">Off</button><button class="season-filter rule-choice" id="mods-srv-on">On</button></div>
+      </div>
+    </div>
+    <div class="rule-foot"><button class="ghost" id="mods-folder">Open the mods folder</button></div>
+    <h2 class="list-head">Your mods</h2>
+    <div class="season-list" id="mods-list"></div>
+    <p class="small">Put each mod's folder inside the mods folder (it has a Scripts folder or a dlls folder in it), then switch it on here. Mods are never deleted by the launcher. Your mods only change your own game; a joiner's mods never change your server or anyone's save. Mods are made by other people: only use ones you trust.</p>
+  </div>
 </section>
 
 <!-- ============================================================ Settings -->

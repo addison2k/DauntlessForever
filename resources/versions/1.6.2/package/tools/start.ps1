@@ -151,15 +151,23 @@ Say '    Local backend: running.' 'Green'
 # --- 2. game servers. The deploy server starts Ramsgate (8777) and the Training Dojo (8776) now,
 #        and a new server copy for each hunt. They all use the package's private settings folder.
 Say '2/3 Starting the game servers (hidden). This takes a minute or two, please wait...'
-$saved = @{ USERPROFILE = $env:USERPROFILE; LOCALAPPDATA = $env:LOCALAPPDATA; APPDATA = $env:APPDATA }
+$saved = @{ USERPROFILE = $env:USERPROFILE; LOCALAPPDATA = $env:LOCALAPPDATA; APPDATA = $env:APPDATA; DF_SERVER_MODS = $env:DF_SERVER_MODS }
+# Server mods (launcher: 1.6.2 > Mods > Also run mods on my servers): every server copy loads UE4SS too (hidden)
+# Prepare BEFORE any server copy starts: it also moves an old dwmapi.dll proxy aside, which would otherwise load UE4SS
+# (with its windows) into every server copy
+$modsMode = Get-ModsMode
+$modsReady = $modsMode.On -and (Invoke-ModsPrepare)
+$serverMods = $modsMode.Servers -and $modsReady
+if ($serverMods) { Say 'Modded mode: your servers run your UE4SS mods too.' 'Gray' }
 try {
+    $env:DF_SERVER_MODS = if ($serverMods) { '1' } else { $null }
     $env:USERPROFILE  = $HomeDir
     $env:LOCALAPPDATA = Join-Path $HomeDir 'AppData\Local'
     $env:APPDATA      = Join-Path $HomeDir 'AppData\Roaming'
     $deploy = Start-Process -FilePath $node -ArgumentList @('--env-file=.env', 'dist/server.js') -WorkingDirectory $DeployDir -WindowStyle Hidden `
         -RedirectStandardOutput $depLog -RedirectStandardError $depErr -PassThru
 } finally {
-    $env:USERPROFILE = $saved.USERPROFILE; $env:LOCALAPPDATA = $saved.LOCALAPPDATA; $env:APPDATA = $saved.APPDATA
+    $env:USERPROFILE = $saved.USERPROFILE; $env:LOCALAPPDATA = $saved.LOCALAPPDATA; $env:APPDATA = $saved.APPDATA; $env:DF_SERVER_MODS = $saved.DF_SERVER_MODS
 }
 [IO.File]::WriteAllText((Join-Path $DataDir 'deploy.pid'), "$($deploy.Id)")
 $t0 = Get-Date; $dots = 0

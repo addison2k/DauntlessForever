@@ -29,6 +29,7 @@ $gameArgs = @("127.0.0.1:$MetaPort", "-AUTH_PASSWORD=$key", '-AUTH_LOGIN=unused'
     '-epicapp=appidlol', '-epicenv=Prod', '-EpicPortal', '-epicusername=usernamelol', '-epicuserid=useridlol',
     '-epiclocale=en-US', '-epicsandboxid=sandboxidlol', '-epicdeploymentid=deploymentidlol') -join ' '
 $gameArgs = Add-GameLanguage $gameArgs   # language picked in the launcher (Settings)
+$gameArgs = Add-GameMods $gameArgs       # modded mode (launcher: 1.6.2 > Mods)
 
 $psi = New-Object System.Diagnostics.ProcessStartInfo
 $psi.FileName = $Exe

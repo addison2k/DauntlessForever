@@ -9,7 +9,7 @@ $ConfigFile = Join-Path $Root 'config.json'
 # The one game build this package works with, and the two files it puts into the game folder.
 $ExeHash     = 'E7ACBA587320491B71CB53BB8F8CBF5F3760BB52F78E74A82384B8BC42D05FD6'   # Dauntless 1.6.2, CL 271281
 $LoaderHash  = '89F34F6CB1B442B8456420A3DA2E3EC78C894B095D21D752D79FB20D1E95878B'   # bin\dxgi.dll (Undaunted loader)
-$ServerHash  = '61C4748E182EEEA1823B34D528A316787E3DB0364ECF92A4302D2131E1E3A86D'   # bin\UndauntedInternalServer.dll (1.6.2 port)
+$ServerHash  = 'CD1B998FA729B7850C7913C189291BA223F015BD94DF1D9402F7FBD9BD5C4CFD'   # bin\UndauntedInternalServer.dll (1.6.2 port)
 $ExeRel      = 'Archon\Binaries\Win64\Dauntless-Win64-Shipping.exe'
 $MetaPort    = 61000
 $DeployPort  = 61001
@@ -228,6 +228,41 @@ function Add-GameLanguage([string]$GameArgs) {
     if ($lang -eq 'zh-Hans-mod') { Say 'Game language: Chinese (community translation)' 'Gray'; return $GameArgs }
     Say "Game language: $lang" 'Gray'
     return ($GameArgs -replace '-epiclocale=en-US', "-epiclocale=$lang") + " -CULTURE=$lang"
+}
+
+# Modded mode (UE4SS; launcher 1.6.2 > Mods): data\mods.txt has mods=on / servers=on. tools\ue4ss.cjs prepare hides
+# UE4SS's console windows and moves an old dwmapi.dll proxy aside; the game then gets -dfmods, and our server DLL loads
+# ue4ss\UE4SS.dll only in that one copy of the game. Servers load it only with servers=on (DF_SERVER_MODS=1).
+function Get-ModsMode {
+    $m = @{ On = $false; Servers = $false }
+    try {
+        foreach ($l in @(Get-Content -LiteralPath (Join-Path $DataDir 'mods.txt') -ErrorAction Stop)) {
+            $t = $l.Trim().ToLower()
+            if ($t -eq 'mods=on') { $m.On = $true }
+            if ($t -eq 'servers=on') { $m.Servers = $true }
+        }
+    } catch {}
+    if (-not $m.On) { $m.Servers = $false }
+    return $m
+}
+function Invoke-ModsPrepare {
+    $nd = $null
+    try { $nd = (Get-Config).Node } catch {}
+    if (-not $nd -or -not (Test-Path -LiteralPath $nd)) { $nd = Find-Node }
+    if (-not $nd) { return $false }
+    try {
+        $r = (& $nd (Join-Path $PSScriptRoot 'ue4ss.cjs') prepare | Out-String) | ConvertFrom-Json
+        if ($r.ok -and $r.on) { return $true }
+        if ($r.error) { Say "Mods: $($r.error) Starting without mods." 'Yellow' }
+    } catch { Say 'Mods: could not get UE4SS ready. Starting without mods.' 'Yellow' }
+    return $false
+}
+# The game's arguments with -dfmods added when modded mode is on and UE4SS is ready
+function Add-GameMods([string]$GameArgs) {
+    if (-not (Get-ModsMode).On) { return $GameArgs }
+    if (-not (Invoke-ModsPrepare)) { return $GameArgs }
+    Say 'Modded mode: UE4SS mods on (their windows stay hidden).' 'Gray'
+    return "$GameArgs -dfmods"
 }
 
 function Set-MenuBackground([string]$CfgDir) {

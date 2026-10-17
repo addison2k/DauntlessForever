@@ -3,6 +3,16 @@
   "notes": [
     {
       "date": "2026-10-16",
+      "title": "Mods: play with UE4SS mods",
+      "items": [
+        "New Mods page (1.6.2): turn on Modded mode to play with UE4SS mods. It loads only in your own game, with no extra windows, and turning it off gives you the normal game.",
+        "Get UE4SS with one button, open the mods folder, and switch each mod on or off. Mods are never deleted.",
+        "Also run mods on my servers: for gameplay mods. Friends who join your server play with them too. Other people's servers are never affected.",
+        "Needs 1.6.2 server files .15."
+      ]
+    },
+    {
+      "date": "2026-10-16",
       "title": "Host with friends: your server starts first",
       "items": [
         "Host with friends now starts your own server first, then opens your game on it. Friends can join as soon as it is up, even before you are in, and it stays up until you press Stop hosting.",

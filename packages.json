@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-16.14",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.14.zip",
-                         "sha256":  "c58136bce748c35c1ff5d70f9418f1eb7d71836d2c618b5c6b9c01122e8777c4",
+                         "packageVersion":  "2026-10-16.16",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.16.zip",
+                         "sha256":  "7457119aea5c8d628614cd6e11f81bd0aabe2b2fc201c0e4454d7756dc1696fa",
                          "date":  "2026-10-16",
-                         "note":  "new loader: fixes the game closing at start on Windows 11 25H2 laptops"
+                         "note":  "Modded mode: UE4SS mods from the launcher"
                      },
                      {
                          "id":  "1.14.7",
@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.2.6",
+                     "version":  "0.2.7",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.4",
                      "notes":  "",
                      "date":  "2026-10-16",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.2.6.asar",
-                                 "sha256":  "9c2133ffe676778dfda7879185fca37054a6ebd3c73e9765f00add07215bafa2",
-                                 "size":  665507,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.2.7.asar",
+                                 "sha256":  "c7b2c4001191b96d09735b95eb0dd403c1fb2871f67d51e514cd1665015696de",
+                                 "size":  674766,
                                  "minShell":  "0.2.4"
                              }
                  }
