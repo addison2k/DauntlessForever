@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-17.5",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-17.5.zip",
-                         "sha256":  "c0bd6e6c5bb65f6800a4b8c20324c5d086625de80ad707515497c0829699bff5",
+                         "packageVersion":  "2026-10-17.6",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-17.6.zip",
+                         "sha256":  "f6c80ccf5a9d83ec2439ef143e247e13905b98d663188c88dedc6cd0adb0d1c4",
                          "date":  "2026-10-17",
-                         "note":  "Online test: ONLINE - HOST through the relay"
+                         "note":  "Online fix: login no longer gets stuck; LAN - JOIN closes a leftover join helper"
                      }
                  ],
     "launcher":  {

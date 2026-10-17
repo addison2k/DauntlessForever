@@ -50,6 +50,13 @@ if ($relayPort) {
     if (-not $node0) { Fail 'Node.js from set-up is missing. Run "1 - SETUP.bat" again.' }
     $ready = Join-Path $DataDir 'join-proxy.json'
     Remove-Item -LiteralPath $ready -Force -ErrorAction SilentlyContinue
+    # a join proxy left over from an earlier join (window closed early) still holds 63000-63027: stop only that one (Oct 17)
+    try {
+        Get-CimInstance Win32_Process -Filter "Name = 'node.exe'" -ErrorAction Stop |
+            Where-Object { $_.CommandLine -and $_.CommandLine -like '*join-proxy-1147.js*' } |
+            ForEach-Object { Say "Closing a join helper left over from last time (process $($_.ProcessId))."; Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }
+        Start-Sleep -Milliseconds 500
+    } catch {}
     New-Item -ItemType Directory -Force (Join-Path $Root 'logs') | Out-Null
     $proxy = Start-Process -FilePath $node0 -PassThru -WindowStyle Hidden -WorkingDirectory $Root `
         -ArgumentList @("`"$(Join-Path $PSScriptRoot 'join-proxy-1147.js')`"", $hostIp, "$relayPort", "`"$ready`"") `

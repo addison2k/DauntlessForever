@@ -19,12 +19,15 @@ const server = net.createServer((client) => {
   const timer = setTimeout(() => route(LO), 3000);   // nothing said in 3 s: treat as a plain connection
   function route(port, rest) {
     if (done) return; done = true; clearTimeout(timer);
+    // Hold everything the friend sends while the backend connection opens: without the pause, data arriving in
+    // that moment was dropped (seen Oct 17: travel uploads and some login requests never arrived).
+    client.pause();
     client.removeListener('data', onData);
     const up = net.connect(port + SHIFT, '127.0.0.1');
     up.setNoDelay(true);
     const kill = () => { client.destroy(); up.destroy(); };
     up.on('error', kill); client.on('error', kill); up.on('close', kill); client.on('close', kill);
-    up.on('connect', () => { if (rest && rest.length) up.write(rest); client.pipe(up); up.pipe(client); });
+    up.on('connect', () => { if (rest && rest.length) up.write(rest); client.pipe(up); up.pipe(client); client.resume(); });
     count++;
   }
   function onData(chunk) {
