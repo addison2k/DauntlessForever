@@ -8,7 +8,7 @@ $ConfigFile = Join-Path $Root 'config.json'
 
 # The one game build this package works with, and the two files it puts into the game folder.
 $ExeHash     = 'E7ACBA587320491B71CB53BB8F8CBF5F3760BB52F78E74A82384B8BC42D05FD6'   # Dauntless 1.6.2, CL 271281
-$LoaderHash  = '9A431D7B6FD20C43FA92BEBD91C3BC023EC7A3FCBC52871C41F4DF293D4B0D1F'   # bin\dxgi.dll (Undaunted loader)
+$LoaderHash  = '89F34F6CB1B442B8456420A3DA2E3EC78C894B095D21D752D79FB20D1E95878B'   # bin\dxgi.dll (Undaunted loader)
 $ServerHash  = '61C4748E182EEEA1823B34D528A316787E3DB0364ECF92A4302D2131E1E3A86D'   # bin\UndauntedInternalServer.dll (1.6.2 port)
 $ExeRel      = 'Archon\Binaries\Win64\Dauntless-Win64-Shipping.exe'
 $MetaPort    = 61000

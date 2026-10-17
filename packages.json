@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-16.13",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.13.zip",
-                         "sha256":  "e583db8b983855eb89f74661446a8920d6dd48d97fc97a22eac53906dc26c314",
+                         "packageVersion":  "2026-10-16.14",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.14.zip",
+                         "sha256":  "c58136bce748c35c1ff5d70f9418f1eb7d71836d2c618b5c6b9c01122e8777c4",
                          "date":  "2026-10-16",
-                         "note":  "War Hammer ammo fix (4, was 7), Trials exotic schematics in Lady Luck\u0027s shop, thanks KombatKing"
+                         "note":  "new loader: fixes the game closing at start on Windows 11 25H2 laptops"
                      },
                      {
                          "id":  "1.14.7",

@@ -27,7 +27,7 @@
                  },
     "package":  {
                     "dir":  "package",
-                    "packageVersion":  "2026-10-16.13",
+                    "packageVersion":  "2026-10-16.14",
                     "setup":  "tools/setup.ps1",
                     "uninstallArgs":  [
                                           "-Uninstall"
@@ -46,7 +46,7 @@
                     "installedFiles":  [
                                            {
                                                "rel":  "Archon/Binaries/Win64/dxgi.dll",
-                                               "sha256":  "9A431D7B6FD20C43FA92BEBD91C3BC023EC7A3FCBC52871C41F4DF293D4B0D1F"
+                                               "sha256":  "89F34F6CB1B442B8456420A3DA2E3EC78C894B095D21D752D79FB20D1E95878B"
                                            },
                                            {
                                                "rel":  "Archon/Binaries/Win64/UndauntedInternalServer.dll",
