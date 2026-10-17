@@ -31,6 +31,10 @@ const ROOT = path.resolve(argVal('--dir') || path.join(__dirname, '..'));
 // firewall for the home network only); RECORDER_PUBLIC_HOST is this PC's address, given to games for the servers.
 const BIND_HOST = argVal('--bind') || process.env.RECORDER_BIND || '127.0.0.1';
 const PUBLIC_HOST = (argVal('--public') || process.env.RECORDER_PUBLIC_HOST || '').trim();
+// DF-ONLINE-1147: through the relay the game servers are reached on the relay's ports (local 8780+i -> public
+// base+i) and the backend on the relay's TCP port (ONLINE - HOST sets both).
+const PUBLIC_PORT_OFFSET = Number(process.env.RECORDER_PUBLIC_PORT_OFFSET) || 0;
+const PUBLIC_BACKEND_PORT = Number(process.env.RECORDER_PUBLIC_BACKEND_PORT) || 0;
 // Only these may talk to the backend: this PC, home networks, Tailscale. Nothing from the open internet.
 function privateAddress(a) {
   a = String(a || '').replace(/^::ffff:/, '');
@@ -633,7 +637,7 @@ const routes = [
   // Matchmaking, first steps only. The region list points back at this recorder so the game's
   // latency test stays on this PC.
   ['mm2', 'POST', /^\/candidate\/player\/register\/?$/, () => J({})],                                // captured
-  ['mm2', 'GET', /^\/candidate\/regions\/?$/, (c) => J({ code: 200, message: 'success', payload: { maxPingingStepTime: 3, pingCount: 5, pingFrequency: 0.25, regionUrls: [`http://${PUBLIC_HOST || '127.0.0.1'}:${c.basePort}`] } })],
+  ['mm2', 'GET', /^\/candidate\/regions\/?$/, (c) => J({ code: 200, message: 'success', payload: { maxPingingStepTime: 3, pingCount: 5, pingFrequency: 0.25, regionUrls: [`http://${PUBLIC_HOST || '127.0.0.1'}:${PUBLIC_BACKEND_PORT || c.basePort}`] } })],
   ['_external', 'GET', /^\/$/, () => ({ status: 200, html: '<!DOCTYPE html><html><body>pong</body></html>', note: 'latency ping' })],
 
   // Matchmaking proper. There is no matchmaker: the "match" is the local game server started by
@@ -681,7 +685,7 @@ const routes = [
     let srv = liveServer(city ? SERVER_FILE : HUNT_SERVER_FILE);
     if (srv && !city && srv.id !== cd.id) srv = null;                       // a server for an earlier destination
     const out = { candidateId: cd.id, candidateStatusPeriodMillis: srv ? 10000 : 3000, gameMode: cd.gameMode, huntId: cd.huntId, playerStates: { [p.accountId]: {} } };
-    if (srv) out.serverInfo = { buildId: cd.buildId, gameSessionId: cd.gameSessionId, host: (PUBLIC_HOST && (!srv.host || srv.host === '127.0.0.1')) ? PUBLIC_HOST : (srv.host || '127.0.0.1'), port: srv.port };
+    if (srv) out.serverInfo = { buildId: cd.buildId, gameSessionId: cd.gameSessionId, host: (PUBLIC_HOST && (!srv.host || srv.host === '127.0.0.1')) ? PUBLIC_HOST : (srv.host || '127.0.0.1'), port: srv.port + (PUBLIC_HOST ? PUBLIC_PORT_OFFSET : 0) };
     const waited = Math.round((Date.now() - (cd.asked || Date.now())) / 1000);
     const failed = !srv && !city && waited > 300;
     out.status = srv ? 'IN_PROGRESS' : failed ? 'FAILED' : 'MATCHING'; out.statusDuration = 0.0; out.statusReason = failed ? 'no server started for this destination' : null;

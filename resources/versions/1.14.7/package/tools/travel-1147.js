@@ -61,7 +61,7 @@ function itemCount(p) {
       backup('before-join');
       const r = await request('PUT', { player: me });
       if (r.status !== 200) { console.log(`The host did not take your character (${r.status}${r.json && r.json.error ? ': ' + r.json.error : ''}). You play with the host's copy.`); process.exit(3); }
-      fs.writeFileSync(pendingFile, JSON.stringify({ host, epicId, at: new Date().toISOString() }));
+      fs.writeFileSync(pendingFile, JSON.stringify({ host: process.env.TRAVEL_LABEL || host, epicId, at: new Date().toISOString() }));   // the join code, so the right host brings it home
       console.log(`Your character${me.characters.length > 1 ? 's' : ''} went to the host (${me.characters.map((c) => c.name).join(', ')}).`);
       process.exit(0);
     }

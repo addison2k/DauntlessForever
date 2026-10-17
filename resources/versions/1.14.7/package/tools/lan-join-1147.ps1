@@ -1,8 +1,10 @@
 # Dauntless Forever - Dauntless 1.14.7 offline package
 # Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
 # Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
-# lan-join-1147.ps1 - "LAN - JOIN.bat": play 1.14.7 on another PC's game (LAN - HOST) on the same home network.
-# Starts only the game (no backend, no game server on this PC), pointed at the host. This PC gets its own player id
+# lan-join-1147.ps1 - "LAN - JOIN.bat": play 1.14.7 on another PC's game: on the same home network (LAN - HOST,
+# code = address) or from anywhere through the Dauntless Forever relay (ONLINE - HOST, code = address:port).
+# Starts only the game (no backend, no game server on this PC), pointed at the host. Online, tools\join-proxy-1147.js
+# carries the game's backend connections to the host through the relay. This PC gets its own player id
 # for this (eos_lan\eos_offline.ini), so the host's backend keeps your character apart from the host's.
 # Needs "1 - SETUP.bat" to have been run on this PC once.
 param([string]$Address = '')
@@ -28,21 +30,50 @@ $addr = $Address.Trim()
 if (-not $addr) {
     $saved = if (Test-Path -LiteralPath $addrFile) { ((Get-Content -LiteralPath $addrFile -Raw) + '').Trim() } else { '' }
     if ($saved) {
-        $ans = Read-Host "Join $saved again? Press Enter for yes, or type the host's address"
+        $ans = Read-Host "Join $saved again? Press Enter for yes, or paste a new address / join code"
         $addr = if ($ans.Trim()) { $ans.Trim() } else { $saved }
     } else {
-        $addr = (Read-Host 'Type the address the host''s LAN - HOST window shows (looks like 192.168.1.50)').Trim()
+        $addr = (Read-Host 'Paste the address or join code from the host (192.168.1.50 at home, or 209.145.57.41:21000 online)').Trim()
     }
 }
-$addr = $addr -replace '\s', ''
-if ($addr -notmatch '^\d{1,3}(\.\d{1,3}){3}$') { Fail 'that does not look like an address (four numbers with dots, like 192.168.1.50). Copy it again from the host window.' }
+$addr = ($addr -replace '\s', '') -replace '\|.*$', ''
+if ($addr -notmatch '^(\d{1,3}(?:\.\d{1,3}){3})(?::(\d{2,5}))?$') { Fail 'that does not look like an address (192.168.1.50) or join code (209.145.57.41:21000). Copy it again from the host window.' }
+$hostIp = $Matches[1]; $relayPort = if ($Matches[2]) { [int]$Matches[2] } else { 0 }
 [IO.File]::WriteAllText($addrFile, $addr)
+
+# --- online: the join proxy carries the game's backend connections through the relay
+$proxy = $null
+$gameHost = $hostIp
+if ($relayPort) {
+    if (Test-Recorder) { Fail 'Dauntless 1.14.7 is still running on THIS PC (its backend answers). Close PLAY here first, then join again.' }
+    $node0 = $cfg.Node; if (-not $node0 -or -not (Test-Path -LiteralPath $node0)) { $node0 = Find-Node }
+    if (-not $node0) { Fail 'Node.js from set-up is missing. Run "1 - SETUP.bat" again.' }
+    $ready = Join-Path $DataDir 'join-proxy.json'
+    Remove-Item -LiteralPath $ready -Force -ErrorAction SilentlyContinue
+    New-Item -ItemType Directory -Force (Join-Path $Root 'logs') | Out-Null
+    $proxy = Start-Process -FilePath $node0 -PassThru -WindowStyle Hidden -WorkingDirectory $Root `
+        -ArgumentList @("`"$(Join-Path $PSScriptRoot 'join-proxy-1147.js')`"", $hostIp, "$relayPort", "`"$ready`"") `
+        -RedirectStandardOutput (Join-Path $Root 'logs\join-proxy.log') -RedirectStandardError (Join-Path $Root 'logs\join-proxy.err')
+    $t0 = Get-Date
+    while (-not (Test-Path -LiteralPath $ready)) {
+        if ($proxy.HasExited -or ((Get-Date) - $t0).TotalSeconds -gt 10) { Fail 'the join proxy did not start (ports 63000-63027 in use on this PC?). See logs\join-proxy.log.' }
+        Start-Sleep -Milliseconds 200
+    }
+    $gameHost = '127.0.0.1'
+}
+function Stop-Proxy { if ($proxy) { try { if (-not $proxy.HasExited) { $proxy.Kill() } } catch {}; Remove-Item -LiteralPath (Join-Path $DataDir 'join-proxy.json') -Force -ErrorAction SilentlyContinue } }
 
 # --- is the host there?
 Say "Checking the host at $addr..."
 $ok = $false
-try { Invoke-RestMethod -Uri "http://${addr}:63000/_recorder/ping" -TimeoutSec 8 | Out-Null; $ok = $true } catch {}
+try { Invoke-RestMethod -Uri "http://${gameHost}:63000/_recorder/ping" -TimeoutSec 10 | Out-Null; $ok = $true } catch {}
 if (-not $ok) {
+    Stop-Proxy
+    if ($relayPort) {
+        Fail ("cannot reach the host through the relay at $addr.`n" +
+              "         - Is the host's ONLINE - HOST window still open, and has their game reached Ramsgate?`n" +
+              "         - Is the join code from the host's CURRENT session? (It changes each time they start ONLINE - HOST.)")
+    }
     Fail ("cannot reach the host at $addr.`n" +
           "         - Is the host's LAN - HOST window still open, and has their game reached Ramsgate?`n" +
           "         - Are both PCs on the same home network (same router)?")
@@ -74,19 +105,20 @@ $node = $cfg.Node; if (-not $node -or -not (Test-Path -LiteralPath $node)) { $no
 $travelJs = Join-Path $PSScriptRoot 'travel-1147.js'
 $pendingFile = Join-Path $DataDir 'travel_pending.json'
 $travelling = $false
+$env:TRAVEL_LABEL = $addr
 function Invoke-Travel([string]$What) {
-    $out = & $node $travelJs $What $addr $lanId $Root 2>&1
+    $out = & $node $travelJs $What $gameHost $lanId $Root 2>&1
     $c = $LASTEXITCODE
     foreach ($l in @($out)) { if ("$l".Trim()) { Say "  $l" } }
     return $c
 }
 if ($node -and (Test-Path -LiteralPath $travelJs)) {
-    if (Test-Recorder) { Fail 'Dauntless 1.14.7 is still running on THIS PC (its backend answers). Close PLAY here first, then join again.' }
+    if (-not $relayPort -and (Test-Recorder)) { Fail 'Dauntless 1.14.7 is still running on THIS PC (its backend answers). Close PLAY here first, then join again.' }
     $pending = $null; try { $pending = Get-Content -LiteralPath $pendingFile -Raw | ConvertFrom-Json } catch {}
     if ($pending -and $pending.host -eq $addr) {
         Say 'Your last game with this host did not bring your character home. Doing that first...'
         $c = Invoke-Travel 'home'
-        if ($c -eq 1) { Fail 'could not bring your character home from the host. Try again in a moment (your home save was not changed).' }
+        if ($c -eq 1) { Stop-Proxy; Fail 'could not bring your character home from the host. Try again in a moment (your home save was not changed).' }
     } elseif ($pending) {
         Say "Note: your character is still at another host ($($pending.host)). Join that host once to bring it home." 'Yellow'
     }
@@ -102,11 +134,12 @@ if ($node -and (Test-Path -LiteralPath $travelJs)) {
 Say ''
 Say "Joining $addr..." 'Green'
 try {
-    & (Join-Path $PSScriptRoot 'play-1147.ps1') -JoinHost $addr -EosDirOverride $eosLan
+    & (Join-Path $PSScriptRoot 'play-1147.ps1') -JoinHost $gameHost -EosDirOverride $eosLan
 } finally {
     if ($travelling -or (Test-Path -LiteralPath $pendingFile)) {
         Say 'Bringing your character home...'
         $c = Invoke-Travel 'home'
         if ($c -ne 0 -and $c -ne 2) { Say 'Your character could not come home just now. The next LAN - JOIN with this host brings it home first.' 'Yellow' }
     }
+    Stop-Proxy
 }
