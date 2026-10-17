@@ -202,7 +202,7 @@ function publicVersion(v) {
   const { bundledDir, ...rest } = v;
   // can host friends (Friends panel / "Host with friends"): its server files have the online host script
   let canHost = false;
-  try { canHost = !!v.package && fs.existsSync(path.join(v.dataDir, 'tools', 'online-host.ps1')); } catch {}
+  try { canHost = !!v.package && fs.existsSync(V.online(v).hostPath); } catch {}
   return { ...rest, hasPackage: !!v.package, canHost };
 }
 function findNode() {
@@ -763,8 +763,9 @@ ipcMain.handle('game:play', async (_e, id) => {
   if (R.anyRunning().some(r => r.kind === 'play')) return { ok: false, error: 'A game is already running. Close it first.' };
   settings.update(s => { s.lastVersion = id; });
   // Host Mode is running this version: only the game starts, joining the server that is already up on this PC
-  const hostPlay = require('./hostmode').isOn(id) && fs.existsSync(path.join(v.dataDir, 'tools', 'play-162.ps1'));
-  const script = hostPlay ? path.join(v.dataDir, 'tools', 'play-162.ps1') : path.join(v.dataDir, v.package.play);
+  const hp = V.online(v).hostPlayPath;
+  const hostPlay = require('./hostmode').isOn(id) && !!hp && fs.existsSync(hp);
+  const script = hostPlay ? hp : path.join(v.dataDir, v.package.play);
   send('play:state', { id, state: 'running' });
   let lastError = '';
   const code = await R.runHidden(id, 'play', script, [], (line, isErr) => {

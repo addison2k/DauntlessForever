@@ -10,8 +10,8 @@
 'use strict';
 const fs = require('fs'), path = require('path'), http = require('http'), crypto = require('crypto');
 const [, , what, host, epicId, root] = process.argv;
-if (!/^(send|home)$/.test(what || '') || !/^\d{1,3}(\.\d{1,3}){3}$/.test(host || '') || !/^[0-9a-f]{32}$/.test(epicId || '') || !root) {
-  console.log('usage: node travel-1147.js send|home <host address> <LAN Epic id> <package folder>'); process.exit(1);
+if (!/^(send|home|save)$/.test(what || '') || !/^\d{1,3}(\.\d{1,3}){3}$/.test(host || '') || !/^[0-9a-f]{32}$/.test(epicId || '') || !root) {
+  console.log('usage: node travel-1147.js send|home|save <host address> <LAN Epic id> <package folder>'); process.exit(1);
 }
 const key = crypto.createHash('sha256').update('epic:' + epicId).digest('hex').slice(0, 32);   // the key the host's backend gives this sign-in
 const stateFile = path.join(root, 'data', 'state.json');
@@ -65,9 +65,11 @@ function itemCount(p) {
       console.log(`Your character${me.characters.length > 1 ? 's' : ''} went to the host (${me.characters.map((c) => c.name).join(', ')}).`);
       process.exit(0);
     }
-    // home
+    // home (save: the same copy home, but the character stays at the host: the host is closing soon, or a check-in
+    // while playing; the final home at the end still happens. Oct 17)
+    const keep = what === 'save';
     const r = await request('GET');
-    if (r.status === 404) { console.log('The host has no character of yours to send back.'); try { fs.unlinkSync(pendingFile); } catch (e) {} process.exit(2); }
+    if (r.status === 404) { console.log('The host has no character of yours to send back.'); if (!keep) { try { fs.unlinkSync(pendingFile); } catch (e) {} } process.exit(2); }
     if (r.status !== 200 || !r.json || !r.json.player) throw new Error(`the host answered ${r.status}`);
     const back = r.json.player;
     if (!hk) { console.log('This PC has no home save to bring the character into. Nothing changed.'); process.exit(3); }
@@ -80,17 +82,18 @@ function itemCount(p) {
     const before = itemCount(mine), after = itemCount(back);
     if (before >= 20 && after < before / 2) problems.push(`items dropped from ${before} to ${after}`);
     if (problems.length) { console.log('The copy from the host looks wrong (' + problems.join('; ') + '). Your home save was NOT changed.'); process.exit(3); }
-    const saved = backup('before-home');
+    const saved = backup(keep ? 'before-save' : 'before-home');
     const home = Object.assign({}, back, { accountId: mine.accountId, epicId: mine.epicId, username: mine.username || back.username });
     delete home.travelledIn; delete home.candidate; delete home.partyId;
     st.players[hk] = home;
     const tmp = stateFile + '.tmp';
     fs.writeFileSync(tmp, JSON.stringify(st, null, 2)); fs.renameSync(tmp, stateFile);
+    if (keep) { console.log(`Saved your character home (it is still at the host; backup of the save before: ${path.relative(root, saved)}).`); process.exit(0); }
     try { fs.unlinkSync(pendingFile); } catch (e) {}
     console.log(`Your character is home again (backup of the save before: ${path.relative(root, saved)}).`);
     process.exit(0);
   } catch (e) {
-    console.log('Travel did not work: ' + e.message + (what === 'home' ? '. Your home save was NOT changed; next LAN - JOIN with this host brings it home first.' : ''));
+    console.log('Travel did not work: ' + e.message + (what !== 'send' ? '. Your home save was NOT changed; next LAN - JOIN with this host brings it home first.' : ''));
     process.exit(1);
   }
 })();

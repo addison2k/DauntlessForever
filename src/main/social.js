@@ -26,6 +26,7 @@ const crypto = require('crypto');
 const { ipcMain, Notification } = require('electron');
 const P = require('./paths');
 const settings = require('./settings');
+const V = require('./versions');   // V.online(v): each version's host/join scripts, relay file and backend port (Oct 17)
 
 const RAW = 'https://raw.githubusercontent.com/addison2k/DauntlessForever/main/';
 const NETWORK_URL = RAW + 'network.json';
@@ -137,7 +138,8 @@ function call(method, apiPath, body, unsigned, timeoutMs) {
 let hostingNow = null;   // version id or null
 function hostingVersion() {
   for (const v of ctx.registry) {
-    try { const st = JSON.parse(fs.readFileSync(path.join(v.dataDir, 'data', 'relay.json'), 'utf8')); if (st && st.base) return { v, relay: st }; } catch {}
+    if (!v.package) continue;
+    try { const st = JSON.parse(fs.readFileSync(V.online(v).relayPath, 'utf8')); if (st && st.base) return { v, relay: st }; } catch {}
   }
   return null;
 }
@@ -159,9 +161,10 @@ function postLocal(port, apiPath, body) {
   });
 }
 // the host's backend answers on this PC (it takes a minute to start after "Host with friends")
-function backendUp() {
+function backendUp(v) {
+  const o = V.online(v);
   return new Promise((resolve) => {
-    const req = http.get({ host: '127.0.0.1', port: 61000, path: '/dauntless-status', timeout: 2000 }, (res) => { res.resume(); resolve(res.statusCode === 200); });
+    const req = http.get({ host: '127.0.0.1', port: o.statusPort, path: o.statusPath, timeout: 2000 }, (res) => { res.resume(); resolve(res.statusCode === 200); });
     req.on('timeout', () => { req.destroy(); resolve(false); }); req.on('error', () => resolve(false));
   });
 }
@@ -180,14 +183,21 @@ async function answerJoin(r) {
     // one account on this PC's backend per friend, kept in data\friend_accounts.json (never shared with anyone else)
     const file = path.join(h.v.dataDir, 'data', 'friend_accounts.json');
     // a friend who presses Join while this game is still starting: wait for the backend (up to 2 minutes)
-    for (let i = 0; i < 40 && !(await backendUp()); i++) {
+    for (let i = 0; i < 40 && !(await backendUp(h.v)); i++) {
       if (!hostingVersion()) { await call('POST', '/v1/join/answer', { reqId: r.reqId, error: 'The host stopped hosting.' }); return; }
       await new Promise(res => setTimeout(res, 3000));
+    }
+    const o = V.online(h.v);
+    if (!o.accounts) {
+      // this version keeps each player apart by their own sign-in (1.14.7): the code is only the address
+      await call('POST', '/v1/join/answer', { reqId: r.reqId, code: `${h.relay.ip}:${h.relay.base}` });
+      ctx.log(`Friends: let ${r.name} join your ${h.v.id} game${isFriend ? '' : ' (open to everyone)'}.`);
+      return;
     }
     const accounts = readJson(file, {});
     let key = accounts[r.from] && accounts[r.from].key;
     if (!key) {
-      const reply = await postLocal(61000, '/undaunted/api/Register', { Username: String(r.name || 'Friend').slice(0, 20) });
+      const reply = await postLocal(o.statusPort, '/undaunted/api/Register', { Username: String(r.name || 'Friend').slice(0, 20) });
       key = String(reply.UUK || '');
       if (!key.startsWith('UUK_')) throw new Error('the backend did not make the account');
       accounts[r.from] = { key, name: r.name, made: new Date().toISOString() };
@@ -206,8 +216,8 @@ async function answerJoin(r) {
 function startJoin(versionId, code, w) {
   const v = ctx.byId(versionId);
   if (!v) throw new Error('This version is not installed.');
-  const script = path.join(v.dataDir, 'tools', 'lan-join.ps1');
-  if (!fs.existsSync(script)) throw new Error('This version has no join script yet. Update its server files.');
+  const script = V.online(v).joinPath;
+  if (!v.package || !fs.existsSync(script)) throw new Error('This version has no join script yet. Update its server files.');
   ctx.runner.runVisible(versionId + ':join', 'join', script, ['-Code', `'${code.replace(/'/g, "''")}'`], `Dauntless ${versionId} - joining a friend`)
     .then(() => { if (gameWith && gameWith.since === since) gameWith = null; push(); });
   const since = Date.now();
@@ -282,9 +292,9 @@ async function poll() {
     if (pn && identity().name !== pn) { try { await applyName(pn); } catch {} }
     // friends see "Hosting" (and a Join button) only once this PC's backend answers: no Join into a game still starting
     let h = hostingVersion();
-    if (h && !(await backendUp())) {
+    if (h && !(await backendUp(h.v))) {
       // nothing answers: if no host window of ours is open either, the relay.json is left over: tidy it away
-      if (!ctx.runner.isRunning(h.v.id + ':host')) { try { fs.unlinkSync(path.join(h.v.dataDir, 'data', 'relay.json')); } catch {} }
+      if (!ctx.runner.isRunning(h.v.id + ':host')) { try { fs.unlinkSync(V.online(h.v).relayPath); } catch {} }
       h = null;
     }
     hostingNow = h ? h.v.id : null;
@@ -332,8 +342,8 @@ function startHost(versionId, pub) {
   if (!onlineOn()) throw new Error(onlineOffMessage() + ' Solo play still works.');
   const v = ctx.byId(versionId);
   if (!v) throw new Error('This version is not installed.');
-  const script = path.join(v.dataDir, 'tools', 'online-host.ps1');
-  if (!fs.existsSync(script)) throw new Error('This version cannot host online yet. Update its server files.');
+  const script = V.online(v).hostPath;
+  if (!v.package || !fs.existsSync(script)) throw new Error('This version cannot host online yet. Update its server files.');
   hostPublicVersion = pub ? versionId : null;
   ctx.runner.runVisible(versionId + ':host', 'host', script, pub ? ['-Public'] : [], `Dauntless ${versionId} - hosting online${pub ? ', open to everyone' : ''} (keep open)`)
     .then(() => { if (hostPublicVersion === versionId) hostPublicVersion = null; closing = null; push(); });
@@ -346,8 +356,8 @@ function startHostMode(versionId, pub, onLine) {
   if (!onlineOn()) return Promise.reject(new Error(onlineOffMessage()));
   const v = ctx.byId(versionId);
   if (!v) return Promise.reject(new Error('This version is not installed.'));
-  const script = path.join(v.dataDir, 'tools', 'online-host.ps1');
-  if (!fs.existsSync(script)) return Promise.reject(new Error('This version cannot host online yet. Update its server files.'));
+  const script = V.online(v).hostPath;
+  if (!v.package || !fs.existsSync(script)) return Promise.reject(new Error('This version cannot host online yet. Update its server files.'));
   hostPublicVersion = pub ? versionId : null;
   const p = ctx.runner.runHidden(versionId + ':host', 'host', script, pub ? ['-HostMode', '-Public'] : ['-HostMode'], onLine)
     .then((code) => { if (hostPublicVersion === versionId) hostPublicVersion = null; closing = null; push(); return code; });
@@ -361,7 +371,7 @@ function checkPlayOnline(versionId) {
   if (!identity()) throw new Error('Still signing you in to the online service. Try again in a moment.');
   const v = ctx.byId(versionId);
   if (!v) throw new Error('This version is not installed.');
-  if (!fs.existsSync(path.join(v.dataDir, 'tools', 'online-host.ps1')) || !fs.existsSync(path.join(v.dataDir, 'tools', 'lan-join.ps1')))
+  if (!v.package || !fs.existsSync(V.online(v).hostPath) || !fs.existsSync(V.online(v).joinPath))
     throw new Error('This version cannot play online yet. Update its server files.');
   if (ctx.runner.anyRunning().length) throw new Error('Close the game that is running first.');
   if (search) throw new Error('Already looking for a game.');
@@ -407,7 +417,8 @@ async function stopHostNow(byUser) {
   if (closing) { closing.timers.forEach(clearTimeout); closing = null; }
   for (const v of ctx.registry) {
     const id = v.id + ':host';
-    const relayFile = path.join(v.dataDir, 'data', 'relay.json');
+    if (!v.package) continue;
+    const relayFile = V.online(v).relayPath;
     if (!ctx.runner.isRunning(id) && !fs.existsSync(relayFile)) continue;   // this version is not hosting: leave it alone
     if (ctx.runner.isRunning(id)) ctx.runner.killTree(id);
     try { await ctx.runner.runStop(v, () => {}); } catch {}

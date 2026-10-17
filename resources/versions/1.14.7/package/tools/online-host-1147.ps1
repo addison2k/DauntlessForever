@@ -9,6 +9,11 @@
 #   - starts the normal PLAY in its own window, telling every game to use the relay's address
 #   - shows the join code (address:port) for the friend's "LAN - JOIN.bat"
 #   - when PLAY is closed: disconnects from the relay
+# The launcher runs this too (version.json "online"): its Friends page ("Host with friends"), Play online and Host Mode.
+#   -Public (Play online, or "Allow randoms"): the launcher lets anyone in; nothing changes on this PC.
+#   -HostMode (the Host Mode page): no game window here; the server stays up (start.ps1 -NoGame) until the launcher
+#   stops it. Exit codes: 0 stopped on request, 3 the relay connection was lost, else start.ps1's. (Oct 17)
+param([switch]$Public, [switch]$HostMode)
 . (Join-Path $PSScriptRoot 'common.ps1')
 $DataDir = Join-Path $Root 'data'
 $DefaultRelay = '209.145.57.41'          # the Dauntless Forever relay; data\relay_host.txt overrides it
@@ -96,9 +101,16 @@ try {
     $env:RECORDER_PUBLIC_PORT_OFFSET = "$($base - 8780)"
     $env:RECORDER_PUBLIC_BACKEND_PORT = "$base"
     Say ''
-    Say 'Starting PLAY in its own window (backend, game server, then your game)...'
-    $play = Start-Process -FilePath 'powershell.exe' -PassThru -WorkingDirectory $Root `
-        -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$(Join-Path $PSScriptRoot 'start.ps1')`"")
+    if ($HostMode) {
+        Say 'Starting Host Mode: the backend and the game server, no game window (log: logs\hostmode.log)...'
+        $play = Start-Process -FilePath 'powershell.exe' -PassThru -WindowStyle Hidden -WorkingDirectory $Root `
+            -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$(Join-Path $PSScriptRoot 'start.ps1')`"", '-NoGame') `
+            -RedirectStandardOutput (Join-Path $logDir 'hostmode.log') -RedirectStandardError (Join-Path $logDir 'hostmode.err')
+    } else {
+        Say 'Starting PLAY in its own window (backend, game server, then your game)...'
+        $play = Start-Process -FilePath 'powershell.exe' -PassThru -WorkingDirectory $Root `
+            -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', "`"$(Join-Path $PSScriptRoot 'start.ps1')`"")
+    }
     $code = "${ip}:$base"
     [IO.File]::WriteAllText((Join-Path $Root 'ONLINE-join-code.txt'), $code)
     # self-check once the backend is up: it answers through the relay
@@ -108,6 +120,20 @@ try {
     try { Invoke-RestMethod -Uri "http://${ip}:$base/_recorder/ping" -TimeoutSec 8 | Out-Null; $ok = $true } catch {}
     if ($ok) { Say 'Checked: your backend answers through the relay.' 'Green' }
     else { Say 'Warning: your backend did not answer through the relay yet. If your friend cannot join, send logs\relay.log and logs\gateway.log.' 'Yellow' }
+    if ($HostMode) {
+        Say 'Host Mode is running. Players join from their launcher (Friends, or Play online when it is open to everyone).' 'Green'
+        $relayLost = $false
+        while (-not $play.HasExited) {
+            if ($relay.HasExited) { Say 'The relay connection was lost: stopping, so the launcher can start Host Mode again.' 'Yellow'; $relayLost = $true; break }
+            Start-Sleep -Seconds 2
+        }
+        if ($relayLost) {
+            [IO.File]::WriteAllText((Join-Path $DataDir 'hostmode_stop'), 'relay lost')
+            if (-not $play.WaitForExit(90000)) { try { $play.Kill() } catch {} }
+            $script:hostExit = 3
+        } else { $play.WaitForExit(); $script:hostExit = $play.ExitCode }
+        exit ([int]$script:hostExit)   # the finally below still runs (disconnects from the relay)
+    }
     Say ''
     Say '============================================================' 'Cyan'
     Say ' Your friend: double-click "LAN - JOIN.bat" and paste this join code:' 'Cyan'

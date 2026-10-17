@@ -3,6 +3,10 @@
 # Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 # start.ps1 - "2 - PLAY.bat": starts the local backend, then the game server, then the game, in that order.
 # When the game is closed, the server and the backend are shut down again.
+# -NoGame (Host Mode, from online-host-1147.ps1 -HostMode): no game window; the backend and the game server stay up
+# until data\hostmode_stop appears or the launcher stops Host Mode. If the backend or the game server stops, this
+# ends with exit code 1 and the launcher starts Host Mode again (when "Restart by itself" is on). (Oct 17)
+param([switch]$NoGame)
 . (Join-Path $PSScriptRoot 'common.ps1')
 
 Say ''
@@ -26,7 +30,7 @@ if (-not $node) { Fail 'Node.js was not found. Run "1 - SETUP.bat" again.' }
 $missing = @('vcruntime140.dll', 'vcruntime140_1.dll', 'msvcp140.dll', 'xinput1_3.dll', 'x3daudio1_7.dll', 'xapofx1_5.dll') |
     Where-Object { -not (Test-Path -LiteralPath (Join-Path $env:WINDIR "System32\$_")) }
 if (@($missing).Count -gt 0) { Fail "Windows is missing parts the game needs ($(@($missing) -join ', ')). Run set-up again: it installs them." }
-if (@(Get-PlayerGame).Count -gt 0) { Fail 'the game is already running. Close it first (or end Dauntless-Win64-Shipping in Task Manager).' }
+if (-not $NoGame -and @(Get-PlayerGame).Count -gt 0) { Fail 'the game is already running. Close it first (or end Dauntless-Win64-Shipping in Task Manager).' }
 
 $dataDir = Join-Path $Root 'data'
 New-Item -ItemType Directory -Force $dataDir, (Join-Path $Root 'logs') | Out-Null
@@ -68,11 +72,27 @@ while (-not (Test-Path -LiteralPath $marker)) {
 }
 Say ("    Game server: ready after {0} s." -f [int]((Get-Date) - $t0).TotalSeconds) 'Green'
 
-# --- 3. the game (this window waits until it is closed)
-Say '3/3 Starting the game...'
 $playOk = $true
-try { & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'play-1147.ps1'); if ($LASTEXITCODE -ne 0) { $playOk = $false } }
-catch { $playOk = $false; Say $_.Exception.Message 'Yellow' }
+$hostFail = ''
+if ($NoGame) {
+    # --- 3. Host Mode: no game here. Keep watch until asked to stop; the backend or the game server going down ends
+    #        this run with an error, and the launcher starts Host Mode again.
+    Say '3/3 Host Mode: the server is up. No game window; press Play in the launcher to join it from this PC.' 'Green'
+    $stopFile = Join-Path $dataDir 'hostmode_stop'
+    Remove-Item -LiteralPath $stopFile -Force -ErrorAction SilentlyContinue
+    while ($true) {
+        if (Test-Path -LiteralPath $stopFile) { Remove-Item -LiteralPath $stopFile -Force -ErrorAction SilentlyContinue; Say 'Host Mode: asked to stop.'; break }
+        if ($recProc -and $recProc.HasExited) { $hostFail = 'the local backend stopped while hosting.'; break }
+        if (-not $recProc -and -not (Test-Recorder)) { $hostFail = 'the local backend stopped answering while hosting.'; break }
+        if ($srvWin.HasExited) { $hostFail = 'the game server stopped while hosting.'; break }
+        Start-Sleep -Seconds 3
+    }
+} else {
+    # --- 3. the game (this window waits until it is closed)
+    Say '3/3 Starting the game...'
+    try { & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'play-1147.ps1'); if ($LASTEXITCODE -ne 0) { $playOk = $false } }
+    catch { $playOk = $false; Say $_.Exception.Message 'Yellow' }
+}
 
 # --- shut down
 Say ''
@@ -88,5 +108,6 @@ if ($recPid) {
     if ($rp -and $rp.ProcessName -eq 'node') { Stop-Process -Id $recPid -Force -ErrorAction SilentlyContinue }
 }
 Say ''
+if ($hostFail) { Say "STOPPED: $hostFail" 'Red'; exit 1 }
 if ($playOk) { Say 'All closed. Your progress is saved (data\state.json). See you next time!' 'Green' }
 else { Say 'All closed. Something went wrong above; the logs are in the upload folder if you need help.' 'Yellow' }

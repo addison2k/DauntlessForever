@@ -212,5 +212,17 @@ function seedConfig(v, gameDir) {
 }
 
 // "0.1.10" > "0.1.9"
+// How a version plays online (Friends, Play online, Host Mode): version.json "package.online", else the 1.6.2 way.
+// hostScript/joinScript are run as before (-Public, -HostMode / -Code '<code>'); relayFile is written by the host
+// script while connected to the relay ({ip, base}); statusPort/statusPath answer 200 once the backend is up;
+// accounts: the host makes a backend account per friend (/undaunted/api/Register, a UUK key in the join code);
+// hostPlay: what Play starts while Host Mode runs this version (only the game, joining the local server). (Oct 17)
+const ONLINE_DEFAULT = { hostScript: 'tools/online-host.ps1', joinScript: 'tools/lan-join.ps1', relayFile: 'data/relay.json',
+  statusPort: 61000, statusPath: '/dauntless-status', accounts: true, hostPlay: 'tools/play-162.ps1', huntPorts: [8770, 8775] };
+function online(v) {
+  const o = Object.assign({}, ONLINE_DEFAULT, (v && v.package && v.package.online) || {});
+  const d = (v && v.dataDir) || '';
+  return { ...o, hostPath: path.join(d, o.hostScript), joinPath: path.join(d, o.joinScript), relayPath: path.join(d, o.relayFile), hostPlayPath: o.hostPlay ? path.join(d, o.hostPlay) : '' };
+}
 function cmpVersionStr(a, b) { return cmpVersion(String(a).replace(/^v/, ''), String(b).replace(/^v/, '')); }
-module.exports = { cmpVersionStr, missingPrereqs, loadRegistry, syncPackage, syncPackageAsync, needsSync, applyPackage, installedPackageVersion, cmpPackageVersion, status, sha256, resolveGameDir, knownGameDir, seedConfig, readPkgConfig };
+module.exports = { online, cmpVersionStr, missingPrereqs, loadRegistry, syncPackage, syncPackageAsync, needsSync, applyPackage, installedPackageVersion, cmpPackageVersion, status, sha256, resolveGameDir, knownGameDir, seedConfig, readPkgConfig };

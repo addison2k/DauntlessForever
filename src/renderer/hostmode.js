@@ -61,9 +61,9 @@
     else if (S.phase === 'failed') sub = `It stopped: ${S.lastError || 'see the log below'}. "Restart by itself" is off.`;
     $('hm-sub').textContent = sub; $('hm-sub').title = sub;
 
-    // version picker (only when more than one version can host)
+    // version picker: always shown, so it is clear which game this server runs (1.6.2, 1.14.7...)
     const vs = $('hm-version');
-    $('hm-ver-wrap').hidden = S.versions.length < 2;
+    $('hm-ver-wrap').hidden = S.versions.length < 1;
     if (vs.dataset.list !== S.versions.join(',')) { vs.innerHTML = ''; for (const id of S.versions) vs.appendChild(new Option(id, id)); vs.dataset.list = S.versions.join(','); }
     vs.value = S.version || S.versions[0] || ''; vs.disabled = on;
 

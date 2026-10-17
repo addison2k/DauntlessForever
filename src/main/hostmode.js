@@ -18,6 +18,7 @@ const path = require('path');
 const { execFile } = require('child_process');
 const { app, ipcMain, powerSaveBlocker } = require('electron');
 const settings = require('./settings');
+const V = require('./versions');
 const { IS_WIN } = require('./paths');
 
 const DEFAULTS = {
@@ -82,7 +83,8 @@ function log(line, isErr) {
 // ------------------------------------------------------------------ start / stop
 function canHost(v) {
   if (!v) return false;
-  try { return fs.readFileSync(path.join(v.dataDir, 'tools', 'online-host.ps1'), 'utf8').includes('HostMode'); } catch { return false; }
+  if (!v.package) return false;
+  try { return fs.readFileSync(V.online(v).hostPath, 'utf8').includes('HostMode'); } catch { return false; }
 }
 function versionsThatCan() { return ctx.registry.filter(v => v.package && canHost(v)).map(v => v.id); }
 async function start(versionId, how) {
@@ -175,7 +177,7 @@ const hooks = {
 function tick() {
   if (run) {
     // starting: ask the friends poll to look now (it sees the server once the relay is connected and the backend answers)
-    if (phase === 'starting') { const v = ctx.byId(run.version); if (v && fs.existsSync(path.join(v.dataDir, 'data', 'relay.json'))) social.poll(); }
+    if (phase === 'starting') { const v = ctx.byId(run.version); if (v && v.package && fs.existsSync(V.online(v).relayPath)) social.poll(); }
     const h = social.hostingVersion();
     if (phase === 'starting' && h && h.v.id === run.version) { phase = 'running'; restartsInRow = Math.min(restartsInRow, 1); log(`Host Mode is up: "${serverName()}" on the ${social.regionName(h.relay.ip) || h.relay.ip} relay.`); }
     if (phase === 'running') welcome();
@@ -260,8 +262,11 @@ function countHunts() {
   if (!IS_WIN) { huntsNow = 0; return; }
   execFile('netstat', ['-ano', '-p', 'UDP'], { windowsHide: true, timeout: 8000 }, (e, out) => {
     if (e) return;
+    // which ports are hunts depends on the version (version.json "online.huntPorts": [first, last]; 1.14.7: 8781-8787)
+    const v = ctx.byId((run && run.version) || cfg().version);
+    const hp = V.online(v).huntPorts || [8770, 8775];
     const ports = new Set();
-    for (const m of String(out).matchAll(/:(877[0-5])\s/g)) ports.add(m[1]);
+    for (const m of String(out).matchAll(/:(\d{4,5})\s/g)) { const p = Number(m[1]); if (p >= hp[0] && p <= hp[1]) ports.add(p); }
     huntsNow = ports.size;
   });
 }

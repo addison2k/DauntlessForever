@@ -12,10 +12,11 @@
                   "Hunt quests (kills on the right island count)",
                   "Potions, lanterns, Omnicells and weapon specials (equipment fix by KombatKing, test build)",
                   "Training grounds, sprint, attacking",
-                  "Hunts (tested: the first Embermane hunt)"
+                  "Hunts (tested: the first Embermane hunt)",
+                  "Online with friends: the launcher\u0027s Friends page, Play online and Host Mode (and ONLINE - HOST / LAN - JOIN by hand)"
               ],
     "notWorking":  [
-                       "Multiplayer (1.6.2 has it for now). Much else may not work yet."
+                       "New characters joining a friend get stuck loading the tutorial: do the tutorial in solo play first. Hunting together is not tested yet. Much else may not work yet."
                    ],
     "exeRel":  "Archon/Binaries/Win64/Dauntless-Win64-Shipping.exe",
     "exeSha256":  "F3F95FBF22709EF077A11632ED95D675B7209B7E0172D9ECB9BA7D02A1FBB66B",
@@ -29,7 +30,7 @@
                  },
     "package":  {
                     "dir":  "package",
-                    "packageVersion":  "2026-10-17.6",
+                    "packageVersion":  "2026-10-17.7",
                     "setup":  "tools/setup.ps1",
                     "uninstallArgs":  [
                                           "-Uninstall"
@@ -73,6 +74,19 @@
                                   ],
                     "needsNode":  "16",
                     "ports":  "63000-63027",
-                    "readme":  "README.txt"
+                    "readme":  "README.txt",
+                    "online":  {
+                                   "hostScript":  "tools/online-host-1147.ps1",
+                                   "joinScript":  "tools/lan-join-1147.ps1",
+                                   "relayFile":  "data/relay-1147.json",
+                                   "statusPort":  63000,
+                                   "statusPath":  "/_recorder/ping",
+                                   "accounts":  false,
+                                   "hostPlay":  "tools/play-1147.ps1",
+                                   "huntPorts":  [
+                                                     8781,
+                                                     8787
+                                                 ]
+                               }
                 }
 }

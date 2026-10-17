@@ -7,7 +7,9 @@
 # carries the game's backend connections to the host through the relay. This PC gets its own player id
 # for this (eos_lan\eos_offline.ini), so the host's backend keeps your character apart from the host's.
 # Needs "1 - SETUP.bat" to have been run on this PC once.
-param([string]$Address = '')
+# The launcher runs this too (version.json "online"): Join on the Friends page and Play online pass -Code
+# (address:port). While the game runs, data\travel_save_now (the host is closing) saves your character home at once.
+param([Alias('Code')][string]$Address = '')
 . (Join-Path $PSScriptRoot 'common.ps1')
 $DataDir = Join-Path $Root 'data'
 
@@ -140,9 +142,27 @@ if ($node -and (Test-Path -LiteralPath $travelJs)) {
 
 Say ''
 Say "Joining $addr..." 'Green'
+# the host is closing (the launcher writes data\travel_save_now): save the character home now, while the host still answers
+$saveNow = Join-Path $DataDir 'travel_save_now'
+Remove-Item -LiteralPath $saveNow -Force -ErrorAction SilentlyContinue
+$saver = $null
+if ($travelling) {
+    $saver = Start-Job -ArgumentList $saveNow, $node, $travelJs, $gameHost, $lanId, $Root, $addr -ScriptBlock {
+        param($flag, $node, $js, $gh, $id, $root, $label)
+        $env:TRAVEL_LABEL = $label
+        while ($true) {
+            if (Test-Path -LiteralPath $flag) {
+                Remove-Item -LiteralPath $flag -Force -ErrorAction SilentlyContinue
+                & $node $js 'save' $gh $id $root 2>&1 | Out-Null
+            }
+            Start-Sleep -Seconds 2
+        }
+    }
+}
 try {
     & (Join-Path $PSScriptRoot 'play-1147.ps1') -JoinHost $gameHost -EosDirOverride $eosLan
 } finally {
+    if ($saver) { Stop-Job $saver -ErrorAction SilentlyContinue; Remove-Job $saver -Force -ErrorAction SilentlyContinue }
     if ($travelling -or (Test-Path -LiteralPath $pendingFile)) {
         Say 'Bringing your character home...'
         $c = Invoke-Travel 'home'

@@ -10,22 +10,22 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-17.6",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-17.6.zip",
-                         "sha256":  "f6c80ccf5a9d83ec2439ef143e247e13905b98d663188c88dedc6cd0adb0d1c4",
+                         "packageVersion":  "2026-10-17.7",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-17.7.zip",
+                         "sha256":  "5be8ff80501c8c8fb5dc84c47d1b15d4591bd52ec59294a61d856630cdabd7d9",
                          "date":  "2026-10-17",
-                         "note":  "Online fix: login no longer gets stuck; LAN - JOIN closes a leftover join helper"
+                         "note":  "Online from the launcher: Host with friends, Play online, Friends Join and Host Mode"
                      }
                  ],
     "launcher":  {
-                     "version":  "0.2.8",
+                     "version":  "0.2.9",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.4",
-                     "notes":  "Settings: new \u0027What you are running\u0027 row shows the server files, DLL and pak hashes, and backend versions for each game version",
+                     "notes":  "1.14.7 online from the launcher: Host with friends, Play online, Friends Join, and Host Mode with a version picker",
                      "date":  "2026-10-17",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.2.8.asar",
-                                 "sha256":  "38b27cbd4b3c06c97eee679b760de65982c0042d09cbe284309c86462cea37f8",
-                                 "size":  679746,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.2.9.asar",
+                                 "sha256":  "24157dbdca243fb9bb0ce44bf32ce6b017e5c684d1f2e61260942155af907577",
+                                 "size":  681685,
                                  "minShell":  "0.2.4"
                              }
                  }
