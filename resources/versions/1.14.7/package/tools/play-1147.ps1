@@ -4,6 +4,8 @@
 # play-1147.ps1 - start the Dauntless 1.14.7 game itself, with its own private settings folder and the offline sign-in.
 # Normally started by "2 - PLAY.bat" (tools\start.ps1) after the backend and the server are up.
 # Waits until you close the game, then puts the logs into upload\client_logs.zip (PC name and user name blanked).
+# -JoinHost <address>: play on another PC's game (LAN - JOIN.bat); -EosDirOverride: the sign-in settings for that.
+param([string]$JoinHost = '', [string]$EosDirOverride = '')
 . (Join-Path $PSScriptRoot 'common.ps1')
 function Set-EosName([string]$Ini, [string]$Name) {
     $lines = if (Test-Path -LiteralPath $Ini) { @(Get-Content -LiteralPath $Ini) } else { @('; eos_offline settings. Lines starting with ; are comments.') }
@@ -19,7 +21,7 @@ $Bin      = Join-Path $cfg.GameDir 'Archon\Binaries\Win64'
 $Exe      = Join-Path $Bin 'Dauntless-Win64-Shipping.exe'
 $GameEos  = Join-Path $Bin 'EOSSDK-Win64-Shipping.dll'
 $HomeDir  = Join-Path $Root 'home'
-$EosDir   = Join-Path $Root 'eos'
+$EosDir   = if ($EosDirOverride) { $EosDirOverride } else { Join-Path $Root 'eos' }
 # Your player name comes from the launcher (one name for every version): the game reads it from eos_offline.ini.
 if ($env:DF_PLAYER_NAME -match '^[A-Za-z0-9_]{3,16}$') {
     New-Item -ItemType Directory -Force $EosDir | Out-Null
@@ -33,15 +35,25 @@ $GameArgs = '-EpicPortal -AUTH_TYPE=accountportal -AUTH_LOGIN=unused -AUTH_PASSW
 # --- checks before start
 if (@(Get-PlayerGame).Count -gt 0) { Fail 'the game is already running. Close it first.' }
 if ((Hash256 $GameEos) -ne $StandInHash) { Fail 'the offline sign-in is not in the game folder (maybe the game was updated or verified). Run "1 - SETUP.bat" again.' }
-if (-not (Test-Recorder)) { Fail 'the local backend is not running. Start the game with "2 - PLAY.bat".' }
-if (-not (Test-Path -LiteralPath (Join-Path $Root 'data\server.json'))) { Say 'Note: no game server is running, so the game will wait after the opening video.' 'Yellow' }
+if ($JoinHost) {
+    try { Invoke-RestMethod -Uri "http://${JoinHost}:63000/_recorder/ping" -TimeoutSec 8 | Out-Null } catch { Fail "the host at $JoinHost does not answer. Is their LAN - HOST window open?" }
+} else {
+    if (-not (Test-Recorder)) { Fail 'the local backend is not running. Start the game with "2 - PLAY.bat".' }
+    if (-not (Test-Path -LiteralPath (Join-Path $Root 'data\server.json'))) { Say 'Note: no game server is running, so the game will wait after the opening video.' 'Yellow' }
+}
 
 foreach ($d in @($HomeDir, "$HomeDir\AppData\Local", "$HomeDir\AppData\Roaming", "$HomeDir\Documents", $EosDir, $RunDir, $Upload)) { New-Item -ItemType Directory -Force $d | Out-Null }
 
 # --- the backend addresses go into the PRIVATE settings folder only (your normal Dauntless settings are not touched)
 $PrivCfg = Join-Path $HomeDir 'AppData\Local\Archon\Saved\Config\WindowsClient'
 New-Item -ItemType Directory -Force $PrivCfg | Out-Null
-Copy-Item -LiteralPath (Join-Path $Root 'profile\Game.ini') -Destination (Join-Path $PrivCfg 'Game.ini') -Force
+if ($JoinHost) {
+    # every backend address points at the host instead of this PC
+    $gi = [IO.File]::ReadAllText((Join-Path $Root 'profile\Game.ini')) -replace '127\.0\.0\.1', $JoinHost
+    [IO.File]::WriteAllText((Join-Path $PrivCfg 'Game.ini'), $gi, [Text.Encoding]::ASCII)
+} else {
+    Copy-Item -LiteralPath (Join-Path $Root 'profile\Game.ini') -Destination (Join-Path $PrivCfg 'Game.ini') -Force
+}
 $eosLog = Join-Path $EosDir 'eos_offline.log'
 $eosLogStart = if (Test-Path -LiteralPath $eosLog) { (Get-Item -LiteralPath $eosLog).Length } else { 0 }
 

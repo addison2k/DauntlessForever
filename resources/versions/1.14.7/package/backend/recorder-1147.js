@@ -27,6 +27,16 @@ const crypto = require('crypto');
 const args = process.argv.slice(2);
 const argVal = (name) => { const i = args.indexOf(name); return i >= 0 ? args[i + 1] : undefined; };
 const ROOT = path.resolve(argVal('--dir') || path.join(__dirname, '..'));
+// DF-LAN-1147: LAN play. RECORDER_BIND=0.0.0.0 lets other PCs on the home network in (LAN - HOST also opens the
+// firewall for the home network only); RECORDER_PUBLIC_HOST is this PC's address, given to games for the servers.
+const BIND_HOST = argVal('--bind') || process.env.RECORDER_BIND || '127.0.0.1';
+const PUBLIC_HOST = (argVal('--public') || process.env.RECORDER_PUBLIC_HOST || '').trim();
+// Only these may talk to the backend: this PC, home networks, Tailscale. Nothing from the open internet.
+function privateAddress(a) {
+  a = String(a || '').replace(/^::ffff:/, '');
+  return a === '::1' || /^127\./.test(a) || /^10\./.test(a) || /^192\.168\./.test(a) || /^172\.(1[6-9]|2\d|3[01])\./.test(a) ||
+    /^169\.254\./.test(a) || /^100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\./.test(a);
+}
 const SERVICES_FILE = path.join(ROOT, 'services_1147.json');
 const LOG_DIR = path.join(ROOT, 'logs');
 const DATA_DIR = path.join(ROOT, 'data');
@@ -146,6 +156,14 @@ function destinationFor(b) {
   if (!url || !URL_OK.test(url)) return { city: true, label, note: 'this destination is not available yet: staying in Ramsgate' };
   return { city: false, label, url };
 }
+// DF-LAN-1147: the place outside the city that the second server is for, and who is (going) there.
+let place = null;
+const placeBase = (u) => String(u || '').replace(/\?PlayerHuntIds=[^?]*/g, '');
+function leavePlace(key) {
+  if (!place) return;
+  place.owners.delete(key);
+  if (!place.owners.size) { place = null; setWanted(null); }
+}
 function setWanted(w) {
   try {
     if (!w) { if (fs.existsSync(WANTED_FILE)) fs.unlinkSync(WANTED_FILE); return; }
@@ -196,12 +214,26 @@ function playerKeyFromEpicToken(token) {
   const sub = epicSubOf(token);
   return sub ? crypto.createHash('sha256').update('epic:' + sub).digest('hex').slice(0, 32) : 'local';
 }
-function playerFor(req) {
-  const b = bearerOf(req);
-  let key = b ? sessions.get(b) : null;
-  if (!key) key = state.lastPlayer || 'local';
-  return getPlayer(key);
+// DF-LAN-1147: with two players, a request must reach the right save. The players' games send their session token;
+// the game servers send none, but name the player in the path or body (account id, character id). Only when neither
+// is there does "the last player who signed in" stand in (always right with one player).
+function keyFromIds(pathName, body) {
+  const want = new Set(String(pathName || '').split('/').filter((x) => /^[A-Z2-7]{26}$/.test(x)));
+  if (body && typeof body === 'object') for (const f of ['accountId', 'phx_account_id', 'account_id', 'characterId', 'character_id', 'playerId']) {
+    if (typeof body[f] === 'string' && /^[A-Z2-7]{26}$/.test(body[f])) want.add(body[f]);
+  }
+  if (!want.size) return null;
+  for (const [k, p] of Object.entries(state.players)) {
+    if (want.has(p.accountId)) return k;
+    for (const ch of p.characters || []) if (ch && want.has(ch.id)) return k;
+  }
+  return null;
 }
+function keyFor(req) {
+  const b = bearerOf(req);
+  return (b ? sessions.get(b) : null) || (req && req._pkey) || state.lastPlayer || 'local';
+}
+function playerFor(req) { return getPlayer(keyFor(req)); }
 
 // ---------------------------------------------------------------- captures
 // Game-wide data (hunt pass and progression tables, event schedule, patch notes...) is not invented here.
@@ -488,7 +520,7 @@ const routes = [
   ['gamesession', 'PUT', /^\/account\/?$/, (c) => {
     const player = playerFor(c.req);
     const token = crypto.randomBytes(24).toString('hex');
-    sessions.set(token, state.lastPlayer || 'local');
+    sessions.set(token, keyFor(c.req));
     return J(wrapped({ id: player.accountId, sessiontoken: token }), 'guess');
   }],
 
@@ -576,7 +608,7 @@ const routes = [
   // Matchmaking, first steps only. The region list points back at this recorder so the game's
   // latency test stays on this PC.
   ['mm2', 'POST', /^\/candidate\/player\/register\/?$/, () => J({})],                                // captured
-  ['mm2', 'GET', /^\/candidate\/regions\/?$/, (c) => J({ code: 200, message: 'success', payload: { maxPingingStepTime: 3, pingCount: 5, pingFrequency: 0.25, regionUrls: [`http://127.0.0.1:${c.basePort}`] } })],
+  ['mm2', 'GET', /^\/candidate\/regions\/?$/, (c) => J({ code: 200, message: 'success', payload: { maxPingingStepTime: 3, pingCount: 5, pingFrequency: 0.25, regionUrls: [`http://${PUBLIC_HOST || '127.0.0.1'}:${c.basePort}`] } })],
   ['_external', 'GET', /^\/$/, () => ({ status: 200, html: '<!DOCTYPE html><html><body>pong</body></html>', note: 'latency ping' })],
 
   // Matchmaking proper. There is no matchmaker: the "match" is the local game server started by
@@ -590,12 +622,29 @@ const routes = [
     if (!dest.city && dest.url && /^[A-Za-z0-9_]{1,100}$/.test(String(b.playerHuntId || '')) && !/[?]PlayerHuntIds=/.test(dest.url)) {
       dest.url += `?PlayerHuntIds=${p.accountId}:${b.playerHuntId}`;
     }
-    p.candidate = { id: 'local1$' + crypto.randomBytes(16).toString('hex'), gameMode: b.gameMode || 'CITY', gameType: b.gameType || null,
+    // DF-LAN-1147: one second server serves everyone. A player asking for the place another player is already in
+    // joins it; a different place while someone else is out there sends this player back to Ramsgate instead of
+    // closing the other player's server.
+    const me = keyFor(c.req);
+    let joinId = null;
+    if (!dest.city) {
+      const base = placeBase(dest.url);
+      if (place && place.base === base) { place.owners.add(me); joinId = place.id; dest.url = place.url; }
+      else if (place && [...place.owners].some((k) => k !== me)) {
+        dest.note = `another player is in ${place.label}: go there too, or wait for them to come back. Staying in Ramsgate`;
+        dest.city = true; delete dest.url;
+      }
+    } else leavePlace(me);
+    p.candidate = { id: joinId || ('local1$' + crypto.randomBytes(16).toString('hex')), gameMode: b.gameMode || 'CITY', gameType: b.gameType || null,
       huntId: Array.isArray(b.hunts) && b.hunts.length ? b.hunts[0] : null, playerHuntId: b.playerHuntId || null,
       buildId: b.buildId || '647472_rel-1.14.7_shipping', gameSessionId: crypto.randomBytes(16).toString('hex'),
       city: dest.city, url: dest.url || null, label: dest.label, asked: Date.now() };
     // Outside the city: ask server-211.ps1 (through a small file) to start a second server on that map.
-    setWanted(dest.city ? null : { id: p.candidate.id, url: dest.url, label: dest.label, reuse: b.gameType === 'TRAINING_GROUND', at: new Date().toISOString() });
+    if (!dest.city && !joinId) {
+      leavePlace(me);
+      place = { id: p.candidate.id, url: dest.url, base: placeBase(dest.url), label: dest.label, owners: new Set([me]) };
+      setWanted({ id: p.candidate.id, url: dest.url, label: dest.label, reuse: b.gameType === 'TRAINING_GROUND', at: new Date().toISOString() });
+    }
     saveState();
     return J({ candidateId: p.candidate.id, gameMode: p.candidate.gameMode, huntId: null, status: 'MATCHING', statusReason: null },
       dest.label + (dest.note ? ' - ' + dest.note : dest.city ? '' : ' - asking for a server on ' + dest.url.split('?')[0]));
@@ -607,16 +656,16 @@ const routes = [
     let srv = liveServer(city ? SERVER_FILE : HUNT_SERVER_FILE);
     if (srv && !city && srv.id !== cd.id) srv = null;                       // a server for an earlier destination
     const out = { candidateId: cd.id, candidateStatusPeriodMillis: srv ? 10000 : 3000, gameMode: cd.gameMode, huntId: cd.huntId, playerStates: { [p.accountId]: {} } };
-    if (srv) out.serverInfo = { buildId: cd.buildId, gameSessionId: cd.gameSessionId, host: srv.host || '127.0.0.1', port: srv.port };
+    if (srv) out.serverInfo = { buildId: cd.buildId, gameSessionId: cd.gameSessionId, host: (PUBLIC_HOST && (!srv.host || srv.host === '127.0.0.1')) ? PUBLIC_HOST : (srv.host || '127.0.0.1'), port: srv.port };
     const waited = Math.round((Date.now() - (cd.asked || Date.now())) / 1000);
     const failed = !srv && !city && waited > 300;
     out.status = srv ? 'IN_PROGRESS' : failed ? 'FAILED' : 'MATCHING'; out.statusDuration = 0.0; out.statusReason = failed ? 'no server started for this destination' : null;
-    if (failed) setWanted(null);
+    if (failed) { setWanted(null); place = null; }
     return J(out, srv ? `game server on port ${srv.port}` : failed ? 'gave up after 5 minutes: no server came up for this destination'
       : city ? 'waiting: the game server is not running' : `waiting ${waited}s for the second server (${liveServer(SERVER_FILE) ? 'starting' : 'server-211.ps1 -Run is not running'})`);
   }],
-  ['mm2', 'POST', /^\/candidate\/leave\/?$/, (c) => { const p = playerFor(c.req); if (p.candidate && p.candidate.city === false) setWanted(null); delete p.candidate; saveState(); return J({}, 'guess'); }],
-  ['mm2', 'DELETE', /^\/candidate\/?$/, (c) => { const p = playerFor(c.req); if (p.candidate && p.candidate.city === false) setWanted(null); delete p.candidate; saveState(); return J({}, 'guess'); }],
+  ['mm2', 'POST', /^\/candidate\/leave\/?$/, (c) => { const p = playerFor(c.req); if (p.candidate && p.candidate.city === false) leavePlace(keyFor(c.req)); delete p.candidate; saveState(); return J({}, 'guess'); }],
+  ['mm2', 'DELETE', /^\/candidate\/?$/, (c) => { const p = playerFor(c.req); if (p.candidate && p.candidate.city === false) leavePlace(keyFor(c.req)); delete p.candidate; saveState(); return J({}, 'guess'); }],
   ['mm2', 'DELETE', /^\/party\/member\/?$/, () => J({}, 'left the party')],                           // captured
   ['mm2', 'POST', /^\/candidate\/player\/ready\/?$/, () => J({}, 'guess')],
   ['mm2', 'PUT', /^\/candidate\/player\/ready\/?$/, () => J({}, 'guess')],
@@ -781,8 +830,10 @@ function logLine(entry) {
 function handle(svc, port, req, res, bodyBuf) {
   const url = new URL(req.url, 'http://127.0.0.1');
   const pathName = url.pathname;
+  if (!privateAddress(req.socket && req.socket.remoteAddress)) { res.writeHead(403, { 'Content-Length': 0 }); res.end(); return; }
   let body;
   if (bodyBuf.length) { try { body = JSON.parse(bodyBuf.toString('utf8')); } catch (e) { body = undefined; } }
+  req._pkey = keyFromIds(pathName, body);   // DF-LAN-1147: which player a server request is about
 
   let reply = null, known = false;
   if (pathName === '/_recorder/ping') { reply = J({ ok: true, service: svc.service, port }); known = true; }
@@ -821,7 +872,7 @@ function handle(svc, port, req, res, bodyBuf) {
 function onUpgrade(svc, port, req, socket) {
   const key = req.headers['sec-websocket-key'];
   const url = new URL(req.url, 'http://127.0.0.1');
-  if (!key) { socket.destroy(); return; }
+  if (!key || !privateAddress(socket.remoteAddress)) { socket.destroy(); return; }
   const accept = crypto.createHash('sha1').update(key + '258EAFA5-E914-47DA-95CA-C5AB0DC85B11').digest('base64');
   const proto = (req.headers['sec-websocket-protocol'] || '').split(',')[0].trim();
   const lines = ['HTTP/1.1 101 Switching Protocols', 'Upgrade: websocket', 'Connection: Upgrade', `Sec-WebSocket-Accept: ${accept}`];
@@ -854,7 +905,8 @@ function start() {
       process.exit(1);
     }
     fs.writeFileSync(PID_FILE, String(process.pid));
-    console.log(`Recorder ready: ${services.length} ports on 127.0.0.1, ${services[0].port} to ${services[services.length - 1].port}.`);
+    console.log(`Recorder ready: ${services.length} ports on ${BIND_HOST}, ${services[0].port} to ${services[services.length - 1].port}.`);
+    if (PUBLIC_HOST) console.log(`LAN: games are sent to the servers at ${PUBLIC_HOST}.`);
     console.log(`Log: ${LOG_FILE}`);
     console.log(capRoot ? `Captures: ${capRoot}` : `Captures: NOT FOUND in ${CAP_DIR} - game-wide data (progression tables, events, patch notes) will be missing.`);
     console.log('Lines marked ? are requests this recorder does not answer yet (empty 404). Press Ctrl+C to stop.\n');
@@ -868,7 +920,7 @@ function start() {
     });
     server.on('upgrade', (req, socket) => onUpgrade(svc, svc.port, req, socket));
     server.on('error', (e) => { failed.push({ port: svc.port, service: svc.service, error: e.code || e.message }); done(); });
-    server.listen(svc.port, '127.0.0.1', () => { servers.push(server); done(); });
+    server.listen(svc.port, BIND_HOST, () => { servers.push(server); done(); });
   }
   const stop = () => { try { fs.unlinkSync(PID_FILE); } catch (e) {} process.exit(0); };
   process.on('SIGINT', stop); process.on('SIGTERM', stop);
