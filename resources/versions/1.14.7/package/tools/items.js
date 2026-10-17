@@ -74,7 +74,14 @@ function backup() {
         return;
     }
 
+    if (cmd === "unlock") {
+        const result = await require('./unlock1147.cjs').unlock(ROOT, who, json);
+        out(result);
+        return;
+    }
+
     if (cmd === "set") {
+        if (fs.existsSync(path.join(ROOT, 'data', 'inventory-unlock.lock'))) fail('An inventory unlock is running. Wait for it to finish.');
         let want;
         try { want = JSON.parse(json || "{}"); } catch { fail("Bad change list."); }
         const changes = Object.entries(want).filter(([id, n]) => ID_OK.test(id) && Number.isFinite(Number(n)));

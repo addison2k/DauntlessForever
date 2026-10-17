@@ -35,6 +35,21 @@ HOW TO USE
   If Windows asks whether Dauntless may use the network: click Cancel. Everything stays on your PC.
   If Windows SmartScreen warns about a .bat file: "More info" -> "Run anyway".
 
+INVENTORY: UNLOCK AND MAX EVERYTHING
+  In the launcher, open Inventory, choose 1.14.7, then use the section below Save / Undo.
+  Play once and create a character first. Close the game and stop hosting before using it.
+  Full unlock adds equipment, shop/Hunt Pass rewards and skins, raises weapons to level 20
+  and reforge rank 10, upgrades armour, grants currencies (99999), cells (6 each), potions
+  (999 each), and completes the available Slayer's Path, Escalation and Hunt Pass tracks.
+  Existing higher quantities/levels, character name, appearance and other characters stay.
+  Gliders are excluded because those item records break the 1.14.7 glider slot.
+  Check cosmetics-only to grant just weapon, armour and lantern skins. This also repairs
+  old unlocks that stored these stackable skins as equipment instances.
+  Save backups are kept in backup\inventory before each change. Undo above the section
+  only discards pending manual edits; restore a backup to reverse a completed unlock.
+  Uses the launcher's Node.js: no Python or extra DLL is needed. Full unlock needs the
+  progression/shop reference data downloaded by Set up. In-game behavior is experimental.
+
 IF SOMETHING GOES WRONG
   - Game stuck on a loading screen, or "a Dauntless process is running":
       close the game, double-click "STOP (if something got stuck).bat", then "2 - PLAY.bat" again.

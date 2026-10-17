@@ -539,6 +539,8 @@ ipcMain.handle('rules:set', (_e, id, changes) => {
 
 // ---------------------------------------------------------------- Inventory (package files items.json + tools/items.js)
 // tools/items.js reads/changes the stacked items in data/undaunted.db with the package's own Node.js and SQLite module.
+const inventoryUnlocks = new Set();
+const inventoryBusy = id => inventoryUnlocks.has(id) || R.anyRunning().some(r => String(r.id).split(':')[0] === id);
 async function runItems(v, args) {
   let node = null;
   try { node = JSON.parse(fs.readFileSync(path.join(v.dataDir, 'config.json'), 'utf8').replace(/^﻿/, '')).Node; } catch {}
@@ -588,12 +590,24 @@ ipcMain.handle('items:list', async (_e, id) => {
   try { catalog = JSON.parse(fs.readFileSync(path.join(v.dataDir, 'items.json'), 'utf8').replace(/^﻿/, '')); } catch { return null; }
   if (!fs.existsSync(path.join(v.dataDir, 'tools', 'items.js'))) return null;
   const save = await runItems(v, ['list']);
-  return { groups: catalog.groups || [], save, running: R.isRunning(v.id) };
+  return { groups: catalog.groups || [], save, running: inventoryBusy(v.id),
+    unlockEverything: v.id === '1.14.7' && fs.existsSync(path.join(v.dataDir, 'tools', 'unlock1147.cjs')) };
+});
+ipcMain.handle('items:unlock', async (_e, id, characterId, mode) => {
+  const v = byId(id);
+  if (!v || v.id !== '1.14.7' || !v.package || !fs.existsSync(path.join(v.dataDir, 'tools', 'unlock1147.cjs')))
+    return { ok: false, error: 'Unlock everything requires the updated 1.14.7 server files.' };
+  if (!/^[\w-]{1,64}$/.test(String(characterId))) return { ok: false, error: 'Press Play and create a character first.' };
+  if (!['all', 'cosmetics-only'].includes(mode)) return { ok: false, error: 'Unknown unlock mode.' };
+  if (inventoryBusy(id)) return { ok: false, error: 'Close the game and stop hosting, and wait for inventory changes to finish.' };
+  inventoryUnlocks.add(id);
+  try { return await runItems(v, ['unlock', String(characterId), mode]); }
+  finally { inventoryUnlocks.delete(id); }
 });
 // Gear (instanced items): add by catalog id, remove by instance id. Only versions whose helper knows "addgear".
 ipcMain.handle('items:gear', async (_e, id, characterId, action, list) => {
   const v = byId(id); if (!v || !v.package) return { ok: false, error: 'Unknown version.' };
-  if (R.isRunning(v.id) || R.isRunning(v.id + ':setup')) return { ok: false, error: 'Close the game first (press Stop), then change gear.' };
+  if (inventoryBusy(v.id)) return { ok: false, error: 'Wait for inventory changes to finish, and close the game (press Stop) before changing gear.' };
   if (!/^[\w-]{1,64}$/.test(String(characterId))) return { ok: false, error: 'Unknown character.' };
   if (action === 'unlockall') return runItems(v, ['addcosmetic', String(characterId), 'all']);
   if (action !== 'addgear' && action !== 'removegear') return { ok: false, error: 'Unknown action.' };
@@ -603,7 +617,7 @@ ipcMain.handle('items:gear', async (_e, id, characterId, action, list) => {
 });
 ipcMain.handle('items:set', async (_e, id, characterId, changes) => {
   const v = byId(id); if (!v || !v.package) return { ok: false, error: 'Unknown version.' };
-  if (R.isRunning(v.id) || R.isRunning(v.id + ':setup')) return { ok: false, error: 'Close the game first (press Stop), then change items.' };
+  if (inventoryBusy(v.id)) return { ok: false, error: 'Wait for inventory changes to finish, and close the game (press Stop) before changing items.' };
   if (!/^[\w-]{1,64}$|^\*$/.test(String(characterId))) return { ok: false, error: 'Unknown character.' };
   const clean = {};
   for (const [k, n] of Object.entries(changes || {})) if (/^[A-Z0-9_]{3,80}$/.test(k) && Number.isFinite(Number(n))) clean[k] = Math.max(0, Math.floor(Number(n)));
@@ -718,6 +732,7 @@ ipcMain.handle('game:deletePartial', async (_e, id) => {
 
 // ---------------------------------------------------------------- IPC: set-up / play / stop / uninstall
 ipcMain.handle('game:setup', async (_e, id, uninstall, auto) => {
+  if (inventoryUnlocks.has(id)) return { ok: false, error: 'Wait for the inventory unlock to finish first.' };
   const v = byId(id); if (!v || !v.package) return { ok: false };
   const key = id + ':setup';
   if (R.isRunning(key)) return { ok: false, error: 'Set-up is already running.' };
@@ -759,6 +774,7 @@ ipcMain.handle('game:importRevived', async (_e, id, tutorialOnly) => {
 });
 
 ipcMain.handle('game:play', async (_e, id) => {
+  if (inventoryUnlocks.has(id)) return { ok: false, error: 'Wait for the inventory unlock to finish first.' };
   const v = byId(id); if (!v || !v.package) return { ok: false };
   if (R.anyRunning().some(r => r.kind === 'play')) return { ok: false, error: 'A game is already running. Close it first.' };
   settings.update(s => { s.lastVersion = id; });

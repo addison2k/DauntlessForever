@@ -340,6 +340,13 @@ dialog form { margin-top: 18px; display: flex; justify-content: flex-end; }
 .item-add-row { display: flex; gap: 8px; align-items: center; }
 .item-add-row #item-add-id { width: 280px; text-transform: uppercase; }
 
+.item-unlock { margin-top: 16px; }
+.item-unlock-option { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.item-unlock-option input { accent-color: var(--brass); width: 16px; height: 16px; }
+.item-unlock-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; }
+.item-unlock-actions .action-note { margin: 0; flex: 1; }
+.item-unlock-option:has(input:disabled) { opacity: .6; cursor: default; }
+
 /* version banner (Game Rules, Inventory): which version's save/server the page changes */
 .ver-banner { display: flex; align-items: center; gap: 16px; margin: 4px 0 18px; padding: 14px 18px; border: 1px solid #6b5520; border-left: 4px solid var(--brass); border-radius: 8px; background: linear-gradient(90deg, rgba(212,170,74,.10), rgba(212,170,74,0) 70%), var(--bg-2); }
 .ver-banner[hidden] { display: none; }

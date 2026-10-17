@@ -763,8 +763,9 @@ const routes = [
   ['store', 'GET', /^\/product\/skus\/public\/?$/, (c) => {
     const tag = (c.url.searchParams.get('requiredTags') || '').split(',')[0];
     if (!tag) return { status: 400, json: { code: '400', message: 'missing requiredTags query parameter' }, note: 'no tag' };   // captured
-    const j = /^[A-Za-z0-9_]+$/.test(tag) ? loadCapture(`Store/Product/Skus/${tag}.json`) : null;
-    return J(Array.isArray(j) ? j : [], Array.isArray(j) ? `${tag}: ${j.length} offer(s) from captures` : `${tag}: empty shelf`);
+    const captured = /^[A-Za-z0-9_]+$/.test(tag) ? loadCapture(`Store/Product/Skus/${tag}.json`) : null;
+    const j = require('../tools/unlock1147.cjs').storeOffers(ROOT, tag, captured, playerFor(c.req));
+    return J(j, j.length ? `${tag}: ${j.length} offer(s)` : `${tag}: empty shelf`);
   }],
   ['store', 'GET', /^\/balance\/?$/, CAP('Store/Balance.md', (j) => zeroed(j))],
   ['store', 'GET', /^\/creator\/?$/, () => J({ expirationDate: null, slug: '', success: false }, 'no creator code, guess')],
