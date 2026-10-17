@@ -1138,5 +1138,125 @@
     ],
     "repeatable": false,
     "championOnly": false
+  },
+  {
+    "id": "trialsexotic_schematic_hunger",
+    "displayName": "Schematic: The Hunger",
+    "displayDescription": "Permanently unlocks crafting for The Hunger. Crafting materials are still required. One purchase per character.",
+    "displayPriority": 30,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "TOKEN_UNLOCK_EXOTIC_CROWBEAR_EBLADE",
+        "quantity": 1,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "trialsexotic_schematic_molten_edict",
+    "displayName": "Schematic: Molten Edict",
+    "displayDescription": "Permanently unlocks crafting for Molten Edict. Crafting materials are still required. One purchase per character.",
+    "displayPriority": 31,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "TOKEN_UNLOCK_EXOTIC_SALLY_IHAMMER",
+        "quantity": 1,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "trialsexotic_schematic_godhand",
+    "displayName": "Schematic: The Godhand",
+    "displayDescription": "Permanently unlocks crafting for The Godhand. Crafting materials are still required. One purchase per character.",
+    "displayPriority": 32,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "TOKEN_UNLOCK_EXOTIC_BUGBEAR_MSPEAR",
+        "quantity": 1,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "trialsexotic_schematic_tragic_echo",
+    "displayName": "Schematic: Tragic Echo",
+    "displayDescription": "Permanently unlocks crafting for Tragic Echo. Crafting materials are still required. One purchase per character.",
+    "displayPriority": 33,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "TOKEN_UNLOCK_EXOTIC_CROWBEAR_HELM",
+        "quantity": 1,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "trialsexotic_schematic_skullforge",
+    "displayName": "Schematic: The Skullforge",
+    "displayDescription": "Permanently unlocks crafting for The Skullforge. Crafting materials are still required. One purchase per character.",
+    "displayPriority": 34,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "TOKEN_UNLOCK_EXOTIC_SALLY_HELM",
+        "quantity": 1,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
+  },
+  {
+    "id": "trialsexotic_schematic_prismatic_grace",
+    "displayName": "Schematic: Prismatic Grace",
+    "displayDescription": "Permanently unlocks crafting for Prismatic Grace. Crafting materials are still required. One purchase per character.",
+    "displayPriority": 35,
+    "tags": [
+      "ladyluckstore"
+    ],
+    "currency": "steelmarks",
+    "price": 1000,
+    "items": [
+      {
+        "catalogId": "TOKEN_UNLOCK_EXOTIC_BUGBEAR_HELM",
+        "quantity": 1,
+        "kind": "stacked"
+      }
+    ],
+    "repeatable": false,
+    "championOnly": false
   }
 ]

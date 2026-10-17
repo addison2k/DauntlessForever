@@ -102,7 +102,7 @@ if ($Online -and -not $Source) {
 }
 
 if (-not $Source) {
-    $Source = @('C:\dr\data\undaunted.db', 'C:\DauntlessRevived\data\undaunted.db', 'D:\dr\data\undaunted.db') |
+    $Source = @('C:\dr\data\undaunted.db', 'C:\DauntlessRevived\data\undaunted.db') |
         Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
     if ($Source) {
         Say "Found a Dauntless Revived save: $Source"

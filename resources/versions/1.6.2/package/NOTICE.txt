@@ -21,6 +21,8 @@ Also by KombatKing (Inventory Expansion 162 R1, AGPL-3.0): 868 more dyes, emotes
 cosmetics in the Inventory picker (tools\gear-162.json).
 Also by KombatKing (Revived Gear Conversion 162 R1, AGPL-3.0): Revived imports turn 1.4.4 upgrade levels into crafted or
 power-surged 1.6.2 gear with Aethersparks for lost levels (tools\import-gear-*), and FIX imported gear levels.bat.
+Also by KombatKing (Weapon Ammo Defaults 162 R1, AGPL-3.0): the War Hammer ammo fix, 4 capsules instead of the
+Blueprint's 7 (tools\hammer-ammo-fix.cjs builds it from your own game files).
 Trials schedule fix (tools\trials-fix.cjs): the idea of moving the game's expired weekly Trials rows to now is
 from Dauntless Revived (mixutin/dauntless-revived, TrialsSchedule.h); done here as a pak built from your own game files.
 Chinese text: zgh95's translation ("Zhongwen buding" 1.0), given to the project; downloaded only when
