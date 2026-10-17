@@ -239,6 +239,18 @@ function epicSubOf(token) {
     return payload && payload.sub ? String(payload.sub) : null;
   } catch (e) { return null; }
 }
+// DF-NAME-1147: the offline sign-in puts the player's name in the token too ("dn", from eos_offline.ini DisplayName,
+// which the launcher fills with its one player name). Use it as the account name, so players are not all "Slayer".
+function epicNameOf(token) {
+  if (!token) return null;
+  const parts = token.split('.');
+  if (parts.length !== 3) return null;
+  try {
+    const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString('utf8'));
+    const n = payload && typeof payload.dn === 'string' ? payload.dn.trim() : '';
+    return /^[A-Za-z0-9_ ]{2,20}$/.test(n) ? n : null;
+  } catch (e) { return null; }
+}
 function playerKeyFromEpicToken(token) {
   const sub = epicSubOf(token);
   return sub ? crypto.createHash('sha256').update('epic:' + sub).digest('hex').slice(0, 32) : 'local';
@@ -540,6 +552,8 @@ const routes = [
     const key = playerKeyFromEpicToken(bearerOf(c.req));
     const player = getPlayer(key);
     player.epicId = epicSubOf(bearerOf(c.req)) || player.epicId || '';
+    const dn = epicNameOf(bearerOf(c.req));
+    if (dn) player.username = dn;   // DF-NAME-1147
     delete player.candidate;   // a fresh sign-in is never already in a match
     state.lastPlayer = key; saveState();
     const token = crypto.randomBytes(24).toString('hex');

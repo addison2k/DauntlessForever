@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-17.7",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-17.7.zip",
-                         "sha256":  "5be8ff80501c8c8fb5dc84c47d1b15d4591bd52ec59294a61d856630cdabd7d9",
+                         "packageVersion":  "2026-10-17.8",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-17.8.zip",
+                         "sha256":  "8928fce2f2f1b959fda1b5f6be55dea088845f250c16cf81230aaec814a87cb2",
                          "date":  "2026-10-17",
-                         "note":  "Online from the launcher: Host with friends, Play online, Friends Join and Host Mode"
+                         "note":  "Players show their launcher name instead of Slayer"
                      }
                  ],
     "launcher":  {
