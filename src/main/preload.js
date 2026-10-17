@@ -63,6 +63,7 @@ contextBridge.exposeInMainWorld('launcher', {
   modsStatus: invoke('mods:status'),
   modsAct: invoke('mods:act'),
   setItems: invoke('items:set'),
+  unlockItems: invoke('items:unlock'),    // 1.14.7: (id, characterId, 'all' | 'cosmetics-only')
   gearItems: invoke('items:gear'),
   patchNotes: invoke('patchnotes:list'),
   // one player name for every version and the Friends page (main/player.js)

@@ -561,6 +561,7 @@ async function renderMods() {
 
 // ---------------------------------------------------------------- Inventory (add / remove items in the save)
 let itemVer = null, itemChar = null, itemNote = null, itemData = null, itemPending = {}, itemErr = false;
+let itemUnlockBusy = false;
 const fmtN = n => Number(n || 0).toLocaleString('en-US');
 async function renderItems(reload) {
   const all = versions.filter(x => x.hasPackage);
@@ -580,11 +581,13 @@ async function renderItems(reload) {
   versionPicker('item-vtabs', 'item-vbanner', all, itemVer, supported,
     (id) => {
       if (Object.keys(itemPending).length && !confirm(`You have unsaved changes for ${itemVer}. Switch to ${id} and drop them?`)) return;
+      if (itemUnlockBusy) return;
       itemVer = id; itemPending = {}; itemNote = null; itemErr = false; renderItems(true);
     },
     cur ? `You are editing your <b>Dauntless ${esc(itemVer)} save</b>${chName ? ` (character <b>${esc(chName)}</b>)` : ''}. Every version has its own save and its own items.`
         : `Inventory editing is not available for Dauntless ${esc(itemVer || '')} yet.`);
   $('item-none').hidden = !!usable; $('item-body').hidden = !usable;
+  $('item-unlock').hidden = !(usable && itemVer === '1.14.7' && cur.d.unlockEverything);
   if (!usable) {
     const why = !cur ? null : (save && !save.ok ? save.error : 'No character yet. Press Play once and make a character first.');
     $('item-none-title').textContent = why ? 'Nothing to edit yet' : `No inventory editing for ${itemVer || 'this version'} yet`;
@@ -602,7 +605,9 @@ async function renderItems(reload) {
   const note = $('item-note');
   note.textContent = itemNote || (cur.d.running ? 'The game is running: close it before saving.' : (n ? `${n} unsaved change${n > 1 ? 's' : ''}.` : ''));
   note.classList.toggle('err', itemErr);
-  $('item-save').disabled = !n; $('item-undo').disabled = !n;
+  $('item-save').disabled = !n || itemUnlockBusy; $('item-undo').disabled = !n || itemUnlockBusy;
+  sel.disabled = itemUnlockBusy;
+  renderUnlock1147(cur, n);
   $('item-save').textContent = n ? `Save ${n} change${n > 1 ? 's' : ''} to ${itemVer}` : `Save to ${itemVer}`;
   const known = new Set();
   const row = (id, name, blurb) => {
@@ -658,6 +663,34 @@ async function renderItems(reload) {
     $('item-add-id').value = ''; itemNote = null; itemErr = false;
     if (!known.has(id)) $('item-more').open = true;
     renderItems(false);
+  };
+}
+
+function renderUnlock1147(cur, pendingCount) {
+  for (const id of ['item-groups', 'item-gear', 'item-more', 'item-add-btn', 'item-add-id', 'item-add-n']) $(id).inert = itemUnlockBusy;
+  if ($('item-unlock').hidden) return;
+  const check = $('item-cosmetics-only'), button = $('item-unlock-btn'), note = $('item-unlock-note');
+  check.disabled = itemUnlockBusy;
+  button.disabled = itemUnlockBusy || !!cur.d.running || !!pendingCount;
+  button.textContent = itemUnlockBusy ? 'Unlocking...' : check.checked ? 'Unlock cosmetics only' : 'Unlock and max everything';
+  note.textContent = itemUnlockBusy ? 'Backing up and updating your save...' : pendingCount ? 'Save or Undo your pending changes first.' : cur.d.running ? 'Close the game and stop hosting first.' : '';
+  check.onchange = () => renderUnlock1147(cur, Object.keys(itemPending).length);
+  button.onclick = async () => {
+    if (itemUnlockBusy || Object.keys(itemPending).length || cur.d.running) return;
+    const id = itemVer, characterId = itemChar, mode = check.checked ? 'cosmetics-only' : 'all';
+    const ok = await confirm(mode === 'all' ? 'Unlock and max everything?' : 'Unlock cosmetics only?',
+      mode === 'all' ? 'Unlock equipment and cosmetics, and max progression for the selected 1.14.7 character and its account. Gliders are excluded. A backup is kept first.' : 'Unlock weapon, armour and lantern skins for the selected 1.14.7 character. The rest of your progress stays unchanged. A backup is kept first.');
+    if (!ok || id !== itemVer || characterId !== itemChar || itemUnlockBusy || Object.keys(itemPending).length) return;
+    itemUnlockBusy = true; itemErr = false; itemNote = 'Unlocking...';
+    await renderItems(false);
+    let success = false;
+    try {
+      const result = await L.unlockItems(id, characterId, mode);
+      if (!result || !result.ok) throw new Error((result && result.error) || 'Could not unlock items.');
+      success = true;
+      itemNote = `${mode === 'all' ? 'Unlocked and maxed your 1.14.7 character' : 'Unlocked cosmetics'}: ${result.cosmetics} skins, ${result.addedGear} gear and ${result.addedStacks} stacks added. Start 1.14.7 to see the changes. Backup kept in backup\\inventory.`;
+    } catch (e) { itemNote = e.message || 'Could not unlock items.'; itemErr = true; }
+    finally { itemUnlockBusy = false; await renderItems(success); }
   };
 }
 

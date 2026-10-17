@@ -123,6 +123,32 @@ tools/           pack-version.ps1, update-dll.ps1, release-launcher.ps1, fetch-n
 build/icon.*     the launcher icon (original mark)
 ```
 
+### 1.14.7 inventory unlocks
+
+Inventory > 1.14.7 includes **Unlock and max everything** below Save / Undo, with a
+**cosmetics-only** checkbox. Both modes require an existing character and refuse while
+playing or hosting. They back up the save, then update only the selected character;
+full unlock also updates that player's account progression and store ownership.
+Other characters and players are not granted items. Cosmetics-only preserves all other progress.
+
+The runtime helper is `resources/versions/1.14.7/package/tools/unlock1147.cjs`, called through
+`tools/items.js unlock <characterId> <all|cosmetics-only>`. It uses the bundled Node.js.
+`unlock-catalog1147.json` contains IDs and flags from build 647472 (source PAK hash is
+recorded in the JSON), including 1016 supported stackable weapon/armour/lantern skins.
+Prototype/glider exclusions are retained. This is save-level functionality; actual game
+rendering and equip behavior still need in-game verification.
+
+To regenerate the catalog on Windows (developer-only, with your own 1.14.7 game and Oodle):
+
+```powershell
+python tools/export-unlock1147.py --pak "<game>/Archon/Content/Paks/Archon_24-WindowsClient.pak" --oodle "<path>/oo2core_9_win64.dll" --output resources/versions/1.14.7/package/tools/unlock-catalog1147.json
+```
+
+Validation: `npm test` exercises inventory migration, progression, backups, guards and IPC;
+`npm run test:ui` runs the actual renderer in a hidden Electron window with isolated test
+fixtures, including first-play gating and both modes. No personal save or credentials are
+used by the tests. Run `node tools/check-ascii.js` before building.
+
 ### Releasing new server files (no launcher rebuild)
 
 ```

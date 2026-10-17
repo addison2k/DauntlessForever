@@ -9,6 +9,8 @@
   "private": true,
   "scripts": {
     "start": "electron .",
+    "test": "node --test tests/*.test.cjs",
+    "test:ui": "electron tests/inventory-unlock-ui.cjs",
     "dev": "DL_MOCK=1 electron .",
     "predist": "node tools/check-ascii.js && powershell -NoProfile -ExecutionPolicy Bypass -File tools/fetch-node.ps1",
     "predist:dir": "node tools/check-ascii.js && powershell -NoProfile -ExecutionPolicy Bypass -File tools/fetch-node.ps1",
