@@ -9,6 +9,8 @@
     "works":  [
                   "Sign in offline, Ramsgate, NPCs and quests (quest progress is saved)",
                   "Quest and dialogue text (fix by KombatKing)",
+                  "Hunt quests (kills on the right island count)",
+                  "Potions, lanterns, Omnicells and weapon specials (equipment fix by KombatKing, test build)",
                   "Training grounds, sprint, attacking",
                   "Hunts (tested: the first Embermane hunt)"
               ],
@@ -27,7 +29,7 @@
                  },
     "package":  {
                     "dir":  "package",
-                    "packageVersion":  "2026-10-17",
+                    "packageVersion":  "2026-10-17.2",
                     "setup":  "tools/setup.ps1",
                     "uninstallArgs":  [
                                           "-Uninstall"
@@ -51,11 +53,15 @@
                                            },
                                            {
                                                "rel":  "Archon/Binaries/Win64/dxgi.dll",
-                                               "sha256":  "176CB7AD849A9E213D884510416BBC1FB2BF4B56EF9561EE554A0ABFBD6AC208"
+                                               "sha256":  "69F263440A51E13D20AF60BE2CF2DC36AAD891319DBB1D00CBB218F692422227"
                                            },
                                            {
                                                "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_QuestDialogueFallback1147_P.pak",
                                                "sha256":  "6F12AA1B3856D2A485851A4857150DCC072B2461128F862E3C351B796E33A00E"
+                                           },
+                                           {
+                                               "rel":  "Archon/Content/Paks/zzzzzzzz_Equipment1147_P.pak",
+                                               "sha256":  "9A2B3AF97304AE8CDD49BFC605A2E2C34657B0707A02076A0EFB6F62C7C80E65"
                                            }
                                        ],
                     "setupDoneFiles":  [

@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-17",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-17.zip",
-                         "sha256":  "73b2e84df77c6c9591e0756d4930d490c469ad862ce0310ebb2e281cb8544306",
+                         "packageVersion":  "2026-10-17.2",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-17.2.zip",
+                         "sha256":  "6e1fa4881473b377c8944dc6785ec9e4a1e4b3e44c276b022391ee2440e785ef",
                          "date":  "2026-10-17",
-                         "note":  "Quest and dialogue text (KombatKing)"
+                         "note":  "Equipment fix (KombatKing), hunt quests count"
                      }
                  ],
     "launcher":  {

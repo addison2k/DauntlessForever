@@ -584,6 +584,12 @@ const routes = [
   ['mm2', 'POST', /^\/candidate\/join(\/[^/]*)?\/?$/, (c) => {
     const p = playerFor(c.req); const b = c.body || {};
     const dest = destinationFor(b);
+    // The second server needs to know which player hunt each player is on: quest objectives check it
+    // (UObjective::HasRequiredPlayerHuntTags / IsInRequiredRegion). The game server reads it from the map option
+    // PlayerHuntIds=<account>:<player hunt>[,...] (UHuntSystemComponent::ReadPlayerHuntIDFromCommandLine). Oct 17.
+    if (!dest.city && dest.url && /^[A-Za-z0-9_]{1,100}$/.test(String(b.playerHuntId || '')) && !/[?]PlayerHuntIds=/.test(dest.url)) {
+      dest.url += `?PlayerHuntIds=${p.accountId}:${b.playerHuntId}`;
+    }
     p.candidate = { id: 'local1$' + crypto.randomBytes(16).toString('hex'), gameMode: b.gameMode || 'CITY', gameType: b.gameType || null,
       huntId: Array.isArray(b.hunts) && b.hunts.length ? b.hunts[0] : null, playerHuntId: b.playerHuntId || null,
       buildId: b.buildId || '647472_rel-1.14.7_shipping', gameSessionId: crypto.randomBytes(16).toString('hex'),

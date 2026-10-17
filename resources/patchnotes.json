@@ -3,6 +3,16 @@
   "notes": [
     {
       "date": "2026-10-17",
+      "title": "1.14.7: potions, hunt quests, equipment",
+      "items": [
+        "Potions, self-revives, tonics, grenades, pylons, lantern and Omnicell abilities and weapon specials work on 1.14.7 servers. The server's 'use this ability' step was empty; it now runs the game's own code. Fix by KombatKing (test build: tell us what still misbehaves).",
+        "Recruit's Repeaters sort under repeaters instead of swords (KombatKing).",
+        "Quest goals that need a kill on a certain island (\"Slay 3 Behemoths on Boreal Outpost\" and the like) now count. Before, the hunt server was never told which hunt you were on.",
+        "Needs 1.14.7 server files 2026-10-17.2 (the launcher gets them by itself and asks you to run Set up again once)."
+      ]
+    },
+    {
+      "date": "2026-10-17",
       "title": "1.14.7: quest and dialogue text",
       "items": [
         "1.14.7 quests and NPC dialogue now show their real text instead of \"*** Missing translation ... Addressee: Unspecified\", in all eight languages. Quests can be read, accepted and turned in. Fix by KombatKing.",

@@ -11,7 +11,6 @@ param([switch]$Uninstall, [switch]$Auto)
 
 $standIn = Join-Path $Root 'bin\EOSSDK-Win64-Shipping.dll'
 $loader  = Join-Path $Root 'bin\dxgi.dll'
-$questPak = Join-Path $Root "bin\$QuestPakName"
 $backup  = Join-Path $Root 'backup'
 
 Say ''
@@ -56,14 +55,15 @@ if ($Uninstall) {
             Say 'The dxgi.dll in the game folder is not this package''s loader (maybe a mod like ReShade, or an older loader). Left in place.' 'Yellow'
         }
     }
-    # quest text fix (a pak of ours in Archon\Content\Paks): only taken out when it is exactly our file
-    $upak = Join-Path $ugame $QuestPakRel
-    if (Test-Path -LiteralPath $upak) {
+    # our paks in Archon\Content\Paks: only taken out when they are exactly our files
+    foreach ($gp in $GamePaks) {
+        $upak = Join-Path $ugame "Archon\Content\Paks\$($gp.Name)"
+        if (-not (Test-Path -LiteralPath $upak)) { continue }
         $uph = Hash256 $upak
-        if ($uph -eq $QuestPakHash -or $QuestPakOld -contains $uph) {
-            Move-Item -LiteralPath $upak -Destination (Join-Path $ubak "removed_${ustamp}_$QuestPakName")
-            Say 'Quest text fix taken out of the game folder (kept in the backup folder).' 'Green'
-        } else { Say "The $QuestPakName in the game folder is not this package's file. Left in place." 'Yellow' }
+        if ($uph -eq $gp.Hash -or $gp.Old -contains $uph) {
+            Move-Item -LiteralPath $upak -Destination (Join-Path $ubak "removed_${ustamp}_$($gp.Name)")
+            Say "$($gp.What) taken out of the game folder (kept in the backup folder)." 'Green'
+        } else { Say "The $($gp.Name) in the game folder is not this package's file. Left in place." 'Yellow' }
     }
     Say ''
     Say 'Done. Your offline progress stays in the data folder of this package.' 'Green'
@@ -71,7 +71,7 @@ if ($Uninstall) {
 }
 
 
-if ((Hash256 $standIn) -ne $StandInHash -or (Hash256 $loader) -ne $LoaderHash -or (Hash256 $questPak) -ne $QuestPakHash) {
+if ((Hash256 $standIn) -ne $StandInHash -or (Hash256 $loader) -ne $LoaderHash -or @($GamePaks | Where-Object { (Hash256 (Join-Path $Root "bin\$($_.Name)")) -ne $_.Hash }).Count -gt 0) {
     Fail "files in the bin folder are missing or damaged. Unzip the package again (all of it) and re-run set-up."
 }
 if (@(Get-PlayerGame).Count -gt 0 -or @(Get-ServerCopies).Count -gt 0) {
@@ -326,23 +326,24 @@ else {
     Say 'Server loader: installed. (It does nothing unless PLAY starts a server copy.)' 'Green'
 }
 
-# ---------------------------------------------------------------- 4b. quest text fix (KombatKing): one pak in Archon\Content\Paks
-# The game itself is not changed: the pak only adds text lines the game asks for but never shipped. Uninstall takes it out.
+# ---------------------------------------------------------------- 4b. KombatKing's fixes: paks in Archon\Content\Paks
+# The game itself is not changed: each pak only overrides a few of the game's own files. Uninstall takes them out.
 $paksDir = Join-Path $gameDir 'Archon\Content\Paks'
-$pakDst  = Join-Path $gameDir $QuestPakRel
-$h = Hash256 $pakDst
-if ($h -eq $QuestPakHash) { Say 'Quest text fix: already in place.' 'Green' }
-else {
-    if (-not (Test-Path -LiteralPath $paksDir)) { Fail "there is no Archon\Content\Paks folder in $gameDir. Re-download or verify the game, then run set-up again." }
+if (-not (Test-Path -LiteralPath $paksDir)) { Fail "there is no Archon\Content\Paks folder in $gameDir. Re-download or verify the game, then run set-up again." }
+foreach ($gp in $GamePaks) {
+    $pakSrc = Join-Path $Root "bin\$($gp.Name)"
+    $pakDst = Join-Path $paksDir $gp.Name
+    $h = Hash256 $pakDst
+    if ($h -eq $gp.Hash) { Say "$($gp.What): already in place." 'Green'; continue }
     if ($h -ne '(missing)') {
-        $park = Join-Path $backup ('questpak_replaced_' + (Get-Date -Format 'yyyyMMdd_HHmmss') + '.pak')
+        $park = Join-Path $backup ('pak_replaced_' + (Get-Date -Format 'yyyyMMdd_HHmmss') + '_' + $gp.Name)
         Move-Item -LiteralPath $pakDst -Destination $park
-        if ($QuestPakOld -contains $h) { Say "  The older quest text fix (R1, crashes the game at start) was replaced. Kept as $park" 'Yellow' }
+        if ($gp.Old -contains $h) { Say "  An older version of the $($gp.What) was replaced. Kept as $park" 'Yellow' }
         else { Say "  A different file with the same name was in the Paks folder. Kept as $park" 'Yellow' }
     }
-    Copy-Item -LiteralPath $questPak -Destination $pakDst
-    if ((Hash256 $pakDst) -ne $QuestPakHash) { Fail 'copying the quest text fix failed.' }
-    Say 'Quest text fix: installed (quests and dialogue show their text; by KombatKing).' 'Green'
+    Copy-Item -LiteralPath $pakSrc -Destination $pakDst
+    if ((Hash256 $pakDst) -ne $gp.Hash) { Fail "copying the $($gp.What) failed." }
+    Say "$($gp.What): installed." 'Green'
 }
 
 # ---------------------------------------------------------------- 5. backend replies recorded from the live servers (public, downloaded once)

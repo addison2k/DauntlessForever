@@ -10,13 +10,19 @@ $ConfigFile = Join-Path $Root 'config.json'
 $ExeHash      = 'F3F95FBF22709EF077A11632ED95D675B7209B7E0172D9ECB9BA7D02A1FBB66B'   # Dauntless 1.14.7, CL 647472
 $EpicEosHash  = 'CBC0E5C922CEB88A9FA99121008AE9CD76244B17753701D9D25C6B596EA2FBFC'   # Epic's EOSSDK-Win64-Shipping.dll
 $StandInHash  = '4113C9EEBFBAC08532B6566A48F69E4F64A6B8E18A18AAFBA43F62F8F7DFDF70'   # bin\EOSSDK-Win64-Shipping.dll (offline sign-in)
-$LoaderHash   = '176CB7AD849A9E213D884510416BBC1FB2BF4B56EF9561EE554A0ABFBD6AC208'    # bin\dxgi.dll (server loader)
+$LoaderHash   = '69F263440A51E13D20AF60BE2CF2DC36AAD891319DBB1D00CBB218F692422227'    # bin\dxgi.dll (server loader: fix5 + KombatKing's equipment fix R1)
 # Quest text fix by KombatKing (AGPL-3.0, source\QuestDialogue1147-R2-source.zip): adds the missing "Unspecified"
 # addressee lines to the game's own text, so quests and dialogue show real sentences. Copied into Archon\Content\Paks.
 $QuestPakName = 'zzzzzzzzzzzzzzzz_QuestDialogueFallback1147_P.pak'
 $QuestPakHash = '6F12AA1B3856D2A485851A4857150DCC072B2461128F862E3C351B796E33A00E'   # bin\zzzzzzzzzzzzzzzz_QuestDialogueFallback1147_P.pak (R2)
 $QuestPakOld  = @('ECB2D6960527073B8EDC9932BD9562A3DC78E1C4EAD8945A178AA85AC3C34A44')   # his R1 (crashes the game at start)
 $QuestPakRel  = "Archon\Content\Paks\$QuestPakName"
+# Every pak set-up puts into Archon\Content\Paks. Old = earlier versions of the same file that set-up may replace.
+$GamePaks = @(
+    [pscustomobject]@{ Name = $QuestPakName; Hash = $QuestPakHash; Old = $QuestPakOld; What = 'Quest text fix (KombatKing)' },
+    # Equipment fix by KombatKing (AGPL-3.0, source\Equipment1147-R1-source.zip): Recruit's Repeaters in the repeater category.
+    [pscustomobject]@{ Name = 'zzzzzzzz_Equipment1147_P.pak'; Hash = '9A2B3AF97304AE8CDD49BFC605A2E2C34657B0707A02076A0EFB6F62C7C80E65'; Old = @(); What = 'Equipment fix (KombatKing)' }
+)
 $ExeRel       = 'Archon\Binaries\Win64\Dauntless-Win64-Shipping.exe'
 $CapturesUrl  = 'https://github.com/EisigesEis/DauntlessEndpointDocumentation/archive/refs/heads/main.zip'
 
