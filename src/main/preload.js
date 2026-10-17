@@ -11,6 +11,7 @@ contextBridge.exposeInMainWorld('launcher', {
   listVersions: invoke('versions:list'),
   status: invoke('versions:status'),
   info: invoke('launcher:info'),
+  versionFiles: invoke('versions:files'),               // Settings -> What you are running (server files, DLLs, paks, backend)
   freeSpace: invoke('launcher:freeSpace'),
   pickFolder: invoke('game:pickFolder'),
   forgetFolder: invoke('game:forget'),

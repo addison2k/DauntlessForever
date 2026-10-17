@@ -87,6 +87,25 @@ async function fillSettings() {
   fillMenuBackground();
   fillGameLanguage();
   fillKeepFiles();
+  fillRunning();
+}
+// "What you are running": server files, the files set-up put in the game folder (short hash, OK or not), backend
+async function fillRunning() {
+  let list = [];
+  try { list = await L.versionFiles(); } catch { $('set-files').textContent = 'Could not read the installed files.'; return; }
+  const out = [`Launcher: Dauntless Forever ${info.version}`];
+  for (const r of list) {
+    if (!r.installed) continue;
+    out.push('');
+    out.push(`${r.id}: server files ${r.installed}` + (r.installed === r.latest ? ' (latest)' : ` (latest is ${r.latest}${r.held ? ', held by Keep my server files' : ''})`));
+    if (!r.gameDir) out.push('  game folder: not set');
+    for (const f of r.files) {
+      const st = f.state === 'ok' ? 'OK' : f.state === 'missing' ? `MISSING (should be ${f.want})` : f.state === 'nogame' ? `(should be ${f.want})` : `DIFFERENT (should be ${f.want}, run SETUP)`;
+      out.push(`  ${f.name}  ${f.have || '--------'}  ${st}`);
+    }
+    for (const b of r.backend) out.push(`  backend ${b.name}  ${b.hash || b.version || ''}`);
+  }
+  $('set-files').textContent = out.length > 1 ? out.join('\n') : 'No server files installed yet.';
 }
 // "Keep my server files" (for modders): no server-file updates while it is on
 async function fillKeepFiles() {
@@ -1008,6 +1027,9 @@ function wire() {
   $('nav').addEventListener('click', (e) => { const b = e.target.closest('.nav-item'); if (b) showPage(b.dataset.page); });
   $('set-games-pick').addEventListener('click', async () => { const p = await L.pickGamesRoot(); if (p) { info.gamesRoot = p; $('set-games').textContent = p; renderDetail(); } });
   $('set-data-open').addEventListener('click', () => L.openPath(info.dataRoot));
+  $('set-files-copy').addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText($('set-files').textContent); $('set-files-copy').textContent = 'Copied'; setTimeout(() => { $('set-files-copy').textContent = 'Copy'; }, 1500); } catch {}
+  });
   document.addEventListener('click', (e) => { const a = e.target.closest('a[data-url]'); if (a) { e.preventDefault(); L.openUrl(a.dataset.url); } });
   document.addEventListener('click', (e) => { if (!e.target.closest('#more-menu') && !e.target.closest('#btn-more')) $('more-menu').hidden = true; });
 

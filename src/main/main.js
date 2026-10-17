@@ -251,6 +251,30 @@ ipcMain.handle('versions:status', (_e, id) => {
   s.busy = R.isRunning(id) ? 'play' : (D.isDownloading(id) ? 'download' : (R.isRunning(id + ':setup') ? 'setup' : null));
   return s;
 });
+// Settings -> "What you are running": per version, the server files installed, each file set-up put in the
+// game folder (loader dxgi.dll, server DLL, paks) with its short hash and whether it is the expected one,
+// and the backend (top-level .js files by hash, node projects by name and version). Read-only. (Oct 17)
+ipcMain.handle('versions:files', () => registry.filter(v => v.package).map(v => {
+  const short = (h) => (h ? String(h).slice(0, 8).toUpperCase() : '');
+  const r = { id: v.id, installed: V.installedPackageVersion(v), latest: v.package.packageVersion, held: kept(v), gameDir: V.knownGameDir(v), files: [], backend: [] };
+  for (const f of v.package.installedFiles || []) {
+    const name = path.basename(f.rel);
+    if (!r.gameDir) { r.files.push({ name, want: short(f.sha256), have: '', state: 'nogame' }); continue; }
+    const have = V.sha256(path.join(r.gameDir, f.rel));
+    r.files.push({ name, want: short(f.sha256), have: short(have), state: !have ? 'missing' : (have === f.sha256.toUpperCase() ? 'ok' : 'different') });
+  }
+  const be = path.join(v.dataDir, 'backend');
+  try {
+    for (const ent of fs.readdirSync(be, { withFileTypes: true })) {
+      const p = path.join(be, ent.name);
+      if (ent.isFile() && /\.(c?js|mjs)$/i.test(ent.name)) r.backend.push({ name: ent.name, hash: short(V.sha256(p)) });
+      else if (ent.isDirectory()) {
+        try { const pj = JSON.parse(fs.readFileSync(path.join(p, 'package.json'), 'utf8')); r.backend.push({ name: pj.name || ent.name, version: pj.version || '' }); } catch {}
+      }
+    }
+  } catch {}
+  return r;
+}));
 ipcMain.handle('launcher:info', async () => ({
   version: AU.info().version, dataRoot: P.dataRoot(), gamesRoot: defaultGamesRoot(),
   node: await findNode(), toolOk: D.toolOk(), platform: process.platform, mock: P.MOCK,
