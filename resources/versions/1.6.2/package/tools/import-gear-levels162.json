@@ -1,0 +1,1652 @@
+{
+  "AR_ARMSTRONG_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_MINT_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_ARMSTRONG_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_MINT_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_ARMSTRONG_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_MINT_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_ARMSTRONG_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_MINT_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_BEAVER_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_BEAVER_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_BEAVER_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_BEAVER_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_BEGINNER_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "AR_BEGINNER_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "AR_BEGINNER_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "AR_BUGBEAR_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_BUGBEAR_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_BUGBEAR_EXOTIC_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_BUGBEAR_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_BUGBEAR_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_BULLSEYE_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_BULLSEYE_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_BULLSEYE_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_BULLSEYE_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_CROWBEAR_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_CROWBEAR_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_CROWBEAR_EXOTIC_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_CROWBEAR_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_CROWBEAR_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_DEBUG_HELM_MANYCELLS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "AR_ELECTROQUILL_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_ELECTROQUILL_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_ELECTROQUILL_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_ELECTROQUILL_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_FULGAR_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_FULGAR_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_FULGAR_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_FULGAR_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_HOST_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_HOST_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_HOST_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_HOST_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_LAVAROLLER_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_LAVAROLLER_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_LAVAROLLER_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_LAVAROLLER_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_LERAWR_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_LERAWR_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_LERAWR_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_LERAWR_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_LERAWR_PLAYASKAT_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_MCROLLIN_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_MCROLLIN_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_MCROLLIN_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_MCROLLIN_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_MOONFACE_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_MOONFACE_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_MOONFACE_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_MOONFACE_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_PAPER_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_PAPER_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_PAPER_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_PAPER_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_FUNGUY_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_FUNGUY_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_FUNGUY_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_FUNGUY_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_PAX_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 1
+  },
+  "AR_PAX_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 1
+  },
+  "AR_PAX_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 1
+  },
+  "AR_PAX_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "AR_RANDALL_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_RANDALL_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_RANDALL_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_RANDALL_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_ROCK_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_ROCK_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_ROCK_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_ROCK_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SALLY_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SALLY_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SALLY_EXOTIC_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SALLY_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SALLY_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SALT_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SALT_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SALT_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SALT_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SCISSORS_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SCISSORS_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SCISSORS_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SCISSORS_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SHADOWCAT_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SHADOWCAT_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SHADOWCAT_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SHADOWCAT_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SHOCKMANE_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SHOCKMANE_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SHOCKMANE_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SHOCKMANE_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SNOWFLAKE_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SNOWFLAKE_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SNOWFLAKE_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_SNOWFLAKE_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_THUNDERBIRD_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_THUNDERBIRD_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_THUNDERBIRD_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_THUNDERBIRD_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_GLITTER_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_GLITTER_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_GLITTER_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_GLITTER_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_CRYSTAL_HELM_00": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_CRYSTAL_CHEST_00": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_CRYSTAL_ARMS_00": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_CRYSTAL_LEGS_00": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "AR_UNEQUIPPED_ARMS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 5
+  },
+  "AR_UNEQUIPPED_CHEST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 5
+  },
+  "AR_UNEQUIPPED_HELM": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 5
+  },
+  "AR_UNEQUIPPED_LEGS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 5
+  },
+  "WP_AC_ARMSTRONG": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_AC_MINT": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_AC_GLITTER": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_AC_BEAVER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_BEGINNER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "WP_AC_BUGBEAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_BULLSEYE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_CROWBEAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_ELECTROQUILL": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_FULGAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_HOST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_LAVAROLLER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_LERAWR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_MCROLLIN": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_MOONFACE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_PAPER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_RANDALL": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_AC_FUNGUY": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_AC_ROCK": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_SALLY": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_SALT": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_SCISSORS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_SHADOWCAT": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_SHOCKMANE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_SNOWFLAKE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_AC_THUNDERBIRD": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_BOW_BEAVER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_BOW_SALT": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_ARMSTRONG": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_CB_MINT": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_CB_GLITTER": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_CB_BEAVER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_BEGINNER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "WP_CB_BUGBEAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_BULLSEYE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_CROWBEAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_ELECTROQUILL": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_FULGAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_HOST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_LAVAROLLER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_LERAWR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_MCROLLIN": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_MOONFACE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_PAPER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_PAX": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 1
+  },
+  "WP_CB_ROCK": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_SALLY": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_SALT": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_SCISSORS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_SHADOWCAT": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_SHOCKMANE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_SNOWFLAKE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_CB_THUNDERBIRD": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_CB_RANDALL": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_CB_FUNGUY": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_CB_UNEQUIPPED": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "WP_DP_EXOTIC_BOMBS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_DP_OSTIAN": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "WP_EB_ARMSTRONG": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_EB_MINT": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_EB_GLITTER": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_EB_BEAVER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_BEGINNER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "WP_EB_BUGBEAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_BULLSEYE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_CROWBEAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_CROWBEAR_EXOTIC": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_ELECTROQUILL": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_FULGAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_HOST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_LAVAROLLER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_LERAWR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_MCROLLIN": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_MOONFACE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_PAPER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_PAX": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 1
+  },
+  "WP_EB_ROCK": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_SALLY": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_SALT": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_SCISSORS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_SHADOWCAT": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_SHOCKMANE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_SNOWFLAKE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_EB_THUNDERBIRD": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_EB_RANDALL": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_EB_FUNGUY": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_EB_TRAINING": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "WP_EB_UNEQUIPPED": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "WP_GA_ARMSTRONG": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_GA_MINT": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_GA_GLITTER": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_GA_BEAVER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 1
+  },
+  "WP_GA_BEGINNER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "WP_GA_BUGBEAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_BULLSEYE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_CROWBEAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_ELECTROQUILL": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_FULGAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_HOST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_LAVAROLLER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_LERAWR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_MCROLLIN": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_MOONFACE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_PAPER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_PAX": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 1
+  },
+  "WP_GA_ROCK": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_SALLY": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_SALT": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_SCISSORS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_SHADOWCAT": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_SHOCKMANE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_SNOWFLAKE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_GA_THUNDERBIRD": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_GA_RANDALL": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_GA_FUNGUY": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_GA_UNEQUIPPED": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "WP_IH_ARMSTRONG": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_IH_MINT": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_IH_GLITTER": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_IH_BEAVER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_BEGINNER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "WP_IH_BUGBEAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_BULLSEYE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_CROWBEAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_ELECTROQUILL": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_FULGAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_HOST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_LAVAROLLER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_LERAWR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_MCROLLIN": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_MOONFACE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_PAPER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_PAX": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 1
+  },
+  "WP_IH_ROCK": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_SALLY": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_SALLY_EXOTIC": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_SALT": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_SCISSORS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_SHADOWCAT": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_SHOCKMANE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_SNOWFLAKE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_IH_THUNDERBIRD": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_IH_RANDALL": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_IH_FUNGUY": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_IH_UNEQUIPPED": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "WP_MS_ARMSTRONG": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_MS_MINT": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_MS_GLITTER": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_MS_BEAVER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_BEGINNER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "WP_MS_BUGBEAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_BUGBEAR_EXOTIC": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_BULLSEYE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_CROWBEAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_ELECTROQUILL": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_FULGAR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_HOST": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_LAVAROLLER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_LERAWR": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_MCROLLIN": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_MOONFACE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_PAPER": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_PAX": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 1
+  },
+  "WP_MS_ROCK": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_SALLY": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_SALT": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_SCISSORS": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_SHADOWCAT": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_SHOCKMANE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_SNOWFLAKE": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": 15
+  },
+  "WP_MS_THUNDERBIRD": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_MS_RANDALL": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_MS_FUNGUY": {
+    "kind": "equipment",
+    "crafted": 10,
+    "surged": 15
+  },
+  "WP_MS_UNEQUIPPED": {
+    "kind": "equipment",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_BARREL_BLAZE": {
+    "kind": "barrel",
+    "crafted": 0,
+    "surged": 15
+  },
+  "PART_DP_BARREL_DEFAULT": {
+    "kind": "barrel",
+    "crafted": 0,
+    "surged": 15
+  },
+  "PART_DP_BARREL_DEFAULT_PAX": {
+    "kind": "barrel",
+    "crafted": 0,
+    "surged": 1
+  },
+  "PART_DP_BARREL_EXOTIC_BOMBS": {
+    "kind": "barrel",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_BARREL_FROST": {
+    "kind": "barrel",
+    "crafted": 0,
+    "surged": 15
+  },
+  "PART_DP_BARREL_LEGENDARY_SHOCK": {
+    "kind": "barrel",
+    "crafted": 10,
+    "surged": 15
+  },
+  "PART_DP_BARREL_LEGENDARY_BLAZE": {
+    "kind": "barrel",
+    "crafted": 10,
+    "surged": 15
+  },
+  "PART_DP_BARREL_LEGENDARY_RADIANT": {
+    "kind": "barrel",
+    "crafted": 10,
+    "surged": 15
+  },
+  "PART_DP_BARREL_LEGENDARY_FROST": {
+    "kind": "barrel",
+    "crafted": 10,
+    "surged": 15
+  },
+  "PART_DP_BARREL_LEGENDARY_UMBRAL": {
+    "kind": "barrel",
+    "crafted": 10,
+    "surged": 15
+  },
+  "PART_DP_BARREL_LEGENDARY_TERRA": {
+    "kind": "barrel",
+    "crafted": 10,
+    "surged": 15
+  },
+  "PART_DP_BARREL_RADIANT": {
+    "kind": "barrel",
+    "crafted": 0,
+    "surged": 15
+  },
+  "PART_DP_BARREL_SHOCK": {
+    "kind": "barrel",
+    "crafted": 0,
+    "surged": 15
+  },
+  "PART_DP_BARREL_TERRA": {
+    "kind": "barrel",
+    "crafted": 0,
+    "surged": 15
+  },
+  "PART_DP_BARREL_UMBRAL": {
+    "kind": "barrel",
+    "crafted": 0,
+    "surged": 15
+  },
+  "PART_DP_GRIP_DEFAULT": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_GRIP_DEFAULT_PAX": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_GRIP_EXOTIC_BOMBS": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_GRIP_MINE": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_GRIP_SHOT_BUFFER": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_PASSIVE_EXOTIC_BOMBS": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_PASSIVE_HOST": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_PASSIVE_SALLY": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_PASSIVE_MCROLLIN": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_PASSIVE_SCISSOR": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_PASSIVE_BEAVER": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_PASSIVE_LAVAROLLER": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_PASSIVE_ROCK_ALPHA": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_PASSIVE_SALT": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_PASSIVE_SHADOWCAT": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_PASSIVE_SNOWFLAKE": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_RECEIVER_DEFAULT": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_RECEIVER_DEFAULT_PAX": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_RECEIVER_EXOTIC_BOMBS": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_RECEIVER_PART_MARKER": {
+    "kind": "repeater_part",
+    "crafted": 0,
+    "surged": null
+  },
+  "PART_DP_RECEIVER_PIERCING": {
+    "kind": "repeater_part",
+    "crafted": 10,
+    "surged": null
+  }
+}

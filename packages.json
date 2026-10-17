@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-16.11",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.11.zip",
-                         "sha256":  "b94e188a0aeb6252f9734c0cc85b6aceea5d6ab146bf28ef8414073cb6b191c8",
+                         "packageVersion":  "2026-10-16.12",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-16.12.zip",
+                         "sha256":  "b0514bef5e58acb6a904fdf168b9975093ecb667f46ef77299b6b9688f7824c9",
                          "date":  "2026-10-16",
-                         "note":  "Trials work again (weekly Trial rotation)"
+                         "note":  "Revived import: gear converts to crafted or power surged, Aethersparks for lost levels (KombatKing)"
                      },
                      {
                          "id":  "1.14.7",

@@ -196,6 +196,9 @@ function writeBonus(w, stamp) {
     fs.writeFileSync(w.file, JSON.stringify(w.out, null, 2));
     return backup;
 }
+// Gear conversion by KombatKing (Revived Gear Conversion 162 R1, AGPL-3.0-only): 1.4.4 upgrade levels become 1.6.2
+// crafted or power-surged gear (+15), with Aethersparks for the lost levels, paid once per item (import-gear-migration162.cjs).
+const gearMigration162 = require("./import-gear-migration162.cjs");
 const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && Number.isFinite(Number(d.CurrentLevel)) ? Number(d.CurrentLevel) : (it && it.itemData ? 0 : -1); };
 
 (async () => {
@@ -227,20 +230,22 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
     if (!T) { tdb.close(); fail("You have no 1.6.2 character yet. Press Play once, make your character, close the game, then import."); }
     const tInst = parse(T.instancedItems, []), tStack = parse(T.stackedItems, []);
     const weapons = weaponPlan(sInst, me);
+    const gearMigration = gearMigration162.plan(tdb, sInst.filter(it => it && (known.has(it.catalogId) || tInst.some(x => x.catalogId === it.catalogId))), {sourceAccount:S.userId,sourceCharacter:S.characterId,targetCharacter:T.characterId}, gearMigration162.settings(ROOT));
 
     // ---- plan
     const plan = { gearNew: [], gearUpgraded: [], gearKept: [], stacks: [], skipped: [] };
     const outInst = tInst.map((x) => ({ ...x }));
     const byInstance = new Map(outInst.map((x, i) => [x.instanceId, i]));
-    for (const it of sInst) {
+    for (const rawItem of sInst) {
+        const it = gearMigration.converted(rawItem);
         if (!it || !it.catalogId) continue;
-        const ownedSingleton = singleInstance.has(it.catalogId) ? outInst.find(x => x.catalogId === it.catalogId) : null;
+        const ownedSingleton = (singleInstance.has(it.catalogId) || gearMigration162.profiles[it.catalogId]) ? outInst.find(x => x.catalogId === it.catalogId) : null;
         const have = ownedSingleton || (byInstance.has(it.instanceId) ? outInst[byInstance.get(it.instanceId)] : null);
         if (!known.has(it.catalogId) && !(have && have.catalogId === it.catalogId) && !tInst.some((x) => x.catalogId === it.catalogId)) { plan.skipped.push(it.catalogId); continue; }
         if (have && have.catalogId === it.catalogId) {
-            if (levelOf(it) > levelOf(have)) {
+            if (gearMigration162.shouldUpgrade(have,it) ?? (levelOf(it) > levelOf(have))) {
                 const idx = outInst.indexOf(have);
-                outInst[idx] = { ...it, instanceId: have.instanceId, updateVersion: Math.max(Number(have.updateVersion) || 0, Number(it.updateVersion) || 0) + 1 };
+                outInst[idx] = gearMigration162.profiles[it.catalogId] ? gearMigration162.upgrade(have,it) : { ...it, instanceId: have.instanceId, updateVersion: Math.max(Number(have.updateVersion) || 0, Number(it.updateVersion) || 0) + 1 };
                 plan.gearUpgraded.push(it.catalogId);
             } else plan.gearKept.push(it.catalogId);
             continue;
@@ -264,6 +269,7 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
         if (cur) cur.quantity = after; else outStack.push({ catalogId: it.catalogId, quantity: after });
         if (after !== before) plan.stacks.push({ id: it.catalogId, before, after });
     }
+    gearMigration162.credit(outStack, gearMigration, MAX);
     // ---- quests: SERIE_<series> entries hold a JSON string {ID, Status, <questGuid>: {Status, <stepGuid>: {Status, CurrentAmount, ...}}}
     // Status: 0 not started, 1 active, 2 step done, 3 quest done. Merge = keep the higher Status / amounts at every level.
     const quests = { added: [], merged: [], flags: 0 };
@@ -351,13 +357,14 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
         to: { character: T.name },
         gearNew: plan.gearNew.length, gearUpgraded: plan.gearUpgraded.length, gearKept: plan.gearKept.length,
         stacksChanged: plan.stacks.length, skipped: [...new Set(plan.skipped)],
-        tutorialMarked: tutChanged, weaponLevels: weapons.changes, questsAdded: quests.added, questsMerged: quests.merged, flagsAdded: quests.flags,
+        gearConversion: gearMigration.summary, tutorialMarked: tutChanged, weaponLevels: weapons.changes, questsAdded: quests.added, questsMerged: quests.merged, flagsAdded: quests.flags,
         rams: (() => { const r = plan.stacks.find((s) => s.id === "CURRENCY_NOTES"); return r ? r.after - r.before : 0; })(),
     };
     const lines = [
         `From Dauntless Revived${srcKind === "file" ? " (server)" : ""}: ${srcUser ? srcUser + " / " : ""}${S.name} (${sInst.length} gear, ${sStack.length} stacks)`,
         `Into your 1.6.2 character: ${T.name}`,
         ``,
+        `  Gear conversion:     ${gearMigration.summary.converted} items; ${gearMigration.summary.powerSurged} power surged; +${gearMigration.sparks} Aethersparks (rate ${gearMigration.summary.rate})`,
         `  New gear:            ${plan.gearNew.length}`,
         `  Gear levelled up:    ${plan.gearUpgraded.length}  (you had it, the imported one has a higher level)`,
         `  Gear you already had: ${plan.gearKept.length}`,
@@ -395,7 +402,7 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
         if (!changedKeys.length && !weapons.changes.length) { tdb.close(); done({ ok: true, mode: cmd, changed: false }, String(tData.HasFinishedTutorial).toLowerCase() === "true" ? "Your 1.6.2 character already has the tutorial and first mission done, and its weapon levels are as high as in Revived. Nothing changed.\n" + missionLine(only) : "The tutorial was not finished in Revived either, so nothing was changed. Weapon levels: " + weapons.line + "."); }
         if (await backendUp()) { tdb.close(); fail("Dauntless is still running (or the Dauntless Revived server is). Close the game, the launcher's server window and Revived, then try again."); }
         const bd = path.join(ROOT, "backup", "import-revived"); fs.mkdirSync(bd, { recursive: true });
-        const st = new Date().toISOString().replace(/[-:]/g, "").replace("T", "-").slice(0, 15);
+        const st = new Date().toISOString().replace(/[:.]/g, "-") + "-" + crypto.randomBytes(4).toString("hex");
         tdb.close();
         fs.copyFileSync(TARGET, path.join(bd, `undaunted.db.${st}`));
         if (changedKeys.length) {
@@ -419,11 +426,12 @@ const levelOf = (it) => { const d = parse(it && it.itemData, null); return d && 
     }
     const bdir = path.join(ROOT, "backup", "import-revived");
     fs.mkdirSync(bdir, { recursive: true });
-    const stamp = new Date().toISOString().replace(/[-:]/g, "").replace("T", "-").slice(0, 15);
+    const stamp = new Date().toISOString().replace(/[:.]/g, "-") + "-" + crypto.randomBytes(4).toString("hex");
     tdb.close();
     fs.copyFileSync(TARGET, path.join(bdir, `undaunted.db.${stamp}`));
     const wdb = new Database(TARGET, { fileMustExist: true });
     wdb.transaction(() => {
+        gearMigration162.commit(wdb, gearMigration);
         wdb.prepare("UPDATE inventories SET instancedItems = ?, stackedItems = ? WHERE characterId = ?")
             .run(JSON.stringify(outInst), JSON.stringify(outStack), T.characterId);
         if (questsChanged) {
