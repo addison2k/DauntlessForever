@@ -347,7 +347,7 @@ $shown = 0; $listening = $false; $start = Get-Date; $stopReason = ""
 # DF-AMMO-LOG-1147 (Oct 25): skip the game's broken "ServerAdjustAmmo" warning in every Dauntless process (it crashed
 # hunt servers, Repeaters); tools\ammo-fix-1147.ps1, log in logs\ammo-fix.log. Checks for new processes every 3 s.
 $ammoNext = Get-Date; $ammoLog = Join-Path $logDir 'ammo-fix.log'
-try { . (Join-Path $PSScriptRoot 'ammo-fix-1147.ps1') } catch { $ammoNext = $null }
+$ammoNext = $null   # Oct 26: bin\dxgi.dll makes this change itself now (antivirus programs blocked the script)
 while ($true) {
     if ($ammoNext -and (Get-Date) -ge $ammoNext) { $ammoNext = (Get-Date).AddSeconds(3); try { DfAmmoFix $ammoLog } catch { } }
     $lines = @(Read-Shared $srvLog)
