@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.3.18",
+                     "version":  "0.3.19",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "",
+                     "notes":  "Set up Forever no longer fails with EPERM on Windows\u0027 protected cache folders",
                      "date":  "2026-10-26",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.3.18.asar",
-                                 "sha256":  "5bf333d7bc2ede5c13dab6a085dcb933883b81ce03518c61f56edc50d25f5ead",
-                                 "size":  8640347,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.3.19.asar",
+                                 "sha256":  "f97e319c1eacec95b865f80221d696b331225c1c2b42d34345aeef6e7542e718",
+                                 "size":  8641032,
                                  "minShell":  "0.2.4"
                              }
                  }

@@ -838,7 +838,15 @@ let setupState = null;   // { step, error }
 function copyTree(src, dst) {
   if (!exists(src)) return;
   const st = fs.statSync(src);
-  if (st.isDirectory()) { P.ensureDir(dst); for (const n of fs.readdirSync(src)) copyTree(path.join(src, n), path.join(dst, n)); }
+  if (st.isDirectory()) {
+    // DF-FV-SETUPEPERM (Oct 26): the server copies' private homes (srvhome*) hold Windows' own protected caches
+    // (AppData\Local\Microsoft\Windows\INetCache\Content.IE5 and friends). They are not part of the install and cannot
+    // be listed: skip them, and skip any other folder Windows refuses to list instead of failing the whole set-up.
+    if (/[\\/]AppData[\\/]Local[\\/]Microsoft([\\/]|$)/i.test(src) || /^(INetCache|INetCookies|WebCache|Content\.IE5)$/i.test(path.basename(src))) return;
+    let names;
+    try { names = fs.readdirSync(src); } catch (e) { if (e.code === 'EPERM' || e.code === 'EACCES') { log('skipped (no access): ' + path.basename(src)); return; } throw e; }
+    P.ensureDir(dst); for (const n of names) copyTree(path.join(src, n), path.join(dst, n));
+  }
   else {
     P.ensureDir(path.dirname(dst));
     // a log a running server copy still holds (EBUSY) or a lock file is not part of the install: skipped, not fatal
