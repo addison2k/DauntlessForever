@@ -198,7 +198,7 @@ app.whenReady().then(async () => {
   // Voice chat with the people in your game (voice.js)
   require('./voice').init({ social: require('./social'), forever: require('./forever'), send, log: (t) => log('voice', t) });
   // Forever mode (forever.js): one world for everyone, run by the director on the VPS
-  require('./forever').init({ runner: R, send, log: (t) => log('forever', t), social: require('./social'),
+  require('./forever').init({ runner: R, send, log: (t) => log('forever', t), social: require('./social'), appVersion: () => { try { return String(AU.info().version || ''); } catch { return ''; } },   // DF-V2-APPGATE: the director gates v2 worlds on the launcher version
     nodeFor: async () => { let node = null; try { node = JSON.parse(fs.readFileSync(path.join(P.versionsDataDir(), 'forever', 'config.json'), 'utf8').replace(/^\uFEFF/, '')).Node; } catch {} if (!node || !fs.existsSync(node)) node = (await findNode() || {}).path; return node || null; } });
   // Host Mode: a server on this PC that stays up (hostmode.js)
   require('./hostmode').init({ get registry() { return registry; }, byId: (id) => byId(id), runner: R, send, log: (t) => log(t), social: require('./social'),

@@ -259,9 +259,34 @@ function stateOf(v) {
 }
 
 // ---------------------------------------------------------------- shelf
+// DF-V2-PLAYUI (Addison, Oct 27): tabs for the builds that have a package; the classic cards only for the upcoming ones, under 'Upcoming'
+let upcomingOpen = false;
+const HERO_ART = { '1.6.2': 'hero-162.jpg', '1.14.7': 'hero-1147.jpg' };
+function renderTabs() {
+  const row = $('gv-tabs'); if (!row) return; row.innerHTML = '';
+  for (const v of versions.filter(x => x.hasPackage)) {
+    const st = stateOf(v);
+    const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
+    b.className = 'gv-tab' + (v.id === selected ? ' selected' : '') + (st.key === 'attn' ? ' attn' : '');
+    b.setAttribute('aria-selected', v.id === selected ? 'true' : 'false'); b.title = `${v.released} - ${st.label}`;
+    b.innerHTML = `<span class="gv-num">${esc(v.id)}</span>${v.warning ? `<span class="build-flag">${esc(t('Experimental'))}</span>` : ''}`;
+    b.addEventListener('click', () => { upcomingOpen = false; select(v.id); });
+    row.appendChild(b);
+  }
+  const up = versions.filter(x => !x.hasPackage);
+  if (up.length) {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'gv-tab more' + (upcomingOpen || up.some(x => x.id === selected) ? ' open' : '');
+    b.setAttribute('aria-expanded', upcomingOpen ? 'true' : 'false');
+    b.innerHTML = `<span>${esc(t('Upcoming'))}</span><span class="gv-chev" aria-hidden="true"></span>`;
+    b.addEventListener('click', () => { upcomingOpen = !upcomingOpen; renderShelf(); });
+    row.appendChild(b);
+  }
+  $('shelf').hidden = !upcomingOpen;
+}
 function renderShelf() {
+  renderTabs();
   const ol = $('shelf'); ol.innerHTML = '';
-  for (const v of versions) {
+  for (const v of versions.filter(x => !x.hasPackage)) {   // DF-V2-PLAYUI: only the upcoming ones live on the cards
     const st = stateOf(v);
     const li = document.createElement('li');
     const b = document.createElement('button');
@@ -285,6 +310,9 @@ function renderDetail() {
   $('detail-empty').hidden = true; $('detail-body').hidden = false;
   $('d-ver').textContent = v.id;
   $('d-meta').textContent = t('Build {build}, released {date}. {era}.', { build: v.build, date: v.released, era: t(v.era) });
+  // DF-V2-PLAYUI: the hero card: era and date line, art per version (none = plain dark card)
+  { const e = $('d-era'); if (e) e.textContent = [t(v.era), v.released].filter(Boolean).join(' \u00b7 ');
+    const hero = $('hero'); if (hero) { const art = HERO_ART[v.id]; hero.style.backgroundImage = art ? `url("${art}")` : ''; hero.classList.toggle('has-art', !!art); } }
   $('d-blurb').textContent = t(v.blurb || ''); $('d-blurb').title = t(v.blurb || '');
   $('d-warn').hidden = !v.warning; $('d-warn').textContent = t(v.warning || '');
   const pill = $('d-pill'); pill.textContent = st.label; pill.className = 'pill ' + st.key;
