@@ -801,6 +801,17 @@ function hostBeatLoop() {
 }
 
 let goneMisses = 0, remoteHoldUntil = 0, townTaking = false, autoUpdated = false, rehosting = false;
+// DF-CRASHWATCH (Addison, Oct 27 live): a crashed game left the launcher 'in a world' with no Play button. Every 20 s while
+// playing (not Host Mode), count the player's game processes (server copies excluded); none twice in a row = the game is gone.
+let gameMisses = 0, gameCheckN = 0, gameSeen = false;
+function gameCount() {
+  return new Promise((resolve) => {
+    let o = '';
+    const ps = spawn('powershell.exe', ['-NoProfile', '-Command', "(Get-CimInstance Win32_Process -Filter \"Name='Dauntless-Win64-Shipping.exe'\" | Where-Object { $_.CommandLine -notmatch '(^|\\s)-server(\\s|$)' } | Measure-Object).Count"], { windowsHide: true });
+    ps.stdout.on('data', d => { o += d; }); ps.on('error', () => resolve(-1)); ps.on('exit', () => resolve(Number(String(o).trim()) >= 0 ? Number(String(o).trim()) : -1));
+    setTimeout(() => { try { ps.kill(); } catch {} resolve(-1); }, 15000);
+  });
+}
 // DF-AUTO-REHOST (Addison, Oct 27): a Host Mode PC whose world was ended from the admin page (an update push, a reset) installs the
 // Forever update if there is one and hosts again by itself, so hosts do not have to press anything 14 times a day.
 async function autoRehost(why) {
@@ -848,7 +859,7 @@ async function takeTown(tt) {
   push(); hostBeatLoop();
 }
 function beatLoop() {
-  clearTimeout(timer); goneMisses = 0;
+  clearTimeout(timer); goneMisses = 0; gameMisses = 0; gameCheckN = 0; gameSeen = false;   // DF-CRASHWATCH: the game is watched once it has been seen running
   const tick = async () => {
     if (S.phase !== 'playing' && S.phase !== 'standby' && S.phase !== 'moving') return;
     try {
@@ -871,6 +882,11 @@ function beatLoop() {
       if (r.takeover && standby && !standby.adopted && !standby.takeoverAsked) { standby.takeoverAsked = true; log('the director asks this PC to take the world over (promotion)'); try { fs.writeFileSync(path.join(dataDir(), 'forever_takeover.txt'), 'now'); } catch {} }
       if (r.role === 'host' && standby && standby.adopted) { becomeHost(); return; }
       if (r.go && r.go.at !== lastGoAt && !(standby && standby.adopted)) { lastGoAt = r.go.at; await follow(r.go); }
+      if (S.phase === 'playing' && !S.helper && S.role !== 'standby' && (++gameCheckN % 4) === 0) {   // DF-CRASHWATCH
+        const n = await gameCount();
+        if (n > 0) gameSeen = true;
+        if (n === 0 && gameSeen) { if (++gameMisses >= 2) { log('your game is not running any more (closed or crashed): Forever stops; press Play Forever to go back'); gameMisses = 0; await stop('the game closed'); return; } } else gameMisses = 0;
+      }
       if (!r.role && !r.go) { if (++goneMisses >= (vpsBackend ? 12 : 3)) { /* DF-VPS: a director restart (a push) is not a lost world: the town is still up; wait a minute */ log('the world is gone'); const again = !!vpsBackend, mode = S.mode === 'fresh' ? 'fresh' : 'any'; await stop('the world ended'); if (again) { log('Play Forever again in 10 s (your character is safe on the server)'); setTimeout(() => { if (S.phase === 'off') play(mode).catch(e => log('Play Forever: ' + e.message, true)); }, 10000); } return; } } else goneMisses = 0;   // DF-VPS: a VPS world that ended comes back by itself
     } catch (e) { S.error = 'director: ' + e.message; }
     push();

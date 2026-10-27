@@ -1,7 +1,7 @@
 {
   "name": "dauntless-forever-launcher",
   "productName": "Dauntless Forever",
-  "version": "0.3.20",
+  "version": "0.3.21",
   "description": "Pick a Dauntless version, download it from Epic's own servers, set it up and play it offline.",
   "main": "src/boot.js",
   "author": "Addison2k",
