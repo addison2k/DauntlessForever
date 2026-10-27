@@ -155,10 +155,12 @@
     stat(a, t('Hunt servers at once (8 players each)'), hasScore ? String(sc.maxHunts) : '-');
     if (hm && S.world) { stat(a, t('Players in your world'), String(S.world.players), true); stat(a, t('Hunts open'), `${(S.world.hunts || []).length} / ${S.world.maxHunts || sc.maxHunts}`); }
     if (!hm) {
-      const bh = el('button', hasScore && stepDone ? 'primary-sm' : 'ghost', t('Host Mode - run a world')); bh.id = 'fv-play-helper'; bh.disabled = !!S.missing || !hasScore || S.phase !== 'off';
+      // DF-ONEBUTTON (Addison, Oct 27 live): no Host Mode button: Play Forever does it all (the director makes this PC the town when it is needed). The button stays in the code, hidden.
+      const bh = el('button', hasScore && stepDone ? 'primary-sm' : 'ghost', t('Host Mode - run a world')); bh.id = 'fv-play-helper'; bh.disabled = !!S.missing || !hasScore || S.phase !== 'off'; bh.hidden = true;
       bh.onclick = async () => { const r = await L.foreverPlay('helper'); if (!r.ok) note(r.error, true); };
       a.append(bh);
       if (!hasScore) a.append(el('p', 'small', t('Run the host check (above) and press Send first.')));
+      else a.append(el('p', 'small', t('Press Play Forever: this PC runs the town when the director picks it, and hosts the hunts you open.')));
     } else {
       a.append(el('p', 'small', S.ownGame ? (S.away ? t('Your game is open in {host}\'s world (where the people are); your own world keeps running here.', { host: S.away.hostName || '?' }) : t('Your game is open in your world. Close it whenever you like; the world stays up.')) : (S.autoPlay ? t('Your world is starting. Your game opens in it by itself, no need to press Play again.') : t('Your world is running. Press Play Forever - fresh character: your game goes where the people are, or into your own world when that is it. The world keeps running when you close your game.'))));
     }

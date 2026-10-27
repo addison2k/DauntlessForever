@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.3.20",
+                     "version":  "0.3.21",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "Forever v2: one big Ramsgate per world, hunts hosted by players with key hand-over and backup copies, characters kept on the server, auto update and auto re-host for hosts, new Play page, 1.3.1 on the timeline.",
+                     "notes":  "Forever: one button (Play Forever runs the town when the director picks you; no Host Mode button), the launcher notices a crashed game and gives Play back, Ramsgate loads faster after hunts.",
                      "date":  "2026-10-27",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.3.20.asar",
-                                 "sha256":  "2823df4f877217b6bd11bab1a937f6ab1551ae3d4a8c5b143cfbb995b3cd22ac",
-                                 "size":  9377545,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.3.21.asar",
+                                 "sha256":  "dc81241502179fc03757f409a5e24d688a365e18218e78d64b48bc145571f9b9",
+                                 "size":  9379593,
                                  "minShell":  "0.2.4"
                              }
                  }
