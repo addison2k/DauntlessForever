@@ -522,3 +522,43 @@ html:not([lang="en"]) .nav-new { padding: 1px 5px; font-size: 10px; }
   background: rgba(10, 14, 18, 0.65); color: var(--ink-2); font-size: 17px; line-height: 1; cursor: pointer; }
 .fh-close:hover { color: var(--ink); border-color: var(--ink-3); }
 .fh-banner.fh-hidden { display: none !important; }
+
+/* DF-V2-PLAYUI (Addison, Oct 27): the Play page: Game version tabs, the hero card with art, the status row, the big buttons. */
+.gv-label { font-family: var(--display); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); margin: -10px 0 8px; }
+.gv-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.gv-tab { display: inline-flex; align-items: center; gap: 10px; padding: 11px 24px; height: 46px; box-sizing: border-box; border: 1px solid var(--line); border-radius: 8px; background: var(--bg-2); color: var(--ink); font-family: var(--display); font-size: 20px; font-weight: 600; line-height: 1; cursor: pointer; }
+.gv-tab:hover { background: var(--bg-3); border-color: var(--line-2); }
+.gv-tab.selected { background: var(--brass); border-color: var(--brass); color: var(--brass-ink); }
+.gv-tab.selected .build-flag { color: var(--brass-ink); border-color: rgba(0,0,0,0.35); }
+.gv-tab .build-flag { margin-left: 0; font-size: 12px; padding: 2px 9px; }
+.gv-tab.more { font-family: var(--font); font-size: 16px; font-weight: 500; color: var(--ink-2); padding: 12px 18px 12px 22px; }
+.gv-tab.more.open { color: var(--ink); border-color: var(--line-2); }
+.gv-chev { width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); margin-left: 6px; transition: transform .15s; }
+.gv-tab.more.open .gv-chev { transform: rotate(45deg); }
+.strip { margin-top: -6px; }
+.hero { position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 12px; min-height: 250px; padding: 48px 36px 24px; display: flex; flex-direction: column; justify-content: flex-end; background-color: #0b1218; background-size: cover; background-position: center; background-repeat: no-repeat; box-sizing: border-box; }
+.hero::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8,12,16,0.90) 0%, rgba(8,12,16,0.72) 34%, rgba(8,12,16,0.28) 58%, rgba(8,12,16,0) 78%), linear-gradient(0deg, rgba(8,12,16,0.78) 0%, rgba(8,12,16,0) 48%); }
+.hero:not(.has-art)::before { background: linear-gradient(135deg, var(--bg-2), var(--bg)); }
+.hero > * { position: relative; }
+.hero-kicker { font-family: var(--display); font-size: 14px; font-weight: 600; letter-spacing: .32em; text-transform: uppercase; color: var(--ink); margin-bottom: 2px; }
+.hero .ver { font-size: 70px; letter-spacing: -0.01em; text-shadow: 0 2px 12px rgba(0,0,0,0.5); }
+.hero .ver::before { content: none; }
+.hero-era { font-family: var(--display); font-size: 22px; font-weight: 600; color: var(--ink-2); margin-top: 4px; text-shadow: 0 1px 8px rgba(0,0,0,0.5); }
+.hero-pill-row { margin-top: 12px; }
+.hero .pill { display: inline-flex; align-items: center; gap: 9px; font-size: 15px; padding: 7px 16px; border-width: 1.5px; background: rgba(8,12,16,0.45); }
+.hero .pill.ready::before { content: ""; width: 18px; height: 18px; border-radius: 50%; background: var(--aether); flex: none; -webkit-mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><circle cx='9' cy='9' r='9' fill='black'/><path d='M5 9.5l2.6 2.6L13 7' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat; mask: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'><circle cx='9' cy='9' r='9' fill='black'/><path d='M5 9.5l2.6 2.6L13 7' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/></svg>") center/contain no-repeat; }
+.hero .blurb { margin-top: 14px; font-size: 16px; height: auto; -webkit-line-clamp: 2; text-shadow: 0 1px 8px rgba(0,0,0,0.6); }
+.hero .meta { margin-top: 6px; font-size: 12px; color: var(--ink-3); }
+.path { display: flex; gap: 0; margin-top: 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg-2); overflow: hidden; }
+.step { flex: 1 1 0; min-width: 0; height: auto; padding: 16px 18px; border: 0; border-right: 1px solid var(--line); border-radius: 0; background: transparent; align-items: center; }
+.step:last-child { border-right: 0; }
+.step.current { border-color: var(--line); box-shadow: inset 0 0 0 1px var(--brass); }
+.step-n { flex: 0 0 32px; height: 32px; font-size: 14px; }
+.step.done .step-n { background: var(--aether); border-color: var(--aether); }
+.step-name { font-size: 16px; }
+.action-row { margin-top: 18px; }
+.action-main { display: flex; gap: 14px; flex: 1 1 auto; }
+.action-main .primary { flex: 1 1 0; min-width: 0; padding: 16px 24px; font-size: 20px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; gap: 12px; }
+.action-main .primary::before { content: ""; width: 0; height: 0; border-left: 13px solid currentColor; border-top: 8px solid transparent; border-bottom: 8px solid transparent; }
+.action-main .primary:disabled::before { display: none; }
+.action-main .host-btn { flex: 1 1 0; min-width: 0; font-family: var(--display); font-size: 20px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 16px 24px; border-radius: 8px; border-width: 1.5px; }

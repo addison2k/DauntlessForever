@@ -124,7 +124,7 @@ function dcallOnce(method, apiPath, body, timeoutMs, fresh) {
       headers['X-DF-Sig'] = crypto.createHmac('sha256', account.secret).update(`${time}\n${method}\n${url.pathname}\n${data}`).digest('hex');
     }
     const lib = url.protocol === 'https:' ? require('https') : require('http');
-    const req = lib.request(url, Object.assign({ method, headers, timeout: timeoutMs || 15000 }, fresh ? { agent: false } : {}), (res) => {
+    const req = lib.request(url, Object.assign({ method, headers, timeout: timeoutMs || 20000 }, fresh ? { agent: false } : {})   /* DF-V2: 15 -> 20 s */, (res) => {
       let b = ''; res.setEncoding('utf8'); res.on('data', d => b += d);
       res.on('end', () => {
         let j = {}; try { j = b ? JSON.parse(b) : {}; } catch {}
@@ -241,6 +241,24 @@ function writeRules(rules) {
   fs.writeFileSync(f, lines.join('\r\n') + '\r\n');
 }
 
+// DF-VPS-IMPORT (Oct 27): the first time this PC plays in a world whose characters live on a VPS backend, the Forever character
+// the director handed out (this player's S1 progress) is sent to that backend under this PC's key. The backend keeps it only when it
+// has no character for the key yet; from then on the VPS copy is the one that counts. A marker file per backend stops repeats.
+async function vpsImport(backend, record) {
+  const key = ownKey(); if (!key || !record || !Array.isArray(record.characters) || !record.characters.length) return;
+  const marker = path.join(dataDir(), `vps-import-${backend.replace(/[^0-9.]/g, '_')}.json`);
+  if (readJson(marker, null)) return;
+  const script = path.join(toolsDir(), 'vps-import-1147.js'); if (!fs.existsSync(script)) return;
+  const node = await ctx.nodeFor(); if (!node) return;
+  const tmp = path.join(dataDir(), 'vps-import.tmp.json'); P.ensureDir(dataDir()); fs.writeFileSync(tmp, JSON.stringify({ key, record }));
+  const [ip, port] = backend.split(':');
+  const outText = await new Promise((resolve) => { let o = ''; const ps = spawn(node, [script, ip, port, tmp], { cwd: dir(), env: process.env, windowsHide: true }); ps.stdout.on('data', d => { o += d; }); ps.stderr.on('data', d => { log('import script: ' + String(d).trim().slice(0, 200), true); }); ps.on('error', () => resolve(o)); ps.on('exit', () => resolve(o)); setTimeout(() => { try { ps.kill(); } catch {} resolve(o); }, 20000); });
+  try { fs.unlinkSync(tmp); } catch {}
+  let r = null; try { r = JSON.parse(String(outText).trim().split(/\r?\n/).pop()); } catch {}
+  if (!r || !r.ok) { log('your Forever character could not be brought to the server yet: ' + ((r && r.reason) || ('no answer: ' + String(outText).trim().slice(0, 160))) + ' (tried again next time)', true); return; }
+  fs.writeFileSync(marker, JSON.stringify({ at: new Date().toISOString(), imported: !!r.imported, reason: r.reason || '' }));
+  log(r.imported ? 'your Forever character now lives on the server (brought over once from the director)' : 'the server already has your Forever character' + (r.reason ? ` (${r.reason})` : ''));
+}
 // ------------------------------------------------------------------ the Forever character (fresh mode)
 async function checkoutCharacter(season) {
   let r = await api('GET', `/v1/forever/character?season=${encodeURIComponent(season)}`, undefined);
@@ -268,13 +286,21 @@ async function checkoutCharacter(season) {
 // it changed), so a crash, a lost travel home or a bad world move costs minutes, not the session. The director keeps
 // the earlier copies too (DF-FV-HISTORY).
 let checkpointTimer = null, lastCheckpoint = '';
-function startCheckpoints() { clearInterval(checkpointTimer); lastCheckpoint = ''; checkpointTimer = setInterval(() => { checkpoint().catch(() => {}); }, 3 * 60 * 1000); }
+// DF-V2-LIVECOPY (Oct 26 night): the character as the host has it right now (the copy the game plays with), read every
+// 30 s while playing. The 3-minute save and the hand-back use it: a game closed between two saves used to hand back
+// the home copy on this PC, which never saw what was earned in a world on another PC (Embermane XP lost, Oct 26 test).
+let lastLive = null, liveTimer = null;
+function startCheckpoints() {
+  clearInterval(checkpointTimer); lastCheckpoint = ''; checkpointTimer = setInterval(() => { checkpoint().catch(() => {}); }, 3 * 60 * 1000);
+  clearInterval(liveTimer); lastLive = null; liveTimer = setInterval(() => { if (character) liveRecord().then((r) => { if (r) lastLive = { at: Date.now(), rec: r }; }).catch(() => {}); }, 30 * 1000);
+}
 async function checkpoint() {
-  if (!character) return;
+  if (!character || vpsBackend) return;   // DF-VPS: the VPS owns the character
   // DF-FV-LIVESAVE (Oct 26): the copy on the PC the game plays on right now, through the join proxy (it follows host
   // changes). Before, this read the home copy, which the join window refreshes from the FIRST host only: after a world
   // move, or for a Host Mode host playing in another world, it stopped changing and nothing was saved for half an hour.
   let source = await liveRecord();
+  if (source) lastLive = { at: Date.now(), rec: source }; else if (lastLive) source = lastLive.rec;   // DF-V2-LIVECOPY
   if (!source) { const own = ownForeverRecord(readJson(path.join(dataDir(), 'state.json'), null)); source = own && own.record; }
   if (!source || typeof source !== 'object') return;
   const rec = Object.assign({}, source, { forever: true, season: character.season }); delete rec.candidate; delete rec.partyId;
@@ -296,14 +322,60 @@ function liveRecord() {
     req.on('timeout', () => req.destroy()); req.on('error', () => resolve(null));
   });
 }
+// DF-V2-RESUME (Oct 26 night): closing the launcher while the game played in a world took the player out of it (the
+// launcher said leave; reopened, the tab showed Not playing and the world did not list them). Now a player's session is
+// kept on disk while the game plays; closing the launcher keeps them in the world, and a launcher that opens while that
+// game's window is still up picks the beats and the 3-minute saves up again. Host Mode and standbys are not resumed.
+const sessionFile = () => path.join(P.dataRoot(), 'forever-session.json');
+let sessionHost = '';
+function saveSession() {
+  if (!(S.phase === 'playing' && S.role === 'player' && S.world && S.world.host)) return;
+  sessionHost = S.world.host;
+  try { fs.writeFileSync(sessionFile(), JSON.stringify({ at: Date.now(), base: directorBase(), mode: S.mode, world: { host: S.world.host, hostName: S.world.hostName || '', code: S.world.code || '' }, character: character ? { season: character.season, lease: character.lease } : null })); } catch {}
+}
+function clearSession() { sessionHost = ''; try { fs.unlinkSync(sessionFile()); } catch {} }
+// the game's join window (lan-join of this Forever install) is still open
+function joinWindowOpen() {
+  return new Promise((resolve) => {
+    const want = path.join(toolsDir(), 'lan-join-1147.ps1').toLowerCase();
+    let out = '', done = false; const fin = (v) => { if (!done) { done = true; resolve(v); } };
+    const ps = spawn('powershell.exe', ['-NoProfile', '-Command', "Get-CimInstance Win32_Process -Filter \"Name='powershell.exe'\" | ForEach-Object { $_.CommandLine }"], { windowsHide: true });
+    ps.stdout.on('data', (d) => { out += d; }); ps.on('error', () => fin(false));
+    ps.on('exit', () => fin(out.toLowerCase().split(/\r?\n/).some(l => l.includes(want))));
+    setTimeout(() => { try { ps.kill(); } catch {} fin(false); }, 15000);
+  });
+}
+let resumeTimer = null;
+async function resumeSession() {
+  let s = null; try { s = JSON.parse(fs.readFileSync(sessionFile(), 'utf8')); } catch { return; }
+  if (!s || !s.world || !s.world.host || S.phase !== 'off') return;
+  if ((s.base && s.base !== directorBase()) || Date.now() - (Number(s.at) || 0) > 12 * 3600 * 1000) { clearSession(); return; }
+  if (!(await joinWindowOpen())) {   // the game closed while the launcher was shut: give the character back as Stop does
+    if (s.character && s.character.lease) { character = s.character; await returnCharacter(); }
+    clearSession(); return;
+  }
+  if (S.phase !== 'off') return;
+  character = s.character && s.character.lease ? s.character : null;
+  S.mode = s.mode === 'any' ? 'any' : 'fresh'; S.world = s.world; S.role = 'player'; S.phase = 'playing'; S.error = '';
+  if (character) { S.character = { season: character.season, exists: true, fresh: false }; startCheckpoints(); }
+  log(`your game is still in ${s.world.hostName || 'a'} world: back in it`);
+  push(); beatLoop();
+  clearInterval(resumeTimer);
+  resumeTimer = setInterval(async () => {   // no runner owns that window now: look for it instead
+    if (S.phase === 'off') { clearInterval(resumeTimer); return; }
+    if (!(await joinWindowOpen())) { clearInterval(resumeTimer); if (S.phase !== 'off') stop('the game closed'); }
+  }, 15000);
+}
 async function returnCharacter() {
   if (!character) return;
-  clearInterval(checkpointTimer); checkpointTimer = null;
+  clearInterval(checkpointTimer); checkpointTimer = null; clearInterval(liveTimer); liveTimer = null;
   const c = character; character = null;
   try {
-    const st = readJson(path.join(dataDir(), 'state.json'), null);
-    const own = ownForeverRecord(st);
-    let record = own ? own.record : null;
+    // DF-V2-LIVECOPY: the host's copy first (now, or the last one read while playing); the home copy only when neither exists
+    let record = await liveRecord();
+    if (!record && lastLive) record = lastLive.rec;
+    lastLive = null;
+    if (!record) { const own = ownForeverRecord(readJson(path.join(dataDir(), 'state.json'), null)); record = own ? own.record : null; }
     if (record && typeof record === 'object') {
       record = Object.assign({}, record, { forever: true, season: c.season });
       delete record.candidate; delete record.partyId;
@@ -354,12 +426,41 @@ function ownGameInTown() {
     return !!(m && Number(m[1]) > 0);
   } catch { return false; }
 }
+// DF-V2-TOWNCOUNT (Oct 26 night): players in this PC's Ramsgate right now (the town server's own log), for the director's
+// stuck-join watchdog (it compares who it sent here with who arrived). null = not known.
+function townCount() {
+  try {
+    const f = path.join(dir(), 'logs', 'server_8780.log');
+    const st = fs.statSync(f); const len = Math.min(st.size, 32768);
+    const fd = fs.openSync(f, 'r'); const b = Buffer.alloc(len); fs.readSync(fd, b, 0, len, st.size - len); fs.closeSync(fd);
+    const m = [...b.toString('utf8').matchAll(/client connections: \d+ -> (\d+)/g)].pop();
+    return m ? Number(m[1]) : null;
+  } catch { return null; }
+}
+// DF-V2-XPLEDGER (Oct 26 night): the XP grants this PC's backend made (data\xp-ledger.jsonl, one line each, written by the
+// TEST Forever files) go to the director with the host beat. Only lines from this hosting session are sent.
+let xpPos = -1, xpBusy = false;
+function xpLedgerStart() { try { xpPos = fs.statSync(path.join(dataDir(), 'xp-ledger.jsonl')).size; } catch { xpPos = 0; } }
+async function sendXpLedger() {
+  if (xpBusy) return;
+  const f = path.join(dataDir(), 'xp-ledger.jsonl');
+  let size; try { size = fs.statSync(f).size; } catch { return; }
+  if (xpPos < 0 || size < xpPos) xpPos = 0;
+  if (size === xpPos) return;
+  const len = Math.min(size - xpPos, 512 * 1024);
+  const fd = fs.openSync(f, 'r'); const b = Buffer.alloc(len); fs.readSync(fd, b, 0, len, xpPos); fs.closeSync(fd);
+  const end = b.lastIndexOf(10); if (end < 0) return;   // only whole lines
+  const grants = b.slice(0, end).toString('utf8').split('\n').map((l) => { try { return JSON.parse(l); } catch { return null; } }).filter(Boolean);
+  xpBusy = true;
+  try { await api('POST', '/v1/forever/xp', { grants, ownKey: ownKey() }); xpPos += end + 1; } catch {} finally { xpBusy = false; }   // not sent: tried again with the next beat
+}
 function huntsForBeat() {
   const h = readJson(path.join(dataDir(), 'server_hunt.json'), null);
   const list = h ? (Array.isArray(h.list) ? h.list : [h]) : [];
   const w = readJson(path.join(dataDir(), 'wanted.json'), null);
   const wl = w ? (Array.isArray(w.list) ? w.list : [w]) : [];
-  return list.filter(e => e && e.id && e.port).map(e => {
+  const rhk = readJson(path.join(dataDir(), 'remote_hunts.json'), null) || {};   // DF-HUNT-MOVE: the backend's list of who is in which hunt
+  return list.filter(e => e && e.id && e.port && !(rhk.list || []).some(x => x && x.id === e.id)).map(e => {   // a hunt that moved to a player's PC is reported as that
     const snap = readJson(path.join(dataDir(), `${(manifest() || {}).snapshot || 'snapshot_'}${e.port}.json`), null);
     const want = wl.find(x => x && x.id === e.id) || {};
     let behemoth = null, players = 0;
@@ -369,8 +470,12 @@ function huntsForBeat() {
       players = Array.isArray(snap.players) ? snap.players.length : 0;
     }
     const hm = /HuntID=([^?]+)/.exec(String(want.url || ''));
-    return { id: e.id, label: want.label || '', huntId: hm ? hm[1] : '', port: e.port, players, cap: 8, behemoth, age: want.at ? Math.max(0, Math.round((Date.now() - Date.parse(want.at)) / 1000)) : 0, tick: tickRate(e.port) };
-  });
+    return { id: e.id, label: want.label || '', huntId: hm ? hm[1] : '', port: e.port, players, cap: 8, behemoth, age: want.at ? Math.max(0, Math.round((Date.now() - Date.parse(want.at)) / 1000)) : 0, tick: tickRate(e.port), keys: (rhk.keys && rhk.keys[e.id]) || [], warm: (rhk.warm && rhk.warm[e.id]) || null };
+  }).concat((() => {   // DF-V2-REMOTEHUNTS: the hunts players' PCs run for this world (the backend's data\remote_hunts.json)
+    const rh = readJson(path.join(dataDir(), 'remote_hunts.json'), null);
+    if (!rh || !Array.isArray(rh.list) || Date.now() - (Number(rh.at) || 0) > 30000) return [];
+    return rh.list.filter(x => x && x.id).map(x => ({ id: x.id, label: String(x.label || ''), huntId: String(x.huntId || ''), port: 0, players: Number(x.players) || 0, cap: 8, behemoth: null, age: Number(x.at) > 0 ? Math.max(0, Math.round((Date.now() - Number(x.at)) / 1000)) : 999, tick: 0, remote: true, up: !!x.up, on: String(x.host || ''), addr: String(x.addr || ''), behemoth: x.behemoth == null ? null : Number(x.behemoth), moved: x.moved || null, warm: x.warm || null, keys: (rh.keys && rh.keys[x.id]) || [] }));   // DF-V2-DISPLAY + DF-HUNT-MOVE
+  })());
 }
 function relayInfo() {
   const st = readJson(path.join(dataDir(), 'relay-1147.json'), null);
@@ -391,7 +496,7 @@ async function play(mode, worldHost) {
   writeForeverMods();
   try {
     if (S.helper && !(S.score && S.score.score)) throw new Error('Run the host check and send it first: the director only hands worlds to PCs with a score.');
-    if (S.mode === 'fresh') {
+    if (S.mode === 'fresh' && !vpsBackendOf(null)) {   // DF-VPS: the VPS owns the character: no checkout, no local copy
       await checkoutCharacter(S.season || 'S1');
       // a brand-new Forever character has to be made in game before it can join anyone: the game opens solo once
       if (!hasCharacter()) { await createCharacter(); if (!hasCharacter()) { S.phase = 'off'; await returnCharacter(); throw new Error('Your Forever character was not created. Press Play Forever again and finish character creation, then close the game.'); } }
@@ -399,16 +504,27 @@ async function play(mode, worldHost) {
     await ask();
   } catch (e) { S.phase = 'off'; await returnCharacter(); throw e; }
 }
+// DF-VPS: the backend address of the world the director put us in (a reply or the current world); '' = on a PC
+function vpsBackendOf(r) { const w = (r && r.world) || S.world; return w && typeof w.backend === 'string' && /^\d{1,3}(\.\d{1,3}){3}:\d{2,5}$/.test(w.backend) ? w.backend : ''; }
 async function ask() {
   const region = (() => { try { return (ctx.social.relayPing() || {}).id || ''; } catch { return ''; } })();
   // data folder \ forever-newworld.txt: start a world of my own instead of joining one (merge testing; a streamer's own world later)
   let newWorld = false; try { newWorld = fs.existsSync(path.join(P.dataRoot(), 'forever-newworld.txt')); } catch {}
   const pings = (() => { try { return ctx.social.relayPings ? ctx.social.relayPings() : {}; } catch { return {}; } })();
   const fv = (() => { try { return JSON.parse(fs.readFileSync(path.join(dir(), 'version.json'), 'utf8').replace(/^\uFEFF/, '')).forever || {}; } catch { return {}; } })();   // DF-FV-VERSIONGATE: the director only lets current installs in
-  const r = await api('POST', '/v1/forever/play', { mode: S.mode, region, pings, newWorld: newWorld || !!S.helper, helper: !!S.helper, world: S.wantWorld || undefined, pack: fv.overlay || '', core: fv.core || '' });
+  const r = await api('POST', '/v1/forever/play', { mode: S.mode, region, pings, newWorld: newWorld || !!S.helper, helper: !!S.helper, world: S.wantWorld || undefined, pack: fv.overlay || '', core: fv.core || '', app: (ctx.appVersion ? ctx.appVersion() : '') });
+  if (r.action === 'update' && !autoUpdated) {   // DF-AUTO-UPDATE (Addison, Oct 27): install the Forever update here and press Play again by itself
+    autoUpdated = true; S.wantWorld = null; S.phase = 'off'; await returnCharacter(); push();
+    log('Forever has an update: installing it now, then Play Forever again');
+    try { await setup(); S.stale = false; push(); } catch (e) { S.stale = true; push(); throw new Error('the Forever update failed: ' + e.message + '. Press Update Forever.'); }
+    const again = await play(mode, worldHost); autoUpdated = false; return again;
+  }
+  autoUpdated = false;
   if (r.action === 'update') { S.wantWorld = null; S.phase = 'off'; S.stale = true; await returnCharacter(); push(); throw new Error(r.why || 'Forever has an update. Press Update Forever first.'); }
   S.season = r.season || S.season;
   if (r.action === 'full' || r.action === 'gone') { S.wantWorld = null; S.phase = 'off'; await returnCharacter(); throw new Error((r.why || 'that world is not available') + '. Press Play Forever to join a world with room.'); }
+  vpsBackend = (r.world && r.world.backend) || (r.backend) || '';   // DF-VPS
+  if (vpsBackend && character) { const c = character; character = null; clearInterval(checkpointTimer); await vpsImport(vpsBackend, c.record).catch(e => log('character import: ' + e.message, true)); try { await api('POST', '/v1/forever/character/release', { season: c.season, lease: c.lease }); } catch {} }   // checked out before we knew: give it back untouched (DF-VPS-IMPORT: after the one-time import)
   if (r.action === 'join') { S.world = r.world; await startJoin(r.world); }
   else if (r.action === 'host') { S.helper = true; S.autoPlay = !S.helperOnly; await startHost(r.rules); }   // every Forever host is a Host Mode host: the world runs headless, the player's own game joins it
   else if (r.action === 'needHost') { S.phase = 'needHost'; S.why = r.why || ''; log('nobody can host: ' + S.why); push(); }   // the tab asks the player; forever:checkAndHost or forever:wait continue
@@ -421,7 +537,7 @@ async function startJoin(world) {
   log(`joining ${world.hostName}'s world (${world.code})`);
   placeRecord('join');
   const script = path.join(toolsDir(), 'lan-join-1147.ps1');
-  ctx.runner.runVisible(FV + ':join', 'join', script, ['-Code', `'${world.code.replace(/'/g, "''")}'`], 'Dauntless Forever - in a world (keep open)', { closeWhenDone: true, env: ENV(), cwd: dir() })
+  ctx.runner.runVisible(FV + ':join', 'join', script, ['-Code', `'${world.code.replace(/'/g, "''")}'`], 'Dauntless Forever - in a world (keep open)', { closeWhenDone: true, env: Object.assign(ENV(), vpsBackend ? { DF_NO_TRAVEL: '1' } : {}), cwd: dir() })   // DF-VPS: the VPS owns the character
     .then(() => { if (S.phase !== 'off') stop('the game closed'); });
   // the client DLL goes into the game once its window is up (loading screen + travel on a GO)
   ctx.runner.runHidden(FV + ':clientattach', 'attach', coreTool('clientAttach'), ['-Dll', coreBin('client')], (line) => {
@@ -429,6 +545,7 @@ async function startJoin(world) {
     else if (/^DFSTATUS (nogame|unconfirmed)/.test(line)) { S.clientDll = false; log('this PC may not follow a host change (set-up did not confirm)', true); }
   }, { env: ENV(), cwd: dir() });
   S.phase = 'playing'; push();
+  saveSession();   // DF-V2-RESUME
   beatLoop();
 }
 
@@ -440,6 +557,25 @@ async function startHost(rules) {
   const script = path.join(toolsDir(), 'online-host-1147.ps1');
   try { fs.unlinkSync(path.join(dataDir(), 'hostmode_stop')); } catch {}
   let run;
+  if (S.helper && vpsBackend) {   // DF-VPS: this PC runs the TOWN (Ramsgate + hunts) for the world's backend on the VPS
+    const [vip, vport] = vpsBackend.split(':');
+    const node = await ctx.nodeFor();
+    const args = ['-Vps', vip, '-Port', String(vport), '-Max', String(Math.max(1, Math.min(7, Number((S.score || {}).maxHunts) || 3))), '-Node', node || 'node.exe', '-Key', ownKey() || 'town'];
+    log(`hosting the town of a world whose characters live on the VPS (${vpsBackend})`);
+    await new Promise((res) => { const ps = spawn('powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', path.join(toolsDir(), 'server-1147.ps1'), '-Stop'], { cwd: dir(), env: Object.assign({}, process.env, ENV()), windowsHide: true, stdio: 'ignore' }); ps.on('exit', res); ps.on('error', res); setTimeout(res, 15000); });   // server copies left from an earlier run hold UDP 8780
+    run = ctx.runner.runHidden(FV + ':host', 'host', path.join(toolsDir(), 'vps-town-1147.ps1'), args, (line, isErr) => {
+      let m;
+      if ((m = /relay slot: players reach this PC's servers at (\S+)/.exec(line))) { S.vpsTown = { code: m[1].trim() }; try { fs.writeFileSync(path.join(dir(), 'ONLINE-join-code.txt'), vpsBackend); } catch {} log('your town is reachable at ' + m[1]); }
+      else if (/DFSTATUS remote city up/.test(line)) { S.vpsTownUp = true; }   // Ramsgate is listening (not just the helper)
+      else if (/DFSTATUS remote failed/.test(line) || isErr) log('town: ' + line.replace(/^DFSTATUS remote /, '').slice(0, 200), true);
+    }, { env: ENV(), cwd: dir() });
+    run.then((code) => { if (S.phase === 'off' || S.phase === 'stopping') return; log(`the town stopped (code ${code}); see logs\\remote-hunts-server.log`, true); stop('town ended').catch(() => {}); });
+    hostStartupReady = true; backendMisses = 0;
+    hostBeatLoop();
+    (async () => { for (let i = 0; i < 120 && S.phase === 'hosting' && !S.vpsTownUp; i++) await new Promise(r => setTimeout(r, 2000)); if (S.phase !== 'hosting') return; if (!S.vpsTownUp) { log('the town did not come up in 4 minutes', true); stop('town startup timed out').catch(() => {}); return; }
+      log('your town is up'); if (S.autoPlay) { S.autoPlay = false; push(); playInOwnWorld().catch(e => log('could not open your game: ' + e.message, true)); } })();
+    return;
+  }
   if (S.helper) {
     // a backend left on 64000 by an earlier run (a cut-off move, a crash) would make Host Mode refuse to start: close it first
     if (await backendAlive(63000 + HM_OFFSET)) { log('closing a backend left over from an earlier run'); try { await killStrayBackend(); } catch {} await new Promise(r => setTimeout(r, 1500)); }
@@ -510,7 +646,7 @@ function postSigned(host, port, apiPath, bodyObj, timeoutMs) {
   const body = JSON.stringify(bodyObj), secret = foreverSecret(), t = String(Date.now());
   const sig = crypto.createHmac('sha256', secret).update(`${t}\nPOST\n${apiPath}\n${body}`).digest('hex');
   return new Promise((resolve, reject) => {
-    const req = require('http').request({ host, port, path: apiPath, method: 'POST', headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body), 'X-DF-Time': t, 'X-DF-Sig': sig }, timeout: timeoutMs || 15000 }, (res) => {
+    const req = require('http').request({ host, port, path: apiPath, method: 'POST', headers: { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body), 'X-DF-Time': t, 'X-DF-Sig': sig }, timeout: timeoutMs || 20000 /* DF-V2 */ }, (res) => {
       let data = ''; res.setEncoding('utf8'); res.on('data', (d) => { data += d; }); res.on('end', () => { let j = null; try { j = JSON.parse(data); } catch {} if (res.statusCode !== 200) reject(new Error(`${res.statusCode} ${(j && (j.reason || j.error)) || data.slice(0, 120)}`)); else resolve(j || {}); });
     });
     req.on('error', reject); req.on('timeout', () => { req.destroy(new Error('timeout')); }); req.end(body);
@@ -565,7 +701,7 @@ async function playAway() {
   let newWorld = false; try { newWorld = fs.existsSync(path.join(P.dataRoot(), 'forever-newworld.txt')); } catch {}   // the own-world switch applies here too
   const pings = (() => { try { return ctx.social.relayPings ? ctx.social.relayPings() : {}; } catch { return {}; } })();
   const fv = (() => { try { return JSON.parse(fs.readFileSync(path.join(dir(), 'version.json'), 'utf8').replace(/^\uFEFF/, '')).forever || {}; } catch { return {}; } })();
-  const r = await api('POST', '/v1/forever/play', { mode: S.mode, region, pings, newWorld, world: S.wantWorld || undefined, pack: fv.overlay || '', core: fv.core || '' });
+  const r = await api('POST', '/v1/forever/play', { mode: S.mode, region, pings, newWorld, world: S.wantWorld || undefined, pack: fv.overlay || '', core: fv.core || '', app: (ctx.appVersion ? ctx.appVersion() : '') });
   S.wantWorld = null;
   if (r.action === 'update') { S.stale = true; push(); throw new Error(r.why || 'Forever has an update. Stop, press Update Forever, then Play Forever.'); }
   if (r.action === 'full' || r.action === 'gone') throw new Error((r.why || 'that world is not available') + '. Press Play Forever to join a world with room.');
@@ -579,7 +715,7 @@ function startAwayJoin(world) {
   try { fs.unlinkSync(path.join(dataDir(), 'join-failover.txt')); } catch {}
   S.away = { host: world.host, hostName: world.hostName || '', code: world.code }; S.ownGame = true; push();
   log(`opening your game in ${world.hostName}'s world (your own world keeps running here)`);
-  ctx.runner.runVisible(FV + ':ownjoin', 'join', path.join(toolsDir(), 'lan-join-1147.ps1'), ['-Code', `'${String(world.code).replace(/'/g, "''")}'`], 'Dauntless Forever - your game (keep open)', { closeWhenDone: true, env: Object.assign(ENV(), { DF_KEEP_OWN: '1' }), cwd: dir() })
+  ctx.runner.runVisible(FV + ':ownjoin', 'join', path.join(toolsDir(), 'lan-join-1147.ps1'), ['-Code', `'${String(world.code).replace(/'/g, "''")}'`], 'Dauntless Forever - your game (keep open)', { closeWhenDone: true, env: Object.assign(ENV(), { DF_KEEP_OWN: '1' }, vpsBackendOf() ? { DF_NO_TRAVEL: '1' } : {}), cwd: dir() })   // DF-VPS: the VPS owns the character
     .then(() => { S.ownGame = false; S.away = null; clearTimeout(awayTimer); api('POST', '/v1/forever/leaveWorld', {}).catch(() => {}); if (S.helper && S.phase === 'hosting') log('your game closed; your world keeps running (Play Forever to go back in)'); push(); });
   ctx.runner.runHidden(FV + ':clientattach', 'attach', coreTool('clientAttach'), ['-Dll', coreBin('client')], (line) => {
     if (/^DFSTATUS ready/.test(line)) { S.clientDll = true; log('your game is ready to follow a host change'); }
@@ -606,18 +742,21 @@ function awayBeatLoop() {
 function playInOwnWorld() {
   if (!S.helper || S.phase !== 'hosting') throw new Error('Host Mode is not running');
   if (ctx.runner.isRunning(FV + ':ownjoin')) throw new Error('your game is already open');
-  const code = joinCode();
+  const code = vpsBackend ? vpsBackend : joinCode();   // DF-VPS
   if (!code) throw new Error('no join code yet');
-  placeRecord('join');
+  if (!vpsBackend) placeRecord('join');
+  if (vpsBackend) { for (const f of ['migrate_successor.txt', 'join-failover.txt']) { try { fs.unlinkSync(path.join(dataDir(), f)); } catch {} } }   // DF-VPS: the host's own game plays on the VPS backend like everyone else; never fall over to this PC's own backend (that is another character)
+  else {
   try { fs.writeFileSync(path.join(dataDir(), 'migrate_successor.txt'), String(HM_OFFSET)); } catch {}
   try { fs.writeFileSync(path.join(dataDir(), 'join-failover.txt'), 'own world'); } catch {}   // the proxy goes local at its first check
+  }
   S.ownGame = true; push();
   log('opening your game in your own world');
   // the client core goes into this game too: it follows a GO when the world moves (promotion, merge)
   ctx.runner.runHidden(FV + ':clientattach', 'attach', coreTool('clientAttach'), ['-Dll', coreBin('client')], (line) => {
     if (/^DFSTATUS ready/.test(line)) { S.clientDll = true; log('your game is ready to follow a host change'); }
   }, { env: ENV(), cwd: dir() });
-  ctx.runner.runVisible(FV + ':ownjoin', 'join', path.join(toolsDir(), 'lan-join-1147.ps1'), ['-Code', `'${code.replace(/'/g, "''")}'`], 'Dauntless Forever - your game in your world (keep open)', { closeWhenDone: true, env: Object.assign(ENV(), { DF_KEEP_OWN: '1' }), cwd: dir() })
+  ctx.runner.runVisible(FV + ':ownjoin', 'join', path.join(toolsDir(), 'lan-join-1147.ps1'), ['-Code', `'${code.replace(/'/g, "''")}'`], 'Dauntless Forever - your game in your world (keep open)', { closeWhenDone: true, env: Object.assign(ENV(), { DF_KEEP_OWN: '1' }, vpsBackend ? { DF_NO_TRAVEL: '1' } : {}), cwd: dir() })   // DF-VPS: keep this PC's own server copies (the town), no travel
     .then(() => { S.ownGame = false; try { fs.unlinkSync(path.join(dataDir(), 'migrate_successor.txt')); } catch {} if (S.helper && S.phase === 'hosting') log('your game closed; your world keeps running (Play Forever to go back in)'); else if (!S.helper && S.phase !== 'off') stop('the game closed'); push(); });
   return Promise.resolve();
 }
@@ -632,23 +771,27 @@ function backendAlive(port) {
     req.on('error', () => resolve(false)); req.on('timeout', () => { req.destroy(); resolve(false); });
   });
 }
-let backendMisses = 0, hostStartupReady = false;
+let backendMisses = 0, hostStartupReady = false, lastHostGoAt = 0;
 function hostBeatLoop() {
-  clearTimeout(hostTimer); backendMisses = 0;
+  clearTimeout(hostTimer); backendMisses = 0; xpLedgerStart();   // DF-V2-XPLEDGER
   const tick = async () => {
     if (S.phase !== 'hosting') return;
     // A new Forever host's backend can take minutes to start: don't treat this
     // as a game closing. Keep talking to the director throughout startup.
-    if (await backendAlive(standby && standby.adopted ? 64000 : S.helper ? 63000 + HM_OFFSET : 63000)) backendMisses = 0;
+    if (vpsBackend && S.helper) { backendMisses = 0; if (!ctx.runner.isRunning(FV + ':host') && !ctx.runner.isRunning(FV + ':remotehunts')) { stop('the town stopped'); return; } }   // DF-VPS: the backend is on the VPS; the town script (or, after a takeover, the hunt helper) reports its own health
+    else if (await backendAlive(standby && standby.adopted ? 64000 : S.helper ? 63000 + HM_OFFSET : 63000)) backendMisses = 0;
     else if ((!S.helper || hostStartupReady) && ++backendMisses >= 3) { stop('backend stopped answering'); return; }
-    const code = standby && standby.adopted ? standby.code : joinCode();
-    const relay = standby && standby.adopted ? { ip: standby.relayIp, base: standby.relayBase } : relayInfo();
+    const code = vpsBackend && S.helper ? vpsBackend : (standby && standby.adopted ? standby.code : joinCode());   // DF-VPS: players join the VPS address
+    const relay = vpsBackend && S.helper ? (S.vpsTown ? { ip: S.vpsTown.code.split(':')[0], base: Number(S.vpsTown.code.split(':')[1]) } : null) : (standby && standby.adopted ? { ip: standby.relayIp, base: standby.relayBase } : relayInfo());
     if (code && /^\d+\.\d+\.\d+\.\d+:\d+$/.test(code)) {
       try {
-        const r = await api('POST', '/v1/forever/host', { code, relay, mode: S.mode, hunts: huntsForBeat(), closingIn: S.closingIn || 0, helper: !!S.helper, ownGame: !!(S.helper && S.ownGame && !S.away && (ownGameInTown() || huntsForBeat().some(h => h.players > 0))) });
+        const r = await api('POST', '/v1/forever/host', { code, relay, mode: S.mode, backend: vpsBackend || undefined, townAt: S.vpsTown ? S.vpsTown.code : undefined, key: ownKey() || undefined, hunts: huntsForBeat(), town: townCount(), closingIn: S.closingIn || 0, helper: !!S.helper, ownGame: !!(S.helper && S.ownGame && !S.away && (ownGameInTown() || huntsForBeat().some(h => h.players > 0))) });
         if (r.promote) { await stepDown(`${r.promote.name || 'a better PC'} takes the world over (promotion)`); return; }
         if (r.merge && r.merge.world) { if (S.helper) await stepDown(`your world folds into ${r.merge.world.hostName}'s`, r.merge.world.code); else await foldInto(r.merge); return; }
+        if (r.ended && S.helper) { autoRehost('the worlds were ended from the admin page').catch(() => {}); return; }   // DF-AUTO-REHOST
         S.world = r.world; S.standbyName = r.standby ? r.standby.name : ''; S.error = '';
+        sendXpLedger().catch(() => {});   // DF-V2-XPLEDGER
+        if (r.hostGo && r.hostGo.address && r.hostGo.at !== lastHostGoAt) { lastHostGoAt = r.hostGo.at; try { fs.writeFileSync(path.join(dataDir(), (manifest() || {}).goFile || 'client_go.txt'), r.hostGo.address); log(r.hostGo.why || 'your hunt moved: back to Ramsgate'); } catch {} }   // DF-HUNT-MOVE (Addison): the host's own game goes back to its Ramsgate when the hunt it was in moved
       } catch (e) { S.error = 'director: ' + e.message; }
     }
     push();
@@ -657,7 +800,53 @@ function hostBeatLoop() {
   hostTimer = setTimeout(tick, 3000);
 }
 
-let goneMisses = 0;
+let goneMisses = 0, remoteHoldUntil = 0, townTaking = false, autoUpdated = false, rehosting = false;
+// DF-AUTO-REHOST (Addison, Oct 27): a Host Mode PC whose world was ended from the admin page (an update push, a reset) installs the
+// Forever update if there is one and hosts again by itself, so hosts do not have to press anything 14 times a day.
+async function autoRehost(why) {
+  if (rehosting) return; rehosting = true;
+  try {
+    const again = !!S.helper;
+    await stop(why);
+    if (!again) return;
+    log('Host Mode comes back on its own in 20 s (with the Forever update first, if there is one)');
+    await new Promise(r => setTimeout(r, 20000));
+    if (S.phase !== 'off') return;
+    if (await setupStale()) { log('installing the Forever update'); try { await setup(); S.stale = false; push(); } catch (e) { S.stale = true; log('auto update failed: ' + e.message + '. Press Update Forever, then Host Mode.', true); push(); return; } }
+    await play('helper');
+  } catch (e) { log('Host Mode did not come back: ' + e.message, true); }
+  finally { rehosting = false; }
+}
+// DF-VPS-TOWNCOLD (Addison, Oct 27: the city fail-safe): no pre-started town anywhere; this PC starts Ramsgate from cold:
+// its hunt helper restarts in town mode (reporting to the backend at once), then it carries on as the world's host.
+async function takeTownCold(tt) {
+  if (townTaking) return; townTaking = true;
+  try {
+    log('the town\'s PC went silent and no town was pre-started: this PC starts Ramsgate now (about a minute)');
+    const max = Math.max(1, Math.min(7, Number((S.score || {}).maxHunts) || 3));
+    if (remote) { stopRemoteHunts(); await new Promise(r => setTimeout(r, 13000)); }
+    if (S.phase !== 'playing') return;
+    remoteFailedAt = 0; remoteHoldUntil = 0;
+    await startRemoteHunts(max, true, true);
+    for (let i = 0; i < 60 && (!remote || !remote.relayIp); i++) await new Promise(r => setTimeout(r, 500));
+    if (!remote || !remote.relayIp) { log('cold town start: the hunt helper did not come up', true); return; }
+    remote.town = true;
+    await takeTown(tt);
+  } finally { townTaking = false; }
+}
+// DF-VPS-TOWNSTANDBY (Oct 27): the world's town PC went silent and the director picked this PC (its Ramsgate is already
+// running, quiet). Tell the helper to report the town to the backend, and carry on as this world's host: same game, same
+// hunt helper (it now serves the town and the hunts), host beats instead of member beats.
+async function takeTown(tt) {
+  const r = remote; if (!r || !r.town || !r.relayIp) return;
+  try { fs.writeFileSync(path.join(dataDir(), 'town_go.txt'), 'go'); } catch (e) { log('town takeover: ' + e.message, true); return; }
+  clearTimeout(timer);
+  S.helper = true; S.role = 'host'; S.phase = 'hosting'; S.ownGame = true; S.away = null;
+  S.vpsTown = { code: `${r.relayIp}:${r.relayBase}` }; S.vpsTownUp = true; hostStartupReady = true; backendMisses = 0;
+  try { fs.writeFileSync(path.join(dir(), 'ONLINE-join-code.txt'), vpsBackend); } catch {}
+  log(`the town's PC went silent: this PC takes the town over (Ramsgate at ${S.vpsTown.code}); players come back to Ramsgate from the menu`);
+  push(); hostBeatLoop();
+}
 function beatLoop() {
   clearTimeout(timer); goneMisses = 0;
   const tick = async () => {
@@ -669,13 +858,20 @@ function beatLoop() {
       const r = await api('POST', '/v1/forever/beat', body);
       S.error = '';
       if (r.world) S.world = r.world;
+      if (S.world && S.world.host !== sessionHost) saveSession();   // DF-V2-RESUME: the world moved
       if (r.hostClosing) S.hostClosing = r.hostClosing; else S.hostClosing = null;
       S.noStandby = !!r.noStandby;
       if (r.role === 'standby' && S.role !== 'standby') await becomeStandby(r.pullFrom);
+      else if (r.role === 'player' && S.role === 'standby' && S.phase === 'standby' && !r.go && standby && !standby.adopted && !standby.takeoverAsked) dropStandby(`${(r.world && r.world.standby && r.world.standby.name) || 'another PC'} stands by now`);   // DF-V2-DROPSTANDBY
+      if (r.townTake && r.townTake.backend && !townTaking) { if (remote && remote.town) { await takeTown(r.townTake); return; } if (r.townTake.cold) { takeTownCold(r.townTake).catch(e => log('cold town start: ' + e.message, true)); return; } }   // DF-VPS-TOWNSTANDBY / DF-VPS-TOWNCOLD
+      if (remote && !!remote.town !== !!r.townStandby && r.huntHost) { log(r.townStandby ? 'you are a town standby now: restarting the hunt helper with Ramsgate pre-started' : 'not a town standby any more: restarting the hunt helper'); stopRemoteHunts(); remoteHoldUntil = Date.now() + 15000; }   // DF-VPS-TOWNSTANDBY
+      if (r.huntHost && r.role === 'player' && !standby && S.phase === 'playing' && /^[0-9a-f]{32}$/.test(String(ownKey() || '')) && Date.now() - remoteFailedAt > 5 * 60 * 1000 && Date.now() > remoteHoldUntil) startRemoteHunts(Number(r.huntHost.max) || 1, !!r.townStandby).catch(() => {});   // DF-V2-REMOTEHUNTS
+      else if (!r.huntHost && remote) stopRemoteHunts();
+      { const tk = JSON.stringify(Array.isArray(r.huntTake) ? r.huntTake : []); if (tk !== lastTake) { lastTake = tk; try { fs.writeFileSync(path.join(dataDir(), 'remote_hunts_take.json'), tk); } catch {} if (tk !== '[]') log('hunt move: the director asks this PC to ' + r.huntTake.map(x => (x.mode === 'take' ? 'take ' : 'keep a backup of ') + (x.label || x.id)).join(', ')); } }   // DF-HUNT-MOVE
       if (r.takeover && standby && !standby.adopted && !standby.takeoverAsked) { standby.takeoverAsked = true; log('the director asks this PC to take the world over (promotion)'); try { fs.writeFileSync(path.join(dataDir(), 'forever_takeover.txt'), 'now'); } catch {} }
       if (r.role === 'host' && standby && standby.adopted) { becomeHost(); return; }
       if (r.go && r.go.at !== lastGoAt && !(standby && standby.adopted)) { lastGoAt = r.go.at; await follow(r.go); }
-      if (!r.role && !r.go) { if (++goneMisses >= 3) { log('the world is gone'); stop('the world ended'); return; } } else goneMisses = 0;
+      if (!r.role && !r.go) { if (++goneMisses >= (vpsBackend ? 12 : 3)) { /* DF-VPS: a director restart (a push) is not a lost world: the town is still up; wait a minute */ log('the world is gone'); const again = !!vpsBackend, mode = S.mode === 'fresh' ? 'fresh' : 'any'; await stop('the world ended'); if (again) { log('Play Forever again in 10 s (your character is safe on the server)'); setTimeout(() => { if (S.phase === 'off') play(mode).catch(e => log('Play Forever: ' + e.message, true)); }, 10000); } return; } } else goneMisses = 0;   // DF-VPS: a VPS world that ended comes back by itself
     } catch (e) { S.error = 'director: ' + e.message; }
     push();
     timer = setTimeout(tick, BEAT_MS);
@@ -685,7 +881,64 @@ function beatLoop() {
 
 // elected: connect this PC's own relay slot first (so the backup backend hands out reachable addresses), then run the
 // standby flow: it follows the host's hunt through the join already up on 63000
+// DF-V2-REMOTEHUNTS (Oct 26 night): while this PC plays in another PC's world as a plain player, and the director says
+// it may (its beat reply carries huntHost), this PC hosts the hunts its player opens: its own relay slot for the hunt
+// servers' UDP ports, and tools\remote-hunts-1147.ps1 (offers to the world's backend, boots the hunts it is given with
+// server-1147.ps1 -HuntsOnly). The hunt servers use the world's backend through this PC's join proxy.
+let remote = null, remoteFailedAt = 0, lastTake = '';
+let vpsBackend = '';   // DF-VPS: 'ip:port' when this world's characters live on the VPS backend (the director says so); '' = v1 (a PC's backend)
+async function startRemoteHunts(max, town, townNow) {   // DF-VPS-TOWNSTANDBY: town = this PC is a town standby (Ramsgate pre-started, quiet until told to go); townNow = run the town for real (cold takeover)
+  if (remote || !fs.existsSync(path.join(toolsDir(), 'remote-hunts-1147.ps1'))) return;
+  const r = remote = { max, town: !!town, procs: [], wanted: 0, up: 0 };
+  try {
+    const node = await ctx.nodeFor(); if (!node) throw new Error('node.exe not found');
+    const logDir = path.join(dir(), 'logs'); P.ensureDir(logDir);
+    const status = path.join(dataDir(), 'relay-forever-hunts.json'); try { fs.unlinkSync(status); } catch {}
+    const net = ctx.social.getNetwork();
+    const list = (Array.isArray(net.relays) && net.relays.length ? net.relays : [net.relay]).filter(x => x && x.host);
+    const bestId = (() => { try { return (ctx.social.relayPing() || {}).id; } catch { return null; } })();
+    const relay = list.find(x => String(x.id || x.name || x.host) === bestId) || list[0];
+    const envR = Object.assign({}, process.env, { LOCAL_BACKEND_PORT: '63096', LOCAL_GAME_PORT_BASE: String(UDP_BASE), RELAY_STATUS_FILE: status });   // only the UDP ports matter: no backend here
+    r.procs.push(spawn(node, [path.join(toolsDir(), 'relay-client.js'), relay.host, String(relay.controlPort || 7000), status], { cwd: dir(), env: envR, windowsHide: true, stdio: ['ignore', fs.openSync(path.join(logDir, 'relay-hunts.log'), 'a'), fs.openSync(path.join(logDir, 'relay-hunts.err'), 'a')] }));
+    let st = null;
+    for (let i = 0; i < 40 && remote === r && !st; i++) { await new Promise(res => setTimeout(res, 500)); const x = readJson(status, null); if (x && x.ip && x.base) st = x; }
+    if (remote !== r) return;   // stopped meanwhile
+    if (!st) throw new Error('the relay did not answer in 20 s');
+    r.relayIp = String(st.ip); r.relayBase = Number(st.base);
+    log(`this PC hosts the hunts you open (relay ${r.relayIp}:${r.relayBase}, up to ${max} at once)${town ? ' and keeps Ramsgate pre-started as a town standby' : ''}`);
+    ctx.runner.runHidden(FV + ':remotehunts', 'remotehunts', path.join(toolsDir(), 'remote-hunts-1147.ps1'), ['-Key', ownKey(), '-Ip', r.relayIp, '-Base', String(r.relayBase), '-Max', String(max), '-Node', node].concat(privateOk() ? ['-Attach', coreTool('attach'), '-Dll', coreBin('server')] : []).concat(vpsBackendOf() ? ['-Target', vpsBackendOf()] : []).concat(town && vpsBackendOf() ? [townNow ? '-Town' : '-TownWarm'] : []) /* DF-VPS: in a VPS world the helper syncs through the signed proxy (the gateway refuses unsigned joiner requests) */, (line, isErr) => {
+      const m = /^DFSTATUS remote hunts (\d+) wanted (\d+) up/.exec(line);
+      if (m) { r.wanted = Number(m[1]); r.up = Number(m[2]); if (r.up) log(`your PC runs ${r.up} hunt server(s) for this world`); push(); }
+      else if (/^DFSTATUS remote (failed|sync failed)/.test(line) || isErr) log('own hunts: ' + line.replace(/^DFSTATUS remote /, '').slice(0, 200), true);
+      else if (/^DFSTATUS remote proxy /.test(line)) log('own hunts: the hunt servers reach this world through ' + line.slice(22));
+      else if (/^DFSTATUS remote (warm|applied) /.test(line)) log('hunt move: ' + line.replace(/^DFSTATUS remote /, ''));   // DF-HUNT-MOVE
+    }, { env: ENV(), cwd: dir() }).then(() => { if (remote === r) { log('hosting your own hunts stopped'); remoteFailedAt = Date.now(); stopRemoteHunts(); } });
+  } catch (e) { log('hosting your own hunts: ' + e.message, true); remoteFailedAt = Date.now(); if (remote === r) stopRemoteHunts(); }
+}
+// DF-V2-DROPSTANDBY (Oct 27): the director moved the standby role to a better PC; this PC kept running its backup
+// backend, town and hunt copies (ports and memory) and, being "standby" locally, never hosted its own hunts. Now it stops
+// them and plays on as a plain player. Its game, join proxy and Forever character are not touched.
+function dropStandby(why) {
+  if (!standby || standby.adopted) return;
+  log(`not the standby any more (${why}): closing this PC's backup copies`);
+  const st = standby; standby = null; S.role = 'player'; S.phase = 'playing';
+  try { ctx.runner.killTree(FV + ':standby'); } catch {}
+  for (const p of st.procs || []) { try { p.kill(); } catch {} }
+  // its backup backend (64000) and server copies are not children of anything left running: close them by what they run
+  try {
+    const ps = spawn('powershell.exe', ['-NoProfile', '-Command', `Get-CimInstance Win32_Process | Where-Object { ($_.Name -eq 'node.exe' -and $_.CommandLine -like '*recorder-1147.js*' -and $_.CommandLine -like '*${dir().replace(/\\/g, '\\\\').replace(/'/g, "''")}*') -or ($_.Name -eq 'Dauntless-Win64-Shipping.exe' -and $_.CommandLine -match '(^|\\s)-server(\\s|$)') } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }`], { windowsHide: true, stdio: 'ignore' });
+    ps.on('error', () => {});
+  } catch {}
+  for (const f of ['wanted.json', 'server_hunt.json', 'server.json']) { try { fs.unlinkSync(path.join(dataDir(), f)); } catch {} }
+  push();
+}
+function stopRemoteHunts() {
+  const r = remote; remote = null; if (!r) return;
+  try { fs.writeFileSync(path.join(dataDir(), 'remote_hunts_stop_helper'), 'stop'); } catch {}   // the helper gives the hunts back to the world's PC first
+  setTimeout(() => { try { ctx.runner.killTree(FV + ':remotehunts'); } catch {} for (const p of r.procs) { try { p.kill(); } catch {} } }, 12000);
+}
 async function becomeStandby(pullFrom) {
+  stopRemoteHunts();   // DF-V2-REMOTEHUNTS: a standby's own server copies need these ports
   S.role = 'standby'; S.phase = 'standby'; push();
   log(`you are the standby for this world: pre-warming the hunt from ${pullFrom ? pullFrom.code : 'the host'}`);
   standby = { relayIp: '', relayBase: 0, code: '', prewarmed: false, ready: false, huntPort: 0, adopted: false, hunts: {} };
@@ -761,6 +1014,11 @@ function becomeHost() {
 }
 // the GO: the hunt moved to another PC; point the join at it, then the client DLL travels the game there
 async function follow(go, away) {
+  if (go.keepProxy) {   // DF-HUNT-MOVE: only this hunt moved (same world, same backend): the game travels, the join, the standby and the role stay
+    try { fs.writeFileSync(path.join(dataDir(), (manifest() || {}).goFile || 'client_go.txt'), go.address); log(`your hunt moved to ${go.newHostName || 'another PC'}: travelling there (${go.address})`); }
+    catch (e) { log('could not follow the hunt: ' + e.message, true); }
+    return;
+  }
   if (!away) { S.phase = 'moving'; push(); }
   log(go.merge ? `your world merged into ${go.newHostName || 'another'}'s: travelling to their town (${go.address})` : `the world moved to ${go.newHostName || 'another PC'}: following to ${go.address}`);
   // a standby of the old world has nothing to stand by for any more; the new world elects its own
@@ -808,6 +1066,9 @@ async function stop(why) {
   } catch {}
   try { await api('POST', '/v1/forever/leave', {}); } catch {}
   await returnCharacter();
+  clearSession(); clearInterval(resumeTimer);   // DF-V2-RESUME
+  stopRemoteHunts();   // DF-V2-REMOTEHUNTS
+  vpsBackend = ''; S.vpsTown = null; S.vpsTownUp = false;   // DF-VPS
   standby = null; S.role = null; S.world = null; S.hostClosing = null; S.phase = 'off'; S.why = ''; S.helper = false; S.helperOnly = false; S.autoPlay = false; S.ownGame = false; S.away = null; clearTimeout(awayTimer);
   log('stopped' + (why ? ' (' + why + ')' : ''));
   push();
@@ -1062,6 +1323,7 @@ function init(c) {
   ctx = c;
   S = { phase: 'off', mode: 'fresh', role: null, world: null, season: 'S1', allowed: false };
   setTimeout(checkAccess, 4000);   // after the Friends sign-in and network.json are up
+  setTimeout(() => { resumeSession().catch((e) => log('resume: ' + e.message, true)); }, 6000);   // DF-V2-RESUME
   ipcMain.handle('forever:state', () => publicState());
   ipcMain.handle('forever:play', async (_e, mode, worldHost) => { try { await play(mode, worldHost); return { ok: true }; } catch (e) { S.error = e.message; push(); return { ok: false, error: e.message }; } });
   ipcMain.handle('forever:stop', async () => { await stop('stopped by you'); return { ok: true }; });
@@ -1100,7 +1362,9 @@ function init(c) {
   ipcMain.handle('forever:access', async () => { await checkAccess(); return { allowed: !!S.allowed }; });
   ipcMain.handle('forever:closing', async (_e, seconds) => { S.closingIn = Math.max(0, Number(seconds) || 0); return { ok: true }; });
 }
-function shutdown() { if (S && S.phase !== 'off') { try { fs.writeFileSync(path.join(dataDir(), 'forever_stop'), 'quit'); } catch {} try { api('POST', '/v1/forever/leave', {}).catch(() => {}); } catch {} } }
+function shutdown() {
+  if (S && S.phase === 'playing' && S.role === 'player' && S.world && !S.helper) { saveSession(); if (remote) { try { fs.writeFileSync(path.join(dataDir(), 'remote_hunts_stop_helper'), 'stop'); } catch {} } return; }   // DF-V2-REMOTEHUNTS: hosted hunts go back to the world's PC   // DF-V2-RESUME: the game keeps playing; the next launcher picks it up
+  if (S && S.phase !== 'off') { try { fs.writeFileSync(path.join(dataDir(), 'forever_stop'), 'quit'); } catch {} try { api('POST', '/v1/forever/leave', {}).catch(() => {}); } catch {} } }
 // for the launcher's close dialog: hosting a Forever world with people in it (or standing by for one)
 // the Forever world's voice room: keyed by the world's host (the voice service checks world membership with the director)
 function voiceRoom() {

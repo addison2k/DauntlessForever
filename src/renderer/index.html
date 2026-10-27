@@ -55,17 +55,23 @@
 
 <!-- ============================================================ Play -->
 <section class="page" id="page-play">
-  <ol class="strip" id="shelf" aria-label="Versions"></ol>
+  <!-- DF-V2-PLAYUI (Addison, Oct 27): "Game version" tabs for the playable builds; "Upcoming" opens the classic cards of the ones still being made -->
+  <div class="gv-label">Game version</div>
+  <div class="gv-tabs" id="gv-tabs" role="tablist" aria-label="Versions"></div>
+  <ol class="strip" id="shelf" aria-label="Upcoming versions" hidden></ol>
 
   <div class="detail-empty" id="detail-empty">Pick a build above.</div>
   <div class="detail-body" id="detail-body" hidden>
-    <div class="title-block">
+    <!-- DF-V2-PLAYUI: the hero card (art per version, hero-162.jpg / hero-1147.jpg) -->
+    <div class="title-block hero" id="hero">
+      <div class="hero-kicker">Dauntless</div>
       <div class="title-row">
         <h1 class="ver" id="d-ver">1.14.7</h1>
-        <span class="pill" id="d-pill">Ready</span>
       </div>
-      <p class="meta" id="d-meta"></p>
+      <p class="hero-era" id="d-era"></p>
+      <div class="hero-pill-row"><span class="pill" id="d-pill">Ready</span></div>
       <p class="blurb" id="d-blurb"></p>
+      <p class="meta" id="d-meta"></p>
     </div>
 
     <ol class="path" id="path">
