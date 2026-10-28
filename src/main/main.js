@@ -15,7 +15,8 @@ const R = require('./runner');
 const D = require('./downloader');
 const U = require('./updates');
 const AU = require('./appupdate');
-const I18N = require('./i18n');   // the launcher language, for the Windows dialogs below
+const I18N = require('./i18n');
+const BUILDS = require('./builds');   // the launcher language, for the Windows dialogs below
 
 let win = null;
 let registry = [];
@@ -693,6 +694,8 @@ ipcMain.handle('mods:act', async (_e, id, action, a, b) => {
   }
   return { ok: false, error: 'Unknown action.' };
 });
+ipcMain.handle('builds:catalog', (_e, id) => BUILDS.catalog(byId(id)));
+ipcMain.handle('builds:local', (_e, action, arg) => BUILDS.local(action, arg));
 ipcMain.handle('items:list', async (_e, id) => {
   const v = byId(id); if (!v || !v.package) return null;
   let catalog;
