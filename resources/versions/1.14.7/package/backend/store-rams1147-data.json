@@ -82,6 +82,7 @@
   "^MP_PUFFLEHOP_",
   "_TEST(_|$)",
   "^AR_UNEQUIPPED",
+  "^TY_GIFT_",
   "^TITLE_(FOUNDER_|PARTNER|TRANSLATOR_|TWITCHPRIME_|RAMSGUARD_SUPPORTER_|10B_COMMUNITY|TEAMCAPTAIN)"
  ],
  "excludeIdPatternsNote": "The TITLE_ line keeps titles that were given for something (founders, partners, translators, Twitch Prime, Ramsguard supporters, community, team captain) out of the shop. Remove a name from it to sell that title too.",

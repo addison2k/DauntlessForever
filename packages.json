@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.3.21",
+                     "version":  "0.3.22",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "Forever: one button (Play Forever runs the town when the director picks you; no Host Mode button), the launcher notices a crashed game and gives Play back, Ramsgate loads faster after hunts.",
-                     "date":  "2026-10-27",
+                     "notes":  "Forever: if your PC runs Ramsgate, closing or crashing your game no longer closes the town for everyone. Reopening your game no longer stops hunts your PC runs for other players. Gift toys are out of the Rams shop.",
+                     "date":  "2026-10-29",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.3.21.asar",
-                                 "sha256":  "dc81241502179fc03757f409a5e24d688a365e18218e78d64b48bc145571f9b9",
-                                 "size":  9379593,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.3.22.asar",
+                                 "sha256":  "ad268535b280f839ee8d00b708c9a11816f35f5724517ad9fb5fc27d244454b7",
+                                 "size":  9381004,
                                  "minShell":  "0.2.4"
                              }
                  }

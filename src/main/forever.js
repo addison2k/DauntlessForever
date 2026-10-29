@@ -524,6 +524,7 @@ async function ask() {
   S.season = r.season || S.season;
   if (r.action === 'full' || r.action === 'gone') { S.wantWorld = null; S.phase = 'off'; await returnCharacter(); throw new Error((r.why || 'that world is not available') + '. Press Play Forever to join a world with room.'); }
   vpsBackend = (r.world && r.world.backend) || (r.backend) || '';   // DF-VPS
+  if (vpsBackend) { try { fs.unlinkSync(path.join(dataDir(), 'travel_pending.json')); } catch {} }   // DF-VPS (report 371): a leftover travel note from a LAN join must not trigger a bring-home at the end of a server session
   if (vpsBackend && character) { const c = character; character = null; clearInterval(checkpointTimer); await vpsImport(vpsBackend, c.record).catch(e => log('character import: ' + e.message, true)); try { await api('POST', '/v1/forever/character/release', { season: c.season, lease: c.lease }); } catch {} }   // checked out before we knew: give it back untouched (DF-VPS-IMPORT: after the one-time import)
   if (r.action === 'join') { S.world = r.world; await startJoin(r.world); }
   else if (r.action === 'host') { S.helper = true; S.autoPlay = !S.helperOnly; await startHost(r.rules); }   // every Forever host is a Host Mode host: the world runs headless, the player's own game joins it
@@ -537,8 +538,12 @@ async function startJoin(world) {
   log(`joining ${world.hostName}'s world (${world.code})`);
   placeRecord('join');
   const script = path.join(toolsDir(), 'lan-join-1147.ps1');
-  ctx.runner.runVisible(FV + ':join', 'join', script, ['-Code', `'${world.code.replace(/'/g, "''")}'`], 'Dauntless Forever - in a world (keep open)', { closeWhenDone: true, env: Object.assign(ENV(), vpsBackend ? { DF_NO_TRAVEL: '1' } : {}), cwd: dir() })   // DF-VPS: the VPS owns the character
-    .then(() => { if (S.phase !== 'off') stop('the game closed'); });
+  if (vpsBackend) killStaleJoinProxy();   // DF-VPS-KEEPOWN: the join below keeps this PC's servers, so only an old join helper is cleared
+  ctx.runner.runVisible(FV + ':join', 'join', script, ['-Code', `'${world.code.replace(/'/g, "''")}'`], 'Dauntless Forever - in a world (keep open)', { closeWhenDone: true, env: Object.assign(ENV(), vpsBackend ? { DF_NO_TRAVEL: '1', DF_KEEP_OWN: '1' } : {}), cwd: dir() })   // DF-VPS: the VPS owns the character   /* DF-VPS-KEEPOWN (Oct 28): opening the game never closes the hunt servers or the town this PC runs for others */
+    .then(() => {
+      if (S.helper && S.phase === 'hosting') { S.ownGame = false; log('your game closed; Ramsgate keeps running on this PC for everyone (Play Forever to go back in)'); push(); return; }   /* DF-TOWN-KEEP (Addison, Oct 28): this PC took the town over: the game closing does not end the town */
+      if (S.phase !== 'off') stop('the game closed');
+    });
   // the client DLL goes into the game once its window is up (loading screen + travel on a GO)
   ctx.runner.runHidden(FV + ':clientattach', 'attach', coreTool('clientAttach'), ['-Dll', coreBin('client')], (line) => {
     if (/^DFSTATUS ready/.test(line)) { S.clientDll = true; log('this PC is ready to follow a host change'); }
@@ -814,6 +819,10 @@ function gameCount() {
 }
 // DF-AUTO-REHOST (Addison, Oct 27): a Host Mode PC whose world was ended from the admin page (an update push, a reset) installs the
 // Forever update if there is one and hosts again by itself, so hosts do not have to press anything 14 times a day.
+// DF-VPS-KEEPOWN (Oct 28): a join helper left from an earlier game (its port would block the new one); servers are left alone
+function killStaleJoinProxy() {
+  try { require('child_process').spawnSync('powershell.exe', ['-NoProfile', '-Command', `Get-CimInstance Win32_Process -Filter "Name='node.exe'" | Where-Object { $_.CommandLine -like '*join-proxy-1147.js*' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force }`], { windowsHide: true, stdio: 'ignore', timeout: 15000 }); } catch {}
+}
 async function autoRehost(why) {
   if (rehosting) return; rehosting = true;
   try {
@@ -875,7 +884,7 @@ function beatLoop() {
       if (r.role === 'standby' && S.role !== 'standby') await becomeStandby(r.pullFrom);
       else if (r.role === 'player' && S.role === 'standby' && S.phase === 'standby' && !r.go && standby && !standby.adopted && !standby.takeoverAsked) dropStandby(`${(r.world && r.world.standby && r.world.standby.name) || 'another PC'} stands by now`);   // DF-V2-DROPSTANDBY
       if (r.townTake && r.townTake.backend && !townTaking) { if (remote && remote.town) { await takeTown(r.townTake); return; } if (r.townTake.cold) { takeTownCold(r.townTake).catch(e => log('cold town start: ' + e.message, true)); return; } }   // DF-VPS-TOWNSTANDBY / DF-VPS-TOWNCOLD
-      if (remote && !!remote.town !== !!r.townStandby && r.huntHost) { log(r.townStandby ? 'you are a town standby now: restarting the hunt helper with Ramsgate pre-started' : 'not a town standby any more: restarting the hunt helper'); stopRemoteHunts(); remoteHoldUntil = Date.now() + 15000; }   // DF-VPS-TOWNSTANDBY
+      if (remote && !remote.town && r.townStandby && r.huntHost && !remote.up && !remote.wanted) { log('you are a town standby now: restarting the hunt helper with Ramsgate pre-started'); stopRemoteHunts(); remoteHoldUntil = Date.now() + 15000; }   // DF-VPS-TOWNSTANDBY (Oct 27 live): only when this PC hosts no hunt right now; losing the role keeps the pre-started town running (a restart would drop the hunts it hosts)
       if (r.huntHost && r.role === 'player' && !standby && S.phase === 'playing' && /^[0-9a-f]{32}$/.test(String(ownKey() || '')) && Date.now() - remoteFailedAt > 5 * 60 * 1000 && Date.now() > remoteHoldUntil) startRemoteHunts(Number(r.huntHost.max) || 1, !!r.townStandby).catch(() => {});   // DF-V2-REMOTEHUNTS
       else if (!r.huntHost && remote) stopRemoteHunts();
       { const tk = JSON.stringify(Array.isArray(r.huntTake) ? r.huntTake : []); if (tk !== lastTake) { lastTake = tk; try { fs.writeFileSync(path.join(dataDir(), 'remote_hunts_take.json'), tk); } catch {} if (tk !== '[]') log('hunt move: the director asks this PC to ' + r.huntTake.map(x => (x.mode === 'take' ? 'take ' : 'keep a backup of ') + (x.label || x.id)).join(', ')); } }   // DF-HUNT-MOVE
