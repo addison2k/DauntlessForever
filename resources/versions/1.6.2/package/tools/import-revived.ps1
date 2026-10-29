@@ -63,11 +63,9 @@ if ($Online -and -not $Source) {
     Say 'This reads only your own account, with your own account key, the same way your game does.'
     Say 'Nothing on the Revived server is changed, and your key is not saved anywhere by this.'
     Say ''
-    while (-not (PortOpen $RevivedPort)) {
-        Say 'Start Dauntless with the Dauntless Revived launcher and wait until you are in game.' 'White'
-        $a = Read-Host 'Then press Enter (or type Q to stop)'
-        if ($a -match '^[Qq]') { Fail 'Stopped. Nothing was changed.' }
-    }
+    # DF-REVIVED-DIRECT (Oct 29): the tool talks to the Revived server itself (the one the Revived launcher saved), so the
+    # game does not need to run. Older Revived launchers without a saved server: the launcher's relay is used instead.
+    Say 'The server is read directly (the one your Dauntless Revived launcher has saved). The game does not need to be running.'
     # The Revived launcher keeps a copy of your key in Documents\Dauntless Revived\Account Keys
     $docs = @([Environment]::GetFolderPath('MyDocuments'))
     if ($env:USERPROFILE) { $docs += @((Join-Path $env:USERPROFILE 'Documents'), (Join-Path $env:USERPROFILE 'OneDrive\Documents')) }
@@ -92,7 +90,7 @@ if ($Online -and -not $Source) {
     $keyText = $null
     if ($LASTEXITCODE -ne 0) { exit 1 }
     Say ''
-    Say 'Got it. Now close Dauntless and the Dauntless Revived launcher (the import needs them closed).' 'White'
+    Say 'Got it. If Dauntless or the Dauntless Revived launcher is open, close them now (the import needs them closed).' 'White'
     $i = 0
     while (PortOpen $RevivedPort) {
         if ($i % 10 -eq 0) { Say '  waiting for Dauntless Revived to close...' }

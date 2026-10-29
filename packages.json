@@ -2,11 +2,11 @@
     "packages":  [
                      {
                          "id":  "1.6.2",
-                         "packageVersion":  "2026-10-25.2",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-25.2.zip",
-                         "sha256":  "305000965256f28b21fd9acaa847eda663d9a3ce8b79fe21c1360d487eb0b9ec",
-                         "date":  "2026-10-25",
-                         "note":  "Game Rules: universal rate, mastery, Rams, merits, rare cores, core on kill, trial boss, extra loadout slots"
+                         "packageVersion":  "2026-10-29",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.6.2-2026-10-29.zip",
+                         "sha256":  "b774ed8b78f0bd2f581e4ba5bb18305896ddf22ba70a607413965193894f701f",
+                         "date":  "2026-10-29",
+                         "note":  "1.4.4 character import reads the server directly"
                      },
                      {
                          "id":  "1.14.7",

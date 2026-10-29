@@ -78,16 +78,63 @@ function myAccount(db) {
     return row ? row.userId : null;
 }
 const parse = (s, d) => { try { const v = JSON.parse(s); return v == null ? d : v; } catch { return d; } };
-// ---- fetch: read your own account from a Revived server, through the Revived launcher's relay on 127.0.0.1
-function httpJson(port, method, p, headers, body) {
+// ---- fetch: read your own account from a Revived server. DF-REVIVED-DIRECT (Oct 29): since Revived launcher commit
+// 14d15b9 (Oct 17, 2026) its relay on 127.0.0.1:61000 answers 403 "local_process_denied" to every program but the game
+// it started, so this tool now talks to the server itself: the server the Revived launcher has saved (settings.json:
+// host, port, mode and the certificate fingerprint it pins), over TLS pinned to that same fingerprint for a public
+// server, or plain HTTP for a private (Tailscale) one. --server host:port [--fp <64 hex>] [--http] overrides. The relay
+// is only tried when no server is known.
+function revivedSavedServers() {
+    const dirs = [];
+    const add = (d) => { if (d && !dirs.includes(d)) dirs.push(d); };
+    if (process.env.APPDATA) { add(path.join(process.env.APPDATA, "Dauntless Revived Launcher")); add(path.join(process.env.APPDATA, "dauntless-revived-launcher")); }
+    if (process.platform !== "win32" && process.env.HOME) { add(path.join(process.env.HOME, ".config", "Dauntless Revived Launcher")); add(path.join(process.env.HOME, ".config", "dauntless-revived-launcher")); }
+    const out = [];
+    for (const d of dirs) {
+        const st = parse((() => { try { return fs.readFileSync(path.join(d, "settings.json"), "utf8"); } catch { return ""; } })(), null);
+        if (!st || typeof st !== "object") continue;
+        const list = Array.isArray(st.savedServers) ? st.savedServers : [];
+        if (st.server && typeof st.server === "object") list.unshift(st.server);
+        for (const sv of list) {
+            if (!sv || typeof sv.host !== "string" || !Number.isInteger(sv.port)) continue;
+            const pub = sv.mode === "public";
+            if (!out.some((x) => x.host === sv.host && x.port === sv.port && x.https === pub)) out.push({ host: sv.host, port: sv.port, https: pub, fp: pub && typeof sv.fp === "string" && /^[0-9a-f]{64}$/.test(sv.fp) ? sv.fp : null, name: sv.name || "" });
+        }
+    }
+    return out;
+}
+function targetFromArgs() {
+    const sv = opt("--server");
+    if (!sv) return null;
+    const m = /^\[?([^\]]+?)\]?(?::(\d{1,5}))?$/.exec(sv.trim());
+    if (!m) fail("--server must be host:port");
+    const fp = (opt("--fp") || "").toLowerCase();
+    if (fp && !/^[0-9a-f]{64}$/.test(fp)) fail("--fp must be the 64-character certificate fingerprint from the invite");
+    return { host: m[1], port: Number(m[2] || (flag("--http") ? 61000 : 443)), https: !flag("--http"), fp: fp || null, name: "" };
+}
+// one request to the target: {host, port, https, fp} = the server itself; {port} alone = the launcher relay on 127.0.0.1
+function httpJson(target, method, p, headers, body) {
     return new Promise((resolve) => {
-        const http = require("http");
-        const req = http.request({ host: "127.0.0.1", port, method, path: p, headers: { "User-Agent": "DauntlessForever-RevivedImport", ...headers }, timeout: 60000 }, (res) => {
+        const t = typeof target === "number" ? { host: "127.0.0.1", port: target, https: false, fp: null } : target;
+        const mod = require(t.https ? "https" : "http");
+        const seen = { fp: null };
+        const o = { host: t.host, port: t.port, method, path: p, headers: { "User-Agent": "DauntlessForever-RevivedImport", ...headers }, timeout: 60000 };
+        if (t.https) {
+            o.rejectUnauthorized = false;   // the servers use their own certificates; trust is the fingerprint, as in the Revived launcher
+            o.servername = /^[\d.]+$/.test(t.host) ? undefined : t.host;
+            o.checkServerIdentity = () => undefined;   // own certificates: the name check is replaced by the fingerprint check below
+        }
+        const req = mod.request(o, (res) => {
             const parts = []; res.on("data", (d) => parts.push(d));
-            res.on("end", () => { const t = Buffer.concat(parts).toString("utf8"); resolve({ status: res.statusCode, text: t, json: parse(t, null) }); });
+            res.on("end", () => { const txt = Buffer.concat(parts).toString("utf8"); resolve({ status: res.statusCode, text: txt, json: parse(txt, null), fp: seen.fp }); });
         });
+        if (t.https) req.on("socket", (sock) => sock.on("secureConnect", () => {   // pin: sha256 of the server's certificate, like the Revived launcher's relay
+            const cert = sock.getPeerCertificate(false);
+            seen.fp = cert && cert.raw ? crypto.createHash("sha256").update(cert.raw).digest("hex") : null;
+            if (t.fp && seen.fp !== t.fp) req.destroy(new Error(`the server's certificate does not match the pinned fingerprint (expected ${t.fp}, got ${seen.fp}); nothing was sent`));
+        }));
         req.on("timeout", () => req.destroy(new Error("timed out")));
-        req.on("error", (e) => resolve({ status: 0, error: e.message }));
+        req.on("error", (e) => resolve({ status: 0, error: e.message, fp: seen.fp }));
         if (body) req.write(body);
         req.end();
     });
@@ -95,15 +142,28 @@ function httpJson(port, method, p, headers, body) {
 const pause = (ms) => new Promise((r) => setTimeout(r, ms));
 async function fetchFromServer() {
     const port = Number(opt("--port")) || 61000, out = opt("--out");
-    if (!out) fail("Use: import-revived.js fetch --out <file.json> [--port 61000]  (account keys on stdin)");
-    const ping = await httpJson(port, "GET", "/", {});
-    if (!ping.status) fail("Dauntless Revived is not running. Start the game with the Dauntless Revived launcher, wait until you are in game, then try again.");
+    if (!out) fail("Use: import-revived.js fetch --out <file.json> [--server host:port [--fp <hex>] [--http]] [--port 61000]  (account keys on stdin)");
+    // which server: --server, else the ones the Revived launcher has saved, else the launcher relay (older launchers)
+    let target = targetFromArgs();
+    const saved = target ? [] : revivedSavedServers();
+    const candidates = target ? [target] : saved.length ? saved : [port];
+    let ping = null;
+    for (const c of candidates) {
+        const r = await httpJson(c, "GET", "/", {});
+        if (r.status) { target = c; ping = r; break; }
+        if (typeof c !== "number") console.log(`  ${c.host}:${c.port}: ${r.error || "no answer"}`);
+    }
+    if (!ping) fail(saved.length || (target && typeof target === "object")
+        ? "The Dauntless Revived server did not answer. Check you are online and that the server is up; or give it with --server host:port."
+        : "No Dauntless Revived server is known on this PC (the Revived launcher has none saved). Give it with --server host:port (and --fp <fingerprint> from the invite), or start the game with the Revived launcher and try again.");
+    if (typeof target === "number" && ping.status === 403 && /local_process_denied/.test(ping.text || "")) fail("The Revived launcher's relay only lets the game itself through (launcher update of Oct 17, 2026). Give the server with --server host:port --fp <fingerprint from the invite>, or play once with the Revived launcher so it saves the server, then run this again.");
+    if (typeof target === "object") console.log(`  Dauntless Revived server: ${target.name ? target.name + " = " : ""}${target.host}:${target.port}${target.https ? " (TLS" + (target.fp ? ", certificate pinned" : ", certificate " + (ping.fp || "?").slice(0, 16) + "... not pinned: give --fp to pin it") + ")" : " (private, plain)"}`);
     const input = fs.readFileSync(0, "utf8");
     const keys = [...new Set((input.match(/UUK_[0-9A-Za-z_-]{16,120}/g) || []).concat(input.split(/\r?\n/).map((l) => l.trim()).filter((l) => /^[A-Za-z0-9_-]{8,128}$/.test(l) && !/^DRK\d$/.test(l))))].slice(0, 5);
     if (!keys.length) fail("No account key was given.");
     let tok = null;
     for (const k of keys) {
-        const r = await httpJson(port, "POST", "/account/api/oauth/token", { "Content-Type": "application/x-www-form-urlencoded" },
+        const r = await httpJson(target, "POST", "/account/api/oauth/token", { "Content-Type": "application/x-www-form-urlencoded" },
             new URLSearchParams({ grant_type: "exchange_code", exchange_code: k, token_type: "eg1" }).toString());
         if (r.status === 200 && r.json && r.json.access_token && r.json.account_id) { tok = r.json; break; }
         if (r.status === 429) fail("The Revived server says too many logins. Wait ten minutes and try again.");
@@ -111,7 +171,7 @@ async function fetchFromServer() {
     }
     if (!tok) fail(keys.length > 1 ? "The Revived server did not accept any of your saved account keys. Paste the key for the server you play on." : "The Revived server did not accept that key. Check it is the key for the server you play on.");
     const uid = String(tok.account_id), auth = { Authorization: "bearer " + tok.access_token };
-    const get = async (p) => { await pause(400); const r = await httpJson(port, "GET", p, auth); return r.status === 200 ? r.json : null; };
+    const get = async (p) => { await pause(400); const r = await httpJson(target, "GET", p, auth); return r.status === 200 ? r.json : null; };
     const chars = await get("/character");
     if (!Array.isArray(chars) || !chars.length) fail("The Revived server has no characters for this account.");
     const exp = { format: "dauntless-forever-revived-export", version: 2, source: "Dauntless Revived (1.4.4) server", exportedAt: new Date().toISOString(),
