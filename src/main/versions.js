@@ -92,27 +92,37 @@ async function syncPackageAsync(v, onFile) {
       const s = path.join(src, ent.name), d = path.join(d0, ent.name);
       if ((PRESERVE_NAMES.has(ent.name) || keep.includes(r)) && fs.existsSync(d)) continue;
       if (ent.isDirectory()) { await fs.promises.mkdir(d, { recursive: true }); await walk(s, d, r); }
-      else { await fs.promises.copyFile(s, d); copied.push({ rel: r, src: s }); n++; if (onFile) onFile(n); }
+      else { copyOne(s, d, r, copied, failed); n++; if (onFile) onFile(n); }
     }
   };
+  const failed = [];   // DF-PKGVERIFY: a blocked file must not stop the files after it (Null, Oct 29: server-1147.ps1 held by Avast/McAfee, start.ps1 never landed)
   await walk(path.join(v.bundledDir, v.package.dir), dst, '');
-  sealPackage(dst, bundledPackageVersion(v), copied);
+  sealPackage(dst, bundledPackageVersion(v), copied, failed);
+}
+// One file: copy; when the destination refuses (EPERM: an antivirus holds the old file), delete it and try once more;
+// still refused -> remembered in failed, the copy goes on with the next file.
+function copyOne(s, d, rel, copied, failed) {
+  try { fs.copyFileSync(s, d); copied.push({ rel, src: s }); return; } catch (e1) {
+    try { fs.rmSync(d, { force: true }); fs.copyFileSync(s, d); copied.push({ rel, src: s }); return; } catch (e2) {
+      failed.push(rel + ' (' + String((e2 && e2.code) || e2).replace(/^E/, '') + ': cannot be written)');
+    }
+  }
 }
 // Put a package (from the bundle, or an update that was just unzipped) into the version's data folder.
 function applyPackage(v, srcDir, packageVersion) {
   const dst = ensureDir(v.dataDir);
   const keep = PRESERVE_PATHS.concat((v.package && v.package.saveFiles) || []).map(p => p.replace(/\\/g, '/').replace(/\/+$/, ''));
-  const copied = [];   // DF-PKGVERIFY
-  copyTree(srcDir, dst, '', keep, copied);
-  sealPackage(dst, packageVersion, copied);
+  const copied = [], failed = [];   // DF-PKGVERIFY
+  copyTree(srcDir, dst, '', keep, copied, failed);
+  sealPackage(dst, packageVersion, copied, failed);
 }
 // DF-PKGVERIFY (Oct 29): after a copy, every copied file is read back and compared with its source, and the list
 // (path, size, sha256) goes into .package-files.json. .package-version is written LAST and only when every file is
 // there as copied. A file that is missing or different afterwards (an antivirus took it, the copy was cut off) is
 // named in the error and the marker stays as it was, so nothing claims a package that is not really there.
 const FILES_MANIFEST = '.package-files.json';
-function sealPackage(dst, packageVersion, copied) {
-  const bad = [], files = {};
+function sealPackage(dst, packageVersion, copied, failed) {
+  const bad = (failed || []).slice(), files = {};
   for (const c of copied) {
     const want = sha256(c.src), have = sha256(path.join(dst, c.rel));
     if (!have) bad.push(c.rel + ' (missing)');
@@ -127,7 +137,7 @@ function sealPackage(dst, packageVersion, copied) {
 }
 function badFilesText(bad) {
   return 'these server files are not in place: ' + bad.slice(0, 5).join(', ') + (bad.length > 5 ? ' and ' + (bad.length - 5) + ' more' : '') +
-    '. An antivirus removing them is the usual reason.';
+    '. An antivirus removing or holding them is the usual reason.';
 }
 // DF-PKGVERIFY: is what was copied into the data folder still there, unchanged? { ok, bad: ['rel (why)'], unverified }.
 // With no list yet (a copy made by a launcher before 0.3.23, or one whose marker does not match the list) the package's
@@ -135,7 +145,10 @@ function badFilesText(bad) {
 // old pak or a loader the antivirus deleted shows up (unverified: true says the check was the narrow one).
 function verifyPackage(v) {
   const r = { ok: true, bad: [], unverified: false, marker: installedPackageVersion(v) };
-  if (!v.package || !fs.existsSync(path.join(v.dataDir, v.package.play))) return r;   // nothing installed: not this check's job
+  if (!v.package) return r;
+  // no play script AND no marker = nothing installed yet, not this check's job. A marker with the play script gone is a
+  // damaged package (an antivirus took tools\start.ps1 and "Ready to play" died at Play - Null, Oct 29): checked below.
+  if (!r.marker && !fs.existsSync(path.join(v.dataDir, v.package.play))) return r;
   let m = null;
   try { m = JSON.parse(fs.readFileSync(path.join(v.dataDir, FILES_MANIFEST), 'utf8')); } catch {}
   if (m && m.files && r.marker && m.packageVersion === r.marker) {
@@ -153,6 +166,12 @@ function verifyPackage(v) {
       if (!have) r.bad.push('bin/' + name + ' (missing)');
       else if (have !== String(f.sha256).toUpperCase()) r.bad.push('bin/' + name + ' (old or different)');
     }
+    // and every tool the bundle ships must still exist (names only: the bundle is older, its tools are a subset).
+    // An antivirus deleting tools\start.ps1 left "Ready to play" with a Play that died at once (Oct 29).
+    const toolsSrc = path.join(v.bundledDir, v.package.dir || 'package', 'tools');
+    const walk = (dir, rel) => { let ents = []; try { ents = fs.readdirSync(dir, { withFileTypes: true }); } catch { return; }
+      for (const e of ents) { const rr = rel + '/' + e.name; if (e.isDirectory()) walk(path.join(dir, e.name), rr); else if (!fs.existsSync(path.join(v.dataDir, rr))) r.bad.push(rr + ' (missing)'); } };
+    walk(toolsSrc, 'tools');
   }
   r.ok = !r.bad.length;
   return r;
@@ -161,14 +180,15 @@ function verifyPackage(v) {
 function cmpPackageVersion(a, b) { return String(a).localeCompare(String(b), 'en', { numeric: true }); }
 // Package files are always refreshed (so an update really updates data/ and eos/ too); only the
 // preserved paths are left alone when the player already has them.
-function copyTree(src, dst, rel, keep, copied) {   // DF-PKGVERIFY: copied (optional) collects { rel, src } per file
+function copyTree(src, dst, rel, keep, copied, failed) {   // DF-PKGVERIFY: copied/failed (optional) collect per file; with them a blocked file does not stop the copy
   for (const ent of fs.readdirSync(src, { withFileTypes: true })) {
     const r = rel ? rel + '/' + ent.name : ent.name;
     const s = path.join(src, ent.name), d = path.join(dst, ent.name);
     const kept = PRESERVE_NAMES.has(ent.name) || keep.includes(r);
     if (kept && fs.existsSync(d)) continue;
-    if (ent.isDirectory()) { ensureDir(d); copyTree(s, d, r, keep, copied); }
-    else { fs.copyFileSync(s, d); if (copied) copied.push({ rel: r, src: s }); }
+    if (ent.isDirectory()) { ensureDir(d); copyTree(s, d, r, keep, copied, failed); }
+    else if (copied && failed) copyOne(s, d, r, copied, failed);
+    else fs.copyFileSync(s, d);
   }
 }
 

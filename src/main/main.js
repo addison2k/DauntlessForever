@@ -81,7 +81,7 @@ async function syncWithPleaseWait() {
         shown = n;
         wait.webContents.executeJavaScript(`document.getElementById('n').textContent = ${JSON.stringify(I18N.t('{version}: {n} files copied', { version: v.name || v.id, n }))}`).catch(() => {});
       });
-    } catch (e) { log('syncPackage', v.id, e.message); try { V.syncPackage(v); } catch (e2) { log('syncPackage', v.id, e2.message); } }
+    } catch (e) { log('syncPackage', v.id, e.message); try { V.syncPackage(v); } catch (e2) { log('syncPackage', v.id, e2.message); syncFailed[v.id] = e2.message; } }
     shown = 0;
   }
   if (wait && !wait.isDestroyed()) {
@@ -220,13 +220,16 @@ app.whenReady().then(async () => {
 // files wrong (an antivirus deleting them as they land) the miss is kept in launcher.json (repairTried) and nothing is
 // fetched again until the files change or a newer package is out; the status says what is wrong instead. The old
 // "Set-up needed forever" cases (old paks under a new marker) are the ones this catches.
+const lastUpdateError = {};   // id -> error text of the last fetch/apply in checkUpdates (package:repair reads it)
 const pkgCheck = {};   // id -> the last verifyPackage result (versions:status carries it)
+const syncFailed = {};   // id -> error text when the start-up bundle copy could not finish (a held file): shown as a bad package
 const badKey = (r) => r.bad.join('|');
 function checkPackages() {
   const force = new Set(), skip = new Map();
   for (const v of registry) {
     if (!v.package) continue;
     let r; try { r = V.verifyPackage(v); } catch (e) { log('package', v.id, 'check failed: ' + e.message); continue; }
+    if (syncFailed[v.id] && r.ok) { r.ok = false; r.bad.push(/not in place: (.*?)\. An antivirus/.exec(syncFailed[v.id]) ? RegExp.$1 : syncFailed[v.id].slice(0, 120)); }
     pkgCheck[v.id] = r;
     const e = settings.versionEntry(v.id);
     if (r.ok) { if (e.repairTried) settings.setVersionEntry(v.id, { repairTried: null }); continue; }
@@ -261,6 +264,7 @@ function avScan() {
 }
 function avFolders() {
   const out = [P.dataRoot()];
+  try { const own = path.dirname(process.execPath); if (app.isPackaged && !out.includes(own)) out.push(own); } catch {}   // the launcher's own folder (portable copies live in Downloads)
   for (const v of registry) { const g = V.knownGameDir(v); if (g && fs.existsSync(g) && !out.includes(g)) out.push(g); }
   return out;
 }
@@ -323,11 +327,14 @@ ipcMain.handle('package:repair', async (_e, id) => {
     try { V.applyPackage(v, path.join(v.bundledDir, v.package.dir), bundled); }
     catch (e) { pkgCheck[id] = V.verifyPackage(v); log('package', id, 'repair from the bundle failed: ' + e.message); return { ok: false, error: e.message, bad: pkgCheck[id].bad }; }
   }
+  lastUpdateError[id] = '';
   await checkUpdates({ force: new Set(fromBundle ? [] : [id]), skip: new Map() });   // newer than the bundle? fetched now
   const chk = V.verifyPackage(v); pkgCheck[id] = chk;
-  if (chk.ok) settings.setVersionEntry(id, { repairTried: null });
+  const err = lastUpdateError[id] || '';   // the fetch itself failed (a held file, no internet): that is the answer, whatever the narrow check says
+  if (err && chk.ok) { chk.ok = false; chk.bad.push(/not in place: (.*?)\. An antivirus/.exec(err) ? RegExp.$1 : err.slice(0, 160)); }
+  if (chk.ok) { settings.setVersionEntry(id, { repairTried: null }); delete syncFailed[id]; }
   log('package', id, 'repair done: ' + (chk.ok ? 'ok' : 'still wrong: ' + chk.bad.join(', ')));
-  return { ok: chk.ok, bad: chk.bad, version: V.installedPackageVersion(v), error: chk.ok ? '' : V.badFilesText(chk.bad) };
+  return { ok: chk.ok, bad: chk.bad, version: V.installedPackageVersion(v), error: chk.ok ? '' : (/cannot be written|EPERM|not permitted/i.test(err + chk.bad.join(' ')) ? V.badFilesText(chk.bad) + ' Something is holding the old file: an antivirus (quarantine or a shield), or a Dauntless window still open. Close everything Dauntless, allow the launcher folder in every antivirus (More > Allow in the antivirus shows the folders), then repair again.' : V.badFilesText(chk.bad)) };
 });
 // after a forced fetch: still wrong -> remember it (same files, that package number) so the next start does not fetch again
 function notePackageResults(results, opts) {
@@ -368,6 +375,7 @@ async function checkUpdates(pkgOpts) {   // DF-PKGVERIFY: pkgOpts { force, skip 
     const results = await U.checkAndApply(registry, (msg) => { log('updates', msg); send('updates:event', { msg }); },
       (id) => R.isRunning(id) || R.isRunning(id + ':setup') || R.isRunning(id + ':host') || D.isDownloading(id), launcherUpdate,
       (id) => { const v = byId(id); return !!v && kept(v); }, pkgOpts);
+    for (const r of results || []) if (r.error) lastUpdateError[r.id] = r.error;
     if (pkgOpts) notePackageResults(results, pkgOpts);
     if (P.MOCK && process.env.DL_MOCK_LAUNCHER) launcherUpdate({ version: process.env.DL_MOCK_LAUNCHER, url: 'https://github.com/addison2k/DauntlessForever/releases', notes: 'Test notes.' });
     if (results.length) send('updates:done', { results });

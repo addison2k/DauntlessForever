@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.3.24",
+                     "version":  "0.3.25",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "Antivirus help: More \u003e Allow in the antivirus adds the Windows Defender exclusions for you (other antivirus: shows the folders to add), More \u003e Repair the launcher files puts the server files back. Set up now says which file the antivirus removed instead of \u0027files missing or damaged\u0027. The ammo, party and Forever helpers no longer compile into the Windows Temp folder (where Bitdefender, ESET and Avast deleted them); they use the launcher folder, which one exclusion covers.",
+                     "notes":  "Repair the launcher files no longer stops at a file the antivirus holds: it copies everything else and names the held file. The Allow in the antivirus and Repair messages stay on screen. The start-up check also notices a deleted tool file (tools\\start.ps1), so Play no longer dies silently. The antivirus folder list now includes the launcher\u0027s own folder.",
                      "date":  "2026-10-29",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.3.24.asar",
-                                 "sha256":  "d10e126280f1b6832c8dc044374c2952b1a45aa707ba7a4fd382628f7338fee3",
-                                 "size":  9406210,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.3.25.asar",
+                                 "sha256":  "9ccb8b09a1388bb3974216ea798115902d50d9f60ea378882e36b535d71f5b0f",
+                                 "size":  9409702,
                                  "minShell":  "0.2.4"
                              }
                  }

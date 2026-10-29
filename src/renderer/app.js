@@ -1259,13 +1259,15 @@ function wire() {
         : t('Could not add the firewall rules: {error}', { error: tm(r && r.error) });
       n.className = r && r.ok ? 'action-note' : 'action-note err';
     }
+    // DF-AVGUARD / DF-PKGVERIFY: these two take a while and the page redraws every few seconds, so their text goes
+    // through checkNotes (kept through redraws, 5 minutes after the end) like the Check the game files text
+    const keep = (text, err, done) => { checkNotes[v.id] = { text, err: !!err, until: done ? Date.now() + 5 * 60 * 1000 : 0 }; if (v.id === selected) renderDetail(); };
     if (act === 'avallow') {   // DF-AVGUARD
-      const n = $('action-note'); n.textContent = t('Checking which antivirus this PC uses...'); n.className = 'action-note';
-      const r = await L.avAllow();
+      keep(t('Checking which antivirus this PC uses...'));
+      let r = null; try { r = await L.avAllow(); } catch (e) { r = { ok: false, error: String(e && e.message || e) }; }
       if (r && r.ok) {
-        n.textContent = r.probe && r.probe.ok ? t('Windows Defender now leaves the launcher folder and the game folder alone ({count} folders). The helper test passed. If something was removed before, use More > Repair the launcher files.', { count: r.count })
-          : t('Windows Defender exclusions were added ({count} folders), but the helper test still failed: {error}. Another protection program may be running; allow the launcher folder there too.', { count: r.count, error: tm(r.probe && r.probe.error) });
-        n.className = r.probe && r.probe.ok ? 'action-note' : 'action-note err';
+        keep(r.probe && r.probe.ok ? t('Windows Defender now leaves the launcher folder and the game folder alone ({count} folders). The helper test passed. If something was removed before, use More > Repair the launcher files.', { count: r.count })
+          : t('Windows Defender exclusions were added ({count} folders), but the helper test still failed: {error}. Another protection program may be running; allow the launcher folder there too.', { count: r.count, error: tm(r.probe && r.probe.error) }), !(r.probe && r.probe.ok), true);
       } else if (r && r.manual) {
         const prods = (r.products || []).join(', ') || t('your antivirus');
         const lines = [t('The launcher can only add exclusions to Windows Defender by itself. For {prods}, add these folders yourself:', { prods }), '', ...r.folders.map(f => '    ' + f), '',
@@ -1277,15 +1279,15 @@ function wire() {
           '  Malwarebytes: Settings > Allow list > Add (folder)',
           '', t('Afterwards use More > Repair the launcher files, then Set up.')];
         $('readme-title').textContent = t('Allow Dauntless Forever in {prods}', { prods }); $('readme-body').textContent = lines.join('\n'); $('dlg-readme').showModal();
-        n.textContent = t('The folders to allow are in the window. After adding them: More > Repair the launcher files.'); n.className = 'action-note';
-      } else { n.textContent = t('Could not add the exclusions: {error}', { error: tm(r && r.error) }); n.className = 'action-note err'; }
+        keep(t('The folders to allow are in the window (More > Allow in the antivirus opens it again). After adding them: More > Repair the launcher files.'), false, true);
+      } else keep(t('Could not add the exclusions: {error}', { error: tm(r && r.error) }), true, true);
     }
     if (act === 'pkgrepair') {   // DF-PKGVERIFY
-      const n = $('action-note'); n.textContent = t('Putting the server files back (a download when the newest are not on this PC)...'); n.className = 'action-note';
-      const r = await L.repairPackage(v.id);
+      keep(t('Putting the server files back (a download when the newest are not on this PC). This takes up to a minute...'));
+      let r = null; try { r = await L.repairPackage(v.id); } catch (e) { r = { ok: false, error: String(e && e.message || e) }; }
       await refresh(v.id);
-      if (r && r.ok) { n.textContent = t('Server files are in place again ({version}). If Set up is asked for, press it.', { version: r.version }); n.className = 'action-note'; }
-      else { n.textContent = tm(r && r.error) || t('The repair did not finish.'); n.className = 'action-note err'; }
+      if (r && r.ok) keep(t('Server files are in place again ({version}). If Set up is asked for, press it.', { version: r.version }), false, true);
+      else keep(tm(r && r.error) || t('The repair did not finish.'), true, true);
     }
     if (act === 'logs') { L.openLogs(v.id); const n = $('action-note'); n.textContent = t('Send the two zips in the upload folder (client_logs.zip, server_logs.zip). Your PC name and user name are blanked out in them.'); n.className = 'action-note'; }
     if (act === 'report') openReport(v);   // DF-REPORTS
