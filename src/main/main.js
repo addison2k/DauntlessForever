@@ -189,6 +189,7 @@ app.whenReady().then(async () => {
   registry = V.loadRegistry();
   const pleaseWait = await syncWithPleaseWait();   // after an update: copy the new server files in, with a "please wait" window
   const pkgTodo = checkPackages();   // DF-PKGVERIFY: are the installed server files what they should be?
+  try { for (const v of registry) R.clearScriptTemp(v.dataDir); R.clearScriptTemp(path.join(P.versionsDataDir(), 'forever')); } catch {}   // DF-AVTEMP: yesterday's compiled helpers
   createWindow();
   // closed only once the launcher's own window exists (closing the last window would quit the app)
   if (pleaseWait && pleaseWait !== startWin) win.once('show', () => { if (!pleaseWait.isDestroyed()) pleaseWait.destroy(); });
@@ -199,7 +200,7 @@ app.whenReady().then(async () => {
   // Voice chat with the people in your game (voice.js)
   require('./voice').init({ social: require('./social'), forever: require('./forever'), send, log: (t) => log('voice', t) });
   // Forever mode (forever.js): one world for everyone, run by the director on the VPS
-  require('./forever').init({ runner: R, send, log: (t) => log('forever', t), social: require('./social'), appVersion: () => { try { return String(AU.info().version || ''); } catch { return ''; } },   // DF-V2-APPGATE: the director gates v2 worlds on the launcher version
+  require('./forever').init({ runner: R, send, log: (t) => { log('forever', t); noteAvLine(t); }, social: require('./social'), appVersion: () => { try { return String(AU.info().version || ''); } catch { return ''; } },   // DF-V2-APPGATE: the director gates v2 worlds on the launcher version
     nodeFor: async () => { let node = null; try { node = JSON.parse(fs.readFileSync(path.join(P.versionsDataDir(), 'forever', 'config.json'), 'utf8').replace(/^\uFEFF/, '')).Node; } catch {} if (!node || !fs.existsSync(node)) node = (await findNode() || {}).path; return node || null; } });
   // Host Mode: a server on this PC that stays up (hostmode.js)
   require('./hostmode').init({ get registry() { return registry; }, byId: (id) => byId(id), runner: R, send, log: (t) => log(t), social: require('./social'),
@@ -212,6 +213,7 @@ app.whenReady().then(async () => {
     } });
   // server-file updates: after the window is up, quietly; the window hears about anything that changed
   win.webContents.once('did-finish-load', () => setTimeout(() => checkUpdates(pkgTodo), 1500));
+  setTimeout(avScan, 4000);   // DF-AVGUARD: which antivirus is on this PC (read-only)
 });
 // DF-PKGVERIFY (Oct 29): at start every installed package is read back (versions.js verifyPackage). A version whose
 // files are missing or wrong gets the current package fetched again - once per start. When that fetch leaves the same
@@ -235,6 +237,98 @@ function checkPackages() {
   log('package', 'checked: ' + Object.keys(pkgCheck).map(id => id + ' ' + (pkgCheck[id].ok ? 'ok' : 'WRONG') + (pkgCheck[id].unverified ? ' (narrow check, no file list yet)' : '')).join(', '));
   return { force, skip };
 }
+// DF-AVGUARD (Oct 29): antivirus awareness, launcher side only. Products come from Windows Security Center (read-only,
+// once at start, in the background). "blocked" is set when a package script or a Forever helper logs the compiler
+// failing on its helper DLL (the antivirus ate it: Enryaku, reKcah). More > Allow in the antivirus adds Defender
+// exclusions for the launcher data folder and the game folders (elevated, like Fix the firewall) or, for another
+// product, hands the renderer the list to show. Nothing probes the antivirus at start: the probe itself trips it.
+const av = { products: [], defender: false, otherOn: [], blocked: null, scanned: false };
+function avScan() {
+  if (!P.IS_WIN || av.scanned) return; av.scanned = true;
+  try {
+    const ps = require('child_process').spawn('powershell.exe', ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-Command',
+      "Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntiVirusProduct | ForEach-Object { $_.displayName + '|' + $_.productState }"], { windowsHide: true });
+    let out = ''; ps.stdout.on('data', d => out += d);
+    ps.on('exit', () => {
+      av.products = out.split(/\r?\n/).map(x => x.trim()).filter(x => x.includes('|')).map(x => { const i = x.lastIndexOf('|'); const state = parseInt(x.slice(i + 1), 10) || 0; return { name: x.slice(0, i), on: (state & 0x1000) !== 0 }; });
+      av.defender = av.products.some(p => /defender/i.test(p.name));
+      av.otherOn = av.products.filter(p => p.on && !/defender/i.test(p.name)).map(p => p.name);
+      log('antivirus', av.products.length ? av.products.map(p => p.name + (p.on ? ' (on)' : ' (off)')).join(', ') : 'none reported by Windows');
+      send('av:info', avInfo());
+    });
+    ps.on('error', (e) => log('antivirus', 'scan: ' + e.message));
+  } catch (e) { log('antivirus', 'scan: ' + e.message); }
+}
+function avFolders() {
+  const out = [P.dataRoot()];
+  for (const v of registry) { const g = V.knownGameDir(v); if (g && fs.existsSync(g) && !out.includes(g)) out.push(g); }
+  return out;
+}
+function avInfo() {
+  const st = settings.load();
+  return { products: av.products, defender: av.defender, otherOn: av.otherOn, blocked: av.blocked, allowedAt: st.avAllowedAt || null, folders: avFolders() };
+}
+const AV_BLOCK_RE = /Add-Type.*?(Access to the path|is denied|could not be found|cannot find|Could not load file)|Riskware|BadInterop|Gen:Variant/i;
+function noteAvLine(line) {
+  if (!line || !AV_BLOCK_RE.test(line)) return;
+  const first = !av.blocked;
+  av.blocked = { at: new Date().toISOString(), line: String(line).trim().slice(0, 200) };
+  if (first) { log('antivirus', 'blocked: a helper the game fixes compile at run time could not be used (an antivirus removed it): ' + av.blocked.line); send('av:info', avInfo()); }
+}
+// one hidden PowerShell, elevated when asked, result { ok, error } - the Fix the firewall pattern
+function runPs(script, elevated) {
+  const inner = `-NoProfile -ExecutionPolicy Bypass -Command "${script.replace(/"/g, '\\"')}"`;
+  const cmd = elevated ? `Start-Process powershell.exe -Verb RunAs -Wait -WindowStyle Hidden -ArgumentList '${inner.replace(/'/g, "''")}'` : script;
+  return new Promise((resolve) => {
+    const child = require('child_process').spawn('powershell.exe', ['-NoProfile', '-ExecutionPolicy', 'Bypass', '-Command', cmd], { windowsHide: true });
+    let err = '', out = ''; child.stderr.on('data', d => err += d); child.stdout.on('data', d => out += d);
+    child.on('exit', (code) => resolve({ ok: code === 0, out: out.trim(), error: code === 0 ? '' : (/canceled|cancelled|denied/i.test(err) ? 'Windows did not get permission (the admin prompt was closed).' : (err.trim().split('\n')[0] || 'The command did not finish.')) }));
+    child.on('error', (e) => resolve({ ok: false, out: '', error: e.message }));
+  });
+}
+// the Add-Type test the game fixes rely on, in the same TEMP the scripts use; on demand only
+async function avProbe() {
+  const tmp = path.join(P.dataRoot(), 'tmp'); try { fs.mkdirSync(tmp, { recursive: true }); } catch {}
+  const r = await runPs(`$env:TEMP='${tmp.replace(/'/g, "''")}'; $env:TMP=$env:TEMP; Add-Type -TypeDefinition 'public static class DfAvProbe { public static int Go() { return 7; } }'; [DfAvProbe]::Go()`, false);
+  const ok = r.ok && /^7/.test(r.out);
+  log('antivirus', 'helper test: ' + (ok ? 'ok' : 'BLOCKED ' + (r.error || r.out).slice(0, 160)));
+  if (ok) av.blocked = null;
+  return { ok, error: ok ? '' : (r.error || r.out).slice(0, 200) };
+}
+ipcMain.handle('av:info', () => avInfo());
+ipcMain.handle('av:probe', () => avProbe());
+ipcMain.handle('av:allow', async () => {
+  if (!P.IS_WIN) return { ok: false, error: 'Windows only.' };
+  const folders = avFolders();
+  if (av.otherOn.length || !av.defender) return { ok: false, manual: true, products: av.otherOn.length ? av.otherOn : av.products.map(p => p.name), folders };
+  const script = folders.map(f => `Add-MpPreference -ExclusionPath '${f.replace(/'/g, "''")}'`).join('; ');
+  log('antivirus', 'Defender exclusions: ' + folders.join(' | '));
+  const r = await runPs(script, true);
+  if (!r.ok) return { ok: false, error: r.error };
+  settings.update(s => { s.avAllowedAt = new Date().toISOString(); s.avAllowedFolders = folders; });
+  const probe = await avProbe();
+  send('av:info', avInfo());
+  return { ok: true, count: folders.length, probe };
+});
+// More > Repair the launcher files: the server files put back from the bundle (when it is current) or fetched again
+ipcMain.handle('package:repair', async (_e, id) => {
+  const v = byId(id); if (!v || !v.package) return { ok: false, error: 'This version has no server files.' };
+  if (R.anyRunning().some(r => String(r.id).split(':')[0] === id && r.kind !== 'stop') || D.isDownloading(id)) return { ok: false, error: 'Close the game first (and stop hosting): the files are replaced while nothing is using them.' };
+  if (kept(v)) return { ok: false, error: 'Settings says you keep your own server files. Turn that off first, then repair.' };
+  settings.setVersionEntry(id, { repairTried: null });
+  const marker = V.installedPackageVersion(v), bundled = V.bundledPackageVersion(v);
+  const fromBundle = fs.existsSync(path.join(v.bundledDir, v.package.dir)) && V.cmpPackageVersion(bundled, marker || '') >= 0;
+  log('package', id, 'repair asked (marker ' + (marker || 'none') + ', bundle ' + bundled + ', ' + (fromBundle ? 'bundle first' : 'fetch') + ')');
+  if (fromBundle) {
+    try { V.applyPackage(v, path.join(v.bundledDir, v.package.dir), bundled); }
+    catch (e) { pkgCheck[id] = V.verifyPackage(v); log('package', id, 'repair from the bundle failed: ' + e.message); return { ok: false, error: e.message, bad: pkgCheck[id].bad }; }
+  }
+  await checkUpdates({ force: new Set(fromBundle ? [] : [id]), skip: new Map() });   // newer than the bundle? fetched now
+  const chk = V.verifyPackage(v); pkgCheck[id] = chk;
+  if (chk.ok) settings.setVersionEntry(id, { repairTried: null });
+  log('package', id, 'repair done: ' + (chk.ok ? 'ok' : 'still wrong: ' + chk.bad.join(', ')));
+  return { ok: chk.ok, bad: chk.bad, version: V.installedPackageVersion(v), error: chk.ok ? '' : V.badFilesText(chk.bad) };
+});
 // after a forced fetch: still wrong -> remember it (same files, that package number) so the next start does not fetch again
 function notePackageResults(results, opts) {
   for (const r of results || []) {
@@ -877,6 +971,12 @@ ipcMain.handle('report:send', async (_e, id, name, reason) => {
   reportBusy = true;
   try {
     const info = { pkg: V.installedPackageVersion(v), launcher: AU.info().version || app.getVersion() };
+    try {   // DF-AVGUARD: what the launcher knows about the antivirus and the server files (info.txt)
+      const a = avInfo(); const c = pkgCheck[id] || V.verifyPackage(v);
+      info.extra = ['', 'Antivirus: ' + (a.products.length ? a.products.map(p => p.name + (p.on ? ' (on)' : ' (off)')).join(', ') : 'none reported'),
+        'Antivirus exclusions added by the launcher: ' + (a.allowedAt || 'never'), 'Helper blocked: ' + (a.blocked ? a.blocked.at + ' ' + a.blocked.line : 'no'),
+        'Server files check: ' + (c.ok ? 'ok' : 'WRONG ' + c.bad.join(', ')) + (c.unverified ? ' (narrow check)' : ''), 'Script TEMP: ' + path.join(v.dataDir, 'data', 'tmp')];
+    } catch {}
     const { zip, files } = RPT.collect(v, info);
     log('report', id, `${files} files, ${zip.length} bytes`);
     const r = await S.call('POST', '/v1/report', { name: name.slice(0, 40), reason: reason.slice(0, 2000), version: v.id, pkg: info.pkg,
@@ -916,6 +1016,16 @@ ipcMain.handle('game:setup', async (_e, id, uninstall, auto) => {
   const g = V.knownGameDir(v);
   if (g && !uninstall) V.seedConfig(v, g);
   const script = path.join(v.dataDir, v.package.setup);
+  // DF-AVGUARD: set-up on server files that are not all there only fails later with a generic line; say which file now
+  if (!uninstall) {
+    const chk = V.verifyPackage(v); pkgCheck[id] = chk;
+    if (!chk.ok) {
+      const msg = V.badFilesText(chk.bad) + ' Use More > Allow in the antivirus, then More > Repair the launcher files.';
+      log('package', id, 'set-up not started: ' + chk.bad.join(', '));
+      send('setup:state', { id, state: 'done', code: 1, auto: !!auto });
+      return { ok: false, code: 1, error: msg };
+    }
+  }
   // auto: no window and no questions (setup.ps1 -Auto); the lines go to the log under the button. Packages from
   // before -Auto existed get the normal window.
   let canAuto = false;
@@ -925,8 +1035,11 @@ ipcMain.handle('game:setup', async (_e, id, uninstall, auto) => {
     let lastError = '';
     const code = await R.runHidden(key, 'setup', script, ['-Auto'], (line, isErr) => {
       if (/^STOPPED:/.test(line.trim())) lastError = line.trim().replace(/^STOPPED:\s*/, '');
+      noteAvLine(line);   // DF-AVGUARD
       send('log:line', { id, line, isErr, kind: 'setup' });
     });
+    // DF-AVGUARD: the package's own bin check says "missing or damaged" without a name; add the names
+    if (code !== 0 && /bin folder/i.test(lastError)) { try { const c = V.verifyPackage(v); pkgCheck[id] = c; if (!c.ok) lastError += ' (' + c.bad.join(', ') + '). Use More > Allow in the antivirus, then More > Repair the launcher files.'; } catch {} }
     send('setup:state', { id, state: 'done', code, auto: true });
     return { ok: code === 0, code, error: lastError };
   }
@@ -1003,6 +1116,7 @@ ipcMain.handle('game:play', async (_e, id) => {
   let lastError = '';
   const code = await R.runHidden(id, 'play', script, [], (line, isErr) => {
     if (isErr && /^STOPPED:/.test(line.trim())) lastError = line.trim().replace(/^STOPPED:\s*/, '');
+    noteAvLine(line);   // DF-AVGUARD
     send('log:line', { id, line, isErr, kind: 'play' });
   });
   send('play:state', { id, state: 'done', code, error: lastError });

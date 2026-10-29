@@ -3,6 +3,7 @@
 // Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 'use strict';
 const checkNotes = {};   // DF-CHECKFILES: versionId -> { text, err, until }
+let avState = null;      // DF-AVGUARD: { products, defender, otherOn, blocked, allowedAt, folders } from main.js
 const L = window.launcher;
 const $ = (id) => document.getElementById(id);
 
@@ -27,6 +28,7 @@ async function boot() {
   wire();
   $('side-ver').textContent = `Dauntless Forever ${info.version}`;
   loadCommunity();
+  try { avState = await L.avInfo(); L.onAvInfo((a) => { avState = a; renderDetail(); }); } catch {}   // DF-AVGUARD
 }
 function showPage(name) {
   for (const b of document.querySelectorAll('.nav-item')) b.classList.toggle('selected', b.dataset.page === name);
@@ -355,6 +357,16 @@ function renderDetail() {
       note.textContent = w ? (w.public ? t('You are in {name}\'s game (open to everyone). Your character is saved home every few minutes. Close the game to play here.', { name: w.name })
         : t('You are in {name}\'s game. Your character is saved home every few minutes. Close the game to play here.', { name: w.name })) : t('You are in a friend\'s game. Close it to play here.');
     }
+  }
+  // DF-PKGVERIFY / DF-AVGUARD: server files that failed their check, or a helper the antivirus removed, outrank the
+  // generic notes above: the player should know what to press (More > Allow in the antivirus, then Repair)
+  if (!st.busy && s.pkg && !s.pkg.ok) {
+    note.textContent = t('Some server files are missing or wrong ({list}). An antivirus usually removed them: use More > Allow in the antivirus, then More > Repair the launcher files.', { list: s.pkg.bad.slice(0, 3).join(', ') });
+    note.className = 'action-note err';
+  } else if (!st.busy && avState && avState.blocked && !avState.allowedAt) {
+    const name = (avState.otherOn[0] || (avState.products[0] || {}).name || t('your antivirus'));
+    note.textContent = t('{name} blocked a helper the game fixes need (the ammo and party fixes, the Forever hunts). Use More > Allow in the antivirus.', { name });
+    note.className = 'action-note err';
   }
   // DF-CHECKFILES: the game-file check's progress / result stays shown through refreshes (5 minutes after it ends)
   const cn = checkNotes[v.id];
@@ -1246,6 +1258,34 @@ function wire() {
       n.textContent = r && r.ok ? t('Windows Firewall now allows the launcher, Node and the game ({count} programs). If you use another firewall or antivirus, allow "Dauntless Forever" and node.exe there too.', { count: r.count })
         : t('Could not add the firewall rules: {error}', { error: tm(r && r.error) });
       n.className = r && r.ok ? 'action-note' : 'action-note err';
+    }
+    if (act === 'avallow') {   // DF-AVGUARD
+      const n = $('action-note'); n.textContent = t('Checking which antivirus this PC uses...'); n.className = 'action-note';
+      const r = await L.avAllow();
+      if (r && r.ok) {
+        n.textContent = r.probe && r.probe.ok ? t('Windows Defender now leaves the launcher folder and the game folder alone ({count} folders). The helper test passed. If something was removed before, use More > Repair the launcher files.', { count: r.count })
+          : t('Windows Defender exclusions were added ({count} folders), but the helper test still failed: {error}. Another protection program may be running; allow the launcher folder there too.', { count: r.count, error: tm(r.probe && r.probe.error) });
+        n.className = r.probe && r.probe.ok ? 'action-note' : 'action-note err';
+      } else if (r && r.manual) {
+        const prods = (r.products || []).join(', ') || t('your antivirus');
+        const lines = [t('The launcher can only add exclusions to Windows Defender by itself. For {prods}, add these folders yourself:', { prods }), '', ...r.folders.map(f => '    ' + f), '',
+          t('Where the setting lives:'),
+          '  Avast / AVG: Menu > Settings > General > Exceptions > Add exception (then restore the files from Protection > Virus Chest)',
+          '  Bitdefender: Protection > Antivirus > Settings > Manage exceptions > Add an exception (folder)',
+          '  ESET: Setup > Computer protection > Edit exclusions > Add (folder); restore from Tools > Quarantine',
+          '  Kaspersky: Settings > Threats and exclusions > Manage exclusions > Add (folder); restore from Quarantine',
+          '  Malwarebytes: Settings > Allow list > Add (folder)',
+          '', t('Afterwards use More > Repair the launcher files, then Set up.')];
+        $('readme-title').textContent = t('Allow Dauntless Forever in {prods}', { prods }); $('readme-body').textContent = lines.join('\n'); $('dlg-readme').showModal();
+        n.textContent = t('The folders to allow are in the window. After adding them: More > Repair the launcher files.'); n.className = 'action-note';
+      } else { n.textContent = t('Could not add the exclusions: {error}', { error: tm(r && r.error) }); n.className = 'action-note err'; }
+    }
+    if (act === 'pkgrepair') {   // DF-PKGVERIFY
+      const n = $('action-note'); n.textContent = t('Putting the server files back (a download when the newest are not on this PC)...'); n.className = 'action-note';
+      const r = await L.repairPackage(v.id);
+      await refresh(v.id);
+      if (r && r.ok) { n.textContent = t('Server files are in place again ({version}). If Set up is asked for, press it.', { version: r.version }); n.className = 'action-note'; }
+      else { n.textContent = tm(r && r.error) || t('The repair did not finish.'); n.className = 'action-note err'; }
     }
     if (act === 'logs') { L.openLogs(v.id); const n = $('action-note'); n.textContent = t('Send the two zips in the upload folder (client_logs.zip, server_logs.zip). Your PC name and user name are blanked out in them.'); n.className = 'action-note'; }
     if (act === 'report') openReport(v);   // DF-REPORTS

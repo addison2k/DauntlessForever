@@ -115,7 +115,7 @@ function collect(v, info) {
     `Version: ${v.id}`, `Server files: ${info.pkg || '?'}`, `Launcher: ${info.launcher || '?'}`,
     `Windows: ${os.release()} ${os.arch()}`, `Memory: ${Math.round(os.totalmem() / 1073741824)} GB (${Math.round(os.freemem() / 1073741824)} GB free)`,
     `CPU: ${(os.cpus()[0] || {}).model || '?'} x${os.cpus().length}`, `Sent: ${new Date().toString()}`,
-    '', ...notes,
+    '', ...notes, ...((info && info.extra) || []),   // DF-AVGUARD: antivirus and server-file lines from main.js
   ];
   entries.unshift({ name: 'info.txt', data: blank(Buffer.from(lines.join('\r\n') + '\r\n', 'utf8')), mtime: new Date() });
   // too big: drop the largest log tails until it fits (the two zips go last)

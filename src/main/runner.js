@@ -51,6 +51,27 @@ function freshEnv() {
   return env;
 }
 
+// DF-AVTEMP (Oct 29): the package scripts compile a small helper at run time (Add-Type in the ammo and party fixes and
+// in the Forever hunt helpers) and the compiler drops its DLL into %TEMP%, where Bitdefender, ESET, Avast and Kaspersky
+// delete it (MSIL/Riskware.BadInterop, Gen:Variant.Adware.Barys) - the fix silently stops, and with ESET every 30 s.
+// Every script therefore gets TEMP/TMP pointed at <version>\data\tmp, inside the launcher data folder that players
+// already exclude, so one exclusion covers it. Cleared at launcher start (clearScriptTemp) so it does not fill up.
+function scriptEnv(scriptPath, opts) {
+  const env = Object.assign(freshEnv(), (opts && opts.env) || {});
+  if (!IS_WIN) return env;
+  try {
+    const cwd = (opts && opts.cwd) || path.dirname(path.dirname(scriptPath));
+    const tmp = path.join(cwd, 'data', 'tmp');
+    fs.mkdirSync(tmp, { recursive: true });
+    env.TEMP = tmp; env.TMP = tmp;
+  } catch {}
+  return env;
+}
+function clearScriptTemp(dataDir) {
+  const tmp = path.join(dataDir, 'data', 'tmp');
+  try { for (const n of fs.readdirSync(tmp)) { try { fs.rmSync(path.join(tmp, n), { recursive: true, force: true }); } catch {} } } catch {}
+}
+
 function isRunning(id) { return running.has(id); }
 function anyRunning() { return [...running.entries()].map(([id, r]) => ({ id, kind: r.kind })); }
 
@@ -70,7 +91,7 @@ function runVisible(id, kind, scriptPath, args, title, opts) {
     // cmd /c start /wait gives the script a real console (Read-Host, the folder picker) and waits for it.
     const cmdLine = `cmd.exe /d /c start "${title}" /wait ${PS} -NoProfile -ExecutionPolicy Bypass -Command "${psCmd}"`;
     const child = spawn('cmd.exe', [cmdLine.slice('cmd.exe '.length)],
-      { windowsHide: false, windowsVerbatimArguments: true, stdio: 'ignore', cwd: (opts && opts.cwd) || path.dirname(path.dirname(scriptPath)), env: Object.assign(freshEnv(), (opts && opts.env) || {}) });   // DF-FOREVER: opts.env / opts.cwd
+      { windowsHide: false, windowsVerbatimArguments: true, stdio: 'ignore', cwd: (opts && opts.cwd) || path.dirname(path.dirname(scriptPath)), env: scriptEnv(scriptPath, opts) });   // DF-FOREVER: opts.env / opts.cwd; DF-AVTEMP: TEMP inside the data folder
     running.set(id, { kind, child });
     child.on('exit', (code) => { running.delete(id); resolve(code == null ? 1 : code); });
     child.on('error', () => { running.delete(id); resolve(1); });
@@ -82,7 +103,7 @@ function runHidden(id, kind, scriptPath, args, onLine, opts) {
   return new Promise((resolve) => {
     if (!IS_WIN) { return mockPlay(id, kind, onLine, resolve); }
     const child = spawn(PS, [...PS_ARGS, '-File', scriptPath, ...args],
-      { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'], cwd: (opts && opts.cwd) || path.dirname(path.dirname(scriptPath)), env: Object.assign(freshEnv(), (opts && opts.env) || {}) });   // DF-FOREVER: opts.env / opts.cwd
+      { windowsHide: true, stdio: ['ignore', 'pipe', 'pipe'], cwd: (opts && opts.cwd) || path.dirname(path.dirname(scriptPath)), env: scriptEnv(scriptPath, opts) });   // DF-FOREVER: opts.env / opts.cwd; DF-AVTEMP: TEMP inside the data folder
     running.set(id, { kind, child });
     const feed = (stream, isErr) => {
       let buf = '';
@@ -150,4 +171,4 @@ function mockPlay(id, kind, onLine, resolve) {
   running.set(id, { kind, child: { pid: 0, exitCode: null, kill() { running.delete(id); } } });
 }
 
-module.exports = { runVisible, runHidden, runStop, killTree, isRunning, anyRunning };
+module.exports = { runVisible, runHidden, runStop, killTree, isRunning, anyRunning, clearScriptTemp };

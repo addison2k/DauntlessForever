@@ -37,6 +37,11 @@ contextBridge.exposeInMainWorld('launcher', {
   openLogs: invoke('open:logs'),
   sendReport: invoke('report:send'),                  // DF-REPORTS: More > Send my logs
   fixFirewall: invoke('fix:firewall'),
+  avInfo: invoke('av:info'),                           // DF-AVGUARD: antivirus products, blocked helper, exclusions added
+  avAllow: invoke('av:allow'),                         // DF-AVGUARD: More > Allow in the antivirus
+  avProbe: invoke('av:probe'),                         // DF-AVGUARD: the Add-Type test, on demand
+  onAvInfo: on('av:info'),
+  repairPackage: invoke('package:repair'),             // DF-PKGVERIFY: More > Repair the launcher files
   readme: invoke('read:readme'),
   onLog: on('log:line'),
   onDownloadProgress: on('download:progress'),
