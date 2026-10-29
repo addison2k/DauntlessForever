@@ -188,6 +188,7 @@ app.whenReady().then(async () => {
   require('electron').session.defaultSession.setPermissionRequestHandler((_wc, perm, cb) => cb(perm === 'media' || perm === 'clipboard-sanitized-write' || perm === 'fullscreen'));
   registry = V.loadRegistry();
   const pleaseWait = await syncWithPleaseWait();   // after an update: copy the new server files in, with a "please wait" window
+  const pkgTodo = checkPackages();   // DF-PKGVERIFY: are the installed server files what they should be?
   createWindow();
   // closed only once the launcher's own window exists (closing the last window would quit the app)
   if (pleaseWait && pleaseWait !== startWin) win.once('show', () => { if (!pleaseWait.isDestroyed()) pleaseWait.destroy(); });
@@ -210,8 +211,43 @@ app.whenReady().then(async () => {
       return node || null;
     } });
   // server-file updates: after the window is up, quietly; the window hears about anything that changed
-  win.webContents.once('did-finish-load', () => setTimeout(checkUpdates, 1500));
+  win.webContents.once('did-finish-load', () => setTimeout(() => checkUpdates(pkgTodo), 1500));
 });
+// DF-PKGVERIFY (Oct 29): at start every installed package is read back (versions.js verifyPackage). A version whose
+// files are missing or wrong gets the current package fetched again - once per start. When that fetch leaves the same
+// files wrong (an antivirus deleting them as they land) the miss is kept in launcher.json (repairTried) and nothing is
+// fetched again until the files change or a newer package is out; the status says what is wrong instead. The old
+// "Set-up needed forever" cases (old paks under a new marker) are the ones this catches.
+const pkgCheck = {};   // id -> the last verifyPackage result (versions:status carries it)
+const badKey = (r) => r.bad.join('|');
+function checkPackages() {
+  const force = new Set(), skip = new Map();
+  for (const v of registry) {
+    if (!v.package) continue;
+    let r; try { r = V.verifyPackage(v); } catch (e) { log('package', v.id, 'check failed: ' + e.message); continue; }
+    pkgCheck[v.id] = r;
+    const e = settings.versionEntry(v.id);
+    if (r.ok) { if (e.repairTried) settings.setVersionEntry(v.id, { repairTried: null }); continue; }
+    log('package', v.id, (r.unverified ? 'copy from an older launcher, ' : '') + 'server files not as expected: ' + r.bad.join(', '));
+    if (e.repairTried && e.repairTried.bad === badKey(r)) skip.set(v.id, e.repairTried.pkg || '');
+    else force.add(v.id);
+  }
+  log('package', 'checked: ' + Object.keys(pkgCheck).map(id => id + ' ' + (pkgCheck[id].ok ? 'ok' : 'WRONG') + (pkgCheck[id].unverified ? ' (narrow check, no file list yet)' : '')).join(', '));
+  return { force, skip };
+}
+// after a forced fetch: still wrong -> remember it (same files, that package number) so the next start does not fetch again
+function notePackageResults(results, opts) {
+  for (const r of results || []) {
+    if (!opts.force.has(r.id)) continue;
+    const v = byId(r.id); if (!v) continue;
+    let chk; try { chk = V.verifyPackage(v); } catch { continue; }
+    pkgCheck[r.id] = chk;
+    if (chk.ok) { settings.setVersionEntry(r.id, { repairTried: null }); log('package', r.id, 'server files are in place again'); continue; }
+    if (!r.applied && r.error && !/not in place/.test(r.error)) { log('package', r.id, 'fetch did not finish (' + r.error + '); tried again next start'); continue; }
+    settings.setVersionEntry(r.id, { repairTried: { bad: badKey(chk), pkg: r.to || '' } });
+    log('package', r.id, 'still wrong after the fetch: ' + chk.bad.join(', ') + ' - not fetched again until it changes. Antivirus?');
+  }
+}
 // A newer launcher. Small launcher updates (appupdate.js) download by themselves and are used from the next start:
 // the banner offers "Restart now". A launcher too old for them shows the banner with a Download button, as before.
 let newerLauncher = null;
@@ -233,11 +269,12 @@ ipcMain.handle('launcher:restart', () => {
   return { ok: true };
 });
 ipcMain.handle('launcher:newer', () => newerLauncher);
-async function checkUpdates() {
+async function checkUpdates(pkgOpts) {   // DF-PKGVERIFY: pkgOpts { force, skip } from checkPackages (start only)
   try {
     const results = await U.checkAndApply(registry, (msg) => { log('updates', msg); send('updates:event', { msg }); },
       (id) => R.isRunning(id) || R.isRunning(id + ':setup') || R.isRunning(id + ':host') || D.isDownloading(id), launcherUpdate,
-      (id) => { const v = byId(id); return !!v && kept(v); });
+      (id) => { const v = byId(id); return !!v && kept(v); }, pkgOpts);
+    if (pkgOpts) notePackageResults(results, pkgOpts);
     if (P.MOCK && process.env.DL_MOCK_LAUNCHER) launcherUpdate({ version: process.env.DL_MOCK_LAUNCHER, url: 'https://github.com/addison2k/DauntlessForever/releases', notes: 'Test notes.' });
     if (results.length) send('updates:done', { results });
   } catch (e) { log('updates', e.message); }
@@ -331,6 +368,7 @@ ipcMain.handle('versions:status', (_e, id) => {
   s.canImportFix = s.canImport && /TutorialOnly/.test((() => { try { return fs.readFileSync(path.join(v.dataDir, 'tools', 'import-revived.ps1'), 'utf8'); } catch { return ''; } })());
   s.imported = fs.existsSync(path.join(v.dataDir, 'data', 'import-revived.json'));
   s.busy = R.isRunning(id) ? 'play' : (D.isDownloading(id) ? 'download' : (R.isRunning(id + ':setup') ? 'setup' : null));
+  s.pkg = pkgCheck[id] || null;   // DF-PKGVERIFY: { ok, bad, unverified, marker } from the start-up check
   return s;
 });
 // Settings -> "What you are running": per version, the server files installed, each file set-up put in the

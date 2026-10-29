@@ -87,19 +87,34 @@ function unzip(zip, dir) {
 // Returns a list of { id, from, to, applied, error } ; onEvent(msg) for the log.
 // onLauncher(info) hears about packages.json's "launcher" block: { version, url, notes } of the newest launcher.
 // isHeld(id): the player keeps their own server files (Settings): say an update is there, don't apply it.
-async function checkAndApply(registry, onEvent, isBusy, onLauncher, isHeld) {
+// DF-PKGVERIFY (Oct 29): opts.force (Set of ids) fetches the current package even when the number matches (the
+// installed files failed their check); opts.skip (Set of ids) fetches nothing for those (a repair already failed on
+// the same files - no 70 MB per start while an antivirus keeps deleting them). A version with no .package-version at
+// all counts as "fetch": the number in the data folder's version.json says what SHOULD be there, not what is.
+let tmpCleared = false;
+async function checkAndApply(registry, onEvent, isBusy, onLauncher, isHeld, opts) {
   const results = [];
   if (MOCK) return results;
+  opts = opts || {};
   let index;
   try { index = JSON.parse(await fetch(INDEX_URL)); }
   catch (e) { onEvent('No package update check: ' + e.message); return results; }
   if (index.launcher && onLauncher) { try { onLauncher(index.launcher); } catch {} }
   const tmpRoot = ensureDir(path.join(dataRoot(), 'tmp'));
+  if (!tmpCleared) {   // DF-PKGVERIFY: leftovers of a download that never finished (closed launcher, crash)
+    tmpCleared = true;
+    try { for (const n of fs.readdirSync(tmpRoot)) { try { fs.rmSync(path.join(tmpRoot, n), { recursive: true, force: true }); } catch {} } } catch {}
+  }
   for (const entry of (index.packages || [])) {
     const v = registry.find(x => x.id === entry.id);
     if (!v || !v.package || !entry.packageVersion || !entry.url || !entry.sha256) continue;
-    const have = V.installedPackageVersion(v) || v.package.packageVersion;
-    if (V.cmpPackageVersion(entry.packageVersion, have) <= 0) continue;
+    const marker = V.installedPackageVersion(v);
+    const have = marker || V.bundledPackageVersion(v) || '';
+    const forced = !!(opts.force && opts.force.has(v.id));
+    if (opts.skip && opts.skip.has(v.id)) { onEvent(`${v.id}: server files ${entry.packageVersion} not fetched again: the last copy was blocked on this PC (see above). Allow the launcher in your antivirus, then More > Repair.`); continue; }
+    if (!forced && marker && V.cmpPackageVersion(entry.packageVersion, marker) <= 0) continue;
+    if (forced) onEvent(`${v.id}: fetching server files ${entry.packageVersion} again (the installed copy failed its check).`);
+    else if (!marker) onEvent(`${v.id}: no record of which server files are installed; fetching ${entry.packageVersion}.`);
     if (isHeld && isHeld(v.id)) { onEvent(`${v.id}: server files ${entry.packageVersion} are available but not applied (Keep my server files is on in Settings).`); continue; }
     if (isBusy(v.id)) { onEvent(`${v.id}: an update is available (${entry.packageVersion}) but the version is in use; next start.`); continue; }
     const r = { id: v.id, from: have, to: entry.packageVersion, applied: false, error: '' };
@@ -119,7 +134,7 @@ async function checkAndApply(registry, onEvent, isBusy, onLauncher, isHeld) {
       if (kids.length === 1 && fs.statSync(path.join(dir, kids[0])).isDirectory()) src = path.join(dir, kids[0]);
       if (!fs.existsSync(path.join(src, v.package.play))) throw new Error('the update does not look like a package (no ' + v.package.play + ')');
       if (!fs.existsSync(path.join(src, 'version.json'))) throw new Error('the update has no version.json');
-      V.applyPackage(v, src, entry.packageVersion);
+      V.applyPackage(v, src, entry.packageVersion);   // DF-PKGVERIFY: throws, marker untouched, when a file does not read back
       // the new version.json (new DLL hashes etc.) now sits in the data folder; use it from here on
       const fresh = JSON.parse(fs.readFileSync(path.join(v.dataDir, 'version.json'), 'utf8'));
       for (const k of Object.keys(fresh)) v[k] = fresh[k];

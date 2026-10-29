@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.3.22",
+                     "version":  "0.3.23",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "Forever: if your PC runs Ramsgate, closing or crashing your game no longer closes the town for everyone. Reopening your game no longer stops hunts your PC runs for other players. Gift toys are out of the Rams shop.",
+                     "notes":  "The launcher now checks its server files at every start and fetches them again when one is old or missing. Fixes the endless Set-up needed loop and set-up that listed 5 patches instead of 7. If an antivirus keeps removing a file, the launcher says which one and stops retrying instead of downloading on every start.",
                      "date":  "2026-10-29",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.3.22.asar",
-                                 "sha256":  "ad268535b280f839ee8d00b708c9a11816f35f5724517ad9fb5fc27d244454b7",
-                                 "size":  9381004,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.3.23.asar",
+                                 "sha256":  "7cdbb8784b0599e48a4c5e89717e5210b81f41a07b8ff1bc76694a62c3f87211",
+                                 "size":  9390456,
                                  "minShell":  "0.2.4"
                              }
                  }

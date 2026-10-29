@@ -25,6 +25,11 @@ function loadRegistry() {
     try {
       let v = JSON.parse(fs.readFileSync(f, 'utf8'));
       const dataDir = path.join(versionsDataDir(), id);
+      // DF-PKGVERIFY (Oct 29): the bundle's own package number is kept apart from whatever the data folder says. The
+      // bundle (resources\versions next to app.asar) is frozen at the installer's date; small launcher updates never
+      // change it. A copy from it must be stamped with ITS number - stamping it with the newer number below was the
+      // "Set-up needed forever" loop (old files, new marker, updates.js saw nothing to do).
+      const bundledPackageVersion = (v.package && v.package.packageVersion) || '';
       // a package update (updates.js) leaves its own version.json in the data folder; prefer it when newer
       try {
         const u = JSON.parse(fs.readFileSync(path.join(dataDir, 'version.json'), 'utf8'));
@@ -32,6 +37,7 @@ function loadRegistry() {
       } catch {}
       v.bundledDir = path.join(dir, id);
       v.dataDir = dataDir;
+      v.bundledPackageVersion = bundledPackageVersion;
       out.push(v);
     } catch (e) { console.error('bad version.json', f, e.message); }
   }
@@ -57,11 +63,20 @@ function needsSync(v) {
   const src = path.join(v.bundledDir, v.package.dir);
   if (!fs.existsSync(src)) return false;   // registry entry came from an update newer than the bundle; nothing to copy
   const have = installedPackageVersion(v);
-  return !(have && cmpPackageVersion(have, v.package.packageVersion) >= 0 && fs.existsSync(path.join(v.dataDir, v.package.play)));
+  const playThere = fs.existsSync(path.join(v.dataDir, v.package.play));
+  // DF-PKGVERIFY: measured against the BUNDLE's number. The bundle goes in when the marker is missing or older than
+  // it, or the play script is gone - except when the data folder already holds an update newer than the bundle (its
+  // version.json won above) and the play script is there: then the bundle would only put old files over new ones.
+  // updates.js takes that case (a missing marker means "fetch the current package").
+  const bundled = bundledPackageVersion(v);
+  if (have && cmpPackageVersion(have, bundled) >= 0 && playThere) return false;
+  if (playThere && cmpPackageVersion(v.package.packageVersion, bundled) > 0) return false;
+  return true;
 }
+function bundledPackageVersion(v) { return v.bundledPackageVersion || (v.package && v.package.packageVersion) || ''; }
 function syncPackage(v) {
   if (!needsSync(v)) return;
-  applyPackage(v, path.join(v.bundledDir, v.package.dir), v.package.packageVersion);
+  applyPackage(v, path.join(v.bundledDir, v.package.dir), bundledPackageVersion(v));
 }
 // The same copy without freezing the launcher (start-up shows a "please wait" window meanwhile). onFile(n) after each file.
 // .package-version is written last, so a copy that gets cut off simply runs again next time.
@@ -70,39 +85,90 @@ async function syncPackageAsync(v, onFile) {
   const dst = ensureDir(v.dataDir);
   const keep = PRESERVE_PATHS.concat((v.package && v.package.saveFiles) || []).map(p => p.replace(/\\/g, '/').replace(/\/+$/, ''));
   let n = 0;
+  const copied = [];   // DF-PKGVERIFY
   const walk = async (src, d0, rel) => {
     for (const ent of await fs.promises.readdir(src, { withFileTypes: true })) {
       const r = rel ? rel + '/' + ent.name : ent.name;
       const s = path.join(src, ent.name), d = path.join(d0, ent.name);
       if ((PRESERVE_NAMES.has(ent.name) || keep.includes(r)) && fs.existsSync(d)) continue;
       if (ent.isDirectory()) { await fs.promises.mkdir(d, { recursive: true }); await walk(s, d, r); }
-      else { await fs.promises.copyFile(s, d); n++; if (onFile) onFile(n); }
+      else { await fs.promises.copyFile(s, d); copied.push({ rel: r, src: s }); n++; if (onFile) onFile(n); }
     }
   };
   await walk(path.join(v.bundledDir, v.package.dir), dst, '');
-  fs.writeFileSync(path.join(dst, '.package-version'), v.package.packageVersion);
-  hashCache.clear();
+  sealPackage(dst, bundledPackageVersion(v), copied);
 }
 // Put a package (from the bundle, or an update that was just unzipped) into the version's data folder.
 function applyPackage(v, srcDir, packageVersion) {
   const dst = ensureDir(v.dataDir);
   const keep = PRESERVE_PATHS.concat((v.package && v.package.saveFiles) || []).map(p => p.replace(/\\/g, '/').replace(/\/+$/, ''));
-  copyTree(srcDir, dst, '', keep);
-  fs.writeFileSync(path.join(dst, '.package-version'), packageVersion);
+  const copied = [];   // DF-PKGVERIFY
+  copyTree(srcDir, dst, '', keep, copied);
+  sealPackage(dst, packageVersion, copied);
+}
+// DF-PKGVERIFY (Oct 29): after a copy, every copied file is read back and compared with its source, and the list
+// (path, size, sha256) goes into .package-files.json. .package-version is written LAST and only when every file is
+// there as copied. A file that is missing or different afterwards (an antivirus took it, the copy was cut off) is
+// named in the error and the marker stays as it was, so nothing claims a package that is not really there.
+const FILES_MANIFEST = '.package-files.json';
+function sealPackage(dst, packageVersion, copied) {
+  const bad = [], files = {};
+  for (const c of copied) {
+    const want = sha256(c.src), have = sha256(path.join(dst, c.rel));
+    if (!have) bad.push(c.rel + ' (missing)');
+    else if (want && have !== want) bad.push(c.rel + ' (different)');
+    let size = 0; try { size = fs.statSync(c.src).size; } catch {}
+    files[c.rel] = { size, sha256: want || '' };
+  }
   hashCache.clear();
+  if (bad.length) throw new Error(badFilesText(bad));
+  fs.writeFileSync(path.join(dst, FILES_MANIFEST), JSON.stringify({ packageVersion, written: new Date().toISOString(), files }, null, 1));
+  fs.writeFileSync(path.join(dst, '.package-version'), packageVersion);
+}
+function badFilesText(bad) {
+  return 'these server files are not in place: ' + bad.slice(0, 5).join(', ') + (bad.length > 5 ? ' and ' + (bad.length - 5) + ' more' : '') +
+    '. An antivirus removing them is the usual reason.';
+}
+// DF-PKGVERIFY: is what was copied into the data folder still there, unchanged? { ok, bad: ['rel (why)'], unverified }.
+// With no list yet (a copy made by a launcher before 0.3.23, or one whose marker does not match the list) the package's
+// own bin\ files are checked against the hashes version.json expects in the game folder: same files, same names, so an
+// old pak or a loader the antivirus deleted shows up (unverified: true says the check was the narrow one).
+function verifyPackage(v) {
+  const r = { ok: true, bad: [], unverified: false, marker: installedPackageVersion(v) };
+  if (!v.package || !fs.existsSync(path.join(v.dataDir, v.package.play))) return r;   // nothing installed: not this check's job
+  let m = null;
+  try { m = JSON.parse(fs.readFileSync(path.join(v.dataDir, FILES_MANIFEST), 'utf8')); } catch {}
+  if (m && m.files && r.marker && m.packageVersion === r.marker) {
+    for (const [rel, want] of Object.entries(m.files)) {
+      const have = sha256(path.join(v.dataDir, rel));
+      if (!have) r.bad.push(rel + ' (missing)');
+      else if (want.sha256 && have !== String(want.sha256).toUpperCase()) r.bad.push(rel + ' (different)');
+    }
+  } else {
+    r.unverified = true;
+    for (const f of v.package.installedFiles || []) {
+      const name = path.basename(f.rel);
+      if (!/\.(dll|pak)$/i.test(name) || !f.sha256) continue;
+      const have = sha256(path.join(v.dataDir, 'bin', name));
+      if (!have) r.bad.push('bin/' + name + ' (missing)');
+      else if (have !== String(f.sha256).toUpperCase()) r.bad.push('bin/' + name + ' (old or different)');
+    }
+  }
+  r.ok = !r.bad.length;
+  return r;
 }
 // "2026-10-12" < "2026-10-14.1" < "2026-10-14.2"
 function cmpPackageVersion(a, b) { return String(a).localeCompare(String(b), 'en', { numeric: true }); }
 // Package files are always refreshed (so an update really updates data/ and eos/ too); only the
 // preserved paths are left alone when the player already has them.
-function copyTree(src, dst, rel, keep) {
+function copyTree(src, dst, rel, keep, copied) {   // DF-PKGVERIFY: copied (optional) collects { rel, src } per file
   for (const ent of fs.readdirSync(src, { withFileTypes: true })) {
     const r = rel ? rel + '/' + ent.name : ent.name;
     const s = path.join(src, ent.name), d = path.join(dst, ent.name);
     const kept = PRESERVE_NAMES.has(ent.name) || keep.includes(r);
     if (kept && fs.existsSync(d)) continue;
-    if (ent.isDirectory()) { ensureDir(d); copyTree(s, d, r, keep); }
-    else fs.copyFileSync(s, d);
+    if (ent.isDirectory()) { ensureDir(d); copyTree(s, d, r, keep, copied); }
+    else { fs.copyFileSync(s, d); if (copied) copied.push({ rel: r, src: s }); }
   }
 }
 
@@ -225,4 +291,4 @@ function online(v) {
   return { ...o, hostPath: path.join(d, o.hostScript), joinPath: path.join(d, o.joinScript), relayPath: path.join(d, o.relayFile), hostPlayPath: o.hostPlay ? path.join(d, o.hostPlay) : '' };
 }
 function cmpVersionStr(a, b) { return cmpVersion(String(a).replace(/^v/, ''), String(b).replace(/^v/, '')); }
-module.exports = { online, cmpVersionStr, missingPrereqs, loadRegistry, syncPackage, syncPackageAsync, needsSync, applyPackage, installedPackageVersion, cmpPackageVersion, status, sha256, resolveGameDir, knownGameDir, seedConfig, readPkgConfig };
+module.exports = { online, cmpVersionStr, missingPrereqs, loadRegistry, syncPackage, syncPackageAsync, needsSync, applyPackage, installedPackageVersion, bundledPackageVersion, verifyPackage, badFilesText, cmpPackageVersion, status, sha256, resolveGameDir, knownGameDir, seedConfig, readPkgConfig };
