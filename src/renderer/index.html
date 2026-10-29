@@ -199,6 +199,8 @@
         <button data-act="logs">Get the logs for asking for help</button>
         <button data-act="report">Send my logs to the Dauntless Forever team</button>
         <button data-act="firewall">Fix the firewall (allow the launcher, Node and the game)</button>
+        <button data-act="avallow">Allow in the antivirus (Defender: adds the exclusions; others: shows what to add)</button>
+        <button data-act="pkgrepair">Repair the 1.14.7 launcher files (puts the server files back)</button>
       </div>
       <div id="fv-check-result" class="fv-check"></div>
 
@@ -512,6 +514,7 @@
   <div class="fp-rail">
     <button class="fp-rail-btn" id="fp-open" title="Friends"><span class="ic-friends fp-rail-ico" aria-hidden="true"></span><span class="fp-rail-count" id="fp-rail-count"></span></button>
     <span class="fp-rail-req" id="fp-rail-req" hidden title="Friend requests"></span>
+    <span class="fp-rail-chat" id="fp-rail-chat" hidden title="Unread messages"></span>
     <span class="fp-rail-voice" id="fp-rail-voice" hidden title="In voice"><svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="5.5" y="1.5" width="5" height="8.5" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 7.5a5 5 0 0 0 10 0M8 12.5V15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
   </div>
   <div class="fp-body" id="fp-body">
@@ -528,6 +531,13 @@
       <div class="fp-hosting" id="fp-hosting" hidden></div>
       <div class="fp-scroll" id="fp-scroll"></div>
       <div class="fp-foot"><button class="fr-link" id="fp-manage">Manage friends</button></div>
+      <!-- DF-CHAT: one conversation, shown instead of the list -->
+      <div class="fp-chat" id="fp-chat" hidden>
+        <div class="fp-chat-head"><button class="fp-chat-back" id="fp-chat-back" title="Back to the list" aria-label="Back to the list"><span class="chev back" aria-hidden="true"></span></button><span class="fr-name" id="fp-chat-name"></span><span class="fp-sub" id="fp-chat-sub"></span></div>
+        <div class="fp-chat-log" id="fp-chat-log" aria-live="polite"></div>
+        <p class="fp-note" id="fp-chat-note"></p>
+        <div class="fp-chat-send"><textarea id="fp-chat-text" class="fr-input" rows="2" maxlength="500" placeholder="Write a message (Enter sends)"></textarea><button class="fp-chat-btn" id="fp-chat-btn" title="Send" aria-label="Send">Send</button></div>
+      </div>
     </div>
     <div class="fp-voice" id="vc-card">
       <div class="vc-bar">

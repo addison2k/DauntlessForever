@@ -1274,7 +1274,7 @@ function wire() {
           t('Where the setting lives:'),
           '  Avast / AVG: Menu > Settings > General > Exceptions > Add exception (then restore the files from Protection > Virus Chest)',
           '  Bitdefender: Protection > Antivirus > Settings > Manage exceptions > Add an exception (folder)',
-          '  ESET: Setup > Computer protection > Edit exclusions > Add (folder); restore from Tools > Quarantine',
+          '  ESET: Setup > Advanced setup (F5) > Scans > Detection exclusions > Edit > Add: Detection name MSIL/Riskware.BadInterop.AC, Path left empty (one rule covers the helper on every path; thanks Enryaku). Folders: Advanced setup > Scans > Performance exclusions. Restore from Tools > Quarantine',
           '  Kaspersky: Settings > Threats and exclusions > Manage exclusions > Add (folder); restore from Quarantine',
           '  Malwarebytes: Settings > Allow list > Add (folder)',
           '', t('Afterwards use More > Repair the launcher files, then Set up.')];

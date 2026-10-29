@@ -228,3 +228,31 @@ dialog.vc-pop .dlg-actions { margin-top: 12px; }
 .fp-choice { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
 .fp-hosting.warn { border-color: var(--ember); border-left-color: var(--ember); background: rgba(232, 120, 80, 0.07); }
 .fp-choice .primary-sm, .fp-choice .fr-small { padding: 5px 10px; font-size: 12.5px; }
+
+/* DF-CHAT (Oct 29): friend chat in the panel */
+.fp-rail-chat { min-width: 18px; padding: 0 5px; border-radius: 9px; background: var(--brass-2); color: #241a06; font-size: 11px; font-weight: 700; line-height: 18px; text-align: center; }
+.fp-chat-ico { position: relative; width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; color: var(--ink-2); border: 1px solid transparent; flex: 0 0 auto; }
+.fp-chat-ico:hover { color: var(--aether); border-color: var(--line-2); background: var(--bg); }
+.fp-chat-ico .n { position: absolute; right: -5px; top: -5px; min-width: 16px; padding: 0 4px; border-radius: 8px; background: var(--brass-2); color: #241a06; font-size: 10px; font-weight: 700; line-height: 16px; text-align: center; }
+.fp-chat-ico .n:empty { display: none; }
+.fp-chat { display: flex; flex-direction: column; min-height: 0; flex: 1 1 auto; padding-bottom: 12px; }
+.fp-chat[hidden] { display: none; }
+.fp-main.chatting .fp-add, .fp-main.chatting .fp-note:not(#fp-chat-note), .fp-main.chatting .fp-hosting, .fp-main.chatting .fp-scroll, .fp-main.chatting .fp-foot, .fp-main.chatting .fp-me { display: none; }
+.fp-chat-head { display: flex; align-items: center; gap: 8px; padding: 0 12px 8px; border-bottom: 1px solid var(--line-2); }
+.fp-chat-head .fr-name { font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.fp-chat-head .fp-sub { color: var(--ink-3); font-size: 12px; margin-left: auto; white-space: nowrap; }
+.fp-chat-back { width: 28px; height: 28px; border-radius: 6px; display: grid; place-items: center; color: var(--ink-2); }
+.fp-chat-back:hover { background: var(--bg-3); color: var(--ink); }
+.fp-chat-back .chev.back { transform: rotate(135deg); margin-left: 3px; }   /* the fold chevron turned into a left arrow */
+.fp-chat-log { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 10px 12px; display: flex; flex-direction: column; gap: 6px; }
+.fp-msg { max-width: 86%; padding: 6px 10px; border-radius: 10px; font-size: 13px; line-height: 1.35; white-space: pre-wrap; word-break: break-word; background: var(--bg-3); color: var(--ink); align-self: flex-start; border-bottom-left-radius: 3px; }
+.fp-msg.mine { align-self: flex-end; background: rgba(95, 211, 198, 0.16); border-bottom-left-radius: 10px; border-bottom-right-radius: 3px; }
+.fp-msg.pending { opacity: 0.55; }
+.fp-msg-day { align-self: center; color: var(--ink-3); font-size: 11.5px; margin: 4px 0 2px; }
+.fp-chat-empty { color: var(--ink-3); font-size: 12.5px; text-align: center; margin: auto; padding: 20px; }
+.fp-chat-send { display: flex; gap: 6px; padding: 8px 12px 0; align-items: flex-end; }
+.fp-chat-send .fr-input { max-width: none; min-width: 0; resize: none; font-size: 13px; line-height: 1.35; padding: 7px 9px; }
+.fp-chat-btn { padding: 8px 12px; border-radius: 6px; border: 1px solid var(--aether); color: var(--aether); font-weight: 600; font-size: 13px; flex: 0 0 auto; }
+.fp-chat-btn:disabled { opacity: 0.5; }
+#fp-chat-note { margin: 4px 12px 0; }
+

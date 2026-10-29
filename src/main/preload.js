@@ -101,6 +101,10 @@ contextBridge.exposeInMainWorld('launcher', {
   foreverServerCheck: invoke('social:foreverCheck'),   // Settings > Forever server (DF-FV-CHECKLINE; not foreverCheck = the host check)          // Settings > Friends account: connection report
   socialResetAccount: invoke('social:resetAccount'),  // a fresh friends account (same name); the old file is kept
   onSocialUpdate: on('social:update'),
+  socialChatOpen: invoke('social:chatOpen'),          // DF-CHAT: (friendId | null) opens/closes a conversation; returns { ok, messages }
+  socialChatFetch: invoke('social:chatFetch'),        // DF-CHAT: (friendId) { ok, messages }
+  socialChatSend: invoke('social:chatSend'),          // DF-CHAT: (friendId, text) { ok, id, at } | { ok: false, error }
+  onSocialChatOpen: on('social:chatOpen'),            // DF-CHAT: a notification was clicked: open that conversation
   // Voice (main/voice.js, renderer/voice.js)
   voiceState: invoke('voice:state'),
   voiceJoin: invoke('voice:join'),

@@ -24,6 +24,9 @@
   let offlineOpen = store.get('df-fp-offline') === '1';
   let noteTimer = null;
   let askStop = false;     // "Stop hosting" with players in the game: ask how first
+  let chatWith = null;     // DF-CHAT: the friend whose conversation is on screen, or null
+  let chatMsgs = [];       // DF-CHAT: messages of that conversation (from main, merged local + server)
+  let chatPoll = null;     // DF-CHAT: refresh timer while the view is open
 
   // notes go away by themselves: messages after 6 s, errors after 20 s (or as soon as the problem is gone)
   let shownError = '';
@@ -64,6 +67,13 @@
     const who = el('div', 'fp-who');
     who.append(el('span', 'fr-name', f.name), el('span', 'fp-sub', sub(f)));
     row.append(el('span', 'fr-dot ' + f.status), who);
+    if (!manage && S && S.chat && S.chat.cap) {   // DF-CHAT
+      const ic = el('button', 'fp-chat-ico'); ic.title = t('Message {name}', { name: f.name }); ic.setAttribute('aria-label', ic.title);
+      ic.innerHTML = '<svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path d="M2.5 3.5h11v7h-6l-3 2.5v-2.5h-2z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>';
+      const n = el('span', 'n', (S.chat.unread && S.chat.unread[f.id]) ? String(S.chat.unread[f.id]) : ''); ic.append(n);
+      ic.onclick = (e) => { e.stopPropagation(); openChat(f); };
+      row.append(ic);
+    }
     if (manage) {
       const rm = el('button', 'ghost fr-small', t('Remove'));
       rm.onclick = async () => {
@@ -125,6 +135,8 @@
     $('fp-online').textContent = S.signedIn && S.friends.length ? t('{n} online', { n: online.length }) : '';
     $('fp-rail-count').textContent = online.length ? String(online.length) : '';
     $('fp-rail-req').hidden = !(S.incoming && S.incoming.length);
+    { const u = (S.chat && S.chat.unread) || {}; const total = Object.values(u).reduce((a, b) => a + (+b || 0), 0); const rc = $('fp-rail-chat'); rc.textContent = total ? String(total) : ''; rc.hidden = !total; }   // DF-CHAT
+    if (chatWith) { const f = S.friends.find(x => x.id === chatWith.id); if (!f || !(S.chat && S.chat.cap)) closeChat(); else { chatWith = f; $('fp-chat-sub').textContent = sub(f); } }   // DF-CHAT: the friend left, or the service lost chat
     // switched off for everyone in network.json (server down or being fixed): say so, nothing else to do here
     if (S.onlineOff) {
       $('fr-signup').hidden = false; $('fr-main').hidden = true;
@@ -207,6 +219,61 @@
     $('fp-manage').textContent = manage ? t('Back') : t('Manage friends');
   }
 
+  // ---------------------------------------------------------------- DF-CHAT (Oct 29): one conversation in the panel
+  function dayLabel(iso) { const d = new Date(iso); const today = new Date(); const y = new Date(); y.setDate(today.getDate() - 1); const same = (a, b) => a.toDateString() === b.toDateString(); return same(d, today) ? t('Today') : same(d, y) ? t('Yesterday') : d.toLocaleDateString(); }
+  function renderChat(keepScroll) {
+    const log = $('fp-chat-log'); if (!chatWith) return;
+    const atBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 40;
+    log.textContent = '';
+    if (!chatMsgs.length) log.append(el('div', 'fp-chat-empty', t('No messages yet. Say hi!')));
+    let lastDay = '';
+    for (const m of chatMsgs) {
+      const day = m.at ? dayLabel(m.at) : ''; if (day && day !== lastDay) { log.append(el('div', 'fp-msg-day', day)); lastDay = day; }
+      const mine = S && m.from !== chatWith.id;
+      const b = el('div', 'fp-msg' + (mine ? ' mine' : '') + (m.pending ? ' pending' : ''), m.text);
+      if (m.at) b.title = new Date(m.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      log.append(b);
+    }
+    if (!keepScroll || atBottom) log.scrollTop = log.scrollHeight;
+    $('fp-chat-note').textContent = chatWith.status === 'offline' ? t('{name} is offline: they see this when their launcher opens.', { name: chatWith.name }) : '';
+  }
+  async function refreshChat() {
+    if (!chatWith) return;
+    const r = await L.socialChatFetch(chatWith.id);
+    if (!chatWith) return;
+    if (r && r.ok) { const pend = chatMsgs.filter(m => m.pending); chatMsgs = r.messages.concat(pend.filter(p => !r.messages.some(m => m.text === p.text && m.from !== chatWith.id))); renderChat(true); }
+    else if (r && r.error) { $('fp-chat-note').textContent = tm(r.error); }
+  }
+  async function openChat(f) {
+    chatWith = f; chatMsgs = [];
+    $('fr-main').classList.add('chatting'); $('fp-chat').hidden = false;
+    $('fp-chat-name').textContent = f.name; $('fp-chat-sub').textContent = sub(f); $('fp-chat-log').textContent = ''; $('fp-chat-note').textContent = '';
+    if (window.innerWidth >= DOCK_MIN) { if ($('fp').classList.contains('folded')) openPanel(); } else { drawerOpen = true; layout(); }
+    const r = await L.socialChatOpen(f.id);
+    if (!chatWith || chatWith.id !== f.id) return;
+    if (r && r.ok) { chatMsgs = r.messages || []; renderChat(false); } else { renderChat(false); if (r && r.error) $('fp-chat-note').textContent = tm(r.error); }
+    $('fp-chat-text').focus();
+    clearInterval(chatPoll); chatPoll = setInterval(refreshChat, 2500);
+  }
+  function closeChat() {
+    if (!chatWith) return;
+    chatWith = null; chatMsgs = []; clearInterval(chatPoll); chatPoll = null;
+    $('fr-main').classList.remove('chatting'); $('fp-chat').hidden = true;
+    L.socialChatOpen(null).catch(() => {});
+    L.socialRefresh();
+  }
+  async function sendChat() {
+    const ta = $('fp-chat-text'), text = ta.value.trim(); if (!text || !chatWith) return;
+    const btn = $('fp-chat-btn'); btn.disabled = true; ta.value = '';
+    const pend = { id: 'p' + Date.now(), from: 'me', text, at: new Date().toISOString(), pending: true };
+    chatMsgs.push(pend); renderChat(false);
+    const r = await L.socialChatSend(chatWith.id, text);
+    btn.disabled = false;
+    if (r && r.ok) { pend.id = r.id; pend.at = r.at || pend.at; delete pend.pending; renderChat(true); }
+    else { chatMsgs = chatMsgs.filter(m => m !== pend); ta.value = text; renderChat(true); $('fp-chat-note').textContent = tm(r && r.error) || t('Not sent.'); }
+    ta.focus();
+  }
+
   async function init() {
     try { versions = await L.listVersions(); } catch { versions = []; }
     $('fr-add').onclick = async () => {
@@ -226,6 +293,11 @@
     const offBtn = $('set-offline');
     if (offBtn) offBtn.onclick = async () => { offBtn.disabled = true; S = await L.socialSetOffline(!(S && S.offlineMode)); render(); offBtn.disabled = false; };
     L.onSocialUpdate((s) => { S = s; render(); });
+    // DF-CHAT
+    $('fp-chat-back').onclick = closeChat;
+    $('fp-chat-btn').onclick = sendChat;
+    $('fp-chat-text').addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendChat(); } if (e.key === 'Escape') closeChat(); });
+    L.onSocialChatOpen(({ id }) => { const f = S && S.friends.find(x => x.id === id); if (f) openChat(f); });
     window.addEventListener('df-lang', () => { if (shownError && S && S.error) note(tm(S.error), true); render(); });   // Settings > Launcher language
     layout();
     S = await L.socialState(); render();

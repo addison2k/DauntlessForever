@@ -307,7 +307,75 @@ function publicState() {
     hostClosing: state && state.hostClosing && gameWith ? { name: state.hostClosing.name, inSec: Math.max(0, Math.ceil(state.hostClosing.inMs / 1000)) } : null,
     search: search ? { version: search.version, phase: search.phase, host: search.host || '', left: Math.max(0, Math.ceil((search.since + SEARCH_MS - Date.now()) / 1000)) } : null,
     inGameWith: gameWith && ctx.runner.isRunning(gameWith.version + ':join') ? { name: gameWith.hostName, version: gameWith.version, public: !!gameWith.public } : null,
+    chat: chatState(),   // DF-CHAT: { cap, unread: { friendId: n }, open: friendId|null }
   };
+}
+// ------------------------------------------------------------------ DF-CHAT (Oct 29): friend-to-friend text in the Friends panel
+// Friends only. Chat is its own small service on the VPS (df-chat, behind the same address under /v1/chat/*), kept
+// OUT of the director's process so chat changes never restart the director. It keeps the last 50 messages per pair
+// for 24 h; the launcher asks it /v1/chat/unread on every poll (that answer is also how the launcher knows chat
+// exists: a 404 means no chat service yet -> no chat UI, asked again in 5 minutes). This PC keeps its own copy of
+// each conversation in chat\<friendId>.json under the data folder (last 200) so the view does not go blank after the
+// server's 24 hours. While a conversation is open the poll runs fast (2 s). A message arriving while the window is
+// not focused shows a Windows notification, at most one per friend per minute.
+const CHAT_KEEP = 200, CHAT_MAX = 500, CHAT_RETRY_MS = 5 * 60 * 1000;
+const chatSvc = { cap: false, unread: {}, nextTry: 0, said: false };   // what the chat service last said
+function chatBase() { return (network.chat && typeof network.chat.url === 'string' && /^https?:\/\//.test(network.chat.url)) ? network.chat.url : null; }   // network.json chat.url = another address for it (optional)
+function chatCall(method, apiPath, body, timeoutMs) { const b = chatBase(); return b ? callAt(b, method, apiPath, body, false, timeoutMs) : call(method, apiPath, body, false, timeoutMs); }
+async function chatPollUnread() {
+  if (CHAT_MOCK || !identity() || offlineMode()) return;
+  if (!chatSvc.cap && Date.now() < chatSvc.nextTry) return;
+  try {
+    const r = await chatCall('POST', '/v1/chat/unread', {}, 8000);
+    chatSvc.cap = !!(r && r.cap); chatSvc.unread = (r && r.unread) || {};
+    if (chatSvc.cap && !chatSvc.said) { chatSvc.said = true; ctx.log('Friends: chat is available'); }
+  } catch (e) {
+    if (e.status === 404 || e.status === 501) { chatSvc.cap = false; chatSvc.unread = {}; chatSvc.nextTry = Date.now() + CHAT_RETRY_MS; }   // no chat service there (yet)
+    // any other failure (network, 5xx): keep what we had, try again next poll
+  }
+}
+const CHAT_MOCK = !!process.env.DF_CHAT_MOCK;   // test hook (dev only): the service has no chat yet -> pretend it does and echo messages back locally
+let chatOpen = null;                 // friendId whose conversation is on screen (fast poll, read marks)
+const chatLastNotified = {};         // friendId -> time of the last notification
+const chatKnownLast = {};            // friendId -> highest message id this PC has seen (notification + unread guard)
+function chatDir() { return P.ensureDir(path.join(P.dataRoot(), 'chat')); }
+function chatFile(id) { return path.join(chatDir(), String(id).replace(/[^A-Za-z0-9_-]/g, '_') + '.json'); }
+function chatLoad(id) { try { const a = JSON.parse(fs.readFileSync(chatFile(id), 'utf8')); return Array.isArray(a) ? a : []; } catch { return []; } }
+function chatSave(id, list) { try { writeJson(chatFile(id), list.slice(-CHAT_KEEP)); } catch {} }
+function chatMerge(id, fresh) {
+  const have = chatLoad(id), seen = new Set(have.map(m => String(m.id)));
+  let changed = false;
+  for (const m of fresh || []) { if (!m || seen.has(String(m.id))) continue; have.push({ id: m.id, from: m.from, text: String(m.text || '').slice(0, CHAT_MAX), at: m.at }); seen.add(String(m.id)); changed = true; }
+  have.sort((a, b) => (a.id > b.id ? 1 : a.id < b.id ? -1 : 0));
+  if (changed) chatSave(id, have);
+  return have.slice(-CHAT_KEEP);
+}
+function chatState() {
+  return { cap: chatSvc.cap || (CHAT_MOCK && !!identity()), unread: chatSvc.unread || {}, open: chatOpen };
+}
+function friendName(id) { const f = (state && state.friends || []).find(x => x.id === id); return f ? f.name : ''; }
+// called from poll(): new unread from a friend whose conversation is not open -> one notification per friend per minute
+function chatNotify() {
+  if (!chatSvc.cap) return;
+  for (const [id, n] of Object.entries(chatSvc.unread || {})) {
+    if (!n || id === chatOpen) continue;
+    const key = id + '|' + n; if (chatKnownLast[id] === key) continue; chatKnownLast[id] = key;
+    const focused = (() => { try { const w = require('electron').BrowserWindow.getAllWindows().find(x => x.isFocused()); return !!w; } catch { return false; } })();
+    if (focused) continue;
+    if (Date.now() - (chatLastNotified[id] || 0) < 60000) continue; chatLastNotified[id] = Date.now();
+    try { if (Notification.isSupported()) { const no = new Notification({ title: require('./i18n').t('{name} sent you a message', { name: friendName(id) || 'A friend' }), body: require('./i18n').t('Open the Friends panel to read it.') }); no.on('click', () => { try { ctx.send('social:chatOpen', { id }); const w = require('electron').BrowserWindow.getAllWindows()[0]; if (w) { w.show(); w.focus(); } } catch {} }); no.show(); } } catch {}
+  }
+}
+async function chatFetch(id) {
+  const have = chatLoad(id);
+  const after = have.length ? have[have.length - 1].id : 0;
+  let fresh = [];
+  if (CHAT_MOCK) return { ok: true, messages: chatMerge(id, []) };
+  try { const r = await chatCall('POST', '/v1/chat/fetch', { with: id, after }); fresh = (r && r.messages) || []; }
+  catch (e) { if (e.status === 403) return { ok: false, error: 'You are not friends any more.' }; if (!have.length) return { ok: false, error: e.message }; }
+  const list = chatMerge(id, fresh);
+  if (list.length && chatOpen === id) { const last = list[list.length - 1].id; chatCall('POST', '/v1/chat/read', { with: id, upTo: last }).catch(() => {}); delete chatSvc.unread[id]; }
+  return { ok: true, messages: list };
 }
 async function poll() {
   clearTimeout(pollTimer);
@@ -361,10 +429,11 @@ async function poll() {
   } catch (e) {
     lastError = e.status === 401 ? 'Your friends account was not recognised by the server. Settings > Friends account can check why and fix it.' : e.message;
   } finally {
+    try { await chatPollUnread(); chatNotify(); } catch {}   // DF-CHAT
     push();
     // in someone's game: a little more often, so a host closing reaches this PC in time to save the character home
     const inGame = gameWith && ctx.runner.isRunning(gameWith.version + ':join');
-    pollTimer = setTimeout(poll, waitingJoin ? FAST_POLL_MS : (inGame ? 10000 : POLL_MS));
+    pollTimer = setTimeout(poll, (waitingJoin || chatOpen) ? FAST_POLL_MS : (inGame ? 10000 : POLL_MS));   // DF-CHAT: fast while a conversation is open
   }
 }
 
@@ -757,6 +826,27 @@ function init(c) {
   // "Allow randoms": a hosted game is listed for everyone (takes effect the next time you host)
   ipcMain.handle('social:setAllowRandoms', (_e, on) => { settings.update(s => { s.allowRandoms = !!on; }); push(); return publicState(); });
   ipcMain.handle('social:refresh', () => { poll(); return true; });
+  // DF-CHAT
+  ipcMain.handle('social:chatOpen', (_e, id) => { chatOpen = id || null; if (chatOpen) { clearTimeout(pollTimer); pollTimer = setTimeout(poll, 50); } return chatOpen ? chatFetch(chatOpen) : { ok: true, messages: [] }; });
+  ipcMain.handle('social:chatFetch', (_e, id) => (offlineMode() || !identity()) ? { ok: false, error: 'Not signed in.' } : chatFetch(id));
+  ipcMain.handle('social:chatSend', async (_e, id, text) => {
+    if (offlineMode() || !identity()) return { ok: false, error: 'Not signed in.' };
+    text = String(text || '').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '').trim();
+    if (!text) return { ok: false, error: 'Nothing to send.' };
+    if (text.length > CHAT_MAX) return { ok: false, error: 'Too long (500 characters at most).' };
+    if (CHAT_MOCK) {   // echo from the "friend" 1.5 s later
+      const me = identity(), now = Date.now();
+      chatMerge(id, [{ id: now, from: me.id, text, at: new Date(now).toISOString() }]);
+      setTimeout(() => chatMerge(id, [{ id: now + 1500, from: id, text: 'echo: ' + text, at: new Date(now + 1500).toISOString() }]), 1500);
+      return { ok: true, id: now, at: new Date(now).toISOString() };
+    }
+    try {
+      const r = await chatCall('POST', '/v1/chat/send', { to: id, text });
+      const me = identity();
+      chatMerge(id, [{ id: r.id, from: me.id, text, at: r.at || new Date().toISOString() }]);
+      return { ok: true, id: r.id, at: r.at };
+    } catch (e) { return { ok: false, error: e.status === 403 ? 'You are not friends any more.' : e.status === 429 ? 'Slow down a little.' : e.message }; }
+  });
   // "Stop hosting": closes the host window and everything it started (backend, game servers, game) for that version.
   // {later: seconds}: players in the game get that long first (see stopHostLater); {cancel: true} calls it off.
   ipcMain.handle('social:stopHost', async (_e, opts) => {
