@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.3.27",
+                     "version":  "0.3.28",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "Chat: the name and time now show above each run of messages, so you can see who is talking.",
+                     "notes":  "1.14.7 is no longer marked Experimental. The More menu is tidier: the repair entries sit together under Check the game files, and the old Get the logs entry is gone (Send my logs does it).",
                      "date":  "2026-10-29",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.3.27.asar",
-                                 "sha256":  "d151945344c8f3b0a20e3f9ba374f893c327965d2297eb7bce9d5c84cbbeac87",
-                                 "size":  9429891,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.3.28.asar",
+                                 "sha256":  "6da004a2d25676e5ec30b1dc2cbb3b7b02f3e4075a9c8ea96b3d17ec195e50da",
+                                 "size":  9429866,
                                  "minShell":  "0.2.4"
                              }
                  }

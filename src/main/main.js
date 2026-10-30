@@ -420,7 +420,7 @@ app.on('window-all-closed', () => app.quit());
 // ---------------------------------------------------------------- helpers
 const byId = (id) => registry.find(v => v.id === id);
 function publicVersion(v) {
-  const { bundledDir, ...rest } = v;
+  const { bundledDir, warning, ...rest } = v;   // DF-NOEXP (Oct 29): the "Experimental" badge/box (version.json warning) is retired for every version; Addison
   // can host friends (Friends panel / "Host with friends"): its server files have the online host script
   let canHost = false;
   try { canHost = !!v.package && fs.existsSync(V.online(v).hostPath); } catch {}
