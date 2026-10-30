@@ -3195,7 +3195,7 @@
   },
   "inventoryTransactions": [],
   "huntPass": "season27",
-  "cooldowns": {},
+  "cooldowns": [],
   "loadouts": {
    "{{CHARACTER_ID}}": {
     "loadouts": [

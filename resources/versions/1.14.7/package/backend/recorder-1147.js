@@ -706,7 +706,7 @@ function saveBounties(c) {
   return J(wrapped(cur), n ? 'saved, guess' : 'guess');
 }
 function saveCooldowns(c) {
-  const p = playerFor(c.req); if (!p.cooldowns) p.cooldowns = [];
+  const p = playerFor(c.req); if (!Array.isArray(p.cooldowns)) p.cooldowns = [];   // DF-HEADSTART-FIX (Oct 30): a save seeded with {} (head-start template bug) is put right here
   const b = c.body && typeof c.body === 'object' ? c.body : {};
   const incoming = Array.isArray(b.cooldowns) ? b.cooldowns : (Array.isArray(b) ? b : (b.cooldown_id ? [b] : []));
   for (const n of incoming) {
@@ -726,7 +726,7 @@ function saveCooldowns(c) {
   saveState();
   return J(wrapped(cooldownMap(p.cooldowns)), `${incoming.length} cooldown(s) saved`);
 }
-function cooldownMap(list) { const m = {}; for (const x of list || []) if (x && x.cooldown_id) m[x.cooldown_id] = String(x.cooldown_started_date || ''); return m; }
+function cooldownMap(list) { const m = {}; for (const x of (Array.isArray(list) ? list : []))   /* DF-HEADSTART-FIX: never iterate a non-list */ if (x && x.cooldown_id) m[x.cooldown_id] = String(x.cooldown_started_date || ''); return m; }
 function saveTrackers(c) {
   const p = playerFor(c.req); const b = c.body && typeof c.body === 'object' ? c.body : {};
   if (!p.trackers) p.trackers = { equipped: '', trackers: [] };

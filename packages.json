@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-29",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-29.zip",
-                         "sha256":  "6f9be7fde8d0efc2a91b864ad8b0fa9310a0f6a54ec8890614e4499b046dfede",
-                         "date":  "2026-10-29",
-                         "note":  "new players start in Ramsgate after the training grounds (tutorial island and Training Grounds skipped); existing saves untouched"
+                         "packageVersion":  "2026-10-30",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-30.zip",
+                         "sha256":  "0eb74b7bc59ee58cf5282da10c7d7d28c147690fb2cea280c1cab7be41154fe1",
+                         "date":  "2026-10-30",
+                         "note":  "new-player start fixed: players who made their first character on 10-29 looped at the title screen"
                      }
                  ],
     "launcher":  {
