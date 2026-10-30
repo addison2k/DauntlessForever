@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.3.26",
+                     "version":  "0.3.27",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "Friend chat: a speech bubble on every friend in the Friends panel opens a conversation (friends only, Enter sends, unread count on the Friends icon, a Windows notification when the launcher is in the background). The Forever tab\u0027s More menu has Allow in the antivirus and Repair the 1.14.7 launcher files too. ESET steps updated.",
+                     "notes":  "Chat: the name and time now show above each run of messages, so you can see who is talking.",
                      "date":  "2026-10-29",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.3.26.asar",
-                                 "sha256":  "a32fdda9640e64287fead518daa9dc27027fc5290a8a858d565bd5c9fcf2c36f",
-                                 "size":  9428818,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.3.27.asar",
+                                 "sha256":  "d151945344c8f3b0a20e3f9ba374f893c327965d2297eb7bce9d5c84cbbeac87",
+                                 "size":  9429891,
                                  "minShell":  "0.2.4"
                              }
                  }

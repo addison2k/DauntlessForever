@@ -249,6 +249,12 @@ dialog.vc-pop .dlg-actions { margin-top: 12px; }
 .fp-msg.mine { align-self: flex-end; background: rgba(95, 211, 198, 0.16); border-bottom-left-radius: 10px; border-bottom-right-radius: 3px; }
 .fp-msg.pending { opacity: 0.55; }
 .fp-msg-day { align-self: center; color: var(--ink-3); font-size: 11.5px; margin: 4px 0 2px; }
+.fp-msg-who { display: flex; gap: 8px; align-items: baseline; margin: 6px 2px 0; font-size: 12px; align-self: flex-start; }
+.fp-msg-who.mine { align-self: flex-end; flex-direction: row-reverse; }
+.fp-msg-name { font-weight: 600; color: var(--brass-2); }
+.fp-msg-who.mine .fp-msg-name { color: var(--aether); }
+.fp-msg-time { color: var(--ink-3); font-size: 11px; }
+.fp-msg-who + .fp-msg { margin-top: 2px; }
 .fp-chat-empty { color: var(--ink-3); font-size: 12.5px; text-align: center; margin: auto; padding: 20px; }
 .fp-chat-send { display: flex; gap: 6px; padding: 8px 12px 0; align-items: flex-end; }
 .fp-chat-send .fr-input { max-width: none; min-width: 0; resize: none; font-size: 13px; line-height: 1.35; padding: 7px 9px; }

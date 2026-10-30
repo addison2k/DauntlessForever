@@ -226,12 +226,21 @@
     const atBottom = log.scrollHeight - log.scrollTop - log.clientHeight < 40;
     log.textContent = '';
     if (!chatMsgs.length) log.append(el('div', 'fp-chat-empty', t('No messages yet. Say hi!')));
-    let lastDay = '';
+    let lastDay = '', lastFrom = null, lastAt = 0;
+    const clock = (iso) => { try { return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); } catch { return ''; } };
     for (const m of chatMsgs) {
-      const day = m.at ? dayLabel(m.at) : ''; if (day && day !== lastDay) { log.append(el('div', 'fp-msg-day', day)); lastDay = day; }
+      const day = m.at ? dayLabel(m.at) : ''; if (day && day !== lastDay) { log.append(el('div', 'fp-msg-day', day)); lastDay = day; lastFrom = null; }
       const mine = S && m.from !== chatWith.id;
+      const who = mine ? 'me' : 'them', at = m.at ? Date.parse(m.at) : 0;
+      // who is talking, like a chat client: the name and time once per run of messages (new run after 5 minutes)
+      if (who !== lastFrom || at - lastAt > 5 * 60 * 1000) {
+        const h = el('div', 'fp-msg-who' + (mine ? ' mine' : ''));
+        h.append(el('span', 'fp-msg-name', mine ? (S.name || t('You')) : chatWith.name), el('span', 'fp-msg-time', m.at ? clock(m.at) : ''));
+        log.append(h);
+      }
+      lastFrom = who; lastAt = at;
       const b = el('div', 'fp-msg' + (mine ? ' mine' : '') + (m.pending ? ' pending' : ''), m.text);
-      if (m.at) b.title = new Date(m.at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      if (m.at) b.title = clock(m.at);
       log.append(b);
     }
     if (!keepScroll || atBottom) log.scrollTop = log.scrollHeight;
