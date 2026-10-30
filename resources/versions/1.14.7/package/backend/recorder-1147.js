@@ -297,9 +297,25 @@ function base32(buf) {
 const idFrom = (seed) => base32(crypto.createHash('sha256').update(seed).digest().subarray(0, 16));
 const newId = () => base32(crypto.randomBytes(16));
 const today = () => new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+// DF-HEADSTART-1147 (Addison, Oct 29): a brand-new player (no record for this key yet) starts from data\head-start.json, a
+// character captured right after the tutorial island, the Training Grounds and the 5,000-damage quest (default rules): the
+// game opens in Ramsgate with the starter gear and the Embermane quest, skipping the tutorial level and the Training Grounds
+// (both failed for many players). Only a key with NO record is seeded; existing saves are never touched; no file = as before.
+const HEAD_START_FILE = path.join(DATA_DIR, 'head-start.json');
+function headStartRecord(key) {
+  try {
+    if (!fs.existsSync(HEAD_START_FILE)) return null;
+    const t = JSON.parse(fs.readFileSync(HEAD_START_FILE, 'utf8').replace(/^\uFEFF/, '')); const tp = t && t.player;
+    if (!tp || !Array.isArray(tp.characters) || !tp.characters.length) return null;
+    const j = JSON.stringify(tp).split('{{ACCOUNT_ID}}').join(idFrom('account:' + key)).split('{{CHARACTER_ID}}').join(newId()).split('{{NAME}}').join('Slayer').split('{{CREATED}}').join(new Date().toISOString().slice(0, 10));
+    const p = JSON.parse(j); p.headStart = true;   // the sign-in that follows puts the player's name on the character, then clears this
+    console.log(`head start: ${key.slice(0, 8)} begins after the Training Grounds (data\\head-start.json)`);
+    return p;
+  } catch (e) { console.warn('head start: template not used: ' + e.message); return null; }
+}
 function getPlayer(key) {
   if (!state.players[key]) {
-    state.players[key] = { accountId: idFrom('account:' + key), username: 'Slayer', created: new Date().toISOString().slice(0, 10), characters: [], inventory: {} };
+    state.players[key] = headStartRecord(key) || { accountId: idFrom('account:' + key), username: 'Slayer', created: new Date().toISOString().slice(0, 10), characters: [], inventory: {} };
     saveState();
   }
   return state.players[key];
@@ -1059,6 +1075,7 @@ const routes = [
 
   ['auth', 'GET', /^\/accountinfo\/?$/, (c) => {
     const p = playerFor(c.req);
+    if (p.headStart && p.username && p.username !== 'Slayer') { for (const ch of p.characters || []) if (ch && ch.name === 'Slayer') ch.name = p.username; delete p.headStart; saveState(); }   // DF-HEADSTART-1147: the seeded character takes the player's name once sign-in has set it
     return J({ accountId: p.accountId, creationDate: `${p.created || '2026-01-01'} 00:00:00`, email: null, preferredLanguage: null, username: p.username, verified: false });
   }],
   ['auth', 'GET', /^\/tags\/?$/, (c) => J({ accountId: playerFor(c.req).accountId, tags: [] })],   // captured
