@@ -41,7 +41,8 @@ contextBridge.exposeInMainWorld('launcher', {
   avAllow: invoke('av:allow'),                         // DF-AVGUARD: More > Allow in the antivirus
   avProbe: invoke('av:probe'),                         // DF-AVGUARD: the Add-Type test, on demand
   onAvInfo: on('av:info'),
-  repairPackage: invoke('package:repair'),             // DF-PKGVERIFY: More > Repair the launcher files
+  repairPackage: invoke('package:repair'),
+  fixAppData: invoke('fix:appdata'),                    // DF-APPDATA: More > Fix the Windows AppData setting             // DF-PKGVERIFY: More > Repair the launcher files
   readme: invoke('read:readme'),
   onLog: on('log:line'),
   onDownloadProgress: on('download:progress'),

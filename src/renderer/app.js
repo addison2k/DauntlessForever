@@ -360,6 +360,14 @@ function renderDetail() {
   }
   // DF-PKGVERIFY / DF-AVGUARD: server files that failed their check, or a helper the antivirus removed, outrank the
   // generic notes above: the player should know what to press (More > Allow in the antivirus, then Repair)
+  // DF-APPDATA: the game ignores its own settings folder on this PC (sign-in loop / back to the title): say so first
+  { const b = document.querySelector('#more-menu [data-act="appdata"]'); if (b) b.hidden = !(s.appdata && !s.appdata.ok && s.appdata.fixable); }
+  if (!st.busy && s.appdata && !s.appdata.ok) {
+    note.textContent = s.appdata.fixable
+      ? t('Windows stores your AppData folder as a fixed path, so the game cannot use its own settings folder: it loops at sign-in or sends you back to the title. Use More > Fix the Windows AppData setting (same folder, nothing moves), then Play.')
+      : t('Your Windows AppData folder was moved to another place, so the game cannot use its own settings folder and may loop at sign-in. Send my logs and ask on Discord.');
+    note.className = 'action-note err';
+  } else
   if (!st.busy && s.pkg && !s.pkg.ok) {
     note.textContent = t('Some server files are missing or wrong ({list}). An antivirus usually removed them: use More > Allow in the antivirus, then More > Repair the launcher files.', { list: s.pkg.bad.slice(0, 3).join(', ') });
     note.className = 'action-note err';
@@ -1207,7 +1215,11 @@ function wire() {
     $('btn-stop').disabled = true; await L.stop(v.id); $('btn-stop').disabled = false;
   });
   $('btn-cancel').addEventListener('click', () => { if (selected) L.cancelDownload(selected); });
-  $('btn-more').addEventListener('click', () => { $('more-menu').hidden = !$('more-menu').hidden; });
+  $('btn-more').addEventListener('click', () => {
+    const m = $('more-menu'); m.hidden = !m.hidden;
+    // DF-MORE-SCROLL (Oct 31): the menu opens below the fold on most screens; bring all of it into view (no scroll if it already is)
+    if (!m.hidden) requestAnimationFrame(() => { try { m.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch {} });
+  });
   $('more-menu').addEventListener('click', async (e) => {
     const act = e.target.dataset.act; if (!act) return;
     $('more-menu').hidden = true;
@@ -1281,6 +1293,13 @@ function wire() {
         $('readme-title').textContent = t('Allow Dauntless Forever in {prods}', { prods }); $('readme-body').textContent = lines.join('\n'); $('dlg-readme').showModal();
         keep(t('The folders to allow are in the window (More > Allow in the antivirus opens it again). After adding them: More > Repair the launcher files.'), false, true);
       } else keep(t('Could not add the exclusions: {error}', { error: tm(r && r.error) }), true, true);
+    }
+    if (act === 'appdata') {   // DF-APPDATA
+      const ok = await confirm(t('Fix the Windows AppData setting?'), t('Windows on this PC stores your AppData location as a fixed path instead of its normal default. The folder stays exactly where it is; only the way Windows writes it down changes back to the default, so Dauntless can use its own settings folder again. No admin rights needed.'));
+      if (!ok) return;
+      let r = null; try { r = await L.fixAppData(); } catch (e) { r = { ok: false, error: String(e && e.message || e) }; }
+      await refresh(v.id);
+      keep(r && r.ok ? t('Done: Windows now uses its default AppData setting. Press Play.') : (tm(r && r.error) || t('The setting could not be changed.')), !(r && r.ok), true);
     }
     if (act === 'pkgrepair') {   // DF-PKGVERIFY
       keep(t('Putting the server files back (a download when the newest are not on this PC). This takes up to a minute...'));

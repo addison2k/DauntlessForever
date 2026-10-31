@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.3.28",
+                     "version":  "0.3.29",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "1.14.7 is no longer marked Experimental. The More menu is tidier: the repair entries sit together under Check the game files, and the old Get the logs entry is gone (Send my logs does it).",
-                     "date":  "2026-10-29",
+                     "notes":  "Fixes the sign-in loop and \u0027sent back to the title screen\u0027 on PCs where Windows stores the AppData folder as a fixed path (More \u003e Fix the Windows AppData setting). Update bars now float over the page instead of pushing it down, and More scrolls to show all its options.",
+                     "date":  "2026-10-31",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.3.28.asar",
-                                 "sha256":  "6da004a2d25676e5ec30b1dc2cbb3b7b02f3e4075a9c8ea96b3d17ec195e50da",
-                                 "size":  9429866,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.3.29.asar",
+                                 "sha256":  "84858b831c651836a161e717a52a8ab2e938e32468aceda5db0d449bff9f1b10",
+                                 "size":  9425294,
                                  "minShell":  "0.2.4"
                              }
                  }

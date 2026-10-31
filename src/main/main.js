@@ -214,6 +214,7 @@ app.whenReady().then(async () => {
   // server-file updates: after the window is up, quietly; the window hears about anything that changed
   win.webContents.once('did-finish-load', () => setTimeout(() => checkUpdates(pkgTodo), 1500));
   setTimeout(avScan, 4000);   // DF-AVGUARD: which antivirus is on this PC (read-only)
+  setTimeout(() => { try { const ad = appDataState(true); if (!ad.ok) log('appdata', 'Windows stores AppData as a fixed path: ' + ad.values.filter(x => x.state !== 'ok').map(x => `${x.name} = ${x.value} (${x.state})`).join(', ')); } catch {} }, 4500);   // DF-APPDATA
 });
 // DF-PKGVERIFY (Oct 29): at start every installed package is read back (versions.js verifyPackage). A version whose
 // files are missing or wrong gets the current package fetched again - once per start. When that fetch leaves the same
@@ -300,6 +301,52 @@ async function avProbe() {
   return { ok, error: ok ? '' : (r.error || r.out).slice(0, 200) };
 }
 ipcMain.handle('av:info', () => avInfo());
+// DF-APPDATA (Oct 31): the game and every server copy get their own settings folder by moving USERPROFILE/LOCALAPPDATA for
+// that process (play-1147.ps1, server-1147.ps1, the 1.6.2 scripts). Windows finds "Local AppData" through the user's
+// shell-folder setting; normally that is %USERPROFILE%\AppData\Local, so the move works. On some PCs it is written as a
+// fixed path (C:\Users\<name>\AppData\Local) - same folder, but then the move does nothing: the game reads the normal
+// Dauntless settings (dead Epic addresses: sign-in loops) and the server copies boot the login map (empty world: back to
+// the title). Reports 429, 434, 450, 452, 457; Leaky confirmed the fix. Fixable = the fixed path IS the default location,
+// so writing the default form back changes nothing else on the PC. A really moved profile is only reported, never changed.
+const SHELL_KEY = 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders';
+const APPDATA_VALUES = [['Local AppData', '%USERPROFILE%\\AppData\\Local', 'AppData\\Local'], ['AppData', '%USERPROFILE%\\AppData\\Roaming', 'AppData\\Roaming']];
+let appDataCache = null;
+function appDataState(fresh) {
+  if (!P.IS_WIN || P.MOCK) return { ok: true, fixable: false, values: [] };
+  if (appDataCache && !fresh) return appDataCache;
+  const prof = String(process.env.USERPROFILE || '');
+  const same = (a, b) => path.resolve(a).toLowerCase().replace(/[\\/]+$/, '') === path.resolve(b).toLowerCase().replace(/[\\/]+$/, '');
+  const values = [];
+  for (const [name, def, rel] of APPDATA_VALUES) {
+    let v = null;
+    try {
+      const out = require('child_process').execFileSync('reg.exe', ['query', SHELL_KEY, '/v', name], { encoding: 'utf8', windowsHide: true, timeout: 5000 });
+      const line = out.split(/\r?\n/).find(l => l.trim().toLowerCase().startsWith(name.toLowerCase() + ' ') && /REG_(EXPAND_)?SZ/.test(l));
+      if (line) v = line.replace(/^\s*\S.*?\s+REG_(EXPAND_)?SZ\s+/, '').trim();
+    } catch {}
+    if (v == null) { values.push({ name, value: null, state: 'ok' }); continue; }   // not readable or not set: Windows uses its default
+    const state = /%USERPROFILE%/i.test(v) ? 'ok' : (prof && same(v, path.join(prof, rel)) ? 'fixable' : 'moved');
+    values.push({ name, value: v, state, def });
+  }
+  appDataCache = { ok: values.every(x => x.state === 'ok'), fixable: values.some(x => x.state === 'fixable'), moved: values.some(x => x.state === 'moved'), values };
+  return appDataCache;
+}
+ipcMain.handle('fix:appdata', async () => {
+  const st = appDataState(true);
+  if (st.ok) return { ok: true, already: true };
+  if (R.anyRunning().length) return { ok: false, error: 'Close the game (and stop hosting) first, then press it again.' };
+  const done = [];
+  for (const x of st.values.filter(x => x.state === 'fixable')) {
+    try {
+      // execFile, no shell: reg.exe gets the text %USERPROFILE% literally, which is the point (REG_EXPAND_SZ)
+      require('child_process').execFileSync('reg.exe', ['add', SHELL_KEY, '/v', x.name, '/t', 'REG_EXPAND_SZ', '/d', x.def, '/f'], { windowsHide: true, timeout: 5000 });
+      done.push(x.name); log('appdata', `${x.name}: ${x.value} -> ${x.def}`);
+    } catch (e) { log('appdata', `${x.name}: could not change: ${e.message}`); return { ok: false, error: 'Windows did not accept the change: ' + e.message }; }
+  }
+  const after = appDataState(true);
+  log('appdata', 'after the fix: ' + after.values.map(x => x.name + ' ' + x.state).join(', '));
+  return { ok: after.values.every(x => x.state !== 'fixable'), done, moved: after.moved };
+});
 ipcMain.handle('av:probe', () => avProbe());
 ipcMain.handle('av:allow', async () => {
   if (!P.IS_WIN) return { ok: false, error: 'Windows only.' };
@@ -471,6 +518,7 @@ ipcMain.handle('versions:status', (_e, id) => {
   s.imported = fs.existsSync(path.join(v.dataDir, 'data', 'import-revived.json'));
   s.busy = R.isRunning(id) ? 'play' : (D.isDownloading(id) ? 'download' : (R.isRunning(id + ':setup') ? 'setup' : null));
   s.pkg = pkgCheck[id] || null;   // DF-PKGVERIFY: { ok, bad, unverified, marker } from the start-up check
+  if (v.package) s.appdata = appDataState();   // DF-APPDATA: { ok, fixable, moved, values }
   return s;
 });
 // Settings -> "What you are running": per version, the server files installed, each file set-up put in the
@@ -983,7 +1031,8 @@ ipcMain.handle('report:send', async (_e, id, name, reason) => {
       const a = avInfo(); const c = pkgCheck[id] || V.verifyPackage(v);
       info.extra = ['', 'Antivirus: ' + (a.products.length ? a.products.map(p => p.name + (p.on ? ' (on)' : ' (off)')).join(', ') : 'none reported'),
         'Antivirus exclusions added by the launcher: ' + (a.allowedAt || 'never'), 'Helper blocked: ' + (a.blocked ? a.blocked.at + ' ' + a.blocked.line : 'no'),
-        'Server files check: ' + (c.ok ? 'ok' : 'WRONG ' + c.bad.join(', ')) + (c.unverified ? ' (narrow check)' : ''), 'Script TEMP: ' + path.join(v.dataDir, 'data', 'tmp')];
+        'Server files check: ' + (c.ok ? 'ok' : 'WRONG ' + c.bad.join(', ')) + (c.unverified ? ' (narrow check)' : ''), 'Script TEMP: ' + path.join(v.dataDir, 'data', 'tmp'),
+        'Windows AppData setting: ' + (() => { const ad = appDataState(true); return ad.ok ? 'ok (default form)' : ad.values.filter(x => x.state !== 'ok').map(x => x.name + ' = fixed path (' + x.state + ')').join(', '); })()];   // DF-APPDATA
     } catch {}
     const { zip, files } = RPT.collect(v, info);
     log('report', id, `${files} files, ${zip.length} bytes`);

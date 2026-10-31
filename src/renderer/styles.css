@@ -112,6 +112,10 @@ body { padding-top: var(--tb); }
 /* update banner */
 .banner { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 0; padding: 9px 40px; background: #22301f; border-bottom: 1px solid #35502f; color: var(--ink); font-size: 13.5px; }
 .banner .link { color: var(--ink-2); }
+/* DF-BANNER-FLOAT (Oct 31): a zero-height holder stuck to the top of the scrolling page: the bars inside overflow it, so
+   they cover the top of the page while shown and never push it down (and stay at the top when the page is scrolled) */
+.banners { position: sticky; top: 0; height: 0; z-index: 40; overflow: visible; }
+.banners .banner { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45); }
 
 /* cards (seasons page) */
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
@@ -472,7 +476,7 @@ html:not([lang="en"]) .nav-new { padding: 1px 5px; font-size: 10px; }
 /* DF-FH-BANNER (Oct 22): the Play page ends with the Forever Hunts banner instead of the Works / Not yet notes,
    and the More menu opens as a popup over it (it no longer pushes the page down). */
 #notes { display: none !important; }
-#more-menu { position: absolute; z-index: 30; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55); }
+#more-menu { position: absolute; z-index: 30; box-shadow: 0 12px 32px rgba(0, 0, 0, 0.55); scroll-margin-bottom: 56px; }   /* DF-MORE-SCROLL: room under it when the page scrolls to it */
 .fh-banner { position: relative; display: flex; align-items: stretch; margin-top: 26px; max-width: 960px; height: 206px; overflow: hidden;
   border: 1px solid var(--line-2); border-left: 3px solid var(--brass); border-radius: 8px; background: var(--bg-2);
   color: var(--ink); text-decoration: none; cursor: pointer; }

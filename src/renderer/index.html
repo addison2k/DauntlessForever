@@ -50,8 +50,10 @@
 
 <main class="content">
 <canvas class="sky" id="sky" aria-hidden="true"></canvas>
+<div class="banners"><!-- DF-BANNER-FLOAT (Oct 31): the update bars float over the top of the page; showing or dismissing one moves nothing -->
 <div class="banner launcher-up" id="banner-up" hidden><span id="banner-up-text"></span><span class="banner-acts"><button class="ghost" id="banner-up-get">Download</button><button class="link" id="banner-up-close">Later</button></span></div>
 <div class="banner" id="banner" hidden><span id="banner-text"></span><button class="link" id="banner-close">Dismiss</button></div>
+</div>
 
 <!-- ============================================================ Play -->
 <section class="page" id="page-play">
@@ -105,6 +107,7 @@
       <button data-act="importfix" hidden>Fix the tutorial after a Revived import</button>
       <button data-act="check">Check the game files (repairs missing or damaged files)</button>
       <button data-act="pkgrepair">Repair the launcher files (puts the server files back)</button>
+      <button data-act="appdata" hidden>Fix the Windows AppData setting (the game cannot use its own settings folder)</button>
       <button data-act="avallow">Allow in the antivirus (Defender: adds the exclusions; others: shows what to add)</button>
       <button data-act="firewall">Fix the firewall (allow the launcher, Node and the game)</button>
       <button data-act="opengame">Open the game folder</button>
