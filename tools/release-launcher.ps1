@@ -44,6 +44,10 @@ if (-not $Small -and -not (Test-Path -LiteralPath $zip)) { Fail "$zip is not the
 $asarName = "app-$ver.asar"
 $asar = Join-Path $Repo "dist\$asarName"
 Copy-Item -LiteralPath $built -Destination $asar -Force
+# DF-PRIVATE (Oct 31): the exact file players download, and the notes they read, must carry no private word
+& node (Join-Path $Repo 'tools\check-private.js') --asar $asar
+if ($LASTEXITCODE -ne 0) { Remove-Item -LiteralPath $asar -Force; Fail 'the update file contains a private word (see above). packages.json was not changed.' }
+if ($Notes) { & node (Join-Path $Repo 'tools\check-private.js') --text $Notes; if ($LASTEXITCODE -ne 0) { Remove-Item -LiteralPath $asar -Force; Fail 'the release notes contain a private word (see above). packages.json was not changed.' } }
 $hash = (Get-FileHash -LiteralPath $asar -Algorithm SHA256).Hash.ToLower()
 $size = (Get-Item -LiteralPath $asar).Length
 
