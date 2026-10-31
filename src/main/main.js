@@ -311,6 +311,15 @@ ipcMain.handle('av:info', () => avInfo());
 const SHELL_KEY = 'HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders';
 const APPDATA_VALUES = [['Local AppData', '%USERPROFILE%\\AppData\\Local', 'AppData\\Local'], ['AppData', '%USERPROFILE%\\AppData\\Roaming', 'AppData\\Roaming']];
 let appDataCache = null;
+function readShellFolderUtf8(name) {   // DF-APPDATA-2: the raw (unexpanded) value, read with UTF-8 output; null if it cannot be read
+  try {
+    const ps = "[Console]::OutputEncoding=[Text.Encoding]::UTF8; $k=Get-Item -LiteralPath 'HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\User Shell Folders'; " +
+      "$v=$k.GetValue('" + name.replace(/'/g, "''") + "', $null, 'DoNotExpandEnvironmentNames'); if ($v -ne $null) { [Console]::Out.Write('<<' + $v + '>>') }";
+    const out = require('child_process').execFileSync('powershell.exe', ['-NoProfile', '-NonInteractive', '-Command', ps], { encoding: 'utf8', windowsHide: true, timeout: 8000 });
+    const m = /<<([\s\S]*?)>>/.exec(out.replace(/^\uFEFF/, ''));
+    return m ? m[1].trim() : null;
+  } catch { return null; }
+}
 function appDataState(fresh) {
   if (!P.IS_WIN || P.MOCK) return { ok: true, fixable: false, values: [] };
   if (appDataCache && !fresh) return appDataCache;
@@ -324,6 +333,13 @@ function appDataState(fresh) {
       const line = out.split(/\r?\n/).find(l => l.trim().toLowerCase().startsWith(name.toLowerCase() + ' ') && /REG_(EXPAND_)?SZ/.test(l));
       if (line) v = line.replace(/^\s*\S.*?\s+REG_(EXPAND_)?SZ\s+/, '').trim();
     } catch {}
+    // DF-APPDATA-2 (Oct 31): reg.exe prints in the PC's old console code page, so a name like C:\Users\Uzivatel (with an accent on the z) came back
+    // garbled, did not match USERPROFILE and was taken for a moved folder (red note, no fix button). When the quick read is
+    // not plain ASCII or does not look fixable, the value is read again through PowerShell with UTF-8 output.
+    if (v != null && !/%USERPROFILE%/i.test(v) && (/[^\x20-\x7e]/.test(v) || !(prof && same(v, path.join(prof, rel))))) {
+      const u = readShellFolderUtf8(name);
+      if (u != null) v = u;
+    }
     if (v == null) { values.push({ name, value: null, state: 'ok' }); continue; }   // not readable or not set: Windows uses its default
     const state = /%USERPROFILE%/i.test(v) ? 'ok' : (prof && same(v, path.join(prof, rel)) ? 'fixable' : 'moved');
     values.push({ name, value: v, state, def });

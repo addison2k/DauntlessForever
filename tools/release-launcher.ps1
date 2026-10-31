@@ -83,7 +83,7 @@ if ($Small) {
     $files = "`"$zip`" `"$asar`"" + $(if (Test-Path -LiteralPath $exe) { " `"$exe`"" } else { '' })
     Say "  1. gh release create v$ver $files --latest --target main --title `"Dauntless Forever $ver`" --notes `"$Notes`""
 }
-Say '  2. git add -A'
+Say '  2. git add package.json packages.json  (plus each changed file by name - never -A)'   # DF-ADD-NAMED (Oct 31)
 Say "  3. git commit -m `"Launcher $ver`""
 Say '  4. git push'
 Say ''
