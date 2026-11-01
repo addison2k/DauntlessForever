@@ -33,9 +33,10 @@
     const on = S.phase !== 'off';
     const setting = !!(S.setup && S.setup.step);
     $('fv-missing').hidden = !(S.missing || S.stale || setting);
-    $('fv-missing-title').textContent = setting ? t('Setting up Forever...') : S.missing ? t('Forever is not set up on this PC') : t('Forever has an update');
-    $('fv-missing-text').textContent = setting ? t('{step}', { step: S.setup.step }) : S.missing ? t('One click builds it from your 1.14.7 install (same game folder, its own save). About a minute.') : t('The server has newer Forever files. Set up again to get them (your character is kept).');
-    $('fv-setup').textContent = S.missing ? t('Set up Forever') : t('Update Forever'); $('fv-setup').disabled = setting; $('fv-setup').hidden = setting;
+    const partial = !!(S.missing && /missing a file/.test(S.missing));   // DF25-FILES: a half-made install names the file
+    $('fv-missing-title').textContent = setting ? t('Setting up Forever...') : partial ? t('Forever is missing a file on this PC') : S.missing ? t('Forever is not set up on this PC') : t('Forever has an update');
+    $('fv-missing-text').textContent = setting ? t('{step}', { step: S.setup.step }) : partial ? S.missing : S.missing ? t('One click builds it from your 1.14.7 install (same game folder, its own save). About a minute.') : t('The server has newer Forever files. Set up again to get them (your character is kept).');
+    $('fv-setup').textContent = partial ? t('Set up Forever again') : S.missing ? t('Set up Forever') : t('Update Forever'); $('fv-setup').disabled = setting; $('fv-setup').hidden = setting;
     if (S.setup && S.setup.error) { $('fv-missing-text').textContent = S.setup.error; }
     if (S.is25) { render25(); return; }   // DF25: the 2.5 view; everything below is the v2 tab
     $('fv25').hidden = true; for (const e of page.querySelectorAll('.fv-v2')) e.hidden = false;

@@ -178,9 +178,19 @@ function privateOk() {
   const m = manifest();
   return !!(m && exists(coreBin('server')) && exists(coreBin('client')) && exists(coreTool('standby')) && exists(coreTool('attach')));
 }
+// DF25-FILES (Nov 1): everything the 2.5 Play path runs on this PC. A half-made install (a folder with version.json and
+// nothing else, a copy that stopped part way, a file an antivirus removed) passed the two-file check above and then
+// failed somewhere down the line with no useful message, while the tab said ready. Name the first missing piece.
+const REQUIRED25 = ['version.json', 'tools/lan-join-1147.ps1', 'tools/join-proxy-1147.js', 'tools/relay-client.js', 'tools/server-1147.ps1',
+  'tools/remote-hunts-1147.ps1', 'tools/hunt-proxy-1147.js', 'tools/online-host-1147.ps1', 'backend/recorder-1147.js', 'backend/quality.js', 'data/hunts_1147.json'];
+function missingFile25() {
+  for (const rel of REQUIRED25) { try { if (!fs.statSync(path.join(dir(), ...rel.split('/'))).size) return rel; } catch { return rel; } }
+  return '';
+}
 function missing() {
   if (!installed()) return 'Forever is not set up on this PC yet (versions\\forever).';
   if (!privateOk()) return 'Forever is missing part of its set-up on this PC. Press Set up Forever.';
+  if (is25()) { const f = missingFile25(); if (f) return `Forever is missing a file on this PC (${f}). Press Set up Forever to put the files back; your character is on the server and is kept.`; }
   return '';
 }
 // this PC's player keys: the game signs in with the eos_lan id when it JOINS someone (what a host stores this
