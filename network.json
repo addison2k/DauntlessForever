@@ -47,5 +47,8 @@
   "director": {
     "url": "http://13.140.234.113:7080",
     "secure": "https://director.dauntlessforever.com"
+  },
+  "forever25": {
+    "director": "http://209.145.57.41:28811"
   }
 }
