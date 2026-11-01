@@ -1131,16 +1131,23 @@ async function fetchTowns25() {
     const relay = relays.find((x) => x.host === host); const id = relay ? String(relay.id || relay.name || relay.host) : '';
     return { region: String(t.region || ''), join: String(t.join || ''), players: Number(t.players) || 0, tick: Number(t.tick) || 0, up: !!t.up, home: !!t.home, ago: Number(t.ago) || 0, ping: id && pings[id] !== undefined ? Number(pings[id]) : null, relayName: relay ? String(relay.name || '') : '' };
   }).filter((t) => t.region && t.join.includes(':'));
-  S.towns = towns25; S.townsAt = Date.now(); push();
+  S.towns = towns25; S.townsAt = Date.now(); S.anyTown = pickTown25('ANY'); push();
   return towns25;
 }
 // which town a region choice means right now. ANY = the fullest town (the backend uses the same rule for the player's
 // town), a tie going to the better ping. A town that stopped reporting is not offered, the same as the backend.
+// DF25-ANYTOWN (Addison, Nov 1): Any = the closest town by ping, unless a busier town is within ANY_NEAR_MS of it (so
+// small groups still gather). With no pings yet, the fullest. The choice is sent to the director with any:true, which
+// pins the TOWN only; hunts still match in every region.
+const ANY_NEAR_MS = 80;
 function pickTown25(region) {
   const live = towns25.filter((t) => t.up && t.ago < 90);
   if (region !== 'ANY') return live.find((t) => t.region === region) || null;
   const p = (t) => (t.ping == null ? 9999 : t.ping);
-  return live.slice().sort((a, b) => (b.players - a.players) || (p(a) - p(b)))[0] || null;
+  const known = live.filter((t) => t.ping != null);
+  if (!known.length) return live.slice().sort((a, b) => (b.players - a.players) || (p(a) - p(b)))[0] || null;
+  const best = Math.min(...known.map(p));
+  return known.filter((t) => p(t) <= best + ANY_NEAR_MS).sort((a, b) => (b.players - a.players) || (p(a) - p(b)))[0] || null;
 }
 // this PC's ping to each region, named the way the director names regions, for the beat (one TCP connect per relay, measured by the launcher already)
 function pings25() {
@@ -1193,7 +1200,7 @@ async function play25() {
     const town = pickTown25(region);
     if (!town) throw new Error(region === 'ANY' ? 'no Forever town is up right now' : `the ${region} town is not up right now: pick another region, or ANY`);
     if (key) {
-      const sendRegion = () => request25('POST', '/v1/region', { key, region: region25() }, 8000, true);
+      const sendRegion = () => request25('POST', '/v1/region', region === 'ANY' ? { key, region: town.region, any: true } : { key, region: region25() }, 8000, true);   // DF25-ANYTOWN: Any pins the chosen town only
       try { await sendRegion(); }
       catch (e) { if (is403(e) && await refreshKey25('region refused')) { try { await sendRegion(); } catch (e2) { log('region: ' + e2.message, true); } } else log('region: ' + e.message, true); }
     }
@@ -1573,7 +1580,7 @@ async function cards() {
 // ------------------------------------------------------------------ state + IPC
 function publicState() {
   if (is25() && !S.score) { const sc = readScore25(); if (sc) S.score = sc; }   // DF25: the rating lives on this PC
-  return { is25: is25(), unlocked: exists(path.join(P.dataRoot(), 'forever-unlock.txt')), region: S.region || region25(), town: S.town || null, towns: S.towns || towns25, score25: S.score25 || 0, board25: S.board25 || null, hunts25: remote ? { wanted: remote.wanted, up: remote.up, max: remote.max } : null, beat25: lastBeat25 ? Math.round((Date.now() - lastBeat25) / 1000) : null, allowed: !!S.allowed, accessError: S.accessError || '', setup: setupState, stale: !!S.stale, cards: S.cards || null, phase: S.phase, mode: S.mode, role: S.role, world: S.world, why: S.why || '', error: S.error || '', season: S.season || 'S1',
+  return { is25: is25(), unlocked: exists(path.join(P.dataRoot(), 'forever-unlock.txt')), region: S.region || region25(), town: S.town || null, towns: S.towns || towns25, anyTown: S.anyTown || null, score25: S.score25 || 0, board25: S.board25 || null, hunts25: remote ? { wanted: remote.wanted, up: remote.up, max: remote.max } : null, beat25: lastBeat25 ? Math.round((Date.now() - lastBeat25) / 1000) : null, allowed: !!S.allowed, accessError: S.accessError || '', setup: setupState, stale: !!S.stale, cards: S.cards || null, phase: S.phase, mode: S.mode, role: S.role, world: S.world, why: S.why || '', error: S.error || '', season: S.season || 'S1',
     standbyName: S.standbyName || '', standby: standby ? { prewarmed: standby.prewarmed, ready: standby.ready, adopted: standby.adopted, code: standby.code } : null,
     hostClosing: S.hostClosing || null, noStandby: !!S.noStandby, character: S.character || null, clientDll: !!S.clientDll, missing: missing(), score: S.score || null, check: S.check || null, board: S.board || null, leaderboard: S.leaderboard || null, helper: !!S.helper, autoPlay: !!S.autoPlay, ownGame: !!S.ownGame, away: S.away || null, pings: (() => { try { return ctx.social.relayPings ? ctx.social.relayPings() : {}; } catch { return {}; } })(), log: logLines.slice(-60) };
 }

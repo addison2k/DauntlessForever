@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.4.1",
+                     "version":  "0.4.2",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "Forever 2.5: Play now closes anything Forever left running on your PC first, which fixes the stop at the host at 127.0.0.1 does not answer. Smaller banner, More menu opens downward.",
+                     "notes":  "Forever 2.5: Any now picks the Ramsgate closest to you by ping (a busier one only when it is within 80 ms). Hunts on Any still come from every region. The Region card shows the town Any picked and its ping.",
                      "date":  "2026-11-01",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.1.asar",
-                                 "sha256":  "a54214c05129493f5453e4bbf669cd9b7e60f319e981ddff9d155d3ec4e3a647",
-                                 "size":  9726721,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.2.asar",
+                                 "sha256":  "5141c0c56ad0bc5ff0e121bdae0fe14aebef2547ce8e57e3cf0d333c38d78b57",
+                                 "size":  9727754,
                                  "minShell":  "0.2.4"
                              }
                  }

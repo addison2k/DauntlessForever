@@ -190,7 +190,7 @@
     const towns = Array.isArray(S.towns) ? S.towns : [];
     const chosen = String(S.region || 'ANY').toUpperCase();
     const live = towns.filter((x) => x.up && x.ago < 90);
-    const fullest = live.slice().sort((a, b) => (b.players - a.players) || ((a.ping == null ? 9999 : a.ping) - (b.ping == null ? 9999 : b.ping)))[0] || null;
+    const fullest = (S.anyTown && live.find((x) => x.region === S.anyTown.region)) || live.slice().sort((a, b) => (b.players - a.players) || ((a.ping == null ? 9999 : a.ping) - (b.ping == null ? 9999 : b.ping)))[0] || null;   // DF25-ANYTOWN: the main process picks Any by ping
     const card = (code, title, subText, ping, players, up) => {
       const b = el('button', 'fv25-region' + (chosen === code ? ' on' : '') + (up ? '' : ' down'));
       const name = el('div', 'fv25-region-name'); name.append(el('span', '', title));
@@ -204,11 +204,11 @@
       b.onclick = async () => { const r = await L.foreverSetRegion(code); if (!r.ok) note(r.error, true); else { S.region = r.region; try { localStorage.setItem('fv25-seen', '1'); } catch {} open25.s1 = false; render(); } };
       regs.append(b);
     };
-    card('ANY', t('Any (recommended)'), fullest ? t('the busiest town right now: {r}', { r: REGION_NAMES[fullest.region] || fullest.region }) : t('the busiest town right now'), null, fullest ? fullest.players : null, !!fullest);
+    card('ANY', t('Any (recommended)'), fullest ? t('the closest busy town for you: {r}', { r: REGION_NAMES[fullest.region] || fullest.region }) + (fullest.ping != null ? ', ' + t('{ms} ms', { ms: fullest.ping }) : '') : t('the closest busy town for you'), null, fullest ? fullest.players : null, !!fullest);
     for (const x of towns) card(x.region, REGION_NAMES[x.region] || x.region, x.up ? (x.relayName ? t('Ramsgate on the {r} relay', { r: x.relayName }) : t('Ramsgate up')) : t('town down right now'), x.ping, x.players, x.up && x.ago < 90);
     if (!towns.length) regs.append(el('p', 'small', S.error && /director/.test(S.error) ? t('The Forever director is not answering. The regions appear when it is back.') : t('Looking for towns...')));
-    $('fv25-s1-sub').textContent = (chosen === 'ANY' ? t('Any') : (REGION_NAMES[chosen] || chosen)) + (fullest && chosen === 'ANY' ? '  |  ' + (REGION_NAMES[fullest.region] || fullest.region) : '');
-    $('fv25-s1-hint').textContent = chosen === 'ANY' ? t('The busiest Ramsgate right now.') : t('Your Ramsgate. Hunts from every region.');
+    $('fv25-s1-sub').textContent = (chosen === 'ANY' ? t('Any') : (REGION_NAMES[chosen] || chosen)) + (fullest && chosen === 'ANY' ? '  |  ' + (REGION_NAMES[fullest.region] || fullest.region) + (fullest.ping != null ? ', ' + t('{ms} ms', { ms: fullest.ping }) : '') : '');
+    $('fv25-s1-hint').textContent = chosen === 'ANY' ? t('The closest busy Ramsgate. Hunts from every region.') : t('Your Ramsgate. Hunts from this region only.');
     $('fv25-s1').classList.toggle('done', true);
     $('fv25-s1').classList.toggle('slim', seen25() && !open25.s1);
     $('fv25-s1-change').textContent = t('Change');
