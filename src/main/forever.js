@@ -486,6 +486,7 @@ function joinCode() { try { return fs.readFileSync(path.join(dir(), 'ONLINE-join
 
 // ------------------------------------------------------------------ roles
 async function play(mode, worldHost) {
+  if (is25()) return play25();   // DF25: the 2.5 world (regions, VPS towns); everything below is the v2 path and is not reached
   S.wantWorld = typeof worldHost === 'string' && worldHost ? worldHost : null;   // a chosen world (Join this world on the board)
   if (S.helper && S.phase === 'hosting' && mode === 'fresh') return playAway();   // Host Mode is up: your game goes where the people are (your own world when that is it)
   if (S.phase !== 'off') throw new Error('Forever is already running. Stop it first.');
@@ -1069,6 +1070,220 @@ async function follow(go, away) {
   S.world = Object.assign({}, S.world || {}, { host: go.newHost, hostName: go.newHostName || '', code: go.code }); S.role = 'player'; S.phase = 'playing'; push();
 }
 
+// ------------------------------------------------------------------ DF25 (Forever 2.5, Oct 31): one world on a VPS, a town per region, hunts on players' PCs
+// network.json  "forever25": { "director": "http://<box>:28811" }  switches the tab to this. The v2 code above stays as it
+// is and is simply not reached. What changes for the player: pick a region (or ANY), rate this PC, Play. The world's
+// backend owns the character (nothing travels, DF_NO_TRAVEL), the region's Ramsgate runs on a VPS, and the hunts this
+// player opens run on this PC exactly as in v2 (relay slot, hunt helper with the core, client side in the game).
+// The 2.5 director is beaten every 3 s with this PC's rating and load, signed with the Forever key; its reply carries
+// what to take or keep warm (for the hunt helper) and, when a hunt this player is in moved, the address to travel to.
+// The rating is the player's own (the same check as before), kept in data\df25-score.json so the tester script and
+// this launcher agree, and sent with every beat: the director keeps no score of its own.
+let towns25 = [], beat25Warned = false, cpuPrev25 = null, lastBeat25 = null, keys25 = 2;   // keys25: the director's key limit per PC (its beat reply carries it)
+const SCORE25 = () => path.join(dataDir(), 'df25-score.json');
+// this PC's player key for 2.5: only the id the game joins with (eos_lan). ownKey() falls back to the shared default id
+// a PC hosts under when it has never joined, and that key must never carry a region choice or a beat: it is everyone's.
+function ownKey25() {
+  try { const m = /^\s*EpicAccountId\s*=\s*([0-9a-fA-F]{32})\s*$/m.exec(fs.readFileSync(path.join(dir(), 'eos_lan', 'eos_offline.ini'), 'utf8')); if (m) return crypto.createHash('sha256').update('epic:' + m[1].toLowerCase()).digest('hex').slice(0, 32); } catch {}
+  return null;
+}
+const REGION25 = () => path.join(P.dataRoot(), 'forever-region.txt');
+function director25() {
+  // a local override for testing against another box, as forever-director.txt does for v2
+  try { const u = fs.readFileSync(path.join(P.dataRoot(), 'forever-director25.txt'), 'utf8').trim(); if (/^https?:\/\//.test(u)) return u.replace(/\/+$/, ''); } catch {}
+  const n = (ctx && ctx.social && ctx.social.getNetwork && ctx.social.getNetwork()) || {}; const f = n.forever25 || {};
+  return typeof f.director === 'string' && /^https?:\/\//.test(f.director) ? f.director.replace(/\/+$/, '') : '';
+}
+const is25 = () => !!director25();
+function readScore25() {
+  const s = readJson(SCORE25(), null);
+  return s && Number(s.score) > 0 ? { score: Number(s.score), maxHunts: Math.max(1, Number(s.maxHunts) || 1), upload: Number(s.upload) || 0, cpu: String(s.cpu || ''), at: String(s.at || ''), canHost: true } : null;
+}
+function region25() { try { const r = fs.readFileSync(REGION25(), 'utf8').trim().toUpperCase(); return /^[A-Z]{2,8}$/.test(r) ? r : 'ANY'; } catch { return 'ANY'; } }
+function request25(method, apiPath, bodyObj, timeoutMs, signed) {
+  return new Promise((resolve, reject) => {
+    const base = director25(); if (!base) return reject(new Error('no Forever 2.5 director address (network.json forever25)'));
+    const url = new URL(apiPath, base + '/');
+    const body = bodyObj === undefined ? '' : JSON.stringify(bodyObj);
+    const headers = { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(body) };
+    if (signed) {   // the same signature the hunt helper and the tester script use: HMAC of time, method, path and body with the Forever key
+      const secret = foreverSecret(); if (!secret) return reject(new Error('no Forever key on this PC (set up Forever first)'));
+      const t = String(Date.now()); headers['X-DF-Time'] = t;
+      headers['X-DF-Sig'] = crypto.createHmac('sha256', secret).update(`${t}\n${method}\n${url.pathname}\n${body}`).digest('hex');
+    }
+    const lib = url.protocol === 'https:' ? require('https') : require('http');
+    const req = lib.request(url, { method, headers, timeout: timeoutMs || 8000, agent: false }, (res) => {
+      let b = ''; res.setEncoding('utf8'); res.on('data', (d) => { b += d; });
+      res.on('end', () => { let j = null; try { j = b ? JSON.parse(b) : {}; } catch {} if (res.statusCode === 200 && j) resolve(j); else reject(new Error(`${res.statusCode} ${(j && (j.reason || j.error)) || b.slice(0, 120)}`)); });
+    });
+    req.on('timeout', () => { req.destroy(new Error('the Forever director did not answer')); });
+    req.on('error', reject); req.end(body);
+  });
+}
+const relays25 = () => { const net = (ctx.social.getNetwork && ctx.social.getNetwork()) || {}; return (Array.isArray(net.relays) && net.relays.length ? net.relays : [net.relay]).filter((x) => x && x.host); };
+const pingsById25 = () => { try { return ctx.social.relayPings ? ctx.social.relayPings() : {}; } catch { return {}; } };
+// the towns this world serves right now, each paired with this PC's own ping to its relay (the launcher already measures every relay)
+async function fetchTowns25() {
+  const r = await request25('GET', '/v1/towns', undefined, 8000, false);
+  const relays = relays25(), pings = pingsById25();
+  towns25 = (Array.isArray(r.towns) ? r.towns : []).map((t) => {
+    const host = String(t.join || '').split(':')[0];
+    const relay = relays.find((x) => x.host === host); const id = relay ? String(relay.id || relay.name || relay.host) : '';
+    return { region: String(t.region || ''), join: String(t.join || ''), players: Number(t.players) || 0, tick: Number(t.tick) || 0, up: !!t.up, home: !!t.home, ago: Number(t.ago) || 0, ping: id && pings[id] !== undefined ? Number(pings[id]) : null, relayName: relay ? String(relay.name || '') : '' };
+  }).filter((t) => t.region && t.join.includes(':'));
+  S.towns = towns25; S.townsAt = Date.now(); push();
+  return towns25;
+}
+// which town a region choice means right now. ANY = the fullest town (the backend uses the same rule for the player's
+// town), a tie going to the better ping. A town that stopped reporting is not offered, the same as the backend.
+function pickTown25(region) {
+  const live = towns25.filter((t) => t.up && t.ago < 90);
+  if (region !== 'ANY') return live.find((t) => t.region === region) || null;
+  const p = (t) => (t.ping == null ? 9999 : t.ping);
+  return live.slice().sort((a, b) => (b.players - a.players) || (p(a) - p(b)))[0] || null;
+}
+// this PC's ping to each region, named the way the director names regions, for the beat (one TCP connect per relay, measured by the launcher already)
+function pings25() {
+  const relays = relays25(), pings = pingsById25(), out = {};
+  for (const t of towns25) { const relay = relays.find((x) => x.host === t.join.split(':')[0]); const id = relay ? String(relay.id || relay.name || relay.host) : ''; if (id && pings[id] !== undefined) out[t.region] = Math.round(Number(pings[id])); }
+  return out;
+}
+async function setRegion25(region) {
+  region = String(region || 'ANY').toUpperCase().slice(0, 8);
+  if (region !== 'ANY' && !towns25.some((t) => t.region === region)) { try { await fetchTowns25(); } catch {} if (!towns25.some((t) => t.region === region)) throw new Error(`there is no ${region} town right now`); }
+  try { fs.writeFileSync(REGION25(), region); } catch (e) { throw new Error('could not save the region: ' + e.message); }
+  S.region = region;
+  // the world files the choice under this PC's player key, so the next join lands in that town; a PC with no key yet
+  // (never joined) tells the world at its first Play instead
+  const key = ownKey25();
+  if (key) await request25('POST', '/v1/region', { key, region }, 8000, true);
+  push();
+}
+function cpuLoad25() {   // this PC's busy % since the last beat, from the per-core counters (no shell, no WMI)
+  const cpus = require('os').cpus(); let idle = 0, total = 0;
+  for (const c of cpus) { for (const k of Object.keys(c.times)) total += c.times[k]; idle += c.times.idle; }
+  const prev = cpuPrev25; cpuPrev25 = { idle, total };
+  if (!prev || total <= prev.total) return 0;
+  return Math.max(0, Math.min(100, Math.round(100 * (1 - (idle - prev.idle) / (total - prev.total)))));
+}
+function ramPct25() { const os = require('os'); return os.totalmem() > 0 ? Math.max(0, Math.min(100, Math.round(100 * (1 - os.freemem() / os.totalmem())))) : 0; }
+function huntTick25() {   // the slowest hunt server running on this PC right now (a log not written for 30 s is not running)
+  let worst = 0;
+  for (let port = 8781; port <= 8787; port++) {
+    try { if (Date.now() - fs.statSync(path.join(dir(), 'logs', `server_${port}.log`)).mtimeMs > 30000) continue; } catch { continue; }
+    const t = tickRate(port); if (t > 0 && (worst === 0 || t < worst)) worst = t;
+  }
+  return worst;
+}
+async function play25() {
+  if (S.phase !== 'off') throw new Error('Forever is already running. Stop it first.');
+  const why = missing(); if (why) throw new Error(why);
+  if (!readScore25()) throw new Error('Rate this PC first. Every player needs a score: without one you cannot join or open a hunt.');   // Addison, Oct 31: everyone rates
+  S.helper = false; S.helperOnly = false; S.autoPlay = false; S.wantWorld = null; S.mode = 'fresh'; S.error = ''; S.phase = 'asking'; S.role = null; S.world = null; S.is25 = true; S.town = null; push();
+  writeForeverMods();
+  try {
+    await fetchTowns25();
+    const key = ownKey25();
+    let region = region25();
+    if (!key && region !== 'ANY') { log(`first game on this PC: the ${region} choice is kept and applies from the next Play`); region = 'ANY'; }
+    const town = pickTown25(region);
+    if (!town) throw new Error(region === 'ANY' ? 'no Forever town is up right now' : `the ${region} town is not up right now: pick another region, or ANY`);
+    if (key) {
+      const sendRegion = () => request25('POST', '/v1/region', { key, region: region25() }, 8000, true);
+      try { await sendRegion(); }
+      catch (e) { if (is403(e) && await refreshKey25('region refused')) { try { await sendRegion(); } catch (e2) { log('region: ' + e2.message, true); } } else log('region: ' + e.message, true); }
+    }
+    S.region = region25(); S.town = town;
+    S.world = { host: 'forever25', hostName: `${town.region} Ramsgate`, code: town.join, backend: '', region: town.region, players: town.players };
+    await startJoin25(town);
+  } catch (e) { S.phase = 'off'; S.is25 = false; S.town = null; push(); throw e; }
+}
+async function startJoin25(town) {
+  S.phase = 'joining'; S.role = 'player'; push();
+  gameSince = Date.now();
+  log(`joining the ${town.region} Ramsgate (${town.join}${town.ping != null ? ', ' + town.ping + ' ms' : ''})`);
+  killStaleJoinProxy();
+  // a go file or an order left from an earlier session would be acted on the moment the helpers come up
+  for (const f of ['join-proxy.json', (manifest() || {}).goFile || 'client_go.txt', 'remote_hunts_take.json']) { try { fs.unlinkSync(path.join(dataDir(), f)); } catch {} }
+  lastTake = '';
+  const script = path.join(toolsDir(), 'lan-join-1147.ps1');
+  ctx.runner.runVisible(FV + ':join', 'join', script, ['-Code', `'${town.join.replace(/'/g, "''")}'`], 'Dauntless Forever - in Ramsgate (keep open)', { closeWhenDone: true, env: Object.assign(ENV(), { DF_NO_TRAVEL: '1', DF_KEEP_OWN: '1' }), cwd: dir() })
+    .then(() => { if (S.phase !== 'off') stop('the game closed'); });
+  // the client side goes into the game once its window is up: it travels the game when the key of a hunt it is in moves
+  ctx.runner.runHidden(FV + ':clientattach', 'attach', coreTool('clientAttach'), ['-Dll', coreBin('client')], (line) => {
+    if (/^DFSTATUS ready/.test(line)) { S.clientDll = true; log('this PC follows its hunt when the key moves'); push(); }
+    else if (/^DFSTATUS (nogame|unconfirmed)/.test(line)) { S.clientDll = false; log('this PC may not follow a key move (set-up did not confirm)', true); push(); }
+  }, { env: ENV(), cwd: dir() });
+  S.phase = 'playing'; push();
+  beatLoop25();
+}
+// DF25-KEYFIX (Nov 1): a PC whose forever_key.txt is stale (an old tester kit, a key change on the box) gets "403 bad
+// signature" from the director and 403 Forbidden from the backend. The key is the one setup fetches from the director's
+// /v1/forever/secret, so on a 403 fetch it again, keep it if it changed, and retry once. Never more than once a minute.
+let keyFetched25 = 0;
+async function refreshKey25(why) {
+  if (Date.now() - keyFetched25 < 60000) return false;
+  keyFetched25 = Date.now();
+  try {
+    const r = await api('GET', '/v1/forever/secret', undefined);
+    if (!(r && r.secret)) return false;
+    const f = path.join(P.dataRoot(), (manifest() || {}).keyFile || 'forever_key.txt');
+    if (foreverSecret() === String(r.secret).trim()) return false;
+    fs.writeFileSync(f, r.secret); log('Forever key refreshed from the server (' + why + ')');
+    return true;
+  } catch (e) { log('could not refresh the Forever key: ' + e.message, true); return false; }
+}
+const is403 = (e) => /\b403\b/.test(String(e && e.message || e));
+function beatLoop25() {
+  clearTimeout(timer); gameMisses = 0; gameCheckN = 0; gameSeen = false; cpuPrev25 = null; beat25Warned = false; lastBeat25 = null;
+  const takeFile = path.join(dataDir(), 'remote_hunts_take.json');
+  const tick = async () => {
+    if (S.phase !== 'playing' || !S.is25) return;
+    try {
+      const key = ownKey25();
+      const inWorld = exists(path.join(dataDir(), 'join-proxy.json'));   // the game reached the world (the hunt helper needs this)
+      const sc = readScore25();
+      const max25 = Math.max(1, Math.min(keys25, sc ? sc.maxHunts : 1));   // never more hunts than keys this PC may hold (Addison: 2)
+      if (inWorld && !remote && key && Date.now() - remoteFailedAt > 5 * 60 * 1000 && Date.now() > remoteHoldUntil) startRemoteHunts(max25, false).catch(() => {});
+      if (key) {
+        const os = require('os');
+        const body = { key, name: os.hostname(), cores: os.cpus().length, loadPct: cpuLoad25(), ramPct: ramPct25(), tick: huntTick25(), max: remote ? remote.max : max25, huntHost: true,
+          score: sc ? sc.score : 0, upload: sc ? sc.upload : 0, rated: !!sc, ratedAt: sc ? sc.at : '', cpu: sc ? sc.cpu : '', pings: pings25(), region: S.town ? S.town.region : '', joining: !inWorld };
+        const r = await request25('POST', '/v1/beat', body, 6000, true);
+        S.error = ''; beat25Warned = false; lastBeat25 = Date.now();
+        S.score25 = Number(r.score) || 0;
+        if (Number(r.huntKeys) >= 1) keys25 = Math.min(4, Math.floor(Number(r.huntKeys)));
+        // orders for the hunt helper: the hunts to take over or keep a warm copy of
+        const tk = JSON.stringify(Array.isArray(r.take) ? r.take.map((x) => ({ id: String((x && x.id) || ''), mode: String((x && x.mode) || '') })).filter((x) => x.id) : []);
+        if (tk !== lastTake) {
+          lastTake = tk;
+          try { if (tk === '[]') fs.unlinkSync(takeFile); else fs.writeFileSync(takeFile, tk); } catch {}
+          if (tk !== '[]') log('hunt move: the director asks this PC to ' + JSON.parse(tk).map((x) => (x.mode === 'take' ? 'take over a hunt' : 'keep a backup copy of a hunt')).join(', '));
+        }
+        // a hunt this player is in moved to another PC: the address goes into the go file and the client side travels
+        if (r.go && r.go.addr) {
+          try { fs.writeFileSync(path.join(dataDir(), (manifest() || {}).goFile || 'client_go.txt'), String(r.go.addr)); log(`your hunt moved to another PC: travelling there (${r.go.addr})`); }
+          catch (e) { log('could not follow the hunt: ' + e.message, true); }
+        }
+      }
+      if ((++gameCheckN % 4) === 0) {   // DF-CRASHWATCH, as in v2: the game closed or crashed
+        const n = await gameCount();
+        if (n > 0) gameSeen = true;
+        if (n === 0 && gameSeen) { if (++gameMisses >= 2) { log('your game is not running any more (closed or crashed): Forever stops; press Play Forever to go back'); gameMisses = 0; await stop('the game closed'); return; } } else gameMisses = 0;
+      }
+    } catch (e) {
+      S.error = 'director: ' + e.message;
+      if (is403(e) && await refreshKey25('beat refused')) { S.error = ''; push(); timer = setTimeout(tick, 500); return; }
+      if (!beat25Warned) { beat25Warned = true; log('the Forever director is not answering (' + e.message + '). You can still play; the hunts you open run on this PC, but no key can move until it is back.', true); }
+    }
+    push();
+    timer = setTimeout(tick, 3000);
+  };
+  timer = setTimeout(tick, 2000);
+}
+// the public key leaderboard of this world (character names and counts only)
+async function board25() { const r = await request25('GET', '/v1/board', undefined, 8000, false); S.board25 = r; push(); return r; }
+
 // ------------------------------------------------------------------ stop
 async function stop(why) {
   if (S.phase === 'off' || S.phase === 'stopping') return;
@@ -1089,25 +1304,37 @@ async function stop(why) {
       ps.on('exit', res); ps.on('error', res); setTimeout(res, 15000);
     });
   } catch {}
-  try { await api('POST', '/v1/forever/leave', {}); } catch {}
+  if (!S.is25) { try { await api('POST', '/v1/forever/leave', {}); } catch {} }   // DF25: the 2.5 director forgets a quiet PC by itself
   await returnCharacter();
   clearSession(); clearInterval(resumeTimer);   // DF-V2-RESUME
   stopRemoteHunts();   // DF-V2-REMOTEHUNTS
   vpsBackend = ''; S.vpsTown = null; S.vpsTownUp = false;   // DF-VPS
   standby = null; S.role = null; S.world = null; S.hostClosing = null; S.phase = 'off'; S.why = ''; S.helper = false; S.helperOnly = false; S.autoPlay = false; S.ownGame = false; S.away = null; clearTimeout(awayTimer);
+  S.is25 = false; S.town = null; S.clientDll = false; lastTake = '';   // DF25
   log('stopped' + (why ? ' (' + why + ')' : ''));
   push();
 }
 
 // ------------------------------------------------------------------ the opt-in host check
-function runHostCheck() {
+// DF25-WEIGHTS: the check tool scores upload 35, connection 25, CPU 20, stability 20. In 2.5 the launcher re-weights
+// those parts (upload 50, connection 25, CPU 15, stability 10; Addison, Nov 1) because a slow upload is what hurts a
+// hunt handed to this PC. The parts come back scaled so the panel shows the new denominators.
+const W25 = { upload: 50, connection: 25, cpu: 15, stability: 10 }, W_TOOL = { upload: 35, connection: 25, cpu: 20, stability: 20 };
+function reweight25(r) {
+  if (!r || !r.parts) return r;
+  const parts = {}; let score = 0;
+  for (const k of Object.keys(W25)) { const v = Math.round(Math.min(W_TOOL[k], Math.max(0, Number(r.parts[k]) || 0)) * W25[k] / W_TOOL[k]); parts[k] = v; score += v; }
+  return Object.assign({}, r, { parts, score: Math.min(100, score), weights: W25, toolScore: r.score });
+}
+function runHostCheck(onLine) {
   return new Promise((resolve) => {
     const net = ctx.social.getNetwork();
     const relays = ((Array.isArray(net.relays) && net.relays.length ? net.relays : [net.relay]) || []).map(r => r && r.host).filter(Boolean).join(',');
     let out = null;
     ctx.runner.runHidden(FV + ':check', 'check', coreTool('check'), relays ? ['-Relays', relays] : [], (line) => {
       const m = /^DFJSON (.+)$/.exec(line.trim()); if (m) { try { out = JSON.parse(m[1]); } catch {} }
-    }).then(() => resolve(out));
+      else if (onLine && line.trim()) onLine(line.trim().slice(0, 120));
+    }).then(() => resolve(is25() ? reweight25(out) : out));
   });
 }
 
@@ -1264,6 +1491,7 @@ async function checkAccess() {
     // a developer's PC: a file named forever-unlock.txt in the launcher's data folder shows the tab without the VPS
     if (exists(path.join(P.dataRoot(), 'forever-unlock.txt'))) S.allowed = true;
     else if (ctx.social.offlineMode()) { S.allowed = false; }
+    else if (is25()) { S.allowed = true; }   // DF25-OPEN (Nov 1): the 2.5 world is open to everyone; the v2 access list only gates v2 launchers now
     else { const r = await api('GET', '/v1/forever/access', undefined); S.allowed = !!r.allowed; S.season = r.season || S.season; }
     S.accessError = '';
     if (S.allowed && installed()) S.stale = await setupStale();
@@ -1340,7 +1568,8 @@ async function cards() {
 
 // ------------------------------------------------------------------ state + IPC
 function publicState() {
-  return { allowed: !!S.allowed, accessError: S.accessError || '', setup: setupState, stale: !!S.stale, cards: S.cards || null, phase: S.phase, mode: S.mode, role: S.role, world: S.world, why: S.why || '', error: S.error || '', season: S.season || 'S1',
+  if (is25() && !S.score) { const sc = readScore25(); if (sc) S.score = sc; }   // DF25: the rating lives on this PC
+  return { is25: is25(), unlocked: exists(path.join(P.dataRoot(), 'forever-unlock.txt')), region: S.region || region25(), town: S.town || null, towns: S.towns || towns25, score25: S.score25 || 0, board25: S.board25 || null, hunts25: remote ? { wanted: remote.wanted, up: remote.up, max: remote.max } : null, beat25: lastBeat25 ? Math.round((Date.now() - lastBeat25) / 1000) : null, allowed: !!S.allowed, accessError: S.accessError || '', setup: setupState, stale: !!S.stale, cards: S.cards || null, phase: S.phase, mode: S.mode, role: S.role, world: S.world, why: S.why || '', error: S.error || '', season: S.season || 'S1',
     standbyName: S.standbyName || '', standby: standby ? { prewarmed: standby.prewarmed, ready: standby.ready, adopted: standby.adopted, code: standby.code } : null,
     hostClosing: S.hostClosing || null, noStandby: !!S.noStandby, character: S.character || null, clientDll: !!S.clientDll, missing: missing(), score: S.score || null, check: S.check || null, board: S.board || null, leaderboard: S.leaderboard || null, helper: !!S.helper, autoPlay: !!S.autoPlay, ownGame: !!S.ownGame, away: S.away || null, pings: (() => { try { return ctx.social.relayPings ? ctx.social.relayPings() : {}; } catch { return {}; } })(), log: logLines.slice(-60) };
 }
@@ -1355,13 +1584,21 @@ function init(c) {
   ipcMain.handle('forever:playOwn', async () => { try { await playInOwnWorld(); return { ok: true }; } catch (e) { return { ok: false, error: e.message }; } });
   ipcMain.handle('forever:leaderboard', async () => { try { S.leaderboard = await api('GET', '/v1/forever/leaderboard', undefined); push(); return { ok: true }; } catch (e) { return { ok: false, error: e.message }; } });
   ipcMain.handle('forever:board', async () => { try { S.board = await api('GET', '/v1/forever/board', undefined); S.score = { score: S.board.score, maxHunts: S.board.maxHunts, canHost: S.board.canHost, maxHuntsChecked: S.board.maxHuntsChecked || 0, hitchAt: S.board.hitchAt || 0 }; push(); return { ok: true, board: S.board }; } catch (e) { return { ok: false, error: e.message }; } });
-  ipcMain.handle('forever:check', async () => { S.check = { running: true }; push(); const r = await runHostCheck(); S.check = r ? Object.assign({ running: false, at: Date.now() }, r) : { running: false, failed: true }; push(); return S.check; });
+  ipcMain.handle('forever:check', async () => { S.check = { running: true, startedAt: Date.now(), line: '' }; push(); const r = await runHostCheck((l) => { if (S.check && S.check.running) { S.check.line = l; push(); } }); S.check = r ? Object.assign({ running: false, at: Date.now() }, r) : { running: false, failed: true }; push(); return S.check; });
   ipcMain.handle('forever:sendScore', async () => {
     const c = S.check; if (!c || c.running || c.failed) return { ok: false, error: 'run the check first' };
+    if (is25()) {   // DF25: the rating stays on this PC (data\df25-score.json, the same file the tester script uses) and goes out with every beat
+      try { P.ensureDir(dataDir()); fs.writeFileSync(SCORE25(), JSON.stringify({ at: new Date().toISOString(), score: Number(c.score) || 0, maxHunts: Math.max(1, Number(c.maxHunts) || 1), upload: Number(c.upload) || 0, cpu: String(c.cpu || ''), threads: Number(c.threads) || 0, ramGB: Number(c.ramGB) || 0 })); S.score = readScore25(); push(); return { ok: true }; }
+      catch (e) { return { ok: false, error: e.message }; }
+    }
     try { const r = await api('POST', '/v1/forever/score', { score: c.score, maxHunts: c.maxHunts, numbers: { cpu: c.cpu, threads: c.threads, ramGB: c.ramGB, upload: c.upload, relay: c.bestRelay, parts: c.parts } }); S.score = { score: r.score, maxHunts: r.maxHunts, canHost: true }; push(); return { ok: true }; }
     catch (e) { return { ok: false, error: e.message }; }
   });
-  ipcMain.handle('forever:clearScore', async () => { try { await api('POST', '/v1/forever/score', { clear: true }); S.score = null; push(); return { ok: true }; } catch (e) { return { ok: false, error: e.message }; } });
+  ipcMain.handle('forever:clearScore', async () => { if (is25()) { try { fs.unlinkSync(SCORE25()); } catch {} S.score = null; push(); return { ok: true }; } try { await api('POST', '/v1/forever/score', { clear: true }); S.score = null; push(); return { ok: true }; } catch (e) { return { ok: false, error: e.message }; } });
+  // DF25: the towns (regions) this world serves, the player's region choice, and the key leaderboard
+  ipcMain.handle('forever:towns', async () => { try { return { ok: true, towns: await fetchTowns25(), region: region25() }; } catch (e) { return { ok: false, error: e.message, towns: towns25, region: region25() }; } });
+  ipcMain.handle('forever:setRegion', async (_e, region) => { try { await setRegion25(region); return { ok: true, region: region25() }; } catch (e) { return { ok: false, error: e.message }; } });
+  ipcMain.handle('forever:board25', async () => { try { return { ok: true, board: await board25() }; } catch (e) { return { ok: false, error: e.message }; } });
   // needHost: the player chose to run the check and host (sends the score, then asks the director again) or to wait
   ipcMain.handle('forever:checkAndHost', async () => {
     if (S.phase !== 'needHost') return { ok: false, error: 'not waiting for a host' };

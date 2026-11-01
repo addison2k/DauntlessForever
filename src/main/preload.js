@@ -144,5 +144,8 @@ contextBridge.exposeInMainWorld('launcher', {
   foreverAccess: invoke('forever:access'),
   foreverCheckAndHost: invoke('forever:checkAndHost'),   // nobody is hosting: run the check, send, host
   foreverWait: invoke('forever:wait'),
+  foreverTowns: invoke('forever:towns'),             // DF25: the towns (regions) of the 2.5 world, with this PC's ping to each
+  foreverSetRegion: invoke('forever:setRegion'),     // DF25: NA / EU / AUS / ANY
+  foreverBoard25: invoke('forever:board25'),         // DF25: the key leaderboard (names and counts)
   onForeverUpdate: on('forever:update'),
 });

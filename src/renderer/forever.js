@@ -37,6 +37,8 @@
     $('fv-missing-text').textContent = setting ? t('{step}', { step: S.setup.step }) : S.missing ? t('One click builds it from your 1.14.7 install (same game folder, its own save). About a minute.') : t('The server has newer Forever files. Set up again to get them (your character is kept).');
     $('fv-setup').textContent = S.missing ? t('Set up Forever') : t('Update Forever'); $('fv-setup').disabled = setting; $('fv-setup').hidden = setting;
     if (S.setup && S.setup.error) { $('fv-missing-text').textContent = S.setup.error; }
+    if (S.is25) { render25(); return; }   // DF25: the 2.5 view; everything below is the v2 tab
+    $('fv25').hidden = true; for (const e of page.querySelectorAll('.fv-v2')) e.hidden = false;
     const [label, cls] = PHASE[S.phase] || PHASE.off;
     $('fv-state').textContent = t(label) + (S.role === 'host' && S.world ? ` (${S.world.players} ${S.world.players === 1 ? t('player') : t('players')})` : '');
     $('fv-dot').className = 'hm-dot ' + cls;
@@ -165,7 +167,137 @@
       a.append(el('p', 'small', S.ownGame ? (S.away ? t('Your game is open in {host}\'s world (where the people are); your own world keeps running here.', { host: S.away.hostName || '?' }) : t('Your game is open in your world. Close it whenever you like; the world stays up.')) : (S.autoPlay ? t('Your world is starting. Your game opens in it by itself, no need to press Play again.') : t('Your world is running. Press Play Forever - fresh character: your game goes where the people are, or into your own world when that is it. The world keeps running when you close your game.'))));
     }
   }
-  async function refreshBoard() { try { await L.foreverBoard(); } catch {} try { await L.foreverCards(); } catch {} try { await L.foreverLeaderboard(); } catch {} }
+  // ------------------------------------------------------------------ DF25: the Forever 2.5 view (region, rating, play)
+  const REGION_NAMES = { NA: 'North America', EU: 'Europe', AUS: 'Australia', JP: 'Japan', ANY: 'Any' };
+  const PHASE25 = { off: ['Not playing', ''], asking: ['Finding your town', 'starting'], joining: ['Joining Ramsgate', 'starting'], playing: ['In Ramsgate', 'running'], stopping: ['Stopping', 'stopping'] };
+  let movedMenu = false, lbTimer25 = null, liveTimer25 = null;
+  // each step folds to a slim row once it has an answer; a click on the row opens it again
+  const open25 = { s1: false, s2: true };   // s2 starts open and stays open until a rating is kept
+  const seen25 = () => { try { return localStorage.getItem('fv25-seen') === '1'; } catch { return false; } };
+  function pingCls(ms) { return ms == null ? '' : ms < 80 ? 'ok' : ms < 160 ? 'warn' : 'bad'; }
+  function render25() {
+    const page = $('page-forever'); if (!page) return;
+    for (const e of page.querySelectorAll('.fv-v2')) e.hidden = true;
+    $('fv25').hidden = false;
+    page.classList.add('is25');
+    const titleEl = page.querySelector('.page-title'); if (titleEl) titleEl.hidden = true;   // the hero carries the title
+    const leadEl = page.querySelector('.lead'); if (leadEl) leadEl.hidden = true;
+    if (!movedMenu) { const m = $('fv-more-menu'), w = $('fv25-more-wrap'); if (m && w) { w.append(m); } const u = $('fv-missing'), d = $('fv25-drop'); if (u && d) d.append(u); movedMenu = true; }
+    const on = S.phase !== 'off';
+    const sc = S.score, ck = S.check, rated = !!(sc && sc.score);
+    // step 1: the regions
+    const regs = $('fv25-regions'); regs.innerHTML = '';
+    const towns = Array.isArray(S.towns) ? S.towns : [];
+    const chosen = String(S.region || 'ANY').toUpperCase();
+    const live = towns.filter((x) => x.up && x.ago < 90);
+    const fullest = live.slice().sort((a, b) => (b.players - a.players) || ((a.ping == null ? 9999 : a.ping) - (b.ping == null ? 9999 : b.ping)))[0] || null;
+    const card = (code, title, subText, ping, players, up) => {
+      const b = el('button', 'fv25-region' + (chosen === code ? ' on' : '') + (up ? '' : ' down'));
+      const name = el('div', 'fv25-region-name'); name.append(el('span', '', title));
+      if (chosen === code) name.append(el('span', 'pill ready', t('chosen')));
+      b.append(name);
+      if (ping != null) b.append(el('div', 'fv25-region-ping ' + pingCls(ping), t('{ms} ms to you', { ms: ping })));
+      b.append(el('div', 'fv25-region-sub', subText));
+      if (up && players != null) b.append(el('div', 'fv25-region-sub', t('{n} in Ramsgate', { n: players })));
+      b.disabled = on;
+      b.title = on ? t('The region applies to your next Play') : '';
+      b.onclick = async () => { const r = await L.foreverSetRegion(code); if (!r.ok) note(r.error, true); else { S.region = r.region; try { localStorage.setItem('fv25-seen', '1'); } catch {} open25.s1 = false; render(); } };
+      regs.append(b);
+    };
+    card('ANY', t('Any (recommended)'), fullest ? t('the busiest town right now: {r}', { r: REGION_NAMES[fullest.region] || fullest.region }) : t('the busiest town right now'), null, fullest ? fullest.players : null, !!fullest);
+    for (const x of towns) card(x.region, REGION_NAMES[x.region] || x.region, x.up ? (x.relayName ? t('Ramsgate on the {r} relay', { r: x.relayName }) : t('Ramsgate up')) : t('town down right now'), x.ping, x.players, x.up && x.ago < 90);
+    if (!towns.length) regs.append(el('p', 'small', S.error && /director/.test(S.error) ? t('The Forever director is not answering. The regions appear when it is back.') : t('Looking for towns...')));
+    $('fv25-s1-sub').textContent = (chosen === 'ANY' ? t('Any') : (REGION_NAMES[chosen] || chosen)) + (fullest && chosen === 'ANY' ? '  |  ' + (REGION_NAMES[fullest.region] || fullest.region) : '');
+    $('fv25-s1-hint').textContent = chosen === 'ANY' ? t('The busiest Ramsgate right now.') : t('Your Ramsgate. Hunts from every region.');
+    $('fv25-s1').classList.toggle('done', true);
+    $('fv25-s1').classList.toggle('slim', seen25() && !open25.s1);
+    $('fv25-s1-change').textContent = t('Change');
+    // step 2: the rating
+    const checking = !!(ck && ck.running);
+    $('fv25-check').hidden = rated; $('fv25-check').disabled = checking || on;
+    $('fv25-check').textContent = checking ? t('Rating...') : t('Rate this PC');
+    $('fv25-rerate').hidden = !rated; $('fv25-rerate').disabled = checking || on;
+    $('fv25-forget').hidden = !rated; $('fv25-forget').disabled = on;
+    $('fv25-skip').hidden = true;   // everyone rates (Addison, Oct 31): no play without a score
+    $('fv25-s2').classList.toggle('done', rated);
+    const kept = !!(rated && ck && ck.at && sc.at && new Date(sc.at).getTime() >= Number(ck.at) - 2000);   // the numbers on screen are the ones already kept
+    $('fv25-s2').classList.toggle('slim', rated && !open25.s2 && !checking && !(ck && !ck.running && !ck.failed && !kept));
+    $('fv25-s2-sub').textContent = rated ? `${sc.score} / 100` : checking ? t('Rating...') : t('Not rated yet');
+    $('fv25-s2-change').textContent = t('Change');
+    const box = $('fv25-check-result'); box.innerHTML = '';
+    if (rated && !(ck && !ck.running && !ck.failed && !kept)) {
+      const r = el('div', 'fv25-rated'); const big = el('div', 'fv25-rated-score', String(sc.score)); big.append(el('small', '', ' / 100')); r.append(big);
+      r.append(el('div', 'fv25-rated-sub', t('up to {h} hunt(s) at once on this PC', { h: sc.maxHunts }) + (sc.upload ? ', ' + t('upload {u} Mbps', { u: sc.upload }) : '') + (sc.at ? ', ' + t('rated {d}', { d: String(sc.at).slice(0, 10) }) : '')));
+      box.append(r);
+      box.append(el('p', 'small', sc.score >= 80 ? t('A strong PC: hunts can be handed to it when their host is struggling.') : t('Hunts you open run here. Other people\'s hunts are handed to PCs rated 80 or more.')));
+    } else if (!rated && !checking && !(ck && !ck.running)) box.append(el('p', 'small', t('Every player rates their PC once. Without a score you cannot join or open a hunt.')));
+    if (checking) {
+      // DF25-RATING-LIVE: the check takes about 20 seconds; show a moving bar, the seconds, and the step the tool is on
+      const secs = ck.startedAt ? Math.max(0, Math.round((Date.now() - ck.startedAt) / 1000)) : 0;
+      const stage = ck.line || (secs < 4 ? t('Looking at CPU, RAM and GPU') : secs < 12 ? t('Timing the relays') : secs < 22 ? t('Measuring upload speed') : t('Working out the score'));
+      const w = el('div', 'fv25-live'); const bar = el('div', 'fv25-bar'); bar.append(el('div', 'fv25-bar-fill')); w.append(bar);
+      const line = el('div', 'fv25-live-line'); line.append(el('span', 'fv25-live-stage', stage), el('span', 'fv25-live-secs', t('{s} s', { s: secs }))); w.append(line);
+      w.append(el('p', 'small', t('Rating this PC. Leave the launcher open; it takes about 20 seconds.'))); box.append(w);
+      if (!liveTimer25) liveTimer25 = setInterval(() => { if (S && S.check && S.check.running) render(); else { clearInterval(liveTimer25); liveTimer25 = null; render(); } }, 1000);
+    }
+    if (ck && !ck.running && !ck.failed && !kept) {
+      const W = ck.weights || { upload: 35, connection: 25, cpu: 20, stability: 20 };
+      const rows = [[t('Upload'), `${ck.upload} Mbps`, `${ck.parts.upload} / ${W.upload}`], [t('Connection'), ck.bestRelay ? `${ck.bestRelay.host} ${ck.bestRelay.avg} ms, jitter ${ck.bestRelay.jitter} ms` : t('no relay replies'), `${ck.parts.connection} / ${W.connection}`],
+        [t('CPU'), `${ck.cpu} (${ck.threads} threads)`, `${ck.parts.cpu} / ${W.cpu}`], [t('Stability'), t('assumed clean'), `${ck.parts.stability} / ${W.stability}`],
+        [t('RAM'), `${ck.ramGB} GB`, t('{n} hunt(s) at once', { n: ck.maxHunts })], [t('Score'), '', `${ck.score} / 100`]];
+      for (const [k, v, p] of rows) { const r = el('div', 'fv-row'); r.append(el('span', 'fv-k', k), el('span', 'fv-v', v), el('span', 'fv-p', p)); box.append(r); }
+      const row = el('div', 'hm-inline'); const b = el('button', 'primary-sm', t('Use this rating')); b.onclick = async () => { const r = await L.foreverSendScore(); if (!r.ok) note(r.error, true); else { setSkipped(false); open25.s2 = false; note(t('Rating kept on this PC. It goes with every beat to the director.')); render(); } };
+      row.append(b, el('span', 'small', t('These numbers stay on this PC until you keep them.'))); box.append(row);
+    } else if (ck && ck.failed) box.append(el('p', 'small', t('The check did not finish. Try again.')));
+    // step 3: play
+    const canPlay = !S.missing && (!S.stale || S.unlocked) && !on && rated && !!(chosen === 'ANY' ? fullest : live.find((x) => x.region === chosen));   // an update blocks Play (Addison), except on a dev PC with forever-unlock.txt
+    $('fv25-play').disabled = !canPlay; $('fv25-play').hidden = on; $('fv25-stop').hidden = !on;
+    const hp = $('fv25-hero-pill'); if (hp) { const [ht, hc] = on ? [S.phase === 'playing' ? t('Playing') : t('Starting'), 'ready'] : S.missing ? [t('Set up Forever'), 'attn'] : (S.stale && !S.unlocked) ? [t('Update Forever'), 'attn'] : !rated ? [t('Rate this PC first'), 'attn'] : canPlay ? [t('Ready to play'), 'ready'] : [t('Town is down'), 'attn']; hp.textContent = ht; hp.className = 'pill ' + hc; }
+    const [label, cls] = PHASE25[S.phase] || PHASE25.off;
+    $('fv25-state').textContent = t(label) + (S.phase === 'playing' && S.town ? ` (${REGION_NAMES[S.town.region] || S.town.region})` : '');
+    $('fv25-dot').className = 'hm-dot ' + cls;
+    let sub = '';
+    if (!on) sub = S.missing ? t('Set up Forever first (top of the page).') : (S.stale && !S.unlocked) ? t('Update Forever first (top of the page).') : !rated ? t('Rate this PC first.') : !canPlay ? t('The town you picked is not up right now. Pick another region, or Any.') : t('Ready. Your character is on the server; press Play.');
+    else if (S.phase === 'playing') {
+      const h = S.hunts25; const parts = [];
+      if (S.town && S.town.ping != null) parts.push(t('{ms} ms', { ms: S.town.ping }));
+      if (h) parts.push(h.up ? t('hosting {n} hunt(s)', { n: h.up }) : t('hosts the hunts you open (up to {n})', { n: h.max }));
+      if (S.clientDll) parts.push(t('follows key moves'));
+      if (S.error) parts.push(S.error);
+      sub = parts.join('  |  ');
+    } else sub = S.why || '';
+    $('fv25-sub').textContent = sub;
+    $('fv-error').textContent = S.error && !on ? S.error : ''; $('fv-error').hidden = !(S.error && !on);
+    // the key leaderboard
+    const lb = S.board25, lbox = $('fv25-lb'); if (lbox) {
+      lbox.innerHTML = '';
+      if (lb && lb.rows && lb.rows.length) {
+        const tbl = el('table', 'fv-lb-table'); const hr = el('tr');
+        for (const hh of ['#', t('Player'), t('Keys'), t('Minutes'), t('Took'), t('Gave'), t('Backed')]) hr.append(el('th', '', hh));
+        tbl.append(hr);
+        lb.rows.forEach((r, i) => { const tr = el('tr'); for (const v of [String(i + 1), r.name || '?', String(r.held), String(r.minutes), String(r.took), String(r.gave), String(r.backed)]) tr.append(el('td', '', v)); tbl.append(tr); });
+        lbox.append(tbl);
+        $('fv25-lb-sub').textContent = t('season {n}', { n: lb.season });
+      } else { lbox.append(el('p', 'small', t('Nobody has held a key yet this season. Open a hunt and be the first.'))); $('fv25-lb-sub').textContent = ''; }
+    }
+    $('fv-log').textContent = (S.log || []).join('\n');
+  }
+  async function refresh25() { try { const r = await L.foreverTowns(); if (r && r.towns) { S.towns = r.towns; S.region = r.region || S.region; } } catch {} try { const b = await L.foreverBoard25(); if (b && b.ok) S.board25 = b.board; } catch {} render(); }
+  function init25() {
+    $('fv25-play').onclick = async () => { $('fv25-play').disabled = true; const r = await L.foreverPlay('fresh'); if (!r.ok) note(r.error, true); };
+    $('fv25-stop').onclick = async () => { $('fv25-stop').disabled = true; await L.foreverStop(); $('fv25-stop').disabled = false; };
+    const rate = async () => { await L.foreverCheck(); };
+    $('fv25-check').onclick = rate; $('fv25-rerate').onclick = rate;
+    $('fv25-forget').onclick = async () => { const r = await L.foreverClearScore(); note(r.ok ? t('Rating forgotten. This PC is not handed other people\'s hunts until it is rated again.') : r.error, !r.ok); };
+    $('fv25-skip').onclick = () => { setSkipped(true); render(); };
+    $('fv25-more').onclick = (e) => { e.stopPropagation(); $('fv-more-menu').hidden = !$('fv-more-menu').hidden; };
+    $('fv25-s1-head').onclick = () => { open25.s1 = $('fv25-s1').classList.contains('slim'); try { localStorage.setItem('fv25-seen', '1'); } catch {} render(); };
+    const tab25 = (which) => { $('fv25-tab-how').classList.toggle('on', which === 'how'); $('fv25-tab-lb').classList.toggle('on', which === 'lb'); $('fv25-pane-how').hidden = which !== 'how'; $('fv25-pane-lb').hidden = which !== 'lb'; try { localStorage.setItem('fv25-tab', which); } catch {} };
+    $('fv25-tab-how').onclick = () => tab25('how'); $('fv25-tab-lb').onclick = () => tab25('lb');
+    try { if (localStorage.getItem('fv25-tab') === 'lb') tab25('lb'); } catch {}
+    $('fv25-s2-head').onclick = () => { if (!$('fv25-s2').classList.contains('slim')) { if (S && S.score && S.score.score) open25.s2 = false; } else open25.s2 = true; render(); };
+  }
+  async function refreshBoard() { if (S && S.is25) return refresh25(); try { await L.foreverBoard(); } catch {} try { await L.foreverCards(); } catch {} try { await L.foreverLeaderboard(); } catch {} }
   async function sendScore() { const r = await L.foreverSendScore(); note(r.ok ? t('Sent. This PC can host worlds now.') : r.error, !r.ok); if (r.ok) setSkipped(false); refreshBoard(); }
   function init() {
     $('fv-stop').onclick = async () => {
@@ -190,7 +322,8 @@
     $('fv-clear').onclick = async () => { const r = await L.foreverClearScore(); note(r.ok ? t('Taken back. This PC will not host.') : r.error, !r.ok); refreshBoard(); };
     // DF-FV-MORE: the Play page's More menu, here. 1.14.7 items run the Play page's own action for 1.14.7.
     $('fv-more').onclick = (e) => { e.stopPropagation(); $('fv-more-menu').hidden = !$('fv-more-menu').hidden; };
-    document.addEventListener('click', (e) => { if (!e.target.closest('#fv-more-menu') && !e.target.closest('#fv-more')) $('fv-more-menu').hidden = true; });
+    document.addEventListener('click', (e) => { if (!e.target.closest('#fv-more-menu') && !e.target.closest('#fv-more') && !e.target.closest('#fv25-more')) $('fv-more-menu').hidden = true; });
+    init25();   // DF25
     $('fv-more-menu').onclick = async (e) => {
       const b = e.target.closest('button'); if (!b) return;
       $('fv-more-menu').hidden = true;

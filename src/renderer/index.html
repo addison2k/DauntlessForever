@@ -157,13 +157,73 @@
     <p id="fv-missing-text"></p>
     <div class="hm-inline"><button class="primary-sm" id="fv-setup">Set up Forever</button></div>
   </div>
-  <div class="card" id="fv-steps" hidden>
+  <!-- DF25: Forever 2.5 - region, rating, play. Shown when network.json names a 2.5 director; the v2 blocks (.fv-v2) hide. -->
+  <div id="fv25" hidden>
+    <div class="hero has-art fv25-hero" id="fv25-hero">
+      <div id="fv25-drop"></div>
+      <div class="fv25-brand">Dauntless</div>
+      <div class="fv25-title-row"><h1 class="fv25-ver">Forever</h1><span class="fv25-beta">Beta</span></div>
+      <p class="fv25-era">A shared world. Your Slayer saved online.</p>
+      <p class="fv25-tag">A town that stays open. Hunts powered by players.</p>
+      <div class="hero-pill-row"><span class="pill ready" id="fv25-hero-pill">Ready to play</span></div>
+      <button class="ghost fv25-more" id="fv25-more" type="button">More</button>
+      <div id="fv25-more-wrap"></div>
+    </div>
+    <div class="fv25-cards">
+      <div class="fv25-step" id="fv25-s1">
+        <button class="fv25-head" id="fv25-s1-head" type="button">
+          <span class="fv25-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 21s-6.5-6.2-6.5-11.2A6.5 6.5 0 0 1 18.5 9.8C18.5 14.8 12 21 12 21z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="9.8" r="2.4" fill="none" stroke="currentColor" stroke-width="1.8"/></svg></span>
+          <span class="fv25-head-text"><span class="fv25-label">Region</span><span class="fv25-answer" id="fv25-s1-sub"></span><span class="fv25-hint" id="fv25-s1-hint">Where your Ramsgate runs.</span></span>
+          <span class="fv25-change" id="fv25-s1-change">Change</span>
+        </button>
+        <div class="fv25-body" id="fv25-s1-body">
+          <p class="small">Each region has its own Ramsgate. Hunts run on players' PCs wherever they are. Pick the one closest to you, or Any for the busiest town right now.</p>
+          <div class="fv25-regions" id="fv25-regions"></div>
+        </div>
+      </div>
+      <div class="fv25-step" id="fv25-s2">
+        <button class="fv25-head" id="fv25-s2-head" type="button">
+          <span class="fv25-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22"><rect x="3" y="4.5" width="18" height="12" rx="1.8" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M9 20h6M12 16.5V20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+          <span class="fv25-head-text"><span class="fv25-label">PC rating</span><span class="fv25-answer" id="fv25-s2-sub"></span><span class="fv25-hint">Helps choose who hosts hunts.</span></span>
+          <span class="fv25-change" id="fv25-s2-change">Change</span>
+        </button>
+        <div class="fv25-body" id="fv25-s2-body">
+          <p class="small" id="fv25-s2-text">About 20 seconds: upload, connection, CPU and stability. You see every number first. The score decides whether this PC is handed other people's hunts; the hunts you open run on it either way.</p>
+          <div class="hm-inline"><button class="primary-sm" id="fv25-check">Rate this PC</button><button class="ghost hm-small" id="fv25-rerate" hidden>Rate again</button><button class="ghost hm-small" id="fv25-forget" hidden>Forget the rating</button><button class="ghost hm-small" id="fv25-skip">Play without a rating</button></div>
+          <div id="fv25-check-result" class="fv-check"></div>
+        </div>
+      </div>
+    </div>
+    <div class="fv25-play-wrap">
+      <button class="primary fv25-play" id="fv25-play">Play Forever</button>
+      <button class="ghost fv25-stop" id="fv25-stop" hidden>Stop Forever</button>
+    </div>
+    <div class="fv25-status-row">
+      <div class="hm-status"><span class="hm-dot" id="fv25-dot" aria-hidden="true"></span><div class="hm-status-text"><div class="hm-state" id="fv25-state">Not playing</div><div class="hm-sub" id="fv25-sub"></div></div></div>
+    </div>
+    <div class="fv25-tabs">
+      <button class="fv25-tab on" id="fv25-tab-how" type="button">How Forever works</button>
+      <button class="fv25-tab" id="fv25-tab-lb" type="button">Key leaderboard <span class="small" id="fv25-lb-sub"></span></button>
+    </div>
+    <div class="fv25-pane" id="fv25-pane-how">
+      <div class="fv25-how3">
+        <div class="fv25-how-item"><span class="fv25-ico big" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><circle cx="12" cy="8.5" r="3.6" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><div><div class="fv25-how-t">Your Slayer</div><div class="fv25-how-d">Saved online. Continue from any PC, and nothing on this PC can roll it back.</div></div></div>
+        <div class="fv25-how-item"><span class="fv25-ico big" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M4 11.5 12 5l8 6.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 10.5V19h11v-8.5M10 19v-5h4v5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></span><div><div class="fv25-how-t">Your town</div><div class="fv25-how-d">Ramsgate stays open in your region, around the clock.</div></div></div>
+        <div class="fv25-how-item"><span class="fv25-ico big" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26"><path d="M4 4l11 11M20 4 9 15M4 20l4-4M20 20l-4-4M6 18l2 2M18 18l-2 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></span><div><div class="fv25-how-t">Your hunts</div><div class="fv25-how-d">Hosted by players. If the PC running a hunt is the weakest in it by a wide margin, the hunt moves to a better one: a short loading screen, same spot, same behemoth.</div></div></div>
+      </div>
+    </div>
+    <div class="fv25-pane" id="fv25-pane-lb" hidden>
+      <p class="small">Whoever opens a hunt holds its key: the hunt runs on their PC. A key moves to a better PC in the hunt when it has to. This is who carried them.</p>
+      <div class="fv-lb" id="fv25-lb"></div>
+    </div>
+  </div>
+  <div class="card fv-v2" id="fv-steps" hidden>
     <div class="card-head"><h2>Help make Forever better</h2><span class="pill">Step 1 of 1</span></div>
     <p>Forever runs on players' PCs. A 20-second check tells the director whether this PC could host hunts for others. You see the numbers first; nothing is sent until you press Send. Play works either way.</p>
     <div class="hm-inline"><button class="primary-sm" id="fv-step-check">Run the host check</button><button class="ghost hm-small" id="fv-step-skip">Skip</button></div>
     <div id="fv-step-result" class="fv-check"></div>
   </div>
-  <div class="hm-top">
+  <div class="hm-top fv-v2">
     <div class="hm-status">
       <span class="hm-dot" id="fv-dot" aria-hidden="true"></span>
       <div class="hm-status-text"><div class="hm-state" id="fv-state">Not playing</div><div class="hm-sub" id="fv-sub"></div></div>
@@ -172,15 +232,15 @@
       <button class="ghost" id="fv-stop" hidden>Stop</button>
     </div>
   </div>
-  <div class="fv-checklist" id="fv-checklist"></div>
-  <div class="fv-cards" id="fv-cards">
+  <div class="fv-checklist fv-v2" id="fv-checklist"></div>
+  <div class="fv-cards fv-v2" id="fv-cards">
     <div class="fv-card" id="fv-card-fresh"></div>
     <div class="fv-card" id="fv-card-any"></div>
   </div>
-  <div class="hm-inline" id="fv-needhost" hidden><button class="primary-sm" id="fv-needhost-check">Run the check and host</button><button class="ghost hm-small" id="fv-needhost-wait">Wait for a world</button></div>
+  <div class="hm-inline fv-v2" id="fv-needhost" hidden><button class="primary-sm" id="fv-needhost-check">Run the check and host</button><button class="ghost hm-small" id="fv-needhost-wait">Wait for a world</button></div>
   <p class="action-note" id="fv-note" aria-live="polite"></p>
   <p class="action-note err" id="fv-error" hidden></p>
-  <div class="hm-cols">
+  <div class="hm-cols fv-v2">
     <div class="hm-col">
       <h2 class="list-head">Open worlds <span class="small" id="fv-season"></span></h2>
       <div class="season-list hm-list" id="fv-board"></div>
@@ -207,7 +267,7 @@
 
     </div>
   </div>
-  <div class="hm-col" id="fv-lb-wrap">
+  <div class="hm-col fv-v2" id="fv-lb-wrap">
     <h2 class="list-head">Hosts leaderboard <span class="small" id="fv-lb-sub"></span></h2>
     <p class="small">Every host who ran a world: time hosted, players helped, player-minutes on their PC, hunts run, takeovers caught.</p>
     <div class="fv-lb" id="fv-lb"></div>

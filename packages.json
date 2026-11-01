@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.3.30",
+                     "version":  "0.4.0",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "AppData fix button now also shows for Windows user names with accents (for example Czech or Polish names).",
-                     "date":  "2026-10-31",
+                     "notes":  "Forever 2.5: one shared world with Ramsgate in your region (NA, EU, AUS) and hunts hosted by players. Your Slayer from Forever is already there. New Forever tab: pick a region, rate your PC once, Play Forever.",
+                     "date":  "2026-11-01",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.3.30.asar",
-                                 "sha256":  "d6f783f361d5a2d1c83be3d5b71150ce56797cc58771281b3eefc7a7fcfa767b",
-                                 "size":  9426684,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.0.asar",
+                                 "sha256":  "2faaaded14c3107821e3d78a69a26056c18c65085c1b159f57ba62ac061c551b",
+                                 "size":  9726203,
                                  "minShell":  "0.2.4"
                              }
                  }
