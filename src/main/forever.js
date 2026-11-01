@@ -1097,6 +1097,37 @@ function ownKey25() {
   try { const m = /^\s*EpicAccountId\s*=\s*([0-9a-fA-F]{32})\s*$/m.exec(fs.readFileSync(path.join(dir(), 'eos_lan', 'eos_offline.ini'), 'utf8')); if (m) return crypto.createHash('sha256').update('epic:' + m[1].toLowerCase()).digest('hex').slice(0, 32); } catch {}
   return null;
 }
+// DF25-KEEPID (Nov 1, Tweety and Nordicsturm): the player's key is sha256 of the id in versions\forever\eos_lan\eos_offline.ini,
+// a file the join script makes once, at random, when it is missing. A reinstall of 1.14.7 or a deleted Forever folder
+// loses it, the PC signs in under a new key and the box makes a blank character while the real one sits under the old
+// key. The launcher keeps a copy of the id in its own settings folder (Roaming: survives reinstalls and folder deletes)
+// and puts it back into the ini before every Play and after every set-up. The id is only ever copied, never remade.
+const KEEPID25 = () => { try { return path.join(require('electron').app.getPath('userData'), 'player-id.json'); } catch { return path.join(P.dataRoot(), 'player-id.json'); } };
+const LANINI25 = () => path.join(dir(), 'eos_lan', 'eos_offline.ini');
+function keepId25(why) {
+  try {
+    const ini = LANINI25();
+    let cur = null, text = '';
+    try { text = fs.readFileSync(ini, 'utf8'); const m = /^\s*EpicAccountId\s*=\s*([0-9a-fA-F]{32})\s*$/m.exec(text); if (m) cur = m[1].toLowerCase(); } catch {}
+    if (cur === DEFAULT_EPIC_ID) cur = null;   // everyone's shared id is not this player's
+    let kept = null;
+    try { const j = JSON.parse(fs.readFileSync(KEEPID25(), 'utf8')); if (j && /^[0-9a-f]{32}$/.test(String(j.id || '')) && j.id !== DEFAULT_EPIC_ID) kept = j.id; } catch {}
+    if (!kept && cur) {   // first time on this launcher: keep what the PC already plays as
+      P.ensureDir(path.dirname(KEEPID25())); fs.writeFileSync(KEEPID25(), JSON.stringify({ id: cur, keptAt: new Date().toISOString(), from: why || '' }));
+      log('DF25-KEEPID: kept this PC\'s player id (' + cur.slice(0, 8) + ') ' + (why || ''));
+      return cur;
+    }
+    if (kept && kept !== cur) {   // the ini is missing or carries a new id: put the kept one back so the character stays the same
+      const lines = text ? text.split(/\r?\n/).filter((l) => !/^\s*EpicAccountId\s*=/.test(l)) : ['; eos_offline settings for LAN games.'];
+      while (lines.length && lines[lines.length - 1] === '') lines.pop();
+      lines.push('EpicAccountId=' + kept);
+      P.ensureDir(path.dirname(ini)); fs.writeFileSync(ini, lines.join('\r\n') + '\r\n');
+      log('DF25-KEEPID: put this PC\'s kept player id back (' + kept.slice(0, 8) + (cur ? ', the ini had ' + cur.slice(0, 8) : ', the ini was missing') + ') ' + (why || ''));
+      return kept;
+    }
+    return kept || cur;
+  } catch (e) { log('DF25-KEEPID: ' + e.message, true); return null; }
+}
 const REGION25 = () => path.join(P.dataRoot(), 'forever-region.txt');
 function director25() {
   // a local override for testing against another box, as forever-director.txt does for v2
@@ -1202,6 +1233,7 @@ async function play25() {
   // backend or server left from v2 on this PC is never cleared by the join and sits on port 63000, and the join proxy
   // cannot answer ("the host at 127.0.0.1 does not answer"). Clear everything of Forever's before every Play instead.
   try { await killLeftovers(); } catch {}
+  keepId25('before Play');
   try {
     await fetchTowns25();
     const key = ownKey25();
@@ -1255,12 +1287,14 @@ async function refreshKey25(why) {
   } catch (e) { log('could not refresh the Forever key: ' + e.message, true); return false; }
 }
 const is403 = (e) => /\b403\b/.test(String(e && e.message || e));
+let keptOnce25 = false;   // DF25-KEEPID
 function beatLoop25() {
   clearTimeout(timer); gameMisses = 0; gameCheckN = 0; gameSeen = false; cpuPrev25 = null; beat25Warned = false; lastBeat25 = null;
   const takeFile = path.join(dataDir(), 'remote_hunts_take.json');
   const tick = async () => {
     if (S.phase !== 'playing' || !S.is25) return;
     try {
+      if (!keptOnce25) { keptOnce25 = !!keepId25('while playing'); }   // DF25-KEEPID: a PC whose ini the join script has only just made
       const key = ownKey25();
       const inWorld = exists(path.join(dataDir(), 'join-proxy.json'));   // the game reached the world (the hunt helper needs this)
       const sc = readScore25();
@@ -1489,6 +1523,7 @@ async function setup(progress) {
   catch (e) { log('could not fetch the Forever key (the server may be older than this launcher): ' + e.message, true); }
   try { fs.rmSync(tmp, { recursive: true, force: true }); } catch {}
   say('done');
+  if (is25()) keepId25('after set-up');
   setupState = null;
   log('Forever is set up on this PC (from 1.14.7 ' + (v.forever.builtFrom || '') + ')');
   return true;

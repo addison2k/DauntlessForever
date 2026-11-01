@@ -199,7 +199,7 @@
       b.append(name);
       if (ping != null) b.append(el('div', 'fv25-region-ping ' + pingCls(ping), t('{ms} ms to you', { ms: ping })));
       b.append(el('div', 'fv25-region-sub', subText));
-      if (up && players != null) b.append(el('div', 'fv25-region-sub', t('{n} in Ramsgate', { n: players })));
+      if (up && players > 0) b.append(el('div', 'fv25-region-sub', t('{n} in Ramsgate', { n: players })));   // a zero reads like a dead town; say nothing instead
       b.disabled = on;
       b.title = on ? t('The region applies to your next Play') : '';
       b.onclick = async () => { const r = await L.foreverSetRegion(code); if (!r.ok) note(r.error, true); else { S.region = r.region; try { localStorage.setItem('fv25-seen', '1'); } catch {} open25.s1 = false; render(); } };

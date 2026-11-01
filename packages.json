@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.4.3",
+                     "version":  "0.4.4",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "Forever 2.5: before Play, the launcher checks that every Forever file it needs is on this PC and names the missing one, with a Set up Forever again button. Fixes Ready to play showing over a half-made install.",
+                     "notes":  "Your Forever character stays yours after a reinstall: the launcher keeps a copy of your player id in its own settings and puts it back before every Play and after every Set up Forever, so a reinstall of 1.14.7 or a deleted Forever folder no longer gives you a blank character. The region line no longer shows 0 in Ramsgate for an empty town.",
                      "date":  "2026-11-01",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.3.asar",
-                                 "sha256":  "6b6672d2a29df200d300c77a6d015f108e370edd3ab59818505028ca67fbdf81",
-                                 "size":  9729037,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.4.asar",
+                                 "sha256":  "1546948c774e13bb140fe65b7ef594f3fad66dcfb433933891777ba22a1f2267",
+                                 "size":  9730201,
                                  "minShell":  "0.2.4"
                              }
                  }
