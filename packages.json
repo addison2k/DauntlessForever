@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.4.0",
+                     "version":  "0.4.1",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "Forever 2.5: one shared world with Ramsgate in your region (NA, EU, AUS) and hunts hosted by players. Your Slayer from Forever is already there. New Forever tab: pick a region, rate your PC once, Play Forever.",
+                     "notes":  "Forever 2.5: Play now closes anything Forever left running on your PC first, which fixes the stop at the host at 127.0.0.1 does not answer. Smaller banner, More menu opens downward.",
                      "date":  "2026-11-01",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.0.asar",
-                                 "sha256":  "2faaaded14c3107821e3d78a69a26056c18c65085c1b159f57ba62ac061c551b",
-                                 "size":  9726203,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.1.asar",
+                                 "sha256":  "a54214c05129493f5453e4bbf669cd9b7e60f319e981ddff9d155d3ec4e3a647",
+                                 "size":  9726721,
                                  "minShell":  "0.2.4"
                              }
                  }
