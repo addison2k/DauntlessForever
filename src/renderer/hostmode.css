@@ -101,7 +101,8 @@
 /* ---- DF25: the Forever 2.5 tab (region, rating, play) ---- */
 /* DF25 Forever 2.5 page: hero, two cards, play, tabs (Addison's layout, Nov 1) */
 #page-forever.is25 { padding-top: 12px; }
-.fv25-hero { min-height: 430px; padding: 40px 40px 28px; margin-bottom: 18px; border-radius: 14px; background-image: url("forever-hero.jpg"); }
+.fv25-hero { min-height: 340px; padding: 26px 40px 24px; margin-bottom: 16px; border-radius: 14px; background-image: url("forever-hero.jpg"); justify-content: flex-start; overflow: visible; z-index: 5; }
+.fv25-hero::before { border-radius: 14px; }
 .fv25-hero::before { background: linear-gradient(90deg, rgba(8,12,16,0.92) 0%, rgba(8,12,16,0.78) 30%, rgba(8,12,16,0.35) 58%, rgba(8,12,16,0.05) 82%), linear-gradient(0deg, rgba(8,12,16,0.85) 0%, rgba(8,12,16,0) 55%); }
 .fv25-hero .hero-kicker { font-size: 13px; letter-spacing: .34em; color: var(--ink-2); }
 .fv25-brand { font-family: var(--display); font-size: 22px; font-weight: 600; letter-spacing: .3em; text-transform: uppercase; color: var(--ink); margin-top: 0; text-shadow: 0 1px 8px rgba(0,0,0,.6); }
@@ -167,7 +168,7 @@
 .fv25-status-row .hm-state { font-size: 16px; color: var(--aether); }
 .fv25-hero > .fv25-more { position: absolute; right: 24px; bottom: 24px; z-index: 3; font-family: var(--display); font-size: 17px; font-weight: 600; padding: 11px 26px; border-radius: 8px; color: var(--ink); background: rgba(11,16,21,.85); border-color: var(--ink-3); }
 .fv25-hero > .fv25-more:hover { background: rgba(11,16,21,.97); border-color: var(--ink-2); }
-.fv25-hero > #fv25-more-wrap { position: absolute; right: 24px; bottom: 76px; z-index: 5; }
+.fv25-hero > #fv25-more-wrap { position: absolute; right: 24px; top: calc(100% - 18px); z-index: 50; }
 .fv25-hero > #fv25-more-wrap .menu { margin-top: 0; background: rgba(11,16,21,.97); box-shadow: 0 10px 30px rgba(0,0,0,.5); }
 /* tabs */
 .fv25-tabs { display: flex; gap: 6px; margin-top: 8px; border-bottom: 1px solid var(--line); }

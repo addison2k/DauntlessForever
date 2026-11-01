@@ -1181,6 +1181,10 @@ async function play25() {
   if (!readScore25()) throw new Error('Rate this PC first. Every player needs a score: without one you cannot join or open a hunt.');   // Addison, Oct 31: everyone rates
   S.helper = false; S.helperOnly = false; S.autoPlay = false; S.wantWorld = null; S.mode = 'fresh'; S.error = ''; S.phase = 'asking'; S.role = null; S.world = null; S.is25 = true; S.town = null; push();
   writeForeverMods();
+  // DF25-LEFTOVERS (Nov 1, Nie): the 2.5 join keeps this PC's own servers alive (that is how its hunts survive), so a
+  // backend or server left from v2 on this PC is never cleared by the join and sits on port 63000, and the join proxy
+  // cannot answer ("the host at 127.0.0.1 does not answer"). Clear everything of Forever's before every Play instead.
+  try { await killLeftovers(); } catch {}
   try {
     await fetchTowns25();
     const key = ownKey25();
