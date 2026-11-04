@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-10-30",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-10-30.zip",
-                         "sha256":  "0eb74b7bc59ee58cf5282da10c7d7d28c147690fb2cea280c1cab7be41154fe1",
-                         "date":  "2026-10-30",
-                         "note":  "new-player start fixed: players who made their first character on 10-29 looped at the title screen"
+                         "packageVersion":  "2026-11-03",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-03.zip",
+                         "sha256":  "a8751e77f67867afe17a638e2be7bf93985d77807db76b7b7ec349c92687be69",
+                         "date":  "2026-11-03",
+                         "note":  "Effects no longer freeze or stay on screen (Reaper\u0027s Dance, ground stomps)"
                      }
                  ],
     "launcher":  {
