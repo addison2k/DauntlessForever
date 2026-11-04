@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.4.4",
+                     "version":  "0.4.5",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "Your Forever character stays yours after a reinstall: the launcher keeps a copy of your player id in its own settings and puts it back before every Play and after every Set up Forever, so a reinstall of 1.14.7 or a deleted Forever folder no longer gives you a blank character. The region line no longer shows 0 in Ramsgate for an empty town.",
-                     "date":  "2026-11-01",
+                     "notes":  "Forever: your character stays on the server after setting Forever up again, and your PC hosts its hunts again on the first join",
+                     "date":  "2026-11-03",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.4.asar",
-                                 "sha256":  "1546948c774e13bb140fe65b7ef594f3fad66dcfb433933891777ba22a1f2267",
-                                 "size":  9730201,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.5.asar",
+                                 "sha256":  "e3d85dcf7742d8a554a8748517f69c73bfe37f9044e0ec99facbd94d213bb084",
+                                 "size":  9878000,
                                  "minShell":  "0.2.4"
                              }
                  }

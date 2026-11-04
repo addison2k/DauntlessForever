@@ -517,6 +517,13 @@ async function play(mode, worldHost) {
 }
 // DF-VPS: the backend address of the world the director put us in (a reply or the current world); '' = on a PC
 function vpsBackendOf(r) { const w = (r && r.world) || S.world; return w && typeof w.backend === 'string' && /^\d{1,3}(\.\d{1,3}){3}:\d{2,5}$/.test(w.backend) ? w.backend : ''; }
+// DF25-NOTRAVEL (Nov 3): the address this PC's hunt servers sync to. In 2.5 that is the town, always: an empty
+// field here made the helper fall back to the joiner path, which the gateway refuses (403, report 500).
+function syncTarget() {
+  const t = vpsBackendOf(); if (t) return t;
+  if (is25()) { const j = (S.town && S.town.join) || ''; return /^\d{1,3}(\.\d{1,3}){3}:\d{2,5}$/.test(j) ? j : ''; }
+  return '';
+}
 async function ask() {
   const region = (() => { try { return (ctx.social.relayPing() || {}).id || ''; } catch { return ''; } })();
   // data folder \ forever-newworld.txt: start a world of my own instead of joining one (merge testing; a streamer's own world later)
@@ -550,7 +557,7 @@ async function startJoin(world) {
   placeRecord('join');
   const script = path.join(toolsDir(), 'lan-join-1147.ps1');
   if (vpsBackend) killStaleJoinProxy();   // DF-VPS-KEEPOWN: the join below keeps this PC's servers, so only an old join helper is cleared
-  ctx.runner.runVisible(FV + ':join', 'join', script, ['-Code', `'${world.code.replace(/'/g, "''")}'`], 'Dauntless Forever - in a world (keep open)', { closeWhenDone: true, env: Object.assign(ENV(), vpsBackend ? { DF_NO_TRAVEL: '1', DF_KEEP_OWN: '1' } : {}), cwd: dir() })   // DF-VPS: the VPS owns the character   /* DF-VPS-KEEPOWN (Oct 28): opening the game never closes the hunt servers or the town this PC runs for others */
+  ctx.runner.runVisible(FV + ':join', 'join', script, ['-Code', `'${world.code.replace(/'/g, "''")}'`], 'Dauntless Forever - in a world (keep open)', { closeWhenDone: true, env: Object.assign(ENV(), vpsBackend ? { DF_KEEP_OWN: '1' } : {}, (is25() || vpsBackend) ? { DF_NO_TRAVEL: '1' } : {}), cwd: dir() })   // DF-VPS: the VPS owns the character   /* DF-VPS-KEEPOWN (Oct 28): opening the game never closes the hunt servers or the town this PC runs for others */
     .then(() => {
       if (S.helper && S.phase === 'hosting') { S.ownGame = false; log('your game closed; Ramsgate keeps running on this PC for everyone (Play Forever to go back in)'); push(); return; }   /* DF-TOWN-KEEP (Addison, Oct 28): this PC took the town over: the game closing does not end the town */
       if (S.phase !== 'off') stop('the game closed');
@@ -731,7 +738,7 @@ function startAwayJoin(world) {
   try { fs.unlinkSync(path.join(dataDir(), 'join-failover.txt')); } catch {}
   S.away = { host: world.host, hostName: world.hostName || '', code: world.code }; S.ownGame = true; push();
   log(`opening your game in ${world.hostName}'s world (your own world keeps running here)`);
-  ctx.runner.runVisible(FV + ':ownjoin', 'join', path.join(toolsDir(), 'lan-join-1147.ps1'), ['-Code', `'${String(world.code).replace(/'/g, "''")}'`], 'Dauntless Forever - your game (keep open)', { closeWhenDone: true, env: Object.assign(ENV(), { DF_KEEP_OWN: '1' }, vpsBackendOf() ? { DF_NO_TRAVEL: '1' } : {}), cwd: dir() })   // DF-VPS: the VPS owns the character
+  ctx.runner.runVisible(FV + ':ownjoin', 'join', path.join(toolsDir(), 'lan-join-1147.ps1'), ['-Code', `'${String(world.code).replace(/'/g, "''")}'`], 'Dauntless Forever - your game (keep open)', { closeWhenDone: true, env: Object.assign(ENV(), { DF_KEEP_OWN: '1' }, (is25() || vpsBackendOf()) ? { DF_NO_TRAVEL: '1' } : {}), cwd: dir() })   // DF-VPS: the VPS owns the character   /* DF25-NOTRAVEL: in 2.5 the character always lives on the box, by definition of the mode */
     .then(() => { S.ownGame = false; S.away = null; clearTimeout(awayTimer); api('POST', '/v1/forever/leaveWorld', {}).catch(() => {}); if (S.helper && S.phase === 'hosting') log('your game closed; your world keeps running (Play Forever to go back in)'); push(); });
   ctx.runner.runHidden(FV + ':clientattach', 'attach', coreTool('clientAttach'), ['-Dll', coreBin('client')], (line) => {
     if (/^DFSTATUS ready/.test(line)) { S.clientDll = true; log('your game is ready to follow a host change'); }
@@ -772,7 +779,7 @@ function playInOwnWorld() {
   ctx.runner.runHidden(FV + ':clientattach', 'attach', coreTool('clientAttach'), ['-Dll', coreBin('client')], (line) => {
     if (/^DFSTATUS ready/.test(line)) { S.clientDll = true; log('your game is ready to follow a host change'); }
   }, { env: ENV(), cwd: dir() });
-  ctx.runner.runVisible(FV + ':ownjoin', 'join', path.join(toolsDir(), 'lan-join-1147.ps1'), ['-Code', `'${code.replace(/'/g, "''")}'`], 'Dauntless Forever - your game in your world (keep open)', { closeWhenDone: true, env: Object.assign(ENV(), { DF_KEEP_OWN: '1' }, vpsBackend ? { DF_NO_TRAVEL: '1' } : {}), cwd: dir() })   // DF-VPS: keep this PC's own server copies (the town), no travel
+  ctx.runner.runVisible(FV + ':ownjoin', 'join', path.join(toolsDir(), 'lan-join-1147.ps1'), ['-Code', `'${code.replace(/'/g, "''")}'`], 'Dauntless Forever - your game in your world (keep open)', { closeWhenDone: true, env: Object.assign(ENV(), { DF_KEEP_OWN: '1' }, (is25() || vpsBackend) ? { DF_NO_TRAVEL: '1' } : {}), cwd: dir() })   // DF-VPS: keep this PC's own server copies (the town), no travel   /* DF25-NOTRAVEL */
     .then(() => { S.ownGame = false; try { fs.unlinkSync(path.join(dataDir(), 'migrate_successor.txt')); } catch {} if (S.helper && S.phase === 'hosting') log('your game closed; your world keeps running (Play Forever to go back in)'); else if (!S.helper && S.phase !== 'off') stop('the game closed'); push(); });
   return Promise.resolve();
 }
@@ -922,9 +929,11 @@ function beatLoop() {
 // servers' UDP ports, and tools\remote-hunts-1147.ps1 (offers to the world's backend, boots the hunts it is given with
 // server-1147.ps1 -HuntsOnly). The hunt servers use the world's backend through this PC's join proxy.
 let remote = null, remoteFailedAt = 0, lastTake = '';
+let noTargetWarned = false;   // DF25-NOTRAVEL: the 'no address yet' line is said once per session, not every beat
 let vpsBackend = '';   // DF-VPS: 'ip:port' when this world's characters live on the VPS backend (the director says so); '' = v1 (a PC's backend)
 async function startRemoteHunts(max, town, townNow) {   // DF-VPS-TOWNSTANDBY: town = this PC is a town standby (Ramsgate pre-started, quiet until told to go); townNow = run the town for real (cold takeover)
   if (remote || !fs.existsSync(path.join(toolsDir(), 'remote-hunts-1147.ps1'))) return;
+  if (is25() && !syncTarget()) { if (!noTargetWarned) { noTargetWarned = true; log('your PC will not host hunts yet: the launcher does not know this world\'s address. Close the launcher completely and open it again.', true); } return; }   // DF25-NOTRAVEL: refuse rather than sync the wrong way, and say so once
   const r = remote = { max, town: !!town, procs: [], wanted: 0, up: 0 };
   try {
     const node = await ctx.nodeFor(); if (!node) throw new Error('node.exe not found');
@@ -942,7 +951,7 @@ async function startRemoteHunts(max, town, townNow) {   // DF-VPS-TOWNSTANDBY: t
     if (!st) throw new Error('the relay did not answer in 20 s');
     r.relayIp = String(st.ip); r.relayBase = Number(st.base);
     log(`this PC hosts the hunts you open (relay ${r.relayIp}:${r.relayBase}, up to ${max} at once)${town ? ' and keeps Ramsgate pre-started as a town standby' : ''}`);
-    ctx.runner.runHidden(FV + ':remotehunts', 'remotehunts', path.join(toolsDir(), 'remote-hunts-1147.ps1'), ['-Key', ownKey(), '-Ip', r.relayIp, '-Base', String(r.relayBase), '-Max', String(max), '-Node', node].concat(privateOk() ? ['-Attach', coreTool('attach'), '-Dll', coreBin('server')] : []).concat(vpsBackendOf() ? ['-Target', vpsBackendOf()] : []).concat(town && vpsBackendOf() ? [townNow ? '-Town' : '-TownWarm'] : []) /* DF-VPS: in a VPS world the helper syncs through the signed proxy (the gateway refuses unsigned joiner requests) */, (line, isErr) => {
+    ctx.runner.runHidden(FV + ':remotehunts', 'remotehunts', path.join(toolsDir(), 'remote-hunts-1147.ps1'), ['-Key', ownKey(), '-Ip', r.relayIp, '-Base', String(r.relayBase), '-Max', String(max), '-Node', node].concat(privateOk() ? ['-Attach', coreTool('attach'), '-Dll', coreBin('server')] : []).concat(syncTarget() ? ['-Target', syncTarget()] : []).concat(town && syncTarget() ? [townNow ? '-Town' : '-TownWarm'] : []) /* DF-VPS: in a VPS world the helper syncs through the signed proxy (the gateway refuses unsigned joiner requests) */, (line, isErr) => {
       const m = /^DFSTATUS remote hunts (\d+) wanted (\d+) up/.exec(line);
       if (m) { r.wanted = Number(m[1]); r.up = Number(m[2]); if (r.up) log(`your PC runs ${r.up} hunt server(s) for this world`); push(); }
       else if (/^DFSTATUS remote (failed|sync failed)/.test(line) || isErr) log('own hunts: ' + line.replace(/^DFSTATUS remote /, '').slice(0, 200), true);
@@ -1247,7 +1256,8 @@ async function play25() {
       catch (e) { if (is403(e) && await refreshKey25('region refused')) { try { await sendRegion(); } catch (e2) { log('region: ' + e2.message, true); } } else log('region: ' + e.message, true); }
     }
     S.region = region25(); S.town = town;
-    S.world = { host: 'forever25', hostName: `${town.region} Ramsgate`, code: town.join, backend: '', region: town.region, players: town.players };
+    S.world = { host: 'forever25', hostName: `${town.region} Ramsgate`, code: town.join, backend: town.join, region: town.region, players: town.players };   // DF25-NOTRAVEL (Nov 3): the town IS the backend in 2.5; an empty field here left DF_NO_TRAVEL unset and the travel step uploaded the local save over the server character
+    if (!vpsBackendOf()) throw new Error('the launcher does not know this world yet. Close the launcher completely, open it again and press Play Forever.');   // DF25-NOTRAVEL: never join 2.5 without a backend address, the travel step would run
     await startJoin25(town);
   } catch (e) { S.phase = 'off'; S.is25 = false; S.town = null; push(); throw e; }
 }
@@ -1363,7 +1373,7 @@ async function stop(why) {
   await returnCharacter();
   clearSession(); clearInterval(resumeTimer);   // DF-V2-RESUME
   stopRemoteHunts();   // DF-V2-REMOTEHUNTS
-  vpsBackend = ''; S.vpsTown = null; S.vpsTownUp = false;   // DF-VPS
+  vpsBackend = ''; noTargetWarned = false; S.vpsTown = null; S.vpsTownUp = false;   // DF-VPS
   standby = null; S.role = null; S.world = null; S.hostClosing = null; S.phase = 'off'; S.why = ''; S.helper = false; S.helperOnly = false; S.autoPlay = false; S.ownGame = false; S.away = null; clearTimeout(awayTimer);
   S.is25 = false; S.town = null; S.clientDll = false; lastTake = '';   // DF25
   log('stopped' + (why ? ' (' + why + ')' : ''));
@@ -1526,6 +1536,14 @@ async function setup(progress) {
   if (is25()) keepId25('after set-up');
   setupState = null;
   log('Forever is set up on this PC (from 1.14.7 ' + (v.forever.builtFrom || '') + ')');
+  if (is25()) {   // DF25-NOTRAVEL (Nov 3): set-up left S.world empty, so the next Play ran the travel step and uploaded the local save over the server character. Put the world back here instead of asking players to restart.
+    try {
+      await fetchTowns25();
+      const t = pickTown25(region25()) || pickTown25('ANY');
+      if (t) { S.region = region25(); S.town = t; S.world = { host: 'forever25', hostName: `${t.region} Ramsgate`, code: t.join, backend: t.join, region: t.region, players: t.players }; push(); log('the world this PC plays on was refreshed after set-up (' + t.region + ')'); }
+      else log('set-up finished but no Forever town is up right now; press Play Forever again in a moment', true);
+    } catch (e) { log('could not refresh the world after set-up: ' + e.message, true); }
+  }
   return true;
 }
 // is the install older than what the server offers? (the packs' checksums differ)
