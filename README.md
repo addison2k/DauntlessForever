@@ -2,7 +2,7 @@
 
 <h1 align="center">Dauntless Forever</h1>
 
-<p align="center"><b>Play Dauntless again: solo or with friends, on the build you love.</b><br>
+<p align="center"><b>Play Dauntless again: solo, with friends, or in a shared world that never goes down.</b><br>
 No keys, no accounts to buy, no paid advantages. A free fan preservation project.</p>
 
 <p align="center">
@@ -19,15 +19,34 @@ offline or online with other people. No game files are shipped here; the game co
 
 | Build | Era | Status |
 |---|---|---|
-| **1.6.2** | Reforged (early 2021) | **Ready**: solo and online. The most complete. |
-| **1.14.7** | Last pre-Awakening build (April 2024) | **Experimental**: solo |
+| **1.6.2** | Reforged (early 2021) | **Ready**: solo, online and Host Mode. The most stable. |
+| **1.14.7** | Last pre-Awakening build (April 2024) | **Ready**: solo, online, Host Mode and **Forever Beta**. The most content. |
 | 1.12.0 | Late Reforged (October 2022) | Coming soon |
 | 2.1.1 | Awakening (December 2024) | Coming soon |
 
+### Forever Beta
+
+A shared, always-on Dauntless world on 1.14.7. Open the launcher, press Play, and you are in a Ramsgate with
+everyone else. No hosting, no waiting for a friend to be online, nothing to set up.
+
+- **Your Slayer lives on the server**, not in a file on your PC. Nothing to back up, nothing to lose, and you can
+  play from any PC you install the launcher on.
+- **A town that stays open.** Ramsgate keeps running when you close the game, with the other players still in it.
+- **Pick your region** (North America, Europe, Australia, or Any for whichever is busiest). Each region has its own
+  Ramsgate, and the launcher shows your ping to each before you choose.
+- **Hunts run on players' PCs**, not on one rented box. The launcher measures your connection and your PC once, and
+  strong machines quietly host hunts for everyone. This is what keeps the whole thing free.
+- **Still no port forwarding.** Nothing to change on your router, ever.
+- **A fresh Slayer.** Your Forever character is separate from your solo and Host Mode ones; those stay exactly as
+  they are on your PC.
+
+It is a beta and it is being worked on daily. Problems go to the Discord, or straight to me through
+**More > "Send my logs to the Dauntless Forever team"**, which attaches everything I need to find the cause.
+
 ### Play together, no port forwarding
 - **Friends panel**: add friends by name (or `name#1234`), see who is online, playing or hosting, press **Join**.
-- **Host with friends**: one click opens your game to your friends through the Dauntless Forever relay (US and EU,
-  the nearest is picked for you). No router settings, nothing to install.
+- **Host with friends**: one click opens your game to your friends through the Dauntless Forever relays
+  (US East, US Central, Europe, Australia and Japan; the nearest is picked for you). No router settings, nothing to install.
 - **Play online**: joins a game that is open to everyone, or hosts one if nobody is on. **Allow randoms** opens your
   own hosted game to Play online players.
 - **Your character comes with you** when you join someone, and is saved home every few minutes while you play.
@@ -50,7 +69,7 @@ from. No game window needed; press **Play on your server** to join it yourself.
 - **Inventory**: change currencies and tokens, add or remove gear.
 - **Bring your Dauntless Revived (1.4.4) character**: More > "Bring my Dauntless Revived (1.4.4) character" moves your
   gear, Rams, cells, materials and quest progress into 1.6.2. Your Revived save is only read.
-- **Offline Forever mode**: play only on your PC, nobody sees you online.
+- **Play offline**: play only on your PC, nobody sees you online.
 
 ## Getting started
 
@@ -62,8 +81,15 @@ from. No game window needed; press **Play on your server** to join it yourself.
 
 Already have the game folder? More > "Use a game folder I already have".
 
+For **Forever Beta**: install 1.14.7, then open the **Forever** tab, pick a region, rate your PC once, and press
+**Play Forever**.
+
 **Needs**: Windows 10 or 11 (64-bit) and free space for the game (about twice its size while it downloads).
 Node.js, DirectX and the Visual C++ runtime are included or installed by set-up.
+
+**Antivirus**: some antivirus programs remove the launcher's own files by mistake (the game server is a modified
+Dauntless, which trips their guesswork). If the game will not start, More > **"Allow in the antivirus"** adds the
+exclusions for Windows Defender in one click, and shows you what to add for anything else.
 
 **Updates** come by themselves: server files when you open the launcher, and a banner with a Download button when a
 new launcher is out.
@@ -106,18 +132,21 @@ src/main/
   updates.js     packages.json: server-file updates and the "new launcher" banner
   social.js      Friends, hosting and joining through the relay, Play online (talks to the friends service)
   hostmode.js    Host Mode: the server that stays up, options, ban list, player limit, backups
+  forever.js     Forever Beta: region and rating, joining the shared world, the hunts this PC hosts
   voice.js       voice chat signalling (WebRTC, peer to peer, TURN fallback)
   player.js      the one player name
   settings.js    launcher.json;  paths.js  every path, no drive letters;  preload.js  the window's bridge
 src/renderer/    index.html, app.js (Play page and the other pages), friends.js, voice.js, hostmode.js,
-                 player.js, sky.js, styles.css, friends.css, hostmode.css (plain HTML/CSS/JS, no framework)
+                 forever.js, player.js, sky.js, styles.css, friends.css, hostmode.css
+                 (plain HTML/CSS/JS, no framework)
 resources/
   versions/<id>/version.json + package/   one folder per build: scripts, server DLL, backends, source
   tools/manifest.exe                      meszmate/manifest + plain-chunk fix (MIT), sha256-checked
   runtime/node/                           bundled Node.js (fetched by tools/fetch-node.ps1, not in git)
   community.json, credits.json, patchnotes.json   read live from the repo too, so they change without a build
 packages.json    the newest server files per build and the newest launcher (read by every launcher on start)
-network.json     where the online services are (relays per region, friends service) and an online on/off switch
+network.json     where the online services are (relays per region, friends service, the Forever world) and an
+                 online on/off switch
 tools/           pack-version.ps1, update-dll.ps1, release-launcher.ps1, fetch-node.ps1, check-ascii.js,
                  revived-export/ (export a character from a Dauntless Revived server)
 build/icon.*     the launcher icon (original mark)
