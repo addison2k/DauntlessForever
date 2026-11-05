@@ -1232,9 +1232,43 @@ function huntTick25() {   // the slowest hunt server running on this PC right no
   }
   return worst;
 }
+// DF25-GAMEFILES (Nov 5, report 592): only the 1.14.7 tile's Set up copies the loader and our paks into the game folder.
+// A package update changes them in versions\1.14.7\bin but not in the game folder, and a Forever-only player never
+// presses that button: the PC kept the old loader, could not host (server-1147.ps1 "the server loader is not in the
+// game folder") and played without the newer fixes. Before set-up finishes and before every Play, put the same files
+// in the same way, checked by the same hashes (version.json installedFiles). What a copy replaces is kept in
+// versions\1.14.7\backup. The sign-in file stays the 1.14.7 set-up's job. Never throws: a locked or blocked file is
+// logged and tried again on the next Play.
+function syncGameFolder25(why) {
+  try {
+    const v = path.join(P.versionsDataDir(), '1.14.7');
+    const cfg = readJson(path.join(v, 'config.json'), null);
+    const game = cfg && typeof cfg.GameDir === 'string' ? cfg.GameDir : '';
+    if (!game || !exists(path.join(game, 'Archon', 'Binaries', 'Win64'))) return;
+    const files = ((readJson(path.join(v, 'version.json'), {}).package || {}).installedFiles) || [];
+    const sha = (f) => { try { return crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex').toUpperCase(); } catch { return ''; } };
+    const backup = path.join(v, 'backup'); let put = 0; const bad = [];
+    for (const it of files) {
+      const rel = String((it && it.rel) || ''), want = String((it && it.sha256) || '').toUpperCase();
+      if (!/^Archon\/(Binaries\/Win64\/dxgi\.dll|Content\/Paks\/[A-Za-z0-9_]+\.pak)$/.test(rel) || !/^[0-9A-F]{64}$/.test(want)) continue;
+      const name = rel.split('/').pop(), dst = path.join(game, ...rel.split('/')), from = path.join(v, 'bin', name);
+      if (sha(dst) === want) continue;
+      if (sha(from) !== want) { bad.push(name + ' (the 1.14.7 files are not updated yet)'); continue; }
+      try {
+        if (exists(dst)) { P.ensureDir(backup); fs.copyFileSync(dst, path.join(backup, 'forever_replaced_' + Date.now() + '_' + name)); }
+        fs.copyFileSync(from, dst);
+        if (sha(dst) !== want) throw new Error('the copy does not match');
+        put++;
+      } catch (e) { bad.push(name + ': ' + (e.code || e.message)); }
+    }
+    if (put) log(`game folder: ${put} file(s) from the 1.14.7 update put in place ${why}`);
+    if (bad.length) log('game folder: could not update ' + bad.join(', ') + ' (press Set up on the 1.14.7 tile if this stays)', true);
+  } catch (e) { log('game folder check: ' + e.message, true); }
+}
 async function play25() {
   if (S.phase !== 'off') throw new Error('Forever is already running. Stop it first.');
   const why = missing(); if (why) throw new Error(why);
+  syncGameFolder25('before Play');   // DF25-GAMEFILES
   if (!readScore25()) throw new Error('Rate this PC first. Every player needs a score: without one you cannot join or open a hunt.');   // Addison, Oct 31: everyone rates
   S.helper = false; S.helperOnly = false; S.autoPlay = false; S.wantWorld = null; S.mode = 'fresh'; S.error = ''; S.phase = 'asking'; S.role = null; S.world = null; S.is25 = true; S.town = null; push();
   writeForeverMods();
@@ -1535,6 +1569,7 @@ async function setup(progress) {
   say('done');
   if (is25()) keepId25('after set-up');
   setupState = null;
+  syncGameFolder25('after set-up');   // DF25-GAMEFILES
   log('Forever is set up on this PC (from 1.14.7 ' + (v.forever.builtFrom || '') + ')');
   if (is25()) {   // DF25-NOTRAVEL (Nov 3): set-up left S.world empty, so the next Play ran the travel step and uploaded the local save over the server character. Put the world back here instead of asking players to restart.
     try {
