@@ -75,6 +75,8 @@ contextBridge.exposeInMainWorld('launcher', {
   rules: invoke('rules:list'),
   setRules: invoke('rules:set'),
   items: invoke('items:list'),
+  buildsCatalog: invoke('builds:catalog'),
+  buildsLocal: invoke('builds:local'),
   modsStatus: invoke('mods:status'),
   modsAct: invoke('mods:act'),
   setItems: invoke('items:set'),
