@@ -171,6 +171,30 @@ key is included. Nearly every fix in the beta so far started with one of these.
 
 ---
 
+## Name, branding and artwork
+
+The AGPL-3.0 licence covers the **code** in this repository. It does not grant any rights to the Dauntless Forever
+name, logo, icons, artwork, UI design or any other branding, and no such rights are granted here. (AGPL-3.0
+section 7 expressly allows declining to grant rights under trademark law, so this reservation takes nothing away
+from your rights to the code.)
+
+You are free to fork, change and redistribute this project under the AGPL. If you do, please:
+
+- **Give your fork its own name.** Do not call it Dauntless Forever, do not use a name that could be mistaken for
+  it, and do not use the logo, the launcher icon or the artwork.
+- **Do not imply this project endorses yours**, or that yours is an official version, a successor, or run by the
+  same people.
+- **Do not use the dauntlessforever.com domain, the Discord, or any Dauntless Forever account names** to promote
+  or distribute your fork.
+- **Keep the credits.** The AGPL requires this anyway: the copyright notices at the top of each source file,
+  NOTICE.txt, and the attributions to Undaunted, Dauntless Revived, MinHook and the other projects this is
+  built on.
+
+Code you add to a fork is yours and you may license your own additions as the AGPL allows, but the name and the
+look are not part of what you receive.
+
+---
+
 ## Credits and licences
 
 - Built on [Undaunted](https://github.com/SyST3MDeV/Undaunted) by gwog and contributors (AGPL-3.0). The server DLLs,
@@ -183,5 +207,7 @@ key is included. Nearly every fix in the beta so far started with one of these.
 - Bundled [Node.js](https://nodejs.org) (MIT); `ws` and `ltx` (MIT) in the 1.6.2 backend.
 - Everyone on the Credits page in the launcher.
 - Launcher: AGPL-3.0, Addison2k, 2026.
+
+By contributing to this project you agree that your contribution may be distributed under AGPL-3.0-only, and that the project may also license it under other terms in future.
 
 Dauntless belongs to its owners. This is an unofficial fan project, not affiliated with or endorsed by Phoenix Labs.
