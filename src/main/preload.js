@@ -108,6 +108,10 @@ contextBridge.exposeInMainWorld('launcher', {
   socialChatFetch: invoke('social:chatFetch'),        // DF-CHAT: (friendId) { ok, messages }
   socialChatSend: invoke('social:chatSend'),          // DF-CHAT: (friendId, text) { ok, id, at } | { ok: false, error }
   onSocialChatOpen: on('social:chatOpen'),            // DF-CHAT: a notification was clicked: open that conversation
+  socialBoardPublish: invoke('social:boardPublish'),  // DF-BOARD: ({ code, name, notes, version, weaponKind, element }) { ok, id, at }
+  socialBoardList: invoke('social:boardList'),        // DF-BOARD: ({ sort, weaponKind, element, version, mine, page }) { ok, builds, page, pages, total }
+  socialBoardVote: invoke('social:boardVote'),        // DF-BOARD: (buildId, up) { ok, votes, voted }
+  socialBoardRemove: invoke('social:boardRemove'),    // DF-BOARD: (buildId) { ok }
   // Voice (main/voice.js, renderer/voice.js)
   voiceState: invoke('voice:state'),
   voiceJoin: invoke('voice:join'),

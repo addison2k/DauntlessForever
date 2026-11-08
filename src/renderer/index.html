@@ -31,6 +31,7 @@
     <button class="nav-item" data-page="rules"><span class="nav-ico ic-rules" aria-hidden="true"></span>Game Rules</button>
     <button class="nav-item" data-page="items"><span class="nav-ico ic-items" aria-hidden="true"></span>Inventory</button>
     <button class="nav-item" data-page="builds"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16"><path d="M3 3h10v10H3zM6 3v10M3 7h10" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></span><span id="build-nav-label">Builds</span><span class="nav-new" id="build-nav-new">New</span></button>
+    <button class="nav-item" data-page="meta" id="meta-nav" hidden><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16"><path d="M4 2.5h8v3a4 4 0 0 1-8 0zM4 4H2v1a2 2 0 0 0 2 2M12 4h2v1a2 2 0 0 1-2 2M8 9.5V12M5.5 13.5h5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></span><span>Meta</span><span class="nav-new">New</span></button>
     <button class="nav-item" data-page="slayer"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2.5 5.5h9M9 3l2.5 2.5L9 8M13.5 10.5h-9M7 8l-2.5 2.5L7 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></span>Slayer copy<span class="nav-new">New</span></button>
     <button class="nav-item" data-page="mods"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 1.8 13.4 4.9v6.2L8 14.2 2.6 11.1V4.9z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></span>Mods</button>
     <button class="nav-item" data-page="patches" hidden><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></span>Patch notes</button>
@@ -439,7 +440,7 @@
   <p id="build-message" class="builds-status" aria-live="polite"></p>
   <p id="build-data-note" class="builds-status" hidden></p>
   <div id="build-panel-editor">
-    <div class="builds-namerow"><input id="build-name" placeholder="Build name" maxlength="90" autocomplete="off" spellcheck="false"><input id="build-notes" placeholder="Notes (what it is for)" maxlength="280" autocomplete="off"><button class="primary-sm" id="build-save" type="button">Save build</button><button class="ghost" id="build-share" type="button">Copy share code</button><button class="ghost" id="build-clear" type="button">Clear</button></div>
+    <div class="builds-namerow"><input id="build-name" placeholder="Build name" maxlength="90" autocomplete="off" spellcheck="false"><input id="build-notes" placeholder="Notes (what it is for)" maxlength="280" autocomplete="off"><button class="primary-sm" id="build-save" type="button">Save build</button><button class="ghost" id="build-publish" type="button" hidden>Publish this build</button><button class="ghost" id="build-share" type="button">Copy share code</button><button class="ghost" id="build-clear" type="button">Clear</button></div>
     <div class="builds-fill builds-import"><input id="build-import-text2" placeholder="Paste a reforged.dauntless-builder.com link (or a share code) and press Import" autocomplete="off" spellcheck="false"><button class="ghost" id="build-import2" type="button">Import</button></div>
     <div class="builds-fill"><span class="builds-fill-label">Fill empty slots:</span><select id="build-fill-weapon" class="hm-select"></select><select id="build-fill-element" class="hm-select"></select><label class="builds-check"><input type="checkbox" id="build-allow-missing"> allow gear this character does not own</label><button class="ghost" id="build-fill" type="button">Fill</button><span id="build-fill-note" class="small"></span></div>
     <div class="builds-loadout">
@@ -464,6 +465,22 @@
     </div>
   </div>
   <p class="builds-disclaimer">This page never writes to a game save. Builds are kept on this PC; a share code is text you paste anywhere.</p>
+</section>
+<section class="page" id="page-meta" hidden data-i18n-skip>
+  <div class="builds-head"><div><h1 class="page-title">Meta</h1><p class="lead">The builds the players rate highest. Vote for the ones that work, open any of them in the Builder, and post your own from the Builds page.</p></div></div>
+  <div class="builds-tabs"><button class="builds-tab" data-build-tab="meta" id="build-tab-meta" type="button">Meta</button><button class="builds-tab" data-build-tab="community" id="build-tab-community" type="button">Community</button></div>
+  <p id="build-board-message" class="builds-status" aria-live="polite"></p>
+  <div id="build-panel-meta" hidden>
+    <p class="small bld-meta-lead">The highest voted build for every weapon, picked by the players. Vote on the Community tab to change what shows here.</p>
+    <div id="build-meta-grid" class="bld-meta-grid"></div>
+  </div>
+  <div id="build-panel-community" hidden>
+    <div id="build-comm-weapons" class="bld-wstrip" role="group" aria-label="Weapon"></div>
+    <div class="builds-fill"><select id="build-comm-sort" class="hm-select"></select><select id="build-comm-weapon" class="hm-select" hidden></select><select id="build-comm-element" class="hm-select"></select><label class="builds-check"><input type="checkbox" id="build-comm-mine"> only mine</label><button class="ghost" id="build-comm-refresh" type="button">Refresh</button><span id="build-comm-count" class="small"></span></div>
+    <div id="build-comm-list" class="builds-list"></div>
+    <div class="builds-fill"><button class="ghost" id="build-comm-prev" type="button">Back</button><span id="build-comm-page" class="small"></span><button class="ghost" id="build-comm-next" type="button">More</button></div>
+  </div>
+  <p class="small">Builds are shared as share codes. Opening one never writes to a game save.</p>
 </section>
 
 <section class="page" id="page-items" hidden>
@@ -759,6 +776,7 @@
 <script src="forever.js"></script>
 <script src="builds-data-1147.js"></script>
 <script src="builds-data-162.js"></script>
+<script src="builds-perkranks-1147.js"></script>
 <script src="builds-dbnames.js"></script>
 <script src="builds.js"></script>
 </body>

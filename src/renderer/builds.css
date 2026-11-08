@@ -1,25 +1,25 @@
 /* Dauntless Forever - launcher. builds.css (DF-BUILDS v2, Nov 6): the Builds page. Copyright (C) 2026 Addison2k. AGPL-3.0-only. */
-#page-builds { max-width: 1120px; }
-#page-builds .builds-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
-#page-builds .builds-head .page-title { margin-bottom: 2px; }
-#page-builds .builds-head .lead { margin: 0; }
-#page-builds .builds-toolbar { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin: 4px 0 0; }
-#page-builds .builds-toolbar label { color: var(--ink-2); font-size: 12px; }
-.builds-picker .hm-select, #page-builds .hm-select { min-height: 33px; }
-.builds-picker input, #page-builds input { min-width: 0; background: var(--bg); color: var(--ink); border: 1px solid var(--line-2); border-radius: 7px; padding: 8px 11px; box-sizing: border-box; font: inherit; }
-.builds-picker input:focus, #page-builds input:focus { outline: 1px solid var(--brass); }
-#page-builds .builds-tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--line); margin: 6px 0 8px; }
-#page-builds .builds-tab { background: transparent; color: var(--ink-2); border: 0; border-bottom: 2px solid transparent; border-radius: 0; padding: 9px 15px; font-weight: 600; }
-#page-builds .builds-tab.is-active { color: var(--brass-2); border-bottom-color: var(--brass-2); }
-#page-builds .builds-status { color: var(--brass-2); font-size: 12.5px; margin: 4px 0; min-height: 0; }
-#page-builds .builds-status:empty { display: none; }
-#page-builds .builds-status.err { color: var(--ember); }
-#page-builds .builds-namerow { display: grid; grid-template-columns: 1.2fr 1.6fr auto auto auto; gap: 8px; align-items: center; margin: 4px 0 8px; }
-.builds-picker .builds-fill, #page-builds .builds-fill { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 10px; }
-.builds-picker .builds-fill input, #page-builds .builds-fill input { flex: 1 1 220px; }
-#page-builds .builds-fill-label { color: var(--ink-2); font-size: 13px; }
-#page-builds .builds-check { white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); font-size: 13px; }
-#page-builds .builds-check input { width: 14px; height: 14px; accent-color: var(--brass); }
+:is(#page-builds, #page-meta) { max-width: 1120px; }
+:is(#page-builds, #page-meta) .builds-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+:is(#page-builds, #page-meta) .builds-head .page-title { margin-bottom: 2px; }
+:is(#page-builds, #page-meta) .builds-head .lead { margin: 0; }
+:is(#page-builds, #page-meta) .builds-toolbar { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin: 4px 0 0; }
+:is(#page-builds, #page-meta) .builds-toolbar label { color: var(--ink-2); font-size: 12px; }
+.builds-picker .hm-select, :is(#page-builds, #page-meta) .hm-select { min-height: 33px; }
+.builds-picker input, :is(#page-builds, #page-meta) input { min-width: 0; background: var(--bg); color: var(--ink); border: 1px solid var(--line-2); border-radius: 7px; padding: 8px 11px; box-sizing: border-box; font: inherit; }
+.builds-picker input:focus, :is(#page-builds, #page-meta) input:focus { outline: 1px solid var(--brass); }
+:is(#page-builds, #page-meta) .builds-tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--line); margin: 6px 0 8px; }
+:is(#page-builds, #page-meta) .builds-tab { background: transparent; color: var(--ink-2); border: 0; border-bottom: 2px solid transparent; border-radius: 0; padding: 9px 15px; font-weight: 600; }
+:is(#page-builds, #page-meta) .builds-tab.is-active { color: var(--brass-2); border-bottom-color: var(--brass-2); }
+:is(#page-builds, #page-meta) .builds-status { color: var(--brass-2); font-size: 12.5px; margin: 4px 0; min-height: 0; }
+:is(#page-builds, #page-meta) .builds-status:empty { display: none; }
+:is(#page-builds, #page-meta) .builds-status.err { color: var(--ember); }
+:is(#page-builds, #page-meta) .builds-namerow { display: grid; grid-template-columns: 1.2fr 1.6fr auto auto auto; gap: 8px; align-items: center; margin: 4px 0 8px; }
+.builds-picker .builds-fill, :is(#page-builds, #page-meta) .builds-fill { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 10px; }
+.builds-picker .builds-fill input, :is(#page-builds, #page-meta) .builds-fill input { flex: 1 1 220px; }
+:is(#page-builds, #page-meta) .builds-fill-label { color: var(--ink-2); font-size: 13px; }
+:is(#page-builds, #page-meta) .builds-check { white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); font-size: 13px; }
+:is(#page-builds, #page-meta) .builds-check input { width: 14px; height: 14px; accent-color: var(--brass); }
 /* the loadout: weapon column, armour column, perk column */
 .builds-loadout { display: grid; grid-template-columns: 1.15fr 1.15fr .9fr; gap: 12px; align-items: start; }
 .builds-col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
@@ -95,3 +95,49 @@
 .builds-disclaimer { color: var(--ink-3); font-size: 12px; margin-top: 16px; }
 @media (max-width: 1100px) { .builds-loadout { grid-template-columns: 1fr 1fr; } .builds-summary { grid-column: 1 / -1; position: static; } #page-builds .builds-namerow { grid-template-columns: 1fr 1fr; } }
 #page-builds .builds-import input { flex: 1 1 320px; }
+
+/* the +1 to +6 box (DF-PERKTIP): hangs off body, so it is never clipped by a card or the picker */
+.has-tip { cursor: help; }
+.bld-tip { position: fixed; z-index: 300; width: min(360px, calc(100vw - 24px)); max-height: 70vh; overflow-y: auto; padding: 10px 12px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--bg); box-shadow: 0 14px 34px rgba(0,0,0,.6); pointer-events: none; }
+.bld-tip[hidden] { display: none; }
+.bld-tip-h { font-family: var(--display); font-size: 14px; margin-bottom: 6px; color: var(--ink); }
+.bld-tip-r { display: grid; grid-template-columns: 28px 1fr; gap: 8px; font-size: 12.5px; color: var(--ink-3); padding: 2px 0; }
+.bld-tip-r.is-now { color: var(--ink); font-weight: 600; }
+.bld-tip-n { text-align: right; }
+.bld-tip-t div + div { margin-top: 2px; }
+.bld-tip-f { font-size: 11.5px; color: var(--ember); margin-top: 6px; }
+
+/* the Community board (DF-BOARD) */
+.bld-vote { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; flex: none; width: 46px; padding: 5px 0; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink-2); }
+.bld-vote:hover { border-color: var(--ink-3); color: var(--ink); }
+.bld-vote.on { border-color: var(--brass); color: var(--brass-2); }
+.bld-vote-caret { font-size: 13px; line-height: 1; }
+.bld-vote-n { font-size: 13px; font-weight: 600; line-height: 1; }
+#build-comm-list .bld-saved { align-items: stretch; }
+#build-comm-page { min-width: 110px; text-align: center; }
+/* DF-BOARD-META (Nov 8): weapon strip, gear strip, Meta tab */
+.bld-wstrip { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 12px; }
+.bld-wbtn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; width: 74px; height: 78px; padding: 6px 3px; border: 1px solid var(--line-2); border-radius: 10px; background: var(--bg-2); color: var(--ink-2); cursor: pointer; transition: border-color .12s, transform .12s, background .12s; }
+.bld-wbtn img { width: 44px; height: 44px; object-fit: contain; filter: grayscale(.35) brightness(.85); transition: filter .12s; }
+.bld-wbtn:hover { border-color: var(--ink-3); color: var(--ink); transform: translateY(-1px); }
+.bld-wbtn:hover img { filter: none; }
+.bld-wbtn.on { border-color: var(--brass); color: var(--brass-2); background: var(--bg); box-shadow: inset 0 0 0 1px var(--brass); }
+.bld-wbtn.on img { filter: none; }
+.bld-wall { font-family: var(--display); font-weight: 800; font-size: 22px; letter-spacing: .06em; line-height: 44px; height: 44px; }
+.bld-wname { font-size: 11px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 70px; }
+.bld-row-wpn { width: 44px; height: 44px; object-fit: contain; flex: none; align-self: center; }
+.bld-gear { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+.bld-gear img { width: 34px; height: 34px; border-radius: 6px; background: var(--bg); border: 1px solid var(--line); object-fit: contain; }
+.bld-meta-lead { margin: 0 0 12px; }
+.bld-meta-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+.bld-meta-card { display: flex; flex-direction: column; gap: 8px; border: 1px solid var(--line-2); border-radius: 12px; background: var(--bg-2); padding: 14px; min-width: 0; }
+.bld-meta-card.empty { border-style: dashed; opacity: .75; }
+.bld-meta-head { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.bld-meta-art { width: 64px; height: 64px; object-fit: contain; flex: none; }
+.bld-meta-ht { min-width: 0; }
+.bld-meta-card .bld-gear img { width: 40px; height: 40px; }
+.bld-meta-notes { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.bld-meta-acts { display: flex; gap: 6px; flex-wrap: wrap; margin-top: auto; }
+.bld-meta-acts .on { color: var(--brass-2); border-color: var(--brass); }
+#build-comm-list .bld-saved-acts { align-self: center; }
+.bld-wstrip { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 2px; }

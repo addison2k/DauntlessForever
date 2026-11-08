@@ -308,6 +308,7 @@ function publicState() {
     search: search ? { version: search.version, phase: search.phase, host: search.host || '', left: Math.max(0, Math.ceil((search.since + SEARCH_MS - Date.now()) / 1000)) } : null,
     inGameWith: gameWith && ctx.runner.isRunning(gameWith.version + ':join') ? { name: gameWith.hostName, version: gameWith.version, public: !!gameWith.public } : null,
     chat: chatState(),   // DF-CHAT: { cap, unread: { friendId: n }, open: friendId|null }
+    board: boardState(),   // DF-BOARD: { cap } - is the build rankings board there at all
   };
 }
 // ------------------------------------------------------------------ DF-CHAT (Oct 29): friend-to-friend text in the Friends panel
@@ -352,6 +353,36 @@ function chatMerge(id, fresh) {
 }
 function chatState() {
   return { cap: chatSvc.cap || (CHAT_MOCK && !!identity()), unread: chatSvc.unread || {}, open: chatOpen };
+}
+
+// ------------------------------------------------------------------ DF-BOARD: the build rankings board (df-builds)
+// Another small service of its own on the Friends VPS, like chat. The launcher asks its health route whether it is
+// there at all: a 404 means no board service yet, so the Community tab stays hidden and we ask again in 5 minutes.
+// That is what lets a launcher ship before the service exists. Signed requests go through the same helper as chat.
+const BOARD_RETRY_MS = 5 * 60 * 1000;
+const boardSvc = { cap: false, nextTry: 0, said: false };
+function boardBase() { return (network.builds && typeof network.builds.url === 'string' && /^https?:\/\//.test(network.builds.url)) ? network.builds.url : null; }   // network.json builds.url = another address for it (optional)
+function boardCall(method, apiPath, body, unsigned, timeoutMs) { const b = boardBase(); return b ? callAt(b, method, apiPath, body, unsigned, timeoutMs) : call(method, apiPath, body, unsigned, timeoutMs); }
+async function boardPollHealth() {
+  if (!identity() || offlineMode()) return;
+  if (!boardSvc.cap && Date.now() < boardSvc.nextTry) return;
+  try {
+    const r = await boardCall('GET', '/v1/builds/health', undefined, true, 8000);
+    boardSvc.cap = !!(r && r.ok);
+    if (boardSvc.cap && !boardSvc.said) { boardSvc.said = true; ctx.log('Friends: the build board is available'); }
+  } catch (e) {
+    if (e.status === 404 || e.status === 501) { boardSvc.cap = false; boardSvc.nextTry = Date.now() + BOARD_RETRY_MS; }   // no board service there (yet)
+    // any other failure (network, 5xx): keep what we had, try again next poll
+  }
+}
+function boardState() { return { cap: boardSvc.cap }; }
+async function boardDo(apiPath, body) {
+  if (offlineMode() || !identity()) return { ok: false, error: 'Not signed in.' };
+  try { const r = await boardCall('POST', apiPath, body || {}); return Object.assign({ ok: true }, r); }
+  catch (e) {
+    if (e.status === 404 || e.status === 501) { boardSvc.cap = false; boardSvc.nextTry = Date.now() + BOARD_RETRY_MS; push(); return { ok: false, error: 'The build board is not running yet.' }; }
+    return { ok: false, error: e.message };
+  }
 }
 function friendName(id) { const f = (state && state.friends || []).find(x => x.id === id); return f ? f.name : ''; }
 // called from poll(): new unread from a friend whose conversation is not open -> one notification per friend per minute
@@ -430,6 +461,7 @@ async function poll() {
     lastError = e.status === 401 ? 'Your friends account was not recognised by the server. Settings > Friends account can check why and fix it.' : e.message;
   } finally {
     try { await chatPollUnread(); chatNotify(); } catch {}   // DF-CHAT
+    try { await boardPollHealth(); } catch {}   // DF-BOARD: is the build board there at all
     push();
     // in someone's game: a little more often, so a host closing reaches this PC in time to save the character home
     const inGame = gameWith && ctx.runner.isRunning(gameWith.version + ':join');
@@ -829,6 +861,11 @@ function init(c) {
   // DF-CHAT
   ipcMain.handle('social:chatOpen', (_e, id) => { chatOpen = id || null; if (chatOpen) { clearTimeout(pollTimer); pollTimer = setTimeout(poll, 50); } return chatOpen ? chatFetch(chatOpen) : { ok: true, messages: [] }; });
   ipcMain.handle('social:chatFetch', (_e, id) => (offlineMode() || !identity()) ? { ok: false, error: 'Not signed in.' } : chatFetch(id));
+  // DF-BOARD
+  ipcMain.handle('social:boardPublish', (_e, b) => boardDo('/v1/builds/publish', b));
+  ipcMain.handle('social:boardList', (_e, q) => boardDo('/v1/builds/list', q));
+  ipcMain.handle('social:boardVote', (_e, id, up) => boardDo('/v1/builds/vote', { id, up: up !== false }));
+  ipcMain.handle('social:boardRemove', (_e, id) => boardDo('/v1/builds/remove', { id }));
   ipcMain.handle('social:chatSend', async (_e, id, text) => {
     if (offlineMode() || !identity()) return { ok: false, error: 'Not signed in.' };
     text = String(text || '').replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g, '').trim();

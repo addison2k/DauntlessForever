@@ -21,11 +21,11 @@
   const ELEMENTS = ['Blaze', 'Frost', 'Shock', 'Terra', 'Radiant', 'Umbral', 'Neutral'];
   const CELL_TYPES = ['Power', 'Technique', 'Mobility', 'Defence', 'Utility'];
   const GENERIC = { weapon: 'ico_equip_Weapon_NoIcon', head: 'ico_armour_generic', chest: 'ico_armour_generic', arms: 'ico_armour_generic', legs: 'ico_armour_generic', lantern: 'ico_lantern_simple', omnicell: 'icon_omnicell_generic', part: 'ico_equip_Weapon_NoIcon' };
-  const S = { ver: '1.14.7', data: null, byId: new Map(), cells: new Map(), characters: [], owned: null, saved: [], tab: 'editor', picker: null, note: '' };
+  const S = { board: null, ver: '1.14.7', data: null, byId: new Map(), cells: new Map(), characters: [], owned: null, saved: [], tab: 'editor', picker: null, note: '' };
   let editor = blank('1.14.7'), loaded = false;
 
   function blank(ver) { return { id: '', name: '', notes: '', version: ver, slots: Object.fromEntries(SLOTS.map(k => [k, ''])), cells: {}, locks: [] }; }
-  function note(s, err) { const n = $('build-message'); n.textContent = s || ''; n.classList.toggle('err', !!err); }
+  function note(s, err) { for (const id of ['build-message', 'build-board-message']) { const n = $(id); if (n) { n.textContent = s || ''; n.classList.toggle('err', !!err); } } }
   function item(id) { return S.byId.get(id) || null; }
   function cell(id) { return S.cells.get(id) || null; }
   function iconUrl(it, kind) { const name = (it && it.icon) || GENERIC[kind] || 'ico_equip_Weapon_NoIcon'; return 'build-icons/' + name + '.png'; }
@@ -40,6 +40,52 @@
   function cellRanks(c) { const m = /^\+(\d)/.exec(c.name || ''); return m ? Number(m[1]) : 1; }
   function cellPerk(c) { return (c.perkName || c.name || '').replace(/^\+\d\s*/, '').replace(/\s*Cell$/i, ''); }
   function perkType(name) { const p = (S.data.perks || []).find(x => x.name === name); return p ? p.type : ''; }
+
+  // ------------------------------------------------------------------ the +1 to +6 box (DF-PERKTIP)
+  // Every perk's own words at each rank, from the game's tables (builds-perkranks-*.js). It hangs off document.body,
+  // not the card: the page column is transformed, so a child box lands in the wrong place (same reason as the picker).
+  function perkRanksFor(idOrName) {
+    const table = (window.DFPerkRanks || {})[S.ver]; if (!table || !idOrName) return null;
+    if (table[idOrName]) return table[idOrName];
+    const p = (S.data.perks || []).find(x => x.name === idOrName);   // the summary and cells know the name, not the id
+    return (p && table[p.id]) || null;
+  }
+  function tipBox() { let b = $('bld-tip'); if (!b) { b = el('div', 'bld-tip'); b.id = 'bld-tip'; b.hidden = true; document.body.append(b); } return b; }
+  function hideTip() { const b = $('bld-tip'); if (b) { b.hidden = true; b.replaceChildren(); } }
+  function fillTip(b, title, entry, atRank) {
+    b.replaceChildren();
+    b.append(el('div', 'bld-tip-h', title));
+    const have = Math.max(0, Number(atRank) || 0);
+    for (let r = 1; r <= 6; r++) {
+      const lines = entry.ranks[String(r)]; if (!lines || !lines.length) continue;
+      const row = el('div', 'bld-tip-r' + (r === Math.min(have, 6) ? ' is-now' : ''));
+      row.append(el('span', 'bld-tip-n', '+' + r));
+      const tx = el('span', 'bld-tip-t'); for (const ln of lines) tx.append(el('div', '', ln)); row.append(tx);
+      b.append(row);
+    }
+    if (have > 6) b.append(el('div', 'bld-tip-f', 'You have +' + have + '; the game counts +6.'));
+  }
+  function placeTip(b, target) {
+    b.hidden = false; b.style.left = '0px'; b.style.top = '0px';
+    const r = target.getBoundingClientRect(), box = b.getBoundingClientRect(), gap = 8;
+    let x = r.right + gap; if (x + box.width > window.innerWidth - 6) x = r.left - gap - box.width;
+    if (x < 6) x = Math.max(6, Math.min(r.left, window.innerWidth - box.width - 6));
+    let y = r.top + (r.height - box.height) / 2;
+    y = Math.max(6, Math.min(y, window.innerHeight - box.height - 6));
+    b.style.left = Math.round(x) + 'px'; b.style.top = Math.round(y) + 'px';
+  }
+  // any pill, any row, any cell: hover or keyboard focus shows the box, leaving or Escape hides it
+  function withTip(node, idOrName, title, atRank) {
+    const entry = perkRanksFor(idOrName); if (!entry) return node;
+    node.classList.add('has-tip');
+    const show = () => { const b = tipBox(); fillTip(b, title || entry.name || String(idOrName), entry, atRank); placeTip(b, node); };
+    node.addEventListener('mouseenter', show);
+    node.addEventListener('focus', show);
+    node.addEventListener('mouseleave', hideTip);
+    node.addEventListener('blur', hideTip);
+    return node;
+  }
+
 
   // ------------------------------------------------------------------ data + inventory
   function loadData(ver) {
@@ -104,7 +150,7 @@
     head.append(acts);
     head.onclick = () => openPicker(key);
     c.append(head);
-    if (it && (it.perks || []).length) { const row = el('div', 'bld-perks'); for (const p of it.perks) row.append(el('span', 'bld-perk pt-' + (p.type || '').toLowerCase(), '+' + p.ranks + ' ' + p.name)); c.append(row); }
+    if (it && (it.perks || []).length) { const row = el('div', 'bld-perks'); for (const p of it.perks) row.append(withTip(el('span', 'bld-perk pt-' + (p.type || '').toLowerCase(), '+' + p.ranks + ' ' + p.name), p.id || p.name, p.name, p.ranks)); c.append(row); }
     if (it && (it.unique || []).length) c.append(el('div', 'bld-unique', it.unique.map(u => u.text).join(' ')));
     if (it && key !== 'bond' && (it.slots || []).length) {   // a bonded weapon lends its perk and effect, not its cell slots
       const row = el('div', 'bld-cells'); const chosen = editor.cells[key] || [];
@@ -112,7 +158,8 @@
         const cc = cell(chosen[i]); const b = el('button', 'bld-cellslot' + (cc ? ' on' : '') + ' ct-' + type.toLowerCase()); b.type = 'button';
         const ci = el('img'); ci.src = 'build-icons/' + (cc ? (cc.icon || 'ico_cell_filled') : 'ico_cell_' + (type === 'Defence' ? 'defense' : type === 'Any' ? 'power' : type.toLowerCase()) + '_empty') + '.png'; ci.alt = '';
         b.append(ci, el('span', '', cc ? cc.name : type + ' cell'));
-        b.onclick = (e) => { e.stopPropagation(); openCellPicker(key, i, type); };
+        if (cc) withTip(b, cellPerk(cc), cellPerk(cc), cellRanks(cc));   // a filled cell slot shows its perk's +1 to +6
+        b.onclick = (e) => { e.stopPropagation(); hideTip(); openCellPicker(key, i, type); };
         row.append(b);
       });
       c.append(row);
@@ -130,6 +177,7 @@
     for (const [name, v] of t.perks) {
       const row = el('div', 'bld-total pt-' + (v.type || perkType(name) || '').toLowerCase());
       row.append(el('span', 'bld-total-n', '+' + v.ranks), el('span', 'bld-total-name', name));
+      withTip(row, name, name, v.ranks);
       const bar = el('div', 'bld-bar'); for (let i = 0; i < 6; i++) bar.append(el('i', i < v.ranks ? 'on' : '')); row.append(bar);
       if (v.ranks > 6) row.append(el('span', 'bld-over', 'over 6'));
       s.append(row);
@@ -155,7 +203,7 @@
     const kf = $('build-picker-kind'); kf.hidden = !(opts.gear && opts.key === 'weapon'); kf.replaceChildren(); if (!kf.hidden) { kf.add(new Option('Every weapon type', '')); for (const [k, n] of Object.entries(WEAPON_KINDS)) if (list.some(i => i.kind === k)) kf.add(new Option(n, k)); }
     drawPicker(); $('build-picker-search').focus();
   }
-  function closePicker() { S.picker = null; $('build-picker').hidden = true; }
+  function closePicker() { S.picker = null; $('build-picker').hidden = true; hideTip(); }
   function drawPicker() {
     const p = S.picker; if (!p) return; const box = $('build-picker-list'); box.replaceChildren();
     const q = $('build-picker-search').value.trim().toLowerCase(); const kind = $('build-picker-kind').hidden ? '' : $('build-picker-kind').value;
@@ -171,11 +219,12 @@
       if (x.element) m.append(el('span', 'bld-el el-' + x.element.toLowerCase(), x.element));
       if (x.behemoth) m.append(el('span', 'bld-beh', x.behemoth));
       if (x.type && !p.opts.gear) m.append(el('span', 'bld-perk pt-' + x.type.toLowerCase(), x.type));
-      for (const pp of (x.perks || [])) m.append(el('span', 'bld-perk pt-' + (pp.type || '').toLowerCase(), '+' + pp.ranks + ' ' + pp.name));
+      for (const pp of (x.perks || [])) m.append(withTip(el('span', 'bld-perk pt-' + (pp.type || '').toLowerCase(), '+' + pp.ranks + ' ' + pp.name), pp.id || pp.name, pp.name, pp.ranks));
       if (x.desc && !p.opts.gear) m.append(el('span', 'bld-desc', x.desc));
       t.append(m); row.append(t);
       const o = p.opts.gear ? owned(x) : ownedCell(x); row.append(el('span', 'bld-own ' + (o === true ? 'yes' : o === false ? 'no' : 'unk'), o === true ? 'owned' : o === false ? 'not owned' : ''));
-      row.onclick = () => p.onPick(x); box.append(row);
+      if (!p.opts.gear) withTip(row, cellPerk(x), cellPerk(x), cellRanks(x));   // in the cell picker every cell shows its perk's +1 to +6
+      row.onclick = () => { hideTip(); p.onPick(x); }; box.append(row);
     }
     if (!list.length) box.append(el('p', 'small', 'Nothing matches.'));
   }
@@ -283,6 +332,181 @@
       acts.append(like, load, code, del); row.append(acts); box.append(row);
     }
   }
+  // ------------------------------------------------------------------ Community: the build rankings board (DF-BOARD)
+  // Everything here goes through the df-builds service on the Friends VPS. The tab is hidden until that service
+  // answers its health route, so a launcher can ship before the service is up. The wire format is the DFB2 share
+  // code the page already makes, so Open is the same path as Import.
+  const COMM = { sort: 'top', weaponKind: '', element: '', mine: false, page: 1, pages: 1, total: 0, builds: [], busy: false, loaded: false, error: '' };
+  function boardOn() { return !!(S.board && S.board.cap && L.socialBoardList); }
+  function showBoardBits() {
+    const nav = $('meta-nav'), pub = $('build-publish');
+    if (nav) nav.hidden = !boardOn();
+    if (pub) pub.hidden = !boardOn();
+    if (!boardOn() && (S.tab === 'community' || S.tab === 'meta')) { showTab('editor'); if (onBoardPage() && typeof showPage === 'function') showPage('builds'); }
+  }
+  function weaponKindOf(b) { const w = (DATA[b.version] && DATA[b.version].items.find(i => i.id === (b.slots && b.slots.weapon))) || null; return w ? w.kind : ''; }
+  function elementOf(b) {
+    const counts = new Map();
+    for (const k of SLOTS) { const it = (DATA[b.version] && DATA[b.version].items.find(i => i.id === (b.slots && b.slots[k]))) || null; if (it && it.element) counts.set(it.element, (counts.get(it.element) || 0) + 1); }
+    let best = '', n = 0; for (const [e, c] of counts) if (c > n) { best = e; n = c; }
+    return best;
+  }
+  // DF-BOARD-META: Meta and Community live on their own page (nav "Meta"); the Builder lives on the Builds page.
+  // The Builds page is shown before a build goes into the editor: app.js sets the version when that page shows, which
+  // would clear a build put there first.
+  function onBoardPage() { const p = $('page-meta'); return !!(p && !p.hidden); }
+  function goBuilds() { const p = $('page-builds'); if (p && p.hidden && typeof showPage === 'function') showPage('builds'); }
+  function goBoard(tab) { if (!onBoardPage() && typeof showPage === 'function') { S.tab = tab; showPage('meta'); } else showTab(tab); }
+  async function commLoad(page) {
+    if (!boardOn() || COMM.busy) return;
+    COMM.busy = true; COMM.error = ''; renderCommunity();
+    try {
+      const r = await L.socialBoardList({ sort: COMM.sort, weaponKind: COMM.weaponKind, element: COMM.element, mine: COMM.mine, page: page || COMM.page });
+      if (r && r.ok) { COMM.builds = r.builds || []; COMM.page = r.page || 1; COMM.pages = r.pages || 1; COMM.total = r.total || 0; COMM.loaded = true; }
+      else COMM.error = (r && r.error) || 'The board did not answer.';
+    } catch (e) { COMM.error = e.message; }
+    COMM.busy = false; renderCommunity();
+  }
+  async function commVote(b, row) {
+    const r = await L.socialBoardVote(b.id, !b.voted);
+    if (!r || !r.ok) return note((r && r.error) || 'That vote did not go through.', true);
+    b.votes = r.votes; b.voted = r.voted; META.loaded = false; renderCommunity();
+  }
+  async function commRemove(b) {
+    if (!confirm('Take "' + b.name + '" off the board?')) return;
+    const r = await L.socialBoardRemove(b.id);
+    if (!r || !r.ok) return note((r && r.error) || 'It is still there.', true);
+    note('Taken off the board.'); commLoad(COMM.page);
+  }
+  function commOpen(b) {
+    goBuilds();
+    const got = parseCode(b.code);
+    if (!got) return note('That build could not be read.', true);
+    if (!DATA[got.version]) return note('That build is for ' + got.version + ', which has no data here.', true);
+    editor = { ...blank(got.version), ...got, id: '' };
+    if (!editor.cells || Array.isArray(editor.cells)) editor.cells = {};
+    if (got.version !== S.ver) { $('build-version').value = got.version; switchVersion(true).then(() => showTab('editor')); } else showTab('editor');
+    note('Loaded into the Builder. Press Save build to keep your own copy.');
+  }
+  async function commPublish() {
+    if (!boardOn()) return note('The build board is not running yet.', true);
+    snapshot();
+    if (!SLOTS.some(k => editor.slots[k])) return note('Put some gear in the build first.', true);
+    if (!editor.name) return note('Give the build a name first.', true);
+    const r = await L.socialBoardPublish({ code: shareCode(editor), name: editor.name, notes: editor.notes, version: editor.version, weaponKind: weaponKindOf(editor), element: elementOf(editor) });
+    if (!r || !r.ok) return note((r && r.error) || 'It did not go up.', true);
+    note('Published. It is on the Community tab now.'); META.loaded = false;
+    COMM.page = 1; COMM.sort = 'new'; const s = $('build-comm-sort'); if (s) s.value = 'new';
+    goBoard('community'); commLoad(1);
+  }
+  // ------------------------------------------------------------------ DF-BOARD-META (Nov 8): weapon strip, gear strip, Meta tab
+  // The weapon strip replaces the weapon dropdown (still in the page, hidden, so its value stays the one source):
+  // ALL, then one picture per weapon the version has. The gear strip shows a build's gear as pictures on every board
+  // row. The Meta tab asks the board for the top build of each weapon (sort top, page 1, first row) and shows one
+  // card per weapon; it is read-only and goes through the same list route as the Community tab.
+  const WPN_ART = k => 'build-icons/wpnclass_' + k + '.png';
+  const WPN_SHORT = { chainblades: 'Chains', strikers: 'Strikers', pike: 'War Pike' };
+  function boardKinds() { const d = DATA['1.14.7'] || S.data; return Object.keys(WEAPON_KINDS).filter(k => d && d.items.some(i => i.kind === k)); }
+  function renderWeaponStrip() {
+    const box = $('build-comm-weapons'); if (!box) return; box.replaceChildren();
+    const pick = (k) => { COMM.weaponKind = k; const s = $('build-comm-weapon'); if (s) s.value = k; renderWeaponStrip(); commLoad(1); };
+    const all = el('button', 'bld-wbtn all' + (COMM.weaponKind ? '' : ' on'), ''); all.type = 'button'; all.title = 'Every weapon';
+    all.append(el('span', 'bld-wall', 'ALL'), el('span', 'bld-wname', 'All builds')); all.onclick = () => pick(''); box.append(all);
+    for (const k of boardKinds()) {
+      const b = el('button', 'bld-wbtn' + (COMM.weaponKind === k ? ' on' : ''), ''); b.type = 'button'; b.title = WEAPON_KINDS[k];
+      const img = el('img'); img.src = WPN_ART(k); img.alt = ''; b.append(img, el('span', 'bld-wname', WPN_SHORT[k] || WEAPON_KINDS[k])); b.onclick = () => pick(k); box.append(b);
+    }
+  }
+  function gearStrip(b) {
+    const got = parseCode(b.code); const d = got && DATA[got.version]; const strip = el('div', 'bld-gear');
+    if (!d) return strip;
+    for (const k of ['weapon', 'head', 'chest', 'arms', 'legs', 'lantern', 'omnicell']) {
+      const id = got.slots && got.slots[k]; if (!id) continue;
+      const it = d.items.find(i => i.id === id); if (!it) continue;
+      const img = el('img'); img.src = iconUrl(it, it.kind); img.alt = it.name; img.title = it.name; img.loading = 'lazy';
+      img.onerror = () => { img.onerror = null; img.src = iconUrl(null, it.kind); }; strip.append(img);
+    }
+    return strip;
+  }
+  const META = { busy: false, loaded: false, error: '', top: {} };
+  async function metaLoad() {
+    if (!boardOn() || META.busy) return;
+    META.busy = true; META.error = ''; renderMeta();
+    try {
+      const kinds = boardKinds();
+      const rs = await Promise.all(kinds.map(k => L.socialBoardList({ sort: 'top', weaponKind: k, element: '', mine: false, page: 1 }).catch(() => null)));
+      META.top = {}; let ok = 0;
+      kinds.forEach((k, n) => { const r = rs[n]; if (r && r.ok) { ok++; META.top[k] = (r.builds || [])[0] || null; } });
+      if (!ok) META.error = 'The board did not answer.';
+      META.loaded = true;
+    } catch (e) { META.error = e.message; }
+    META.busy = false; renderMeta();
+  }
+  async function metaVote(b) {
+    const r = await L.socialBoardVote(b.id, !b.voted);
+    if (!r || !r.ok) return note((r && r.error) || 'That vote did not go through.', true);
+    b.votes = r.votes; b.voted = r.voted; renderMeta();
+  }
+  function renderMeta() {
+    const box = $('build-meta-grid'); if (!box) return; box.replaceChildren();
+    if (META.error) { box.append(el('p', 'small err', META.error)); return; }
+    if (META.busy && !META.loaded) { box.append(el('p', 'small', 'Loading...')); return; }
+    for (const k of boardKinds()) {
+      const b = META.top[k], card = el('div', 'bld-meta-card' + (b ? '' : ' empty'));
+      const head = el('div', 'bld-meta-head'); const img = el('img', 'bld-meta-art'); img.src = WPN_ART(k); img.alt = '';
+      const ht = el('div', 'bld-meta-ht'); ht.append(el('div', 'bld-slot', 'Top ' + WEAPON_KINDS[k] + ' build'), el('div', 'bld-name', b ? b.name : 'Nobody yet'));
+      head.append(img, ht); card.append(head);
+      if (!b) {
+        card.append(el('p', 'small', 'No ' + WEAPON_KINDS[k] + ' build on the board. Make one on the Builder tab and press Publish this build.'));
+        box.append(card); continue;
+      }
+      const m = el('div', 'bld-row-meta'); m.append(el('span', 'bld-beh', 'by ' + b.author));
+      if (b.element) m.append(el('span', 'bld-el el-' + b.element.toLowerCase(), b.element));
+      m.append(el('span', 'bld-beh', b.votes + ' vote' + (b.votes === 1 ? '' : 's'))); card.append(m);
+      card.append(gearStrip(b));
+      if (b.notes) card.append(el('div', 'small bld-meta-notes', b.notes));
+      const acts = el('div', 'bld-meta-acts');
+      const open = el('button', 'primary-sm', 'Open'); open.type = 'button'; open.onclick = () => commOpen(b);
+      const vote = el('button', 'ghost hm-small' + (b.voted ? ' on' : ''), b.voted ? 'Voted' : 'Upvote'); vote.type = 'button'; vote.onclick = () => metaVote(b);
+      const more = el('button', 'ghost hm-small', 'All ' + WEAPON_KINDS[k] + ' builds'); more.type = 'button';
+      more.onclick = () => { COMM.weaponKind = k; COMM.sort = 'top'; const s = $('build-comm-sort'); if (s) s.value = 'top'; const w = $('build-comm-weapon'); if (w) w.value = k; showTab('community'); commLoad(1); };
+      acts.append(open, vote, more); card.append(acts); box.append(card);
+    }
+  }
+  function renderCommunity() {
+    const box = $('build-comm-list'); if (!box) return; box.replaceChildren();
+    $('build-comm-count').textContent = COMM.busy ? 'Loading...' : COMM.total ? COMM.total + ' build' + (COMM.total === 1 ? '' : 's') : '';
+    $('build-comm-page').textContent = COMM.pages > 1 ? 'Page ' + COMM.page + ' of ' + COMM.pages : '';
+    $('build-comm-prev').disabled = COMM.page <= 1; $('build-comm-next').disabled = COMM.page >= COMM.pages;
+    const pager = $('build-comm-prev').parentElement; if (pager) pager.hidden = COMM.pages <= 1;   // one page needs no Back and More
+    if (COMM.error) { box.append(el('p', 'small err', COMM.error)); return; }
+    if (COMM.busy && !COMM.builds.length) { box.append(el('p', 'small', 'Loading...')); return; }
+    if (!COMM.builds.length) { box.append(el('p', 'small', COMM.mine ? 'You have not published anything yet. Make a build on the Builder tab and press Publish this build.' : 'Nothing on the board yet. Be the first: Builder tab, then Publish this build.')); return; }
+    for (const b of COMM.builds) {
+      const row = el('div', 'bld-saved');
+      const vote = el('button', 'bld-vote' + (b.voted ? ' on' : ''), ''); vote.type = 'button';
+      vote.append(el('span', 'bld-vote-caret', '^'), el('span', 'bld-vote-n', String(b.votes)));
+      vote.title = b.voted ? 'Take your vote back' : 'Upvote this build';
+      vote.onclick = () => commVote(b, row);
+      row.append(vote);
+      if (b.weaponKind && WEAPON_KINDS[b.weaponKind]) { const wi = el('img', 'bld-row-wpn'); wi.src = WPN_ART(b.weaponKind); wi.alt = ''; wi.title = WEAPON_KINDS[b.weaponKind]; row.append(wi); }
+      const t = el('div', 'bld-saved-text');
+      t.append(el('div', 'bld-row-name', b.name + '  (' + b.version + ')'));
+      const m = el('div', 'bld-row-meta');
+      m.append(el('span', 'bld-beh', 'by ' + b.author));
+      if (b.weaponKind) m.append(el('span', 'bld-beh', WEAPON_KINDS[b.weaponKind] || b.weaponKind));
+      if (b.element) m.append(el('span', 'bld-el el-' + b.element.toLowerCase(), b.element));
+      t.append(m);
+      if (b.notes) t.append(el('div', 'small', b.notes));
+      t.append(gearStrip(b));
+      row.append(t);
+      const acts = el('div', 'bld-saved-acts');
+      const open = el('button', 'primary-sm', 'Open'); open.onclick = () => commOpen(b); acts.append(open);
+      const code = el('button', 'ghost hm-small', 'Copy code'); code.onclick = async () => { note((await copyText(b.code)) ? 'Share code copied.' : 'Could not copy.', false); }; acts.append(code);
+      if (b.mine) { const rm = el('button', 'ghost hm-small danger', 'Remove'); rm.onclick = () => commRemove(b); acts.append(rm); }
+      row.append(acts); box.append(row);
+    }
+  }
   function renderCatalog() {
     const box = $('build-catalog-list'); box.replaceChildren();
     const q = $('build-catalog-search').value.trim().toLowerCase(), kind = $('build-catalog-kind').value, onlyOwned = $('build-catalog-owned').checked;
@@ -308,11 +532,11 @@
   function render() {
     const sc = document.querySelector('.content'); const top = sc ? sc.scrollTop : 0;
     $('build-name').value = editor.name || ''; $('build-notes').value = editor.notes || '';
-    if (S.tab === 'editor') renderLoadout(); else if (S.tab === 'mine') renderMine(); else renderCatalog();
+    if (S.tab === 'editor') renderLoadout(); else if (S.tab === 'mine') renderMine(); else if (S.tab === 'community') { renderWeaponStrip(); renderCommunity(); if (!COMM.loaded && !COMM.busy) commLoad(1); } else if (S.tab === 'meta') { renderMeta(); if (!META.loaded && !META.busy) metaLoad(); } else renderCatalog();
     const n = $('build-data-note'); n.hidden = !(S.data && S.data.note); n.textContent = (S.data && S.data.note) || '';
     if (sc) sc.scrollTop = top;
   }
-  function showTab(tab) { S.tab = tab; for (const k of ['editor', 'catalog', 'mine']) { $('build-panel-' + k).hidden = k !== tab; $('build-tab-' + k).classList.toggle('is-active', k === tab); } closePicker(); render(); }
+  function showTab(tab) { S.tab = tab; for (const k of ['editor', 'catalog', 'mine', 'meta', 'community']) { const p = $('build-panel-' + k), b = $('build-tab-' + k); if (p) p.hidden = k !== tab; if (b) b.classList.toggle('is-active', k === tab); } closePicker(); render(); }
   async function switchVersion(keepEditor) {
     loadData($('build-version').value); if (!keepEditor) editor = blank(S.ver);
     const ks = $('build-fill-weapon'); ks.replaceChildren(); ks.add(new Option('any weapon', '')); for (const [k, n] of Object.entries(WEAPON_KINDS)) if (S.data.items.some(i => i.kind === k)) ks.add(new Option(n, k));
@@ -324,6 +548,18 @@
     $('build-character').onchange = pickCharacter; $('build-refresh').onclick = () => readInventory();
     for (const b of document.querySelectorAll('.builds-tab')) b.onclick = () => { snapshot(); showTab(b.dataset.buildTab); };
     $('build-save').onclick = save;
+    $('build-publish').onclick = commPublish;
+    const cs = $('build-comm-sort'); cs.add(new Option('Top', 'top')); cs.add(new Option('New', 'new')); cs.add(new Option('By weapon', 'weapon'));
+    const cw = $('build-comm-weapon'); cw.add(new Option('any weapon', '')); for (const [k, n] of Object.entries(WEAPON_KINDS)) cw.add(new Option(n, k));
+    const ce = $('build-comm-element'); ce.add(new Option('any element', '')); for (const e of ELEMENTS) ce.add(new Option(e, e));
+    for (const id of ['build-comm-sort', 'build-comm-weapon', 'build-comm-element', 'build-comm-mine']) $(id).addEventListener('change', () => {
+      COMM.sort = $('build-comm-sort').value; COMM.weaponKind = $('build-comm-weapon').value; COMM.element = $('build-comm-element').value; COMM.mine = $('build-comm-mine').checked; commLoad(1);
+    });
+    $('build-comm-refresh').onclick = () => commLoad(COMM.page);
+    $('build-comm-prev').onclick = () => commLoad(Math.max(1, COMM.page - 1));
+    $('build-comm-next').onclick = () => commLoad(Math.min(COMM.pages, COMM.page + 1));
+    if (L.socialState) { L.socialState().then((s) => { S.board = s && s.board; showBoardBits(); }).catch(() => {}); }
+    if (L.onSocialUpdate) L.onSocialUpdate((s) => { const was = boardOn(); S.board = s && s.board; if (boardOn() !== was) showBoardBits(); });
     $('build-clear').onclick = () => { editor = blank(S.ver); $('build-fill-note').textContent = ''; render(); };
     $('build-share').onclick = async () => { snapshot(); note((await copyText(shareCode(editor))) ? 'Share code copied. Paste it anywhere; Import on My builds reads it.' : 'Could not copy.', false); };
     $('build-fill').onclick = fill;
@@ -350,5 +586,14 @@
     await loadSaved(); await switchVersion(false);
   }
   // app.js sets #build-version to the Play page's version and fires change before the page shows; before init that is harmless
-  document.addEventListener('page:shown', (e) => { if (e.detail === 'builds') init(); });
+  document.addEventListener('page:shown', async (e) => {
+    if (e.detail !== 'builds' && e.detail !== 'meta') return;
+    await init();
+    const board = S.tab === 'meta' || S.tab === 'community';
+    if (e.detail === 'meta') showTab(board ? S.tab : 'meta');
+    else showTab(board ? 'editor' : S.tab);
+  });
+  // the Meta nav item shows as soon as the board answers, before either page was opened
+  if (L.socialState) L.socialState().then((s) => { S.board = s && s.board; showBoardBits(); }).catch(() => {});
+  if (L.onSocialUpdate) L.onSocialUpdate((s) => { const was = boardOn(); S.board = s && s.board; if (boardOn() !== was) showBoardBits(); });
 })();
