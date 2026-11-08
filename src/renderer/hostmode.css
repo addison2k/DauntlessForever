@@ -188,3 +188,228 @@
 .fv25-rated-score small { font-size: 14px; color: var(--ink-3); font-weight: 400; }
 .fv25-rated-sub { color: var(--ink-2); font-size: 13px; }
 @media (max-width: 1000px) { .fv25-cards { grid-template-columns: 1fr; } .fv25-how3 { grid-template-columns: 1fr; } .fv25-how-item + .fv25-how-item { border-left: 0; padding-left: 0; border-top: 1px solid var(--line); } .fv25-ver { font-size: 56px; } }
+
+/* ---- DF-INFINITE (Nov 6): Infinite on the Play page (the Forever 2.5 nodes, moved in by forever.js) ---- */
+body:not(.inf-on) .inf-only, body:not(.sel-1147) .inf-only, body:not(.inf-on) #fv25-play, body:not(.sel-1147) #fv25-play, body:not(.inf-on) #fv25-stop, body:not(.sel-1147) #fv25-stop { display: none !important; }
+body.inf-on #fh-banner { display: none; }
+.inf-panel { margin-top: 16px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-2); overflow: hidden; }
+.inf-band { position: relative; display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 118px; padding: 16px 24px; background: url("infinite-band.jpg") center 55% / cover no-repeat; }
+.inf-band::before { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(8,12,16,.94) 0%, rgba(8,12,16,.72) 42%, rgba(8,12,16,.18) 100%); }
+.inf-band > * { position: relative; }
+.inf-band-text { border-left: 3px solid var(--brass); padding-left: 16px; min-width: 0; }
+.inf-title { font-family: var(--display); font-size: 42px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; line-height: 1; text-shadow: 0 2px 12px rgba(0,0,0,.6); }
+.inf-tag { color: var(--ink-2); font-size: 15px; margin-top: 6px; text-shadow: 0 1px 8px rgba(0,0,0,.6); }
+.inf-band .hero-pill-row { margin: 0; flex: 0 0 auto; }
+.inf-band .pill { display: inline-flex; align-items: center; gap: 9px; font-family: var(--display); font-weight: 600; font-size: 15px; padding: 7px 16px; border-width: 1.5px; background: rgba(8,12,16,.55); }
+.inf-band .pill.ready::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--aether); }
+.inf-band .pill.attn::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--brass); }
+#inf-drop #fv-missing { margin: 0; border-radius: 0; border-left: 0; border-right: 0; border-top: 0; }
+#inf-cards { padding: 12px 14px 2px; }
+#inf-cards .fv25-cards { margin-bottom: 0; }
+#inf-cards .fv25-step { background: var(--bg-3); }
+.inf-fold { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 10px 18px; margin-top: 10px; border-top: 1px solid var(--line); color: var(--ink-2); font-family: var(--display); font-size: 15px; font-weight: 600; }
+.inf-fold:hover { color: var(--ink); background: rgba(255,255,255,.03); }
+.inf-fold-chev { width: 8px; height: 8px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); transition: transform .15s; }
+.inf-fold.open .inf-fold-chev { transform: rotate(45deg); }
+#inf-how { padding: 0 18px 14px; }
+#inf-how .fv25-tabs { margin-top: 0; }
+#inf-panel #fv-error, #inf-panel #fv-note { margin: 0 18px 12px; }
+#inf-panel #fv-note:empty { display: none; }
+/* the third button: Play Infinite in Infinite's own colour */
+.action-main .fv25-play { flex: 1 1 0; min-width: 0; padding: 16px 24px; font-size: 20px; letter-spacing: .06em; border-radius: 8px; gap: 12px; background: var(--aether); color: #082521; }
+.action-main .fv25-play::before { border-left-width: 13px; border-top-width: 8px; border-bottom-width: 8px; }
+.action-main .fv25-play:hover { background: var(--aether); filter: brightness(1.08); }
+.action-main .fv25-play:disabled { background: var(--bg-3); color: var(--ink-3); filter: none; }
+.action-main .fv25-stop { flex: 1 1 0; min-width: 0; height: 56px; padding: 0 20px; font-size: 16px; border-radius: 8px; }
+.action-row > .action-caps { grid-column: 1 / -1; grid-row: 2; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 14px; margin-top: -6px; text-align: center; color: var(--ink-3); font-size: 13px; }
+body.inf-on.sel-1147 .action-row > .host-opt, body.inf-on.sel-1147 .action-side { grid-row: 3; }
+#inf-status .fv25-status-row { border-bottom: 0; padding-bottom: 0; margin-top: 8px; }
+/* More sits at the end of the status strip */
+.step.step-more { flex: 0 0 auto; justify-content: center; padding: 10px 14px; }
+.step-more .ghost { white-space: nowrap; }
+.step-more .ghost::after { content: ""; display: inline-block; width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(45deg); margin-left: 8px; vertical-align: 2px; }
+/* the More menu: a letter and a colour per line (gold = set-up and repair, blue = antivirus and firewall, teal = open or send, red = deletes) */
+.menu button { display: flex; align-items: center; gap: 12px; }
+.mk { flex: 0 0 24px; height: 24px; border-radius: 6px; display: inline-grid; place-items: center; font-family: var(--display); font-size: 12.5px; font-weight: 700; color: #0b1015; }
+.mk-grey { background: #9aa7b2; } .mk-gold { background: var(--brass); } .mk-blue { background: #7fb3ff; } .mk-teal { background: var(--aether); } .mk-red { background: var(--ember); color: #fff; }
+.menu button:disabled .mk { opacity: .4; }
+/* the three columns: Play solo | Host with friends | Play Infinite (Play online left the page, so Host moves to column 2) */
+#btn-host { grid-column: 2; }
+.action-row > #host-light-opt { grid-column: 2; }
+.action-main .fv25-play, .action-main .fv25-stop { grid-column: 3; grid-row: 1; width: 100%; }
+
+/* ---- DF-INFINITE v2 (Nov 6): one picture; Region and PC rating fold into chips in the hero; the buttons dock at the bottom ---- */
+.hero .inf-chips { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.12); }
+.inf-kicker { font-family: var(--display); font-size: 13px; font-weight: 700; letter-spacing: .3em; text-transform: uppercase; color: var(--aether); margin-right: 2px; text-shadow: 0 1px 8px rgba(0,0,0,.6); }
+.inf-slot:empty { display: none; }
+.inf-chips .hero-pill-row { margin: 0; }
+.inf-chips .fv25-step.slim { padding: 3px 6px 3px 6px; border-radius: 10px; background: rgba(8,12,16,.64); border: 1px solid rgba(255,255,255,.16); backdrop-filter: blur(3px); }
+.inf-chips .fv25-head { gap: 10px; padding: 2px; align-items: center; }
+.inf-chips .fv25-head .fv25-ico, .inf-chips .fv25-head .fv25-change { margin-top: 0; }
+.inf-chips .fv25-ico { width: 30px; height: 30px; } .inf-chips .fv25-ico svg { width: 16px; height: 16px; }
+.inf-chips .fv25-head-text { gap: 0; }
+.inf-chips .fv25-label { font-size: 12px; line-height: 1.1; color: var(--ink-2); font-family: var(--font); font-weight: 500; }
+.inf-chips .fv25-answer { font-size: 14px; color: var(--ink); font-weight: 600; }
+.inf-chips .fv25-hint { display: none; }
+.inf-chips .fv25-change { font-size: 12.5px; padding: 5px 10px; border-radius: 7px; margin-left: 4px; }
+.inf-howlink { margin-left: auto; display: inline-flex; align-items: center; gap: 8px; color: var(--ink-2); font-size: 13.5px; padding: 6px 2px; text-shadow: 0 1px 8px rgba(0,0,0,.6); }
+.inf-howlink:hover { color: var(--ink); }
+.inf-howlink.open .inf-fold-chev { transform: rotate(45deg); }
+#inf-cards > span:empty { display: none; }
+#inf-cards .fv25-step { margin-top: 12px; }
+#inf-cards .fv25-step:not(.slim) { padding: 16px 18px; }
+#inf-how { margin-top: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-2); padding: 0 18px 14px; }
+#inf-msgs:empty { display: none; }
+#inf-msgs .action-note { margin-top: 8px; }
+#inf-drop #fv-missing { margin: 12px 0 0; border-radius: 12px; border: 1px solid var(--line-2); border-top: 1px solid var(--line-2); }
+/* the status strip, slimmer */
+.path { margin-top: 12px; }
+.step { padding: 9px 14px; }
+.step-n { flex-basis: 24px; height: 24px; font-size: 12px; }
+.step-name { font-size: 14px; }
+.step-sub { font-size: 12px; -webkit-line-clamp: 1; }
+.step.step-more { padding: 6px 10px; }
+/* the dock: the buttons are the last thing on the page and stay at the bottom of the window while the page scrolls */
+#page-play .detail-body:not([hidden]) { display: flex; flex-direction: column; flex: 1 1 auto; }
+#page-play .detail-body > .notes { margin-bottom: 8px; }
+#play-dock { position: sticky; bottom: 0; z-index: 6; flex: none; margin: auto -40px 0; padding: 12px 40px 12px; background: linear-gradient(180deg, rgba(11,16,21,0) 0%, rgba(11,16,21,.94) 16%, var(--bg) 38%); }
+#play-dock .action-row { margin-top: 0; }
+#play-dock .menu { margin-top: 10px; align-self: flex-start; }
+#play-dock .action-note { margin-top: 6px; min-height: 0; }
+#play-dock .action-note:empty { display: none; }
+.action-row > #inf-status { grid-column: 3; grid-row: 3; align-self: start; }
+#inf-status .fv25-status-row { margin-top: 0; }
+#inf-status .hm-status { justify-content: flex-start; }
+#inf-status .hm-state { font-size: 14px; }
+#inf-status .hm-sub { font-size: 12.5px; white-space: normal; }
+body.inf-on.sel-1147 .action-row > .host-opt .opt-sub { display: none; }
+@media (max-width: 1000px) { #play-dock { margin-left: -24px; margin-right: -24px; padding-left: 24px; padding-right: 24px; } }
+
+/* ---- DF-INFINITE v3 (Nov 6): the play bar, Now playing, Light hosting under the picture, a smaller picture ---- */
+#play-dock { background: var(--bg-2); border-top: 1px solid var(--line-2); box-shadow: 0 -14px 28px rgba(0,0,0,.45); padding: 8px 40px 12px; }
+.action-row > .action-caps { grid-row: 1; margin-top: 0; }
+.action-caps span { visibility: hidden; font-family: var(--display); font-size: 12px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--aether); }
+.action-caps span.now { visibility: visible; }
+#btn-primary, #btn-host, .action-main .fv25-play, .action-main .fv25-stop { grid-row: 2; }
+.action-row > #inf-status, body.inf-on.sel-1147 .action-row > #inf-status { grid-column: 1 / -1; grid-row: 3; justify-self: center; }
+#inf-status .hm-status { justify-content: center; text-align: left; }
+.action-side, body.inf-on.sel-1147 .action-side { grid-row: 4; }
+.action-row > .host-opt, body.inf-on.sel-1147 .action-row > .host-opt { grid-row: 4; }
+.detail-body > #host-light-opt { margin: 10px 2px 0; }
+.detail-body > #host-light-opt .opt-sub { display: inline; margin-left: 6px; }
+/* the picture: Infinite's row is what is left in it */
+.hero .inf-chips { flex-wrap: nowrap; gap: 8px; margin-top: 12px; }
+.inf-kicker { font-size: 12px; letter-spacing: .22em; }
+.inf-chips .pill { font-size: 13.5px; padding: 6px 12px; }
+.inf-chips .fv25-change { display: none; }
+.inf-chips .fv25-step.slim { padding: 2px 4px; }
+.inf-chips .fv25-head { gap: 8px; }
+.inf-chips .fv25-head::after { content: ""; width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); margin: 0 6px 0 2px; color: var(--ink-3); flex: none; }
+.inf-chips .fv25-ico { width: 28px; height: 28px; }
+.action-main .fv25-stop { border-color: var(--aether); color: var(--aether); }
+.inf-howlink { flex: 0 1 auto; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ---- DF-INFINITE v4 (Nov 6): Addison's mock: short picture + Details, one-line strip, the Infinite panel, captions, Host options ---- */
+.hero > .hero-details { position: absolute; right: 18px; bottom: 16px; z-index: 3; display: inline-flex; align-items: center; gap: 8px; padding: 7px 12px; background: rgba(8,12,16,.55); color: var(--ink); border-color: rgba(255,255,255,.22); font-size: 14px; }
+.hero > .hero-details .inf-fold-chev { transform: rotate(-45deg); }
+.hero > .hero-details.open .inf-fold-chev { transform: rotate(45deg); }
+/* the Infinite panel */
+.inf-panel { margin-top: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg-2); padding: 16px 18px 12px; }
+.inf-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+.inf-head-text { min-width: 0; }
+.inf-title { font-family: var(--display); font-size: 30px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--aether); line-height: 1; }
+.inf-tag { font-size: 15.5px; color: var(--ink); margin-top: 6px; }
+.inf-req { font-size: 13px; color: var(--ink-2); margin-top: 4px; }
+.inf-head .hero-pill-row { margin: 4px 0 0; flex: 0 0 auto; }
+.inf-head .pill { display: inline-flex; align-items: center; gap: 9px; font-family: var(--display); font-weight: 600; font-size: 14px; padding: 7px 16px; border-width: 1.5px; }
+.inf-head .pill.ready::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--aether); }
+.inf-head .pill.attn::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--brass); }
+#inf-cards .fv25-cards { margin: 14px 0 0; }
+#inf-cards .fv25-step { background: var(--bg-3); margin-top: 0; }
+.fv25-label { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-2); font-family: var(--font); font-weight: 600; }
+.fv25-label::before { display: inline-block; margin-right: 10px; color: var(--aether); }
+#fv25-s1 .fv25-label::before { content: "1"; }
+#fv25-s2 .fv25-label::before { content: "2"; }
+.fv25-answer { font-family: var(--display); font-size: 22px; font-weight: 700; color: var(--ink); white-space: normal; line-height: 1.15; }
+.fv25-step.slim.done .fv25-hint { font-size: 0; }
+.fv25-step.slim.done .fv25-hint::before { font-size: 13px; content: "\2713  "; color: var(--aether); white-space: pre; }
+#fv25-s1.slim.done .fv25-hint::after { font-size: 13px; content: "Selected"; color: var(--ink-2); }
+#fv25-s2.slim.done .fv25-hint::after { font-size: 13px; content: "Completed"; color: var(--ink-2); }
+.fv25-head .fv25-change { border: 0; border-left: 1px solid var(--line); border-radius: 0; padding: 8px 6px 8px 16px; color: var(--ink); align-self: center; margin-top: 0; }
+.fv25-change::after { content: ""; display: inline-block; width: 7px; height: 7px; border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); margin-left: 8px; vertical-align: 1px; }
+.fv25-head:hover .fv25-change { border-color: var(--line); color: var(--aether); }
+.inf-panel .inf-howlink { margin: 10px 0 0; padding: 4px 0; color: var(--aether); font-weight: 600; font-size: 14px; overflow: visible; }
+.inf-panel .inf-howlink .inf-fold-chev { transform: rotate(-45deg); }
+.inf-panel .inf-howlink.open .inf-fold-chev { transform: rotate(45deg); }
+#inf-how { margin-top: 8px; border: 0; border-top: 1px solid var(--line); border-radius: 0; background: transparent; padding: 0; }
+/* the play bar */
+#play-dock { padding: 6px 40px 10px; }
+#play-dock .action-row { row-gap: 6px; }
+.action-row > .action-subs { grid-column: 1 / -1; grid-row: 3; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); column-gap: 14px; text-align: center; color: var(--ink-2); font-size: 13.5px; margin-top: 2px; }
+.action-row > .host-opts-wrap { grid-column: 2; grid-row: 4; justify-self: center; text-align: center; }
+.host-opts-btn { color: var(--aether); font-weight: 600; font-size: 13.5px; display: inline-flex; align-items: center; gap: 8px; padding: 2px 4px; }
+.host-opts-btn .inf-fold-chev { transform: rotate(45deg); }
+.host-opts-btn.open .inf-fold-chev { transform: rotate(-135deg); }
+.host-opts { margin-top: 8px; text-align: left; border: 1px solid var(--line-2); border-radius: 8px; background: var(--bg-3); padding: 10px 12px; }
+.host-opts .host-opt { margin: 0; width: auto; }
+.action-row > #inf-status, body.inf-on.sel-1147 .action-row > #inf-status { grid-row: 5; }
+.action-side, body.inf-on.sel-1147 .action-side { grid-row: 6; }
+.action-row > .host-opt, body.inf-on.sel-1147 .action-row > .host-opt { grid-row: 6; }
+
+/* ---- DF-TABS131 (Nov 6): the play bar keeps one height on every version tab; 1.3.1 is a greyed-out tab ---- */
+.gv-tab.soon { opacity: .55; }
+body.sel-soon .path, body.sel-soon .detail-body > .notes { opacity: .5; }
+body.inf-on.sel-soon #fv25-play { display: inline-flex !important; background: var(--bg-3) !important; color: var(--ink-3) !important; pointer-events: none; }
+body.inf-on.sel-soon #fv25-play::before { display: none; }
+body.sel-soon .action-row > .action-subs { visibility: hidden; }
+
+/* ---- DF-INFINITE v6 (Nov 6): one picture size on every tab; a bar that never moves; big version boxes on the other pages ---- */
+/* the picture: kicker, number, era, pill; the blurb and build line sit behind Details on every version */
+.hero > .blurb, .hero > .meta { display: none; }
+body.hero-details .hero > .blurb { display: -webkit-box; }
+body.hero-details .hero > .meta { display: block; }
+.hero { min-height: 236px; padding: 40px 36px 22px; }
+/* the bar: a fixed height, so nothing above or inside it moves it; the More menu opens above it */
+#play-dock { position: sticky; height: 232px; min-height: 0; box-sizing: border-box; overflow: visible; }
+#play-dock .action-row { grid-template-rows: 14px 56px 18px 24px 38px; align-content: start; row-gap: 6px; }
+.action-row > #inf-status, body.inf-on.sel-1147 .action-row > #inf-status { overflow: hidden; }
+#play-dock .action-note, #play-dock .action-note:empty { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; height: 36px; margin: 2px auto 0; max-width: 90ch; text-align: center; font-size: 13.5px; }
+#play-dock .warn-box { position: absolute; left: 40px; right: 40px; bottom: calc(100% + 8px); margin: 0; z-index: 7; }
+#play-dock .menu { position: absolute; left: 40px; bottom: calc(100% + 8px); margin: 0; z-index: 40; box-shadow: 0 10px 30px rgba(0,0,0,.5); max-height: calc(100vh - 300px); overflow-y: auto; }
+#play-dock .action-row > .host-opts-wrap { position: relative; }
+#play-dock .host-opts { position: absolute; left: 50%; transform: translateX(-50%); bottom: calc(100% + 6px); min-width: 320px; z-index: 8; }
+/* the version picker on Hunt Pass / Game Rules / Inventory / Mods: big boxes, every version, greyed where nothing is there yet */
+.season-tabs.ver-tabs { display: flex; flex-wrap: nowrap; gap: 0; margin: 0 0 16px; border: 1px solid var(--line-2); border-radius: 10px; overflow: hidden; background: var(--bg-2); }
+.season-tabs.ver-tabs .season-tab.ver-tab { flex: 1 1 0; min-width: 0; text-align: center; font-family: var(--display); font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; padding: 14px 8px; border: 0; border-right: 1px solid var(--line-2); border-bottom: 3px solid transparent; border-radius: 0; color: var(--ink); background: transparent; }
+.season-tabs.ver-tabs .season-tab.ver-tab:last-child { border-right: 0; }
+.season-tabs.ver-tabs .season-tab.ver-tab:hover { background: var(--bg-3); }
+.season-tabs.ver-tabs .season-tab.ver-tab[aria-selected="true"] { color: var(--brass-2); background: rgba(212,160,53,.14); border-bottom-color: var(--brass); }
+.season-tabs.ver-tabs .season-tab.ver-tab.soon { color: var(--ink-3); opacity: .55; }
+.season-tabs.ver-tabs .season-tab.ver-tab .soon-tag { display: none; }
+.season-tabs.ver-tabs[hidden] { display: none; }
+
+/* ---- DF-INFINITE v7 (Nov 6): a tight bar; the gear on the Host button; the badge states ---- */
+#play-dock { height: 122px; padding: 8px 40px 10px; }
+#play-dock .action-row { grid-template-rows: 14px 56px 18px; row-gap: 6px; }
+.action-row > #inf-status, body.inf-on.sel-1147 .action-row > #inf-status { display: none; }
+#play-dock .action-note, #play-dock .action-note:empty { position: absolute; left: 40px; right: 40px; bottom: calc(100% + 6px); height: auto; margin: 0; max-width: none; padding: 6px 12px; border-radius: 8px; background: rgba(11,16,21,.92); border: 1px solid var(--line-2); font-size: 13px; z-index: 7; }
+#play-dock .action-note:empty { display: none; }
+/* the gear: on the right edge of Host with friends */
+.action-row > .host-opts-wrap { grid-column: 2; grid-row: 2; justify-self: end; align-self: center; margin-right: 8px; z-index: 2; position: relative; }
+body.host-opts-on #btn-host { padding-right: 46px; }
+.host-opts-btn { width: 34px; height: 34px; border-radius: 8px; display: inline-grid; place-items: center; padding: 0; color: var(--brass-2); }
+.host-opts-btn:hover, .host-opts-btn.open { background: rgba(0,0,0,.25); color: var(--ink); }
+#play-dock .host-opts { left: auto; right: 0; transform: none; }
+/* the badge states */
+.inf-head .pill.live::before { animation: infpulse 1.4s ease-in-out infinite; }
+@keyframes infpulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+.inf-head .pill.bad { border-color: var(--ember); color: var(--ember); cursor: pointer; }
+.inf-head .pill.bad::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--ember); }
+.inf-pill-link { text-decoration: underline; text-underline-offset: 3px; font-weight: 500; opacity: .9; }
+#inf-msgs .action-note.flash { animation: infflash 1.2s ease-out; }
+@keyframes infflash { 0% { background: rgba(224,96,64,.25); } 100% { background: transparent; } }
+
+/* ---- DF-INFINITE v8 (Nov 6): the bar is exactly as tall as its three rows (it was 5 px short, so the page could scroll under it); Stop everything / Cancel download sit above it ---- */
+#play-dock { height: 118px; }
+.action-side, body.inf-on.sel-1147 .action-side { position: absolute; right: 40px; bottom: calc(100% + 8px); grid-row: auto; z-index: 7; }
+.action-row > .host-opt, body.inf-on.sel-1147 .action-row > .host-opt { display: none; }

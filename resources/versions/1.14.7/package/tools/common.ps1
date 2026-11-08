@@ -10,7 +10,7 @@ $ConfigFile = Join-Path $Root 'config.json'
 $ExeHash      = 'F3F95FBF22709EF077A11632ED95D675B7209B7E0172D9ECB9BA7D02A1FBB66B'   # Dauntless 1.14.7, CL 647472
 $EpicEosHash  = 'CBC0E5C922CEB88A9FA99121008AE9CD76244B17753701D9D25C6B596EA2FBFC'   # Epic's EOSSDK-Win64-Shipping.dll
 $StandInHash  = '4113C9EEBFBAC08532B6566A48F69E4F64A6B8E18A18AAFBA43F62F8F7DFDF70'   # bin\EOSSDK-Win64-Shipping.dll (offline sign-in)
-$LoaderHash   = '13A85219DEC937C887EC6718A340ED34803F1990D6029B49A7416F5A9D9101B5'    # bin\dxgi.dll (null RHI for server copies Oct 24; crash guard 3 Oct 24; boss bar crash fix Oct 21; in-game text chat Oct 21; server loader: fix5 + KombatKing's equipment fix R1 + owner-only replication; client: significance guard, cheap checks Oct 21)
+$LoaderHash   = '2CB0F74017099408FFD923D81B50050D2F4B6698DF7A35284413AA189E78742D'    # bin\dxgi.dll (null RHI for server copies Oct 24; crash guard 3 Oct 24; boss bar crash fix Oct 21; in-game text chat Oct 21; server loader: fix5 + KombatKing's equipment fix R1 + owner-only replication; client: significance guard, cheap checks Oct 21)
 # Quest text fix by KombatKing (AGPL-3.0, source\QuestDialogue1147-R2-source.zip): adds the missing "Unspecified"
 # addressee lines to the game's own text, so quests and dialogue show real sentences. Copied into Archon\Content\Paks.
 $QuestPakName = 'zzzzzzzzzzzzzzzz_QuestDialogueFallback1147_P.pak'
@@ -23,7 +23,7 @@ $GamePaks = @(
     # Equipment fix by KombatKing (AGPL-3.0, source\Equipment1147-R1-source.zip): Recruit's Repeaters in the repeater category.
     [pscustomobject]@{ Name = 'zzzzzzzz_Equipment1147_P.pak'; Hash = '9A2B3AF97304AE8CDD49BFC605A2E2C34657B0707A02076A0EFB6F62C7C80E65'; Old = @(); What = 'Equipment fix (KombatKing)' },
     # KombatKing's 1.14.7 All-in-One R1 (AGPL-3.0, source\KombatKing-1147-AllInOne-R1-source.zip)
-    [pscustomobject]@{ Name = 'zzzz_Mega1147_Middleman_P.pak'; Hash = '60966CBC3BC8CCCD4922D0515DF631F12C93E993F51B30665B6224E944404E8A'; Old = @(); What = 'Middleman fusion timer (KombatKing)' },
+    [pscustomobject]@{ Name = 'zzzz_Mega1147_Middleman_P.pak'; Hash = '1CEAF8363951F8F3733A2E87D2AB71C7F00ED5428775CF56BADB19536A4C33CC'; Old = @('60966CBC3BC8CCCD4922D0515DF631F12C93E993F51B30665B6224E944404E8A'); What = 'Middleman fusion timer (KombatKing), re-roll price and icon' },
     [pscustomobject]@{ Name = 'zzzz_Mega1147_HuntPass_P.pak'; Hash = '7D64B5DCFB133FD19FBB54142D1C0F2713C954721A9D01B981BF9A4B3C91B7B1'; Old = @(); What = 'Hunt Pass seasons (KombatKing)' },
     [pscustomobject]@{ Name = 'zzzzzzzzzzzzzzzz_HammerReload1147_P.pak'; Hash = 'F8A1449FD2C70FE915B455BEAF4428AE128D0C163AAF9A2E66554C62B2451E34'; Old = @(); What = 'War Hammer reload fix (KombatKing)' },
     # KombatKing's Item Expiry R1 (AGPL-3.0, source\KombatKing-1147-Oct18-source.zip): Season 11A potions and the Springtide egg token do not expire

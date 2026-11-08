@@ -897,6 +897,10 @@ ipcMain.handle('mods:act', async (_e, id, action, a, b) => {
   }
   return { ok: false, error: 'Unknown action.' };
 });
+// DF-BUILDS (Nov 6): read-only catalogs + the local build library (main/builds.js); never opens a save for writing
+const BUILDS = require('./builds');
+ipcMain.handle('builds:catalog', (_e, id) => BUILDS.catalog(byId(id)));
+ipcMain.handle('builds:local', (_e, action, arg) => BUILDS.local(action, arg));
 ipcMain.handle('items:list', async (_e, id) => {
   const v = byId(id); if (!v || !v.package) return null;
   let catalog;

@@ -1,0 +1,97 @@
+/* Dauntless Forever - launcher. builds.css (DF-BUILDS v2, Nov 6): the Builds page. Copyright (C) 2026 Addison2k. AGPL-3.0-only. */
+#page-builds { max-width: 1120px; }
+#page-builds .builds-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+#page-builds .builds-head .page-title { margin-bottom: 2px; }
+#page-builds .builds-head .lead { margin: 0; }
+#page-builds .builds-toolbar { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; margin: 4px 0 0; }
+#page-builds .builds-toolbar label { color: var(--ink-2); font-size: 12px; }
+.builds-picker .hm-select, #page-builds .hm-select { min-height: 33px; }
+.builds-picker input, #page-builds input { min-width: 0; background: var(--bg); color: var(--ink); border: 1px solid var(--line-2); border-radius: 7px; padding: 8px 11px; box-sizing: border-box; font: inherit; }
+.builds-picker input:focus, #page-builds input:focus { outline: 1px solid var(--brass); }
+#page-builds .builds-tabs { display: flex; gap: 8px; border-bottom: 1px solid var(--line); margin: 6px 0 8px; }
+#page-builds .builds-tab { background: transparent; color: var(--ink-2); border: 0; border-bottom: 2px solid transparent; border-radius: 0; padding: 9px 15px; font-weight: 600; }
+#page-builds .builds-tab.is-active { color: var(--brass-2); border-bottom-color: var(--brass-2); }
+#page-builds .builds-status { color: var(--brass-2); font-size: 12.5px; margin: 4px 0; min-height: 0; }
+#page-builds .builds-status:empty { display: none; }
+#page-builds .builds-status.err { color: var(--ember); }
+#page-builds .builds-namerow { display: grid; grid-template-columns: 1.2fr 1.6fr auto auto auto; gap: 8px; align-items: center; margin: 4px 0 8px; }
+.builds-picker .builds-fill, #page-builds .builds-fill { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 10px; }
+.builds-picker .builds-fill input, #page-builds .builds-fill input { flex: 1 1 220px; }
+#page-builds .builds-fill-label { color: var(--ink-2); font-size: 13px; }
+#page-builds .builds-check { white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); font-size: 13px; }
+#page-builds .builds-check input { width: 14px; height: 14px; accent-color: var(--brass); }
+/* the loadout: weapon column, armour column, perk column */
+.builds-loadout { display: grid; grid-template-columns: 1.15fr 1.15fr .9fr; gap: 12px; align-items: start; }
+.builds-col { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.bld-card { border: 1px solid var(--line-2); border-radius: 10px; background: var(--bg-2); padding: 10px 12px; min-width: 0; min-height: 78px; box-sizing: border-box; }
+.bld-card.empty { border-style: dashed; }
+.bld-card.locked { border-color: var(--brass); }
+.bld-card.nobond { opacity: .55; } .bld-card.nobond .bld-card-head { cursor: default; }
+.bld-card-head { display: flex; align-items: center; gap: 10px; cursor: pointer; min-width: 0; }
+.bld-card-head:hover .bld-name { color: var(--brass-2); }
+.bld-icon { width: 56px; height: 56px; border-radius: 8px; background: var(--bg); flex: none; object-fit: contain; }
+.bld-card-text { flex: 1 1 auto; min-width: 0; }
+.bld-slot { font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bld-name { font-family: var(--display); font-size: 17px; font-weight: 700; line-height: 1.15; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bld-card.empty .bld-name { color: var(--ink-2); font-weight: 500; }
+.bld-meta, .bld-row-meta { display: flex; flex-wrap: wrap; gap: 5px 8px; align-items: center; margin-top: 3px; font-size: 12px; color: var(--ink-2); }
+.bld-card .bld-meta { flex-wrap: nowrap; overflow: hidden; white-space: nowrap; }
+.bld-acts { display: flex; flex-direction: column; gap: 4px; flex: none; }
+.bld-lock, .bld-x { font-size: 11.5px; padding: 3px 8px; border: 1px solid var(--line-2); border-radius: 6px; color: var(--ink-2); background: transparent; }
+.bld-lock:hover, .bld-x:hover { color: var(--ink); border-color: var(--ink-3); }
+.bld-card.locked .bld-lock { color: var(--brass-2); border-color: var(--brass); }
+.bld-perks { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.bld-perk { font-size: 12px; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; white-space: nowrap; }
+.bld-unique { margin-top: 6px; font-size: 12px; color: var(--ink-2); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.bld-cells { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+.bld-cellslot { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 4px; border: 1px solid var(--line-2); border-radius: 999px; background: var(--bg); color: var(--ink-2); font-size: 12.5px; max-width: 100%; }
+.bld-cellslot img { width: 22px; height: 22px; flex: none; }
+.bld-cellslot span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bld-cellslot:hover { border-color: var(--ink-3); color: var(--ink); }
+.bld-cellslot.on { color: var(--ink); border-color: currentColor; }
+/* element and perk type colours (the game's) */
+.bld-el { font-size: 11.5px; padding: 1px 7px; border-radius: 999px; border: 1px solid currentColor; font-weight: 600; }
+.el-blaze { color: #ff8a4a; } .el-frost { color: #7fd8ff; } .el-shock { color: #ffd84d; } .el-terra { color: #8ee06a; } .el-radiant { color: #ffe9a8; } .el-umbral { color: #b48cff; } .el-neutral { color: #c9d1d9; }
+.pt-power, .ct-power.on { color: #ff6b6b; } .pt-technique, .ct-technique.on { color: #ffa94d; } .pt-mobility, .ct-mobility.on { color: #74d680; } .pt-defence, .ct-defence.on { color: #6cb2ff; } .pt-utility, .ct-utility.on { color: #c78bff; }
+.bld-beh { color: var(--ink-3); }
+.bld-own { font-size: 11px; letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+.bld-own.yes { color: var(--aether); } .bld-own.no { color: var(--ember); } .bld-own.unk { color: var(--ink-3); }
+/* the perk column */
+.builds-summary { border: 1px solid var(--line); border-radius: 10px; background: var(--bg-2); padding: 10px 12px; position: sticky; top: 8px; }
+.bld-h2 { font-family: var(--display); font-size: 15px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--brass-2); margin: 2px 0 8px; }
+.bld-h2 + .bld-h2 { margin-top: 12px; }
+.bld-total { display: grid; grid-template-columns: 34px 1fr auto; align-items: center; gap: 6px; padding: 4px 0; border-top: 1px solid var(--line); font-size: 13.5px; }
+.bld-total:first-of-type { border-top: 0; }
+.bld-total-n { font-family: var(--display); font-weight: 700; font-size: 15px; }
+.bld-total-name { color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bld-bar { display: flex; gap: 2px; }
+.bld-bar i { width: 9px; height: 9px; border-radius: 2px; background: rgba(255,255,255,.08); }
+.bld-bar i.on { background: currentColor; }
+.bld-over { grid-column: 2 / -1; font-size: 11.5px; color: var(--ember); }
+.bld-inv { margin: 10px 0 0; }
+.bld-ueff { font-size: 12.5px; color: var(--ink-2); margin: 0 0 6px; }
+.bld-ueff b { color: var(--ink); font-weight: 600; }
+/* lists: catalog, picker, my builds */
+.builds-list { display: flex; flex-direction: column; gap: 6px; }
+.bld-row { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; padding: 7px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg-2); color: var(--ink); }
+.bld-row:not(.static):hover { border-color: var(--ink-3); background: var(--bg-3); }
+.bld-row img { width: 40px; height: 40px; border-radius: 6px; background: var(--bg); flex: none; object-fit: contain; }
+.bld-row-text { flex: 1 1 auto; min-width: 0; }
+.bld-row-name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bld-row-none { color: var(--ink-2); justify-content: center; }
+.bld-desc { color: var(--ink-3); }
+.bld-saved { display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg-2); }
+.bld-saved-text { flex: 1 1 auto; min-width: 0; }
+.bld-saved-acts { display: flex; gap: 6px; flex: none; flex-wrap: wrap; justify-content: flex-end; }
+.bld-saved-acts .on { color: var(--brass-2); border-color: var(--brass); }
+.bld-saved-acts .danger { color: var(--ember); }
+/* the picker */
+.builds-picker { position: fixed; inset: 0; z-index: 200; background: rgba(5,8,11,.72); display: flex; align-items: center; justify-content: center; padding: 30px; }
+.builds-picker[hidden] { display: none; }
+.builds-picker-box { width: min(760px, 100%); max-height: 100%; display: flex; flex-direction: column; border: 1px solid var(--line-2); border-radius: 12px; background: var(--bg); padding: 14px 16px; box-shadow: 0 20px 50px rgba(0,0,0,.6); }
+.builds-picker-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.builds-picker-head h2 { font-family: var(--display); font-size: 20px; margin: 0; }
+.builds-picker-box .builds-list { overflow-y: auto; min-height: 0; padding-right: 4px; }
+.builds-disclaimer { color: var(--ink-3); font-size: 12px; margin-top: 16px; }
+@media (max-width: 1100px) { .builds-loadout { grid-template-columns: 1fr 1fr; } .builds-summary { grid-column: 1 / -1; position: static; } #page-builds .builds-namerow { grid-template-columns: 1fr 1fr; } }
+#page-builds .builds-import input { flex: 1 1 320px; }

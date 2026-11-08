@@ -42,7 +42,7 @@
                  },
     "package":  {
                     "dir":  "package",
-                    "packageVersion":  "2026-11-03",
+                    "packageVersion":  "2026-11-07",
                     "setup":  "tools/setup.ps1",
                     "uninstallArgs":  [
                                           "-Uninstall"
@@ -66,7 +66,7 @@
                                            },
                                            {
                                                "rel":  "Archon/Binaries/Win64/dxgi.dll",
-                                               "sha256":  "13A85219DEC937C887EC6718A340ED34803F1990D6029B49A7416F5A9D9101B5"
+                                               "sha256":  "2CB0F74017099408FFD923D81B50050D2F4B6698DF7A35284413AA189E78742D"
                                            },
                                            {
                                                "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_QuestDialogueFallback1147_P.pak",
@@ -78,7 +78,7 @@
                                            },
                                            {
                                                "rel":  "Archon/Content/Paks/zzzz_Mega1147_Middleman_P.pak",
-                                               "sha256":  "60966CBC3BC8CCCD4922D0515DF631F12C93E993F51B30665B6224E944404E8A"
+                                               "sha256":  "1CEAF8363951F8F3733A2E87D2AB71C7F00ED5428775CF56BADB19536A4C33CC"
                                            },
                                            {
                                                "rel":  "Archon/Content/Paks/zzzz_Mega1147_HuntPass_P.pak",

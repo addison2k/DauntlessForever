@@ -28,15 +28,18 @@
     if (!S) return;
     // the tab exists only when the VPS says so (forever-beta.txt there)
     const nav = document.querySelector('.nav-item[data-page="forever"]');
-    if (nav) nav.hidden = !S.allowed;
-    const page = $('page-forever'); if (!page || page.hidden) return;
+    if (nav) nav.hidden = !S.allowed || !!S.is25;   // DF-INFINITE (Nov 6): in 2.5 there is no tab; Infinite lives on the Play page under 1.14.7
+    document.body.classList.toggle('inf-on', !!(S.is25 && S.allowed));
+    { const was = document.body.classList.contains('inf-playing'), now = !!(S.is25 && S.phase !== 'off'); if (was !== now) { document.body.classList.toggle('inf-playing', now); try { if (window.renderHostButton) window.renderHostButton(); } catch {} } }   // DF-INFINITE v3: "Now playing" over Play Infinite
+    const page = $('page-forever'); if (!page) return;
+    if (S.is25) { const pp = $('page-play'); if (!pp || pp.hidden) return; } else if (page.hidden) return;
     const on = S.phase !== 'off';
     const setting = !!(S.setup && S.setup.step);
     $('fv-missing').hidden = !(S.missing || S.stale || setting);
     const partial = !!(S.missing && /missing a file/.test(S.missing));   // DF25-FILES: a half-made install names the file
-    $('fv-missing-title').textContent = setting ? t('Setting up Forever...') : partial ? t('Forever is missing a file on this PC') : S.missing ? t('Forever is not set up on this PC') : t('Forever has an update');
-    $('fv-missing-text').textContent = setting ? t('{step}', { step: S.setup.step }) : partial ? S.missing : S.missing ? t('One click builds it from your 1.14.7 install (same game folder, its own save). About a minute.') : t('The server has newer Forever files. Set up again to get them (your character is kept).');
-    $('fv-setup').textContent = partial ? t('Set up Forever again') : S.missing ? t('Set up Forever') : t('Update Forever'); $('fv-setup').disabled = setting; $('fv-setup').hidden = setting;
+    $('fv-missing-title').textContent = setting ? t('Setting up Infinite...') : partial ? t('Infinite is missing a file on this PC') : S.missing ? t('Infinite is not set up on this PC') : t('Infinite has an update');
+    $('fv-missing-text').textContent = setting ? t('{step}', { step: S.setup.step }) : partial ? S.missing : S.missing ? t('One click builds it from your 1.14.7 install (same game folder, its own save). About a minute.') : t('The server has newer Infinite files. Set up again to get them (your character is kept).');
+    $('fv-setup').textContent = partial ? t('Set up Infinite again') : S.missing ? t('Set up Infinite') : t('Update Infinite'); $('fv-setup').disabled = setting; $('fv-setup').hidden = setting;
     if (S.setup && S.setup.error) { $('fv-missing-text').textContent = S.setup.error; }
     if (S.is25) { render25(); return; }   // DF25: the 2.5 view; everything below is the v2 tab
     $('fv25').hidden = true; for (const e of page.querySelectorAll('.fv-v2')) e.hidden = false;
@@ -173,7 +176,7 @@
   const PHASE25 = { off: ['Not playing', ''], asking: ['Finding your town', 'starting'], joining: ['Joining Ramsgate', 'starting'], playing: ['In Ramsgate', 'running'], stopping: ['Stopping', 'stopping'] };
   let movedMenu = false, lbTimer25 = null, liveTimer25 = null;
   // each step folds to a slim row once it has an answer; a click on the row opens it again
-  const open25 = { s1: false, s2: true };   // s2 starts open and stays open until a rating is kept
+  const open25 = { s1: false, s2: false };   // DF-INFINITE v2: both fold once answered; an unrated PC's rating card is open until it is rated
   const seen25 = () => { try { return localStorage.getItem('fv25-seen') === '1'; } catch { return false; } };
   function pingCls(ms) { return ms == null ? '' : ms < 80 ? 'ok' : ms < 160 ? 'warn' : 'bad'; }
   function render25() {
@@ -183,7 +186,19 @@
     page.classList.add('is25');
     const titleEl = page.querySelector('.page-title'); if (titleEl) titleEl.hidden = true;   // the hero carries the title
     const leadEl = page.querySelector('.lead'); if (leadEl) leadEl.hidden = true;
-    if (!movedMenu) { const m = $('fv-more-menu'), w = $('fv25-more-wrap'); if (m && w) { w.append(m); } const u = $('fv-missing'), d = $('fv25-drop'); if (u && d) d.append(u); movedMenu = true; }
+    if (!movedMenu) {   // DF-INFINITE: the tab's nodes move onto the Play page once; ids and handlers stay
+      movedMenu = true;
+      try {
+        const mm = $('more-menu'); for (const b of $('fv-more-menu').querySelectorAll('button[data-fv]')) mm.append(b);
+        $('inf-drop').append($('fv-missing'));
+        $('inf-slot-pill').append($('fv25-hero').querySelector('.hero-pill-row'));
+        { const cards = page.querySelector('.fv25-cards'); cards.append($('fv25-s1'), $('fv25-s2')); $('inf-cards').append(cards); }   // DF-INFINITE v4: both cards in the panel, side by side when folded
+        $('inf-how').append(page.querySelector('.fv25-tabs'), $('fv25-pane-how'), $('fv25-pane-lb'));
+        document.querySelector('#page-play .action-main').append($('fv25-play'), $('fv25-stop'));
+        $('inf-status').append(page.querySelector('.fv25-status-row'));
+        $('inf-msgs').append($('fv-note'), $('fv-error'));
+      } catch (e) { console.error('Infinite layout: ' + e.message); }
+    }
     const on = S.phase !== 'off';
     const sc = S.score, ck = S.check, rated = !!(sc && sc.score);
     // step 1: the regions
@@ -207,7 +222,7 @@
     };
     card('ANY', t('Any (recommended)'), fullest ? t('the closest busy town for you: {r}', { r: REGION_NAMES[fullest.region] || fullest.region }) + (fullest.ping != null ? ', ' + t('{ms} ms', { ms: fullest.ping }) : '') : t('the closest busy town for you'), null, fullest ? fullest.players : null, !!fullest);
     for (const x of towns) card(x.region, REGION_NAMES[x.region] || x.region, x.up ? (x.relayName ? t('Ramsgate on the {r} relay', { r: x.relayName }) : t('Ramsgate up')) : t('town down right now'), x.ping, x.players, x.up && x.ago < 90);
-    if (!towns.length) regs.append(el('p', 'small', S.error && /director/.test(S.error) ? t('The Forever director is not answering. The regions appear when it is back.') : t('Looking for towns...')));
+    if (!towns.length) regs.append(el('p', 'small', S.error && /director/.test(S.error) ? t('The Infinite director is not answering. The regions appear when it is back.') : t('Looking for towns...')));
     $('fv25-s1-sub').textContent = (chosen === 'ANY' ? t('Any') : (REGION_NAMES[chosen] || chosen)) + (fullest && chosen === 'ANY' ? '  |  ' + (REGION_NAMES[fullest.region] || fullest.region) + (fullest.ping != null ? ', ' + t('{ms} ms', { ms: fullest.ping }) : '') : '');
     $('fv25-s1-hint').textContent = chosen === 'ANY' ? t('The closest busy Ramsgate. Hunts from every region.') : t('Your Ramsgate. Hunts from this region only.');
     $('fv25-s1').classList.toggle('done', true);
@@ -224,7 +239,7 @@
     const kept = !!(rated && ck && ck.at && sc.at && new Date(sc.at).getTime() >= Number(ck.at) - 2000);   // the numbers on screen are the ones already kept
     $('fv25-s2').classList.toggle('slim', rated && !open25.s2 && !checking && !(ck && !ck.running && !ck.failed && !kept));
     $('fv25-s2-sub').textContent = rated ? `${sc.score} / 100` : checking ? t('Rating...') : t('Not rated yet');
-    $('fv25-s2-change').textContent = t('Change');
+    $('fv25-s2-change').textContent = t('Details');   // DF-INFINITE v4
     const box = $('fv25-check-result'); box.innerHTML = '';
     if (rated && !(ck && !ck.running && !ck.failed && !kept)) {
       const r = el('div', 'fv25-rated'); const big = el('div', 'fv25-rated-score', String(sc.score)); big.append(el('small', '', ' / 100')); r.append(big);
@@ -253,12 +268,20 @@
     // step 3: play
     const canPlay = !S.missing && (!S.stale || S.unlocked) && !on && rated && !!(chosen === 'ANY' ? fullest : live.find((x) => x.region === chosen));   // an update blocks Play (Addison), except on a dev PC with forever-unlock.txt
     $('fv25-play').disabled = !canPlay; $('fv25-play').hidden = on; $('fv25-stop').hidden = !on;
-    const hp = $('fv25-hero-pill'); if (hp) { const [ht, hc] = on ? [S.phase === 'playing' ? t('Playing') : t('Starting'), 'ready'] : S.missing ? [t('Set up Forever'), 'attn'] : (S.stale && !S.unlocked) ? [t('Update Forever'), 'attn'] : !rated ? [t('Rate this PC first'), 'attn'] : canPlay ? [t('Ready to play'), 'ready'] : [t('Town is down'), 'attn']; hp.textContent = ht; hp.className = 'pill ' + hc; }
+    // DF-INFINITE v7: the badge follows the game: Ready to play / Connecting... / Playing Infinite / Connection failed - Details
+    const hp = $('fv25-hero-pill'); if (hp) {
+      const failed = !on && !!S.error && !S.missing && !(S.stale && !S.unlocked);
+      const [ht, hc] = on ? [S.phase === 'playing' ? t('Playing Infinite') : S.phase === 'stopping' ? t('Stopping') : t('Connecting...'), S.phase === 'playing' ? 'ready live' : 'ready']
+        : failed ? [t('Connection failed'), 'bad'] : S.missing ? [t('Set up Infinite'), 'attn'] : (S.stale && !S.unlocked) ? [t('Update Infinite'), 'attn'] : !rated ? [t('Rate this PC first'), 'attn'] : canPlay ? [t('Ready to play'), 'ready'] : [t('Town is down'), 'attn'];
+      hp.textContent = ht; hp.className = 'pill ' + hc;
+      if (failed) { hp.append(' ', el('span', 'inf-pill-link', t('Details'))); hp.title = S.error; hp.onclick = () => { const e = $('fv-error'); if (e) { e.hidden = false; e.scrollIntoView({ block: 'nearest' }); e.classList.remove('flash'); void e.offsetWidth; e.classList.add('flash'); } }; }
+      else { hp.title = ''; hp.onclick = null; }
+    }
     const [label, cls] = PHASE25[S.phase] || PHASE25.off;
     $('fv25-state').textContent = t(label) + (S.phase === 'playing' && S.town ? ` (${REGION_NAMES[S.town.region] || S.town.region})` : '');
     $('fv25-dot').className = 'hm-dot ' + cls;
     let sub = '';
-    if (!on) sub = S.missing ? t('Set up Forever first (top of the page).') : (S.stale && !S.unlocked) ? t('Update Forever first (top of the page).') : !rated ? t('Rate this PC first.') : !canPlay ? t('The town you picked is not up right now. Pick another region, or Any.') : t('Ready. Your character is on the server; press Play.');
+    if (!on) sub = S.missing ? t('Set up Infinite first (above).') : (S.stale && !S.unlocked) ? t('Update Infinite first (above).') : !rated ? t('Rate this PC first (above). Play Infinite lights up after.') : !canPlay ? t('The town you picked is not up right now. Pick another region, or Any.') : t('Ready. Your character is on the server; press Play.');
     else if (S.phase === 'playing') {
       const h = S.hunts25; const parts = [];
       if (S.town && S.town.ping != null) parts.push(t('{ms} ms', { ms: S.town.ping }));
@@ -297,6 +320,14 @@
     $('fv25-tab-how').onclick = () => tab25('how'); $('fv25-tab-lb').onclick = () => tab25('lb');
     try { if (localStorage.getItem('fv25-tab') === 'lb') tab25('lb'); } catch {}
     $('fv25-s2-head').onclick = () => { if (!$('fv25-s2').classList.contains('slim')) { if (S && S.score && S.score.score) open25.s2 = false; } else open25.s2 = true; render(); };
+    // DF-INFINITE: the "How Infinite works" fold on the Play page, and the three Infinite lines in the Play page's More menu
+    const hb = $('inf-how-btn'); if (hb) hb.onclick = () => { const h = $('inf-how'); h.hidden = !h.hidden; hb.classList.toggle('open', !h.hidden); };
+    const mm = $('more-menu'); if (mm) mm.addEventListener('click', (e) => { const b = e.target.closest('button[data-fv]'); if (!b) return; mm.hidden = true; fvAct(b.dataset.fv); });
+  }
+  async function fvAct(fv) {
+    if (fv === 'setup') { if (S && S.phase !== 'off') return note(t('Stop Infinite first.'), true); note(t('Setting up Infinite...')); const r = await L.foreverSetup(); if (!r.ok) note(r.error, true); else { note(t('Infinite is set up.')); refreshBoard(); } return; }
+    if (fv === 'folder') { const r = await L.foreverOpenFolder(); if (!r.ok) note(r.error || t('Infinite is not set up yet.'), true); return; }
+    if (fv === 'cleanup') { if (S && S.phase !== 'off') return note(t('Stop Infinite first.'), true); note(t('Closing leftovers...')); const r = await L.foreverCleanup(); note(r.ok ? (r.closed ? t('Closed') + ' ' + r.closed + ' ' + t('leftover program(s). Try again now.') : t('Nothing was left running.')) : r.error, !r.ok); return; }
   }
   async function refreshBoard() { if (S && S.is25) return refresh25(); try { await L.foreverBoard(); } catch {} try { await L.foreverCards(); } catch {} try { await L.foreverLeaderboard(); } catch {} }
   async function sendScore() { const r = await L.foreverSendScore(); note(r.ok ? t('Sent. This PC can host worlds now.') : r.error, !r.ok); if (r.ok) setSkipped(false); refreshBoard(); }
@@ -317,7 +348,7 @@
     $('fv-step-check').onclick = async () => { await L.foreverCheck(); };
     $('fv-again').onclick = async () => { await L.foreverCheck(); };
     $('fv-step-skip').onclick = () => { setSkipped(true); render(); };
-    $('fv-setup').onclick = async () => { const r = await L.foreverSetup(); if (!r.ok) note(r.error, true); else { note(t('Forever is set up.')); refreshBoard(); } };
+    $('fv-setup').onclick = async () => { const r = await L.foreverSetup(); if (!r.ok) note(r.error, true); else { note(t('Infinite is set up.')); refreshBoard(); } };
     $('fv-needhost-check').onclick = async () => { const r = await L.foreverCheckAndHost(); if (!r.ok && r.error) note(r.error, true); };
     $('fv-needhost-wait').onclick = async () => { await L.foreverWait(); };
     $('fv-clear').onclick = async () => { const r = await L.foreverClearScore(); note(r.ok ? t('Taken back. This PC will not host.') : r.error, !r.ok); refreshBoard(); };
@@ -329,9 +360,7 @@
       const b = e.target.closest('button'); if (!b) return;
       $('fv-more-menu').hidden = true;
       const fv = b.dataset.fv, act = b.dataset.act;
-      if (fv === 'setup') { if (S && S.phase !== 'off') return note(t('Stop Forever first.'), true); note(t('Setting up Forever...')); const r = await L.foreverSetup(); if (!r.ok) note(r.error, true); else { note(t('Forever is set up.')); refreshBoard(); } return; }
-      if (fv === 'folder') { const r = await L.foreverOpenFolder(); if (!r.ok) note(r.error || t('Forever is not set up yet.'), true); return; }
-      if (fv === 'cleanup') { if (S && S.phase !== 'off') return note(t('Stop Forever first.'), true); note(t('Closing leftovers...')); const r = await L.foreverCleanup(); note(r.ok ? (r.closed ? t('Closed') + ' ' + r.closed + ' ' + t('leftover program(s). Try again now.') : t('Nothing was left running.')) : r.error, !r.ok); return; }
+      if (fv) return fvAct(fv);
       if (act) {
         select('1.14.7');
         if (['check', 'setup', 'logs'].includes(act)) showPage('play');   // these show their progress on the Play page
@@ -339,8 +368,9 @@
       }
     };
     L.onForeverUpdate((s) => { S = s; render(); });
-    L.foreverState().then((s) => { S = s; render(); });
-    document.addEventListener('page:shown', (e) => { if (e.detail === 'forever') { refreshBoard(); clearInterval(boardTimer); boardTimer = setInterval(refreshBoard, 15000); render(); } else { clearInterval(boardTimer); } });
+    L.foreverState().then((s) => { S = s; render(); if (S && S.is25 && !$('page-play').hidden) { refreshBoard(); clearInterval(boardTimer); boardTimer = setInterval(refreshBoard, 15000); } });
+    // DF-INFINITE: in 2.5 the Play page is the Infinite page: towns and the board refresh while it is shown
+    document.addEventListener('page:shown', (e) => { if (e.detail === 'forever' || (e.detail === 'play' && S && S.is25)) { refreshBoard(); clearInterval(boardTimer); boardTimer = setInterval(refreshBoard, 15000); render(); } else { clearInterval(boardTimer); } });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();

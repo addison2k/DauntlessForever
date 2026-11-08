@@ -23,7 +23,7 @@ async function boot() {
   versions = await L.listVersions();
   await refreshAll();
   renderShelf();
-  const pick = versions.find(v => v.id === info.lastVersion) || versions.find(v => v.hasPackage) || versions[0];
+  const pick = versions.find(v => v.id === info.lastVersion) || versions.find(v => v.id === '1.14.7') || versions.find(v => v.hasPackage) || versions[0];   // DF-DEFAULT1147 (Nov 6): last seen, else 1.14.7
   if (pick) select(pick.id);
   wire();
   $('side-ver').textContent = `Dauntless Forever ${info.version}`;
@@ -217,13 +217,13 @@ async function fillMenuBackground() {
   const sel = $('set-menu'); sel.innerHTML = '';
   for (const b of m.backgrounds) {
     const o = document.createElement('option');
-    o.value = b.key; o.textContent = t(b.title) + (b.season && b.key !== 'default' ? ' ' + t('(season {n})', { n: b.season }) : '') + (b.tested === false ? ' - ' + t('experimental') : '');
+    o.value = b.key; o.textContent = t(b.title) + (b.season && b.key !== 'default' ? ' ' + t('(pass {n})', { n: b.season }) : '') + (b.tested === false ? ' - ' + t('experimental') : '');
     sel.appendChild(o);
   }
   if (m.custom) { const o = document.createElement('option'); o.value = 'custom'; o.textContent = t('Your own picture...'); sel.appendChild(o); }
   sel.value = m.background;
   menuShowCustom(m);
-  $('set-menu-sub').textContent = t('The art behind the game\'s start and login screen, from any Hunt Pass season or your own picture. Changes at the next game start.');
+  $('set-menu-sub').textContent = t('The art behind the game\'s start and login screen, from any Hunt Pass or your own picture. Changes at the next game start.');
 }
 function menuShowCustom(m) {
   const isCustom = $('set-menu').value === 'custom';
@@ -263,19 +263,28 @@ function stateOf(v) {
 // ---------------------------------------------------------------- shelf
 // DF-V2-PLAYUI (Addison, Oct 27): tabs for the builds that have a package; the classic cards only for the upcoming ones, under 'Upcoming'
 let upcomingOpen = false;
-const HERO_ART = { '1.6.2': 'hero-162.jpg', '1.14.7': 'hero-1147.jpg' };
+const HERO_ART = { '1.3.1': 'hero-131.jpg', '1.6.2': 'hero-162.jpg', '1.14.7': 'hero-1147-town.jpg' };   // DF-INFINITE (Nov 6): new 1.14.7 art
+// DF-TABS131 (Nov 6): the version tabs on the Play page and on Hunt Pass / Game Rules / Inventory / Mods are these three,
+// in this order; 1.3.1 shows greyed out until its package exists. Everything else without a package stays under Upcoming.
+const TAB_VERSIONS = ['1.3.1', '1.6.2', '1.14.7'];
+function tabVersions() { return TAB_VERSIONS.map(id => versions.find(v => v.id === id)).filter(Boolean); }
+// the version picker on Mods: every version, in number order; the page greys out the ones with nothing yet
+function allVersions() { const num = (id) => String(id).split('.').map(n => parseInt(n, 10) || 0); return [...versions].sort((a, b) => { const x = num(a.id), y = num(b.id); for (let i = 0; i < 3; i++) if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) - (y[i] || 0); return 0; }); }
+// the version picker on Hunt Pass / Game Rules / Inventory: the two playable versions only (Addison, Nov 6)
+const PICKER_VERSIONS = ['1.6.2', '1.14.7'];
+function pickerVersions() { return PICKER_VERSIONS.map(id => versions.find(v => v.id === id)).filter(Boolean); }
 function renderTabs() {
   const row = $('gv-tabs'); if (!row) return; row.innerHTML = '';
-  for (const v of versions.filter(x => x.hasPackage)) {
+  for (const v of tabVersions()) {
     const st = stateOf(v);
     const b = document.createElement('button'); b.type = 'button'; b.setAttribute('role', 'tab');
-    b.className = 'gv-tab' + (v.id === selected ? ' selected' : '') + (st.key === 'attn' ? ' attn' : '');
+    b.className = 'gv-tab' + (v.id === selected ? ' selected' : '') + (st.key === 'attn' ? ' attn' : '') + (v.hasPackage ? '' : ' soon');
     b.setAttribute('aria-selected', v.id === selected ? 'true' : 'false'); b.title = `${v.released} - ${st.label}`;
     b.innerHTML = `<span class="gv-num">${esc(v.id)}</span>${v.warning ? `<span class="build-flag">${esc(t('Experimental'))}</span>` : ''}`;
     b.addEventListener('click', () => { upcomingOpen = false; select(v.id); });
     row.appendChild(b);
   }
-  const up = versions.filter(x => !x.hasPackage);
+  const up = versions.filter(x => !x.hasPackage && !TAB_VERSIONS.includes(x.id));
   if (up.length) {
     const b = document.createElement('button'); b.type = 'button'; b.className = 'gv-tab more' + (upcomingOpen || up.some(x => x.id === selected) ? ' open' : '');
     b.setAttribute('aria-expanded', upcomingOpen ? 'true' : 'false');
@@ -310,6 +319,8 @@ function renderDetail() {
   const v = versions.find(x => x.id === selected); if (!v) return;
   const s = statuses[v.id] || {}; const st = stateOf(v); const d = dl[v.id];
   $('detail-empty').hidden = true; $('detail-body').hidden = false;
+  document.body.classList.toggle('sel-1147', v.id === '1.14.7');   // DF-INFINITE: the Infinite panel and button show under 1.14.7 only
+  document.body.classList.toggle('sel-soon', !v.hasPackage);   // DF-TABS131: a coming-soon tab keeps the bar, every button greyed
   $('d-ver').textContent = v.id;
   $('d-meta').textContent = t('Build {build}, released {date}. {era}.', { build: v.build, date: v.released, era: t(v.era) });
   // DF-V2-PLAYUI: the hero card: era and date line, art per version (none = plain dark card)
@@ -460,7 +471,7 @@ function renderHostButton() {
   const run = (soc && soc.running) || [];
   const hostingThis = run.some(r => r.id === v.id + ':host');
   // shown (dim) from the start, lit up once the version is ready to play
-  hb.hidden = !v.canHost || !!(soc && soc.offlineMode);
+  hb.hidden = (!v.canHost && !!v.hasPackage) || !!(soc && soc.offlineMode);   // DF-TABS131: a coming-soon version shows the button greyed
   hb.classList.toggle('on', hostingThis);
   // Host Mode (Host Mode page) runs this version: the server is already up here, so Play only starts the game
   const hm = soc && soc.hostMode && soc.hostMode.version === v.id ? soc.hostMode : null;
@@ -471,10 +482,15 @@ function renderHostButton() {
   hb.title = st.key !== 'ready' && !hostingThis ? t('Ready once the game is downloaded and set up') : soc && soc.onlineOff ? tm(soc.onlineOff) : (hostingThis ? (soc && soc.hostPublic ? t('Your game is open to everyone') : t('Your game is open to your friends'))
     : (randoms ? t('Play {version} and let your friends (and players using Play online) join you', { version: v.id }) : t('Play {version} and let your friends join you', { version: v.id })) + ping);
   renderOnline(v, soc, st, run, hostingThis);
+  // DF-INFINITE v3: "Now playing" over the running button (Infinite's state comes from forever.js as a body class)
+  { const inf = document.body.classList.contains('inf-playing'), hosting = hostingThis || !!hm;
+    const cap = (id, on) => { const e = $(id); if (e) e.classList.toggle('now', !!on); };
+    cap('cap-host', hosting); cap('cap-inf', inf && v.id === '1.14.7'); cap('cap-solo', st.busy === 'play' && !hosting && !(inf && v.id === '1.14.7')); }
   // Light hosting: under the Host button, only where Host Mode can run this version
   const lo = $('host-light-opt'), lbox = $('opt-light');
   const canHM = !!(hostCan && hostCan.has(v.id));
   lo.hidden = hb.hidden || !canHM;
+  { const hw = $('host-opts-wrap'); if (hw) hw.hidden = lo.hidden; document.body.classList.toggle('host-opts-on', !lo.hidden); }   // DF-INFINITE v4: the Host options gear shows only when there is an option in it
   lbox.checked = lightHost; lbox.disabled = hostingThis || !!hm;
   lo.classList.toggle('off', hostingThis || !!hm);
   lo.title = t('Off (recommended): your server starts first and stays up until you press Stop hosting, so friends can always get in. On: the old way, lighter on your PC; the server stops when you close the game.');
@@ -507,7 +523,7 @@ function renderOnline(v, soc, st, run, hostingThis) {
   const search = soc && soc.search;
   const mine = !!(search && search.version === v.id);
   const off = !v.canHost || !!(soc && soc.offlineMode);
-  ob.hidden = off;   // dim until the version is ready, like Host with friends
+  ob.hidden = true;   // DF-INFINITE (Nov 6): Play online is off the page (Infinite is the shared world); the search code stays as it was
   ob.classList.toggle('on', mine);
   const lbl = ob.querySelector('.lbl');
   lbl.textContent = !mine ? t('Play online') : search.phase === 'asking' ? t('Joining') : search.phase === 'hosting' ? t('Starting') : t('Searching {n}', { n: search.left });
@@ -522,7 +538,7 @@ function renderOnline(v, soc, st, run, hostingThis) {
     n.textContent = onlineNote; n.className = 'action-note';
   } else if (onlineNote) { if (n.textContent === onlineNote) n.textContent = ''; onlineNote = ''; }
   // Allow randoms: shown with the Host button; fixed while hosting (it applies when hosting starts)
-  opt.hidden = off;
+  opt.hidden = true;   // DF-INFINITE: Allow randoms only mattered to Play online
   const box = $('opt-randoms');
   box.checked = !!(soc && soc.allowRandoms);
   box.disabled = hostingThis;
@@ -601,13 +617,13 @@ function versionPicker(tabsId, bannerId, all, curId, supported, onPick, bannerSu
 }
 function pickVersion(all, cur, supported) {
   if (all.some(v => v.id === cur)) return cur;
-  return (all.find(v => v.id === selected && supported.has(v.id)) || all.find(v => supported.has(v.id)) || all.find(v => v.id === selected) || all[0] || {}).id || null;
+  return (all.find(v => v.id === selected && supported.has(v.id)) || all.find(v => v.id === '1.14.7' && supported.has(v.id)) || all.find(v => supported.has(v.id)) || all.find(v => v.id === selected) || all[0] || {}).id || null;   // DF-DEFAULT1147: the Play page's version, else 1.14.7
 }
 
 // ---------------------------------------------------------------- Game Rules
 let ruleVer = null, ruleNote = null;
 async function renderRules() {
-  const all = versions.filter(x => x.hasPackage);
+  const all = pickerVersions();   // DF-TABS131
   const withRules = [];
   for (const v of all) {
     let d = null; try { d = await L.rules(v.id); } catch {}
@@ -652,7 +668,7 @@ async function renderRules() {
 // ---------------------------------------------------------------- Mods (UE4SS modded mode; tools\ue4ss.cjs)
 let modsVer = null, modsNote = null, modsErr = false, modsBusy = false;
 async function renderMods() {
-  const all = versions.filter(x => x.hasPackage);
+  const all = allVersions();   // DF-TABS131: Mods lists every version
   const found = [];
   for (const v of all) { let d = null; try { d = await L.modsStatus(v.id); } catch {} if (d) found.push({ v, d }); }
   const supported = new Set(found.map(x => x.v.id));
@@ -721,7 +737,7 @@ async function renderMods() {
 let itemVer = null, itemChar = null, itemNote = null, itemData = null, itemPending = {}, itemErr = false;
 const fmtN = n => Number(n || 0).toLocaleString('en-US');
 async function renderItems(reload) {
-  const all = versions.filter(x => x.hasPackage);
+  const all = pickerVersions();   // DF-TABS131
   if (reload || !itemData) {
     const found = [];
     for (const v of all) { let d = null; try { d = await L.items(v.id); } catch {} if (d) found.push({ v, d }); }
@@ -918,7 +934,7 @@ async function renderPatches() {
 const SEASON_KINDS = [
   ['all', 'All'], ['original', 'Original'], ['reimagined', 'Reimagined'], ['vault', 'Vault'], ['event', 'Event passes'], ['mega', 'Mega'],
 ];
-const KIND_LABEL = { mega: 'Mega pass, every season in one', original: 'Original, as shipped', reimagined: 'Reimagined', vault: 'Vault re-release, as shipped', event: 'Event pass, as shipped' };
+const KIND_LABEL = { mega: 'Mega pass, every Hunt Pass in one', original: 'Original, as shipped', reimagined: 'Reimagined', vault: 'Vault re-release, as shipped', event: 'Event pass, as shipped' };
 let seasonVer = null, seasonFilter = 'all', seasonNote = null;
 // the season's reward list (a small Markdown file: a heading, a few lines, one table) shown in a dialog
 async function showSeasonDoc(x) {
@@ -943,24 +959,25 @@ async function showSeasonDoc(x) {
   }
   flush();
   $('season-doc-title').textContent = t('{title}: rewards', { title: t(x.title) });
-  $('season-doc-body').innerHTML = html || `<p>${esc(t('No reward list for this season.'))}</p>`;
+  $('season-doc-body').innerHTML = html || `<p>${esc(t('No reward list for this pass.'))}</p>`;
   $('dlg-season').showModal(); $('season-doc-body').scrollTop = 0;
 }
 async function renderSeasons() {
   const withSeasons = [];
-  for (const v of versions.filter(x => x.hasPackage)) {
+  for (const v of pickerVersions()) {
     let d = null; try { d = await L.seasons(v.id); } catch {}
     if (d && d.seasons.length) withSeasons.push({ v, d });
   }
-  if (!withSeasons.some(x => x.v.id === seasonVer)) seasonVer = (withSeasons.find(x => x.v.id === selected) || withSeasons[0] || {}).v?.id || null;
+  if (!seasonVer || !pickerVersions().some(v => v.id === seasonVer)) seasonVer = (withSeasons.find(x => x.v.id === selected) || withSeasons.find(x => x.v.id === '1.14.7') || withSeasons[0] || {}).v?.id || null;   // DF-DEFAULT1147   // DF-TABS131: a tab without a pass stays picked and says so
   const tabs = $('season-vtabs'); tabs.innerHTML = '';
-  for (const { v } of withSeasons) {
-    const b = document.createElement('button'); b.className = 'season-tab'; b.setAttribute('role', 'tab');
-    b.setAttribute('aria-selected', String(v.id === seasonVer)); b.textContent = v.name || v.id;
+  for (const v of pickerVersions()) {   // DF-TABS131
+    const ok = withSeasons.some(x => x.v.id === v.id);
+    const b = document.createElement('button'); b.className = 'season-tab ver-tab' + (ok ? '' : ' soon'); b.setAttribute('role', 'tab');
+    b.setAttribute('aria-selected', String(v.id === seasonVer)); b.innerHTML = `${esc(v.id)}${ok ? '' : ` <span class="soon-tag">${esc(t('soon'))}</span>`}`;
     b.addEventListener('click', () => { seasonVer = v.id; seasonNote = null; renderSeasons(); });
     tabs.appendChild(b);
   }
-  tabs.hidden = withSeasons.length < 2;
+  tabs.hidden = false;
   const cur = withSeasons.find(x => x.v.id === seasonVer);
   $('season-none').hidden = !!cur; $('season-body').hidden = !cur;
   if (!cur) return;
@@ -992,9 +1009,9 @@ async function renderSeasons() {
     const pick = row.querySelector('[data-pick]');
     if (pick) pick.addEventListener('click', async () => {
       const r = await L.setSeason(seasonVer, x.key);
-      if (!r || !r.ok) { seasonNote = tm(r && r.error) || t('Could not change the season.'); }
+      if (!r || !r.ok) { seasonNote = tm(r && r.error) || t('Could not change the Hunt Pass.'); }
       else seasonNote = r.running
-        ? t('Switched to {title}. Close the game and press Play again: the season loads when the servers start.', { title: t(x.title) })
+        ? t('Switched to {title}. Close the game and press Play again: the pass loads when the servers start.', { title: t(x.title) })
         : t('Switched to {title}. It starts the next time you press Play.', { title: t(x.title) });
       renderSeasons();
     });
@@ -1215,13 +1232,17 @@ function wire() {
     $('btn-stop').disabled = true; await L.stop(v.id); $('btn-stop').disabled = false;
   });
   $('btn-cancel').addEventListener('click', () => { if (selected) L.cancelDownload(selected); });
+  // DF-INFINITE v4: Host options fold under the Host button; Details on the picture shows the blurb and build line
+  { const hb = $('host-opts-btn'); if (hb) hb.addEventListener('click', () => { const o = $('host-opts'); o.hidden = !o.hidden; hb.classList.toggle('open', !o.hidden); }); }
+  { const hd = $('hero-details'); if (hd) hd.addEventListener('click', () => { const on = document.body.classList.toggle('hero-details'); hd.classList.toggle('open', on); hd.firstChild.textContent = on ? t('Hide details') : t('Details'); }); }
+  { const hr = $('help-report'); if (hr) hr.addEventListener('click', () => { const v = versions.find(x => x.id === selected && x.hasPackage) || versions.find(x => x.hasPackage); if (v) openReport(v); }); }   // DF-SENDLOGS
   $('btn-more').addEventListener('click', () => {
     const m = $('more-menu'); m.hidden = !m.hidden;
     // DF-MORE-SCROLL (Oct 31): the menu opens below the fold on most screens; bring all of it into view (no scroll if it already is)
     if (!m.hidden) requestAnimationFrame(() => { try { m.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); } catch {} });
   });
   $('more-menu').addEventListener('click', async (e) => {
-    const act = e.target.dataset.act; if (!act) return;
+    const bt = e.target.closest('button'); const act = bt && bt.dataset.act; if (!act) return;   // DF-INFINITE: the letter badge inside the button is a click too
     $('more-menu').hidden = true;
     const v = versions.find(x => x.id === selected); if (!v) return;
     if (act === 'pick') {
@@ -1367,6 +1388,8 @@ function wire() {
   });
   $('set-menu-pick').addEventListener('click', () => { if (menuVer) menuPickPicture(); });
   $('nav').addEventListener('click', (e) => { const b = e.target.closest('.nav-item'); if (b) showPage(b.dataset.page); });
+  // DF-BUILDS: the Builds page opens on the Play page's version (1.6.2 or 1.14.7), else 1.14.7; builds.js reloads its catalog on the change
+  document.addEventListener('page:shown', (e) => { if (e.detail !== 'builds') return; const s = $('build-version'); if (!s) return; const want = ['1.6.2', '1.14.7'].includes(selected) ? selected : '1.14.7'; if (s.value !== want) { s.value = want; s.dispatchEvent(new Event('change')); } });
   $('set-games-pick').addEventListener('click', async () => { const p = await L.pickGamesRoot(); if (p) { info.gamesRoot = p; $('set-games').textContent = p; renderDetail(); } });
   $('set-data-open').addEventListener('click', () => L.openPath(info.dataRoot));
   $('set-acct-check').addEventListener('click', accountCheck);

@@ -10,22 +10,22 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-11-03",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-03.zip",
-                         "sha256":  "a8751e77f67867afe17a638e2be7bf93985d77807db76b7b7ec349c92687be69",
-                         "date":  "2026-11-03",
-                         "note":  "Effects no longer freeze or stay on screen (Reaper\u0027s Dance, ground stomps)"
+                         "packageVersion":  "2026-11-07",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-07.zip",
+                         "sha256":  "5bd96585cc5646060cd0c2893f61a9b1afd494b1f45149cca8ade008067f2410",
+                         "date":  "2026-11-07",
+                         "note":  "Rubberband fix: no more hard pull-backs in hunts. Falling forever fixed: a player who falls off the map is put back where they last stood. Game log on by default for reports. Middleman: re-rolling a +3 cell costs 20 Aetherdust instead of 2,000 Rams and shows the Aetherdust icon (BitSents). The game no longer offers items you have none of."
                      }
                  ],
     "launcher":  {
-                     "version":  "0.4.6",
+                     "version":  "0.4.7",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "Forever: your PC can host hunts again after a server update, without pressing Set up on the 1.14.7 tile",
-                     "date":  "2026-11-05",
+                     "notes":  "Play Infinite is on the Play page now (the Forever Beta tab is gone): region and PC rating sit above the play bar, the play bar stays at the bottom and the badge shows Ready / Connecting / Playing Infinite / Connection failed. More menu lines are lettered A to R and colour coded, so support can say More, then F. 1.3.1 shows as a greyed version tab. Seasons is now Hunt Pass. Help is now Send my logs. Game Rules, Hunt Pass and Inventory pick between 1.6.2 and 1.14.7 only. New Builds tab: the 1.14.7 gear with icons, perks, cell slots and rank-3 cells, bonded weapons and weapon parts, summed perks, save and share codes, and import of reforged.dauntless-builder.com build links. A new loading screen for Infinite.",
+                     "date":  "2026-11-07",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.6.asar",
-                                 "sha256":  "26550608dd7e008a4ecbff0602593fa7a093ea850abf8f07c11293c90ecb759b",
-                                 "size":  10026765,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.7.asar",
+                                 "sha256":  "8272a551b614197c0295ffbd9728c78524ab13acd6b50fa689b7e15f6bd26c9e",
+                                 "size":  19190246,
                                  "minShell":  "0.2.4"
                              }
                  }

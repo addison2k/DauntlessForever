@@ -1,7 +1,7 @@
 // Dauntless Forever - launcher
 // Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
 // Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
-// forever.js - Forever mode (main side). One button: Play Forever. The director on the VPS (df-director.js, mounted in
+// forever.js - Forever mode (main side). One button: Play Infinite. The director on the VPS (df-director.js, mounted in
 // the social service) says whether this PC joins a world, hosts one, or waits; keeps the board; elects a standby PC in
 // every world and tells everyone where to go when a host leaves; and holds the Forever characters (fresh characters
 // that only play Forever).
@@ -510,7 +510,7 @@ async function play(mode, worldHost) {
     if (S.mode === 'fresh' && !vpsBackendOf(null)) {   // DF-VPS: the VPS owns the character: no checkout, no local copy
       await checkoutCharacter(S.season || 'S1');
       // a brand-new Forever character has to be made in game before it can join anyone: the game opens solo once
-      if (!hasCharacter()) { await createCharacter(); if (!hasCharacter()) { S.phase = 'off'; await returnCharacter(); throw new Error('Your Forever character was not created. Press Play Forever again and finish character creation, then close the game.'); } }
+      if (!hasCharacter()) { await createCharacter(); if (!hasCharacter()) { S.phase = 'off'; await returnCharacter(); throw new Error('Your Forever character was not created. Press Play Infinite again and finish character creation, then close the game.'); } }
     }
     await ask();
   } catch (e) { S.phase = 'off'; await returnCharacter(); throw e; }
@@ -533,14 +533,14 @@ async function ask() {
   const r = await api('POST', '/v1/forever/play', { mode: S.mode, region, pings, newWorld: newWorld || !!S.helper, helper: !!S.helper, world: S.wantWorld || undefined, pack: fv.overlay || '', core: fv.core || '', app: (ctx.appVersion ? ctx.appVersion() : '') });
   if (r.action === 'update' && !autoUpdated) {   // DF-AUTO-UPDATE (Addison, Oct 27): install the Forever update here and press Play again by itself
     autoUpdated = true; S.wantWorld = null; S.phase = 'off'; await returnCharacter(); push();
-    log('Forever has an update: installing it now, then Play Forever again');
-    try { await setup(); S.stale = false; push(); } catch (e) { S.stale = true; push(); throw new Error('the Forever update failed: ' + e.message + '. Press Update Forever.'); }
+    log('Forever has an update: installing it now, then Play Infinite again');
+    try { await setup(); S.stale = false; push(); } catch (e) { S.stale = true; push(); throw new Error('the Forever update failed: ' + e.message + '. Press Update Infinite.'); }
     const again = await play(mode, worldHost); autoUpdated = false; return again;
   }
   autoUpdated = false;
-  if (r.action === 'update') { S.wantWorld = null; S.phase = 'off'; S.stale = true; await returnCharacter(); push(); throw new Error(r.why || 'Forever has an update. Press Update Forever first.'); }
+  if (r.action === 'update') { S.wantWorld = null; S.phase = 'off'; S.stale = true; await returnCharacter(); push(); throw new Error(r.why || 'Forever has an update. Press Update Infinite first.'); }
   S.season = r.season || S.season;
-  if (r.action === 'full' || r.action === 'gone') { S.wantWorld = null; S.phase = 'off'; await returnCharacter(); throw new Error((r.why || 'that world is not available') + '. Press Play Forever to join a world with room.'); }
+  if (r.action === 'full' || r.action === 'gone') { S.wantWorld = null; S.phase = 'off'; await returnCharacter(); throw new Error((r.why || 'that world is not available') + '. Press Play Infinite to join a world with room.'); }
   vpsBackend = (r.world && r.world.backend) || (r.backend) || '';   // DF-VPS
   if (vpsBackend) { try { fs.unlinkSync(path.join(dataDir(), 'travel_pending.json')); } catch {} }   // DF-VPS (report 371): a leftover travel note from a LAN join must not trigger a bring-home at the end of a server session
   if (vpsBackend && character) { const c = character; character = null; clearInterval(checkpointTimer); await vpsImport(vpsBackend, c.record).catch(e => log('character import: ' + e.message, true)); try { await api('POST', '/v1/forever/character/release', { season: c.season, lease: c.lease }); } catch {} }   // checked out before we knew: give it back untouched (DF-VPS-IMPORT: after the one-time import)
@@ -559,7 +559,7 @@ async function startJoin(world) {
   if (vpsBackend) killStaleJoinProxy();   // DF-VPS-KEEPOWN: the join below keeps this PC's servers, so only an old join helper is cleared
   ctx.runner.runVisible(FV + ':join', 'join', script, ['-Code', `'${world.code.replace(/'/g, "''")}'`], 'Dauntless Forever - in a world (keep open)', { closeWhenDone: true, env: Object.assign(ENV(), vpsBackend ? { DF_KEEP_OWN: '1' } : {}, (is25() || vpsBackend) ? { DF_NO_TRAVEL: '1' } : {}), cwd: dir() })   // DF-VPS: the VPS owns the character   /* DF-VPS-KEEPOWN (Oct 28): opening the game never closes the hunt servers or the town this PC runs for others */
     .then(() => {
-      if (S.helper && S.phase === 'hosting') { S.ownGame = false; log('your game closed; Ramsgate keeps running on this PC for everyone (Play Forever to go back in)'); push(); return; }   /* DF-TOWN-KEEP (Addison, Oct 28): this PC took the town over: the game closing does not end the town */
+      if (S.helper && S.phase === 'hosting') { S.ownGame = false; log('your game closed; Ramsgate keeps running on this PC for everyone (Play Infinite to go back in)'); push(); return; }   /* DF-TOWN-KEEP (Addison, Oct 28): this PC took the town over: the game closing does not end the town */
       if (S.phase !== 'off') stop('the game closed');
     });
   // the client DLL goes into the game once its window is up (loading screen + travel on a GO)
@@ -631,7 +631,7 @@ async function startHost(rules) {
       if (S.autoPlay) {
         S.autoPlay = false; push(); log('your world is up: opening your game in it');
         playInOwnWorld().catch(e => log('could not open your game: ' + e.message, true));
-      } else log('your world is up: press Play Forever - fresh character to play in it');
+      } else log('your world is up: press Play Infinite - fresh character to play in it');
     }).catch(e => {
       log('Forever startup check failed: ' + e.message, true);
       if (S.phase === 'hosting') stop('host startup failed').catch(err => log('host cleanup: ' + err.message, true));
@@ -714,7 +714,7 @@ async function waitForOwnWorld() {
   }
   log('your world did not come up in 3 minutes', true); return false;
 }
-// Host Mode: Play Forever asks the director like anyone; the game joins the world with people in it (this PC keeps
+// Host Mode: Play Infinite asks the director like anyone; the game joins the world with people in it (this PC keeps
 // hosting its own world underneath) - or its own world when that is the one with room
 let awayTimer = null, lastAwayGoAt = 0;
 async function playAway() {
@@ -726,8 +726,8 @@ async function playAway() {
   const fv = (() => { try { return JSON.parse(fs.readFileSync(path.join(dir(), 'version.json'), 'utf8').replace(/^\uFEFF/, '')).forever || {}; } catch { return {}; } })();
   const r = await api('POST', '/v1/forever/play', { mode: S.mode, region, pings, newWorld, world: S.wantWorld || undefined, pack: fv.overlay || '', core: fv.core || '', app: (ctx.appVersion ? ctx.appVersion() : '') });
   S.wantWorld = null;
-  if (r.action === 'update') { S.stale = true; push(); throw new Error(r.why || 'Forever has an update. Stop, press Update Forever, then Play Forever.'); }
-  if (r.action === 'full' || r.action === 'gone') throw new Error((r.why || 'that world is not available') + '. Press Play Forever to join a world with room.');
+  if (r.action === 'update') { S.stale = true; push(); throw new Error(r.why || 'Forever has an update. Stop, press Update Infinite, then Play Infinite.'); }
+  if (r.action === 'full' || r.action === 'gone') throw new Error((r.why || 'that world is not available') + '. Press Play Infinite to join a world with room.');
   if (r.action === 'join' && r.world && r.world.host !== (account && account.id)) return startAwayJoin(r.world);
   if (r.action === 'join' && r.world) { try { await api('POST', '/v1/forever/leaveWorld', {}); } catch {} }
   return playInOwnWorld();   // the director put you in your own world, or nobody else is hosting one with room
@@ -739,7 +739,7 @@ function startAwayJoin(world) {
   S.away = { host: world.host, hostName: world.hostName || '', code: world.code }; S.ownGame = true; push();
   log(`opening your game in ${world.hostName}'s world (your own world keeps running here)`);
   ctx.runner.runVisible(FV + ':ownjoin', 'join', path.join(toolsDir(), 'lan-join-1147.ps1'), ['-Code', `'${String(world.code).replace(/'/g, "''")}'`], 'Dauntless Forever - your game (keep open)', { closeWhenDone: true, env: Object.assign(ENV(), { DF_KEEP_OWN: '1' }, (is25() || vpsBackendOf()) ? { DF_NO_TRAVEL: '1' } : {}), cwd: dir() })   // DF-VPS: the VPS owns the character   /* DF25-NOTRAVEL: in 2.5 the character always lives on the box, by definition of the mode */
-    .then(() => { S.ownGame = false; S.away = null; clearTimeout(awayTimer); api('POST', '/v1/forever/leaveWorld', {}).catch(() => {}); if (S.helper && S.phase === 'hosting') log('your game closed; your world keeps running (Play Forever to go back in)'); push(); });
+    .then(() => { S.ownGame = false; S.away = null; clearTimeout(awayTimer); api('POST', '/v1/forever/leaveWorld', {}).catch(() => {}); if (S.helper && S.phase === 'hosting') log('your game closed; your world keeps running (Play Infinite to go back in)'); push(); });
   ctx.runner.runHidden(FV + ':clientattach', 'attach', coreTool('clientAttach'), ['-Dll', coreBin('client')], (line) => {
     if (/^DFSTATUS ready/.test(line)) { S.clientDll = true; log('your game is ready to follow a host change'); }
   }, { env: ENV(), cwd: dir() });
@@ -780,7 +780,7 @@ function playInOwnWorld() {
     if (/^DFSTATUS ready/.test(line)) { S.clientDll = true; log('your game is ready to follow a host change'); }
   }, { env: ENV(), cwd: dir() });
   ctx.runner.runVisible(FV + ':ownjoin', 'join', path.join(toolsDir(), 'lan-join-1147.ps1'), ['-Code', `'${code.replace(/'/g, "''")}'`], 'Dauntless Forever - your game in your world (keep open)', { closeWhenDone: true, env: Object.assign(ENV(), { DF_KEEP_OWN: '1' }, (is25() || vpsBackend) ? { DF_NO_TRAVEL: '1' } : {}), cwd: dir() })   // DF-VPS: keep this PC's own server copies (the town), no travel   /* DF25-NOTRAVEL */
-    .then(() => { S.ownGame = false; try { fs.unlinkSync(path.join(dataDir(), 'migrate_successor.txt')); } catch {} if (S.helper && S.phase === 'hosting') log('your game closed; your world keeps running (Play Forever to go back in)'); else if (!S.helper && S.phase !== 'off') stop('the game closed'); push(); });
+    .then(() => { S.ownGame = false; try { fs.unlinkSync(path.join(dataDir(), 'migrate_successor.txt')); } catch {} if (S.helper && S.phase === 'hosting') log('your game closed; your world keeps running (Play Infinite to go back in)'); else if (!S.helper && S.phase !== 'off') stop('the game closed'); push(); });
   return Promise.resolve();
 }
 function startHostHelpers() {
@@ -850,7 +850,7 @@ async function autoRehost(why) {
     log('Host Mode comes back on its own in 20 s (with the Forever update first, if there is one)');
     await new Promise(r => setTimeout(r, 20000));
     if (S.phase !== 'off') return;
-    if (await setupStale()) { log('installing the Forever update'); try { await setup(); S.stale = false; push(); } catch (e) { S.stale = true; log('auto update failed: ' + e.message + '. Press Update Forever, then Host Mode.', true); push(); return; } }
+    if (await setupStale()) { log('installing the Forever update'); try { await setup(); S.stale = false; push(); } catch (e) { S.stale = true; log('auto update failed: ' + e.message + '. Press Update Infinite, then Host Mode.', true); push(); return; } }
     await play('helper');
   } catch (e) { log('Host Mode did not come back: ' + e.message, true); }
   finally { rehosting = false; }
@@ -912,9 +912,9 @@ function beatLoop() {
       if (S.phase === 'playing' && !S.helper && S.role !== 'standby' && (++gameCheckN % 4) === 0) {   // DF-CRASHWATCH
         const n = await gameCount();
         if (n > 0) gameSeen = true;
-        if (n === 0 && gameSeen) { if (++gameMisses >= 2) { log('your game is not running any more (closed or crashed): Forever stops; press Play Forever to go back'); gameMisses = 0; await stop('the game closed'); return; } } else gameMisses = 0;
+        if (n === 0 && gameSeen) { if (++gameMisses >= 2) { log('your game is not running any more (closed or crashed): Forever stops; press Play Infinite to go back'); gameMisses = 0; await stop('the game closed'); return; } } else gameMisses = 0;
       }
-      if (!r.role && !r.go) { if (++goneMisses >= (vpsBackend ? 12 : 3)) { /* DF-VPS: a director restart (a push) is not a lost world: the town is still up; wait a minute */ log('the world is gone'); const again = !!vpsBackend, mode = S.mode === 'fresh' ? 'fresh' : 'any'; await stop('the world ended'); if (again) { log('Play Forever again in 10 s (your character is safe on the server)'); setTimeout(() => { if (S.phase === 'off') play(mode).catch(e => log('Play Forever: ' + e.message, true)); }, 10000); } return; } } else goneMisses = 0;   // DF-VPS: a VPS world that ended comes back by itself
+      if (!r.role && !r.go) { if (++goneMisses >= (vpsBackend ? 12 : 3)) { /* DF-VPS: a director restart (a push) is not a lost world: the town is still up; wait a minute */ log('the world is gone'); const again = !!vpsBackend, mode = S.mode === 'fresh' ? 'fresh' : 'any'; await stop('the world ended'); if (again) { log('Play Infinite again in 10 s (your character is safe on the server)'); setTimeout(() => { if (S.phase === 'off') play(mode).catch(e => log('Play Infinite: ' + e.message, true)); }, 10000); } return; } } else goneMisses = 0;   // DF-VPS: a VPS world that ended comes back by itself
     } catch (e) { S.error = 'director: ' + e.message; }
     push();
     timer = setTimeout(tick, BEAT_MS);
@@ -1291,7 +1291,7 @@ async function play25() {
     }
     S.region = region25(); S.town = town;
     S.world = { host: 'forever25', hostName: `${town.region} Ramsgate`, code: town.join, backend: town.join, region: town.region, players: town.players };   // DF25-NOTRAVEL (Nov 3): the town IS the backend in 2.5; an empty field here left DF_NO_TRAVEL unset and the travel step uploaded the local save over the server character
-    if (!vpsBackendOf()) throw new Error('the launcher does not know this world yet. Close the launcher completely, open it again and press Play Forever.');   // DF25-NOTRAVEL: never join 2.5 without a backend address, the travel step would run
+    if (!vpsBackendOf()) throw new Error('the launcher does not know this world yet. Close the launcher completely, open it again and press Play Infinite.');   // DF25-NOTRAVEL: never join 2.5 without a backend address, the travel step would run
     await startJoin25(town);
   } catch (e) { S.phase = 'off'; S.is25 = false; S.town = null; push(); throw e; }
 }
@@ -1368,7 +1368,7 @@ function beatLoop25() {
       if ((++gameCheckN % 4) === 0) {   // DF-CRASHWATCH, as in v2: the game closed or crashed
         const n = await gameCount();
         if (n > 0) gameSeen = true;
-        if (n === 0 && gameSeen) { if (++gameMisses >= 2) { log('your game is not running any more (closed or crashed): Forever stops; press Play Forever to go back'); gameMisses = 0; await stop('the game closed'); return; } } else gameMisses = 0;
+        if (n === 0 && gameSeen) { if (++gameMisses >= 2) { log('your game is not running any more (closed or crashed): Forever stops; press Play Infinite to go back'); gameMisses = 0; await stop('the game closed'); return; } } else gameMisses = 0;
       }
     } catch (e) {
       S.error = 'director: ' + e.message;
@@ -1576,7 +1576,7 @@ async function setup(progress) {
       await fetchTowns25();
       const t = pickTown25(region25()) || pickTown25('ANY');
       if (t) { S.region = region25(); S.town = t; S.world = { host: 'forever25', hostName: `${t.region} Ramsgate`, code: t.join, backend: t.join, region: t.region, players: t.players }; push(); log('the world this PC plays on was refreshed after set-up (' + t.region + ')'); }
-      else log('set-up finished but no Forever town is up right now; press Play Forever again in a moment', true);
+      else log('set-up finished but no Forever town is up right now; press Play Infinite again in a moment', true);
     } catch (e) { log('could not refresh the world after set-up: ' + e.message, true); }
   }
   return true;

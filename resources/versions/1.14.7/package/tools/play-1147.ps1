@@ -75,13 +75,16 @@ Add-GameMods $psi   # launcher Mods page: UE4SS (-dfmods) and the Boss Health Ba
 # Troubleshooting: data\client_log.txt (any content) makes the game write its own log to logs\client_engine.log (the
 # shipping game's log file stays empty otherwise). The file's text, if any, is passed as -LogCmds (log categories).
 $clientLogSwitch = Join-Path $Root 'data\client_log.txt'
-if (Test-Path -LiteralPath $clientLogSwitch) {
-    $logCmds = ([IO.File]::ReadAllText($clientLogSwitch)).Trim() -replace '"', ''
+# DF-CLIENTLOG (Nov 6): on by default, so every report carries the game's own log (it was 130 bytes, open and close
+# only). data\client_log_off.txt turns it off; data\client_log.txt still passes its text as -LogCmds.
+$clientLogOff = Join-Path $Root 'data\client_log_off.txt'
+if (-not (Test-Path -LiteralPath $clientLogOff)) {
+    $logCmds = if (Test-Path -LiteralPath $clientLogSwitch) { ([IO.File]::ReadAllText($clientLogSwitch)).Trim() -replace '"', '' } else { '' }
     $clientLog = Join-Path $Root 'logs\client_engine.log'
     $extra = ' -stdout -FullStdOutLogOutput' + $(if ($logCmds) { " -LogCmds=`"$logCmds`"" } else { '' })
     $psi.FileName = Join-Path $env:SystemRoot 'System32\cmd.exe'
     $psi.Arguments = '/c ""' + $Exe + '" ' + $GameArgs + $psi.Arguments.Substring($GameArgs.Length) + $extra + ' > "' + $clientLog + '" 2>&1"'
-    Say "Troubleshooting: the game's log goes to logs\client_engine.log" 'Yellow'
+    Say "The game's own log goes to logs\client_engine.log (for Send my logs)."
 }
 $startTime = Get-Date
 $p = [Diagnostics.Process]::Start($psi)

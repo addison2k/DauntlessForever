@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="styles.css">
 <link rel="stylesheet" href="friends.css">
 <link rel="stylesheet" href="hostmode.css">
+<link rel="stylesheet" href="builds.css">
 </head>
 <body>
 <header class="titlebar"><img class="titlebar-mark" src="mark.png" alt="" width="16" height="16"><span class="titlebar-name">Dauntless Forever</span></header>
@@ -25,16 +26,17 @@
     <button class="nav-item selected" data-page="play"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M4.5 3v10l8-5z" fill="currentColor"/></svg></span>Play</button>
     <button class="nav-item" data-page="forever" hidden><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 2.2c2.2 0 3.6 1.5 3.6 3.4 0 2.6-3.6 5.6-3.6 5.6S4.4 8.2 4.4 5.6C4.4 3.7 5.8 2.2 8 2.2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M3 13.5h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>Forever<span class="nav-new">Beta</span></button>
     <button class="nav-item" data-page="host"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><rect x="2.5" y="2.5" width="11" height="4.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.4"/><rect x="2.5" y="9" width="11" height="4.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.4"/><circle cx="5.2" cy="4.75" r=".9" fill="currentColor"/><circle cx="5.2" cy="11.25" r=".9" fill="currentColor"/></svg></span>Host Mode<span class="nav-dot" id="nav-host-dot" hidden></span></button>
-    <button class="nav-item" data-page="seasons"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 1.5 9.4 6.6 14.5 8 9.4 9.4 8 14.5 6.6 9.4 1.5 8 6.6 6.6z" fill="currentColor"/></svg></span>Seasons</button>
+    <button class="nav-item" data-page="seasons"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 1.5 9.4 6.6 14.5 8 9.4 9.4 8 14.5 6.6 9.4 1.5 8 6.6 6.6z" fill="currentColor"/></svg></span>Hunt Pass</button>
     <button class="nav-item" data-page="events"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 2.5 13.5 8 8 13.5 2.5 8z" fill="currentColor"/></svg></span>Events</button>
     <button class="nav-item" data-page="rules"><span class="nav-ico ic-rules" aria-hidden="true"></span>Game Rules</button>
     <button class="nav-item" data-page="items"><span class="nav-ico ic-items" aria-hidden="true"></span>Inventory</button>
+    <button class="nav-item" data-page="builds"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16"><path d="M3 3h10v10H3zM6 3v10M3 7h10" fill="none" stroke="currentColor" stroke-width="1.4"/></svg></span><span id="build-nav-label">Builds</span><span class="nav-new" id="build-nav-new">New</span></button>
     <button class="nav-item" data-page="slayer"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M2.5 5.5h9M9 3l2.5 2.5L9 8M13.5 10.5h-9M7 8l-2.5 2.5L7 13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></span>Slayer copy<span class="nav-new">New</span></button>
     <button class="nav-item" data-page="mods"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 1.8 13.4 4.9v6.2L8 14.2 2.6 11.1V4.9z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></span>Mods</button>
-    <button class="nav-item" data-page="patches"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></span>Patch notes</button>
+    <button class="nav-item" data-page="patches" hidden><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M3 4.5h10M3 8h10M3 11.5h10" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></span>Patch notes</button>
     <button class="nav-item" data-page="settings"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M6.7 1.5h2.6l.4 1.8 1.2.7 1.8-.6 1.3 2.2-1.4 1.3v1.4l1.4 1.3-1.3 2.2-1.8-.6-1.2.7-.4 1.8H6.7l-.4-1.8-1.2-.7-1.8.6-1.3-2.2 1.4-1.3V7.6L2 6.3l1.3-2.2 1.8.6 1.2-.7z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="8" cy="8" r="2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/></svg></span>Settings</button>
     <button class="nav-item" data-page="credits"><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 13.6 2.6 8.4A3.2 3.2 0 0 1 8 4.2a3.2 3.2 0 0 1 5.4 4.2z" fill="currentColor"/></svg></span>Credits</button>
-    <button class="nav-item" data-page="help"><span class="nav-ico">?</span>Help</button>
+    <button class="nav-item" data-page="help"><span class="nav-ico">?</span>Send my logs</button>
   </nav>
   <div class="side-foot">
     <a class="side-link discord" id="lnk-discord" data-url="" hidden><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><circle cx="8" cy="8" r="2.2" fill="currentColor"/></svg></span><span id="lnk-discord-text">Join the Discord</span></a>
@@ -74,48 +76,29 @@
       <div class="hero-pill-row"><span class="pill" id="d-pill">Ready</span></div>
       <p class="blurb" id="d-blurb"></p>
       <p class="meta" id="d-meta"></p>
+      <!-- DF-INFINITE v4: the blurb and build line fold behind Details under 1.14.7 -->
+      <button class="ghost hero-details" id="hero-details" type="button">Details<span class="inf-fold-chev" aria-hidden="true"></span></button>
     </div>
 
     <ol class="path" id="path">
       <li class="step" data-step="game"><span class="step-n">1</span><div><div class="step-name">Game files</div><div class="step-sub" id="s-game"></div></div></li>
       <li class="step" data-step="setup"><span class="step-n">2</span><div><div class="step-name">Set-up</div><div class="step-sub" id="s-setup"></div></div></li>
       <li class="step" data-step="play"><span class="step-n">3</span><div><div class="step-name">Play</div><div class="step-sub" id="s-play"></div></div></li>
+      <li class="step step-more"><button class="ghost" id="btn-more">More</button></li>
     </ol>
-
-    <div class="action-row">
-      <div class="action-main">
-        <button class="primary" id="btn-primary">Play</button>
-        <button class="host-btn online-btn" id="btn-online" hidden><span class="ic-globe host-ico" aria-hidden="true"></span><span class="lbl">Play online</span></button>
-        <button class="host-btn" id="btn-host" hidden><span class="ic-friends host-ico" aria-hidden="true"></span>Host with friends</button>
+    <!-- DF-INFINITE v2 (Nov 6): the Forever tab's nodes land here (forever.js moves them once): the set-up/update
+         notice, whichever of the Region / PC rating cards is open (folded ones sit in the hero), the how-it-works
+         panes, and the notes/errors. The buttons dock at the bottom of the page (#play-dock). -->
+    <div class="inf-only" id="inf-drop"></div>
+    <div class="inf-panel inf-only" id="inf-panel">
+      <div class="inf-head">
+        <div class="inf-head-text"><div class="inf-title">Infinite</div><div class="inf-tag">A shared world. Your Slayer saved online.</div><div class="inf-req">Both steps are required before your first connection.</div></div>
+        <span class="inf-slot" id="inf-slot-pill"></span>
       </div>
-      <div class="action-side">
-        <button class="ghost" id="btn-stop" hidden>Stop everything</button>
-        <button class="ghost" id="btn-cancel" hidden>Cancel download</button>
-        <button class="ghost" id="btn-more">More</button>
-      </div>
-      <label class="host-opt" id="host-opt" hidden><input type="checkbox" id="opt-randoms"><span><span class="opt-name">Allow randoms</span><span class="opt-sub">Play online players can join you</span></span></label>
-      <label class="host-opt" id="host-light-opt" hidden><input type="checkbox" id="opt-light"><span><span class="opt-name">Light hosting</span><span class="opt-sub">For older PCs: the server only runs while your game is open</span></span></label>
-
-    </div>
-    <div class="warn-box" id="d-warn" hidden></div>
-    <p class="action-note" id="action-note"></p>
-
-    <div class="menu" id="more-menu" hidden>
-      <button data-act="pick">Use a game folder I already have</button>
-      <button data-act="setup">Run set-up again</button>
-      <button data-act="import" hidden>Bring my Dauntless Revived (1.4.4) character</button>
-      <button data-act="importfix" hidden>Fix the tutorial after a Revived import</button>
-      <button data-act="check">Check the game files (repairs missing or damaged files)</button>
-      <button data-act="pkgrepair">Repair the launcher files (puts the server files back)</button>
-      <button data-act="appdata" hidden>Fix the Windows AppData setting (the game cannot use its own settings folder)</button>
-      <button data-act="avallow">Allow in the antivirus (Defender: adds the exclusions; others: shows what to add)</button>
-      <button data-act="firewall">Fix the firewall (allow the launcher, Node and the game)</button>
-      <button data-act="opengame">Open the game folder</button>
-      <button data-act="openver">Open this version's launcher folder (save, logs)</button>
-      <button data-act="report">Send my logs to the Dauntless Forever team</button>
-      <button data-act="readme">Read this version's README</button>
-      <button data-act="delpartial" class="danger">Delete the unfinished download (frees space)</button>
-      <button data-act="uninstall" class="danger">Uninstall: put the game folder back</button>
+      <div id="inf-cards"></div>
+      <button class="inf-howlink" id="inf-how-btn" type="button">How Infinite works<span class="inf-fold-chev" aria-hidden="true"></span></button>
+      <div id="inf-how" hidden></div>
+      <div id="inf-msgs"></div>
     </div>
 
     <div class="progress" id="progress" hidden>
@@ -133,6 +116,52 @@
     <div class="notes" id="notes">
       <div class="note-col"><h3>Works so far</h3><ul id="d-works"></ul></div>
       <div class="note-col"><h3>Not yet</h3><ul id="d-not"></ul></div>
+    </div>
+
+    <div class="dock" id="play-dock">
+    <div class="action-row">
+      <div class="action-main">
+        <button class="primary" id="btn-primary">Play</button>
+        <button class="host-btn online-btn" id="btn-online" hidden><span class="ic-globe host-ico" aria-hidden="true"></span><span class="lbl">Play online</span></button>
+        <button class="host-btn" id="btn-host" hidden><span class="ic-friends host-ico" aria-hidden="true"></span>Host with friends</button>
+      </div>
+      <div class="action-side">
+        <button class="ghost" id="btn-stop" hidden>Stop everything</button>
+        <button class="ghost" id="btn-cancel" hidden>Cancel download</button>
+      </div>
+      <label class="host-opt" id="host-opt" hidden><input type="checkbox" id="opt-randoms"><span><span class="opt-name">Allow randoms</span><span class="opt-sub">Play online players can join you</span></span></label>
+      <!-- DF-INFINITE v3: "Now playing" over the button whose game is running (app.js renderHostButton) -->
+      <div class="action-caps" id="action-caps"><span id="cap-solo">Now playing</span><span id="cap-host">Now playing</span><span id="cap-inf" class="inf-only">Now playing</span></div>
+      <div class="action-subs" id="action-subs"><span>Your local Slayer</span><span>Your local Slayer, with friends</span><span class="inf-only">Shared world. Saved online.</span></div>
+      <!-- DF-INFINITE v4: Light hosting (and anything else about hosting) folds under the Host button -->
+      <div class="host-opts-wrap" id="host-opts-wrap" hidden><button class="host-opts-btn" id="host-opts-btn" type="button" title="Host options" aria-label="Host options"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.8 1.8M16.7 16.7l1.8 1.8M5.5 18.5l1.8-1.8M16.7 7.3l1.8-1.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+        <div class="host-opts" id="host-opts" hidden>
+    <label class="host-opt" id="host-light-opt" hidden><input type="checkbox" id="opt-light"><span><span class="opt-name">Light hosting</span><span class="opt-sub">For older PCs: the server only runs while your game is open</span></span></label>
+        </div>
+      </div>
+      <div class="inf-only" id="inf-status"></div>
+
+    </div>
+    <div class="warn-box" id="d-warn" hidden></div>
+    <p class="action-note" id="action-note"></p>
+
+    <div class="menu" id="more-menu" hidden>
+      <button data-act="pick"><span class="mk mk-grey" data-i18n-skip>A</span>Use a game folder I already have</button>
+      <button data-act="setup"><span class="mk mk-gold" data-i18n-skip>B</span>Run set-up again</button>
+      <button data-act="import" hidden><span class="mk mk-gold" data-i18n-skip>C</span>Bring my Dauntless Revived (1.4.4) character</button>
+      <button data-act="importfix" hidden><span class="mk mk-gold" data-i18n-skip>D</span>Fix the tutorial after a Revived import</button>
+      <button data-act="check"><span class="mk mk-gold" data-i18n-skip>E</span>Check the game files (repairs missing or damaged files)</button>
+      <button data-act="pkgrepair"><span class="mk mk-gold" data-i18n-skip>F</span>Repair the launcher files (puts the server files back)</button>
+      <button data-act="appdata" hidden><span class="mk mk-gold" data-i18n-skip>G</span>Fix the Windows AppData setting (the game cannot use its own settings folder)</button>
+      <button data-act="avallow"><span class="mk mk-blue" data-i18n-skip>H</span>Allow in the antivirus (Defender: adds the exclusions; others: shows what to add)</button>
+      <button data-act="firewall"><span class="mk mk-blue" data-i18n-skip>I</span>Fix the firewall (allow the launcher, Node and the game)</button>
+      <button data-act="opengame"><span class="mk mk-teal" data-i18n-skip>J</span>Open the game folder</button>
+      <button data-act="openver"><span class="mk mk-teal" data-i18n-skip>K</span>Open this version's launcher folder (save, logs)</button>
+      <button data-act="report"><span class="mk mk-teal" data-i18n-skip>L</span>Send my logs to the Dauntless Forever team</button>
+      <button data-act="readme"><span class="mk mk-teal" data-i18n-skip>M</span>Read this version's README</button>
+      <button data-act="delpartial" class="danger"><span class="mk mk-red" data-i18n-skip>N</span>Delete the unfinished download (frees space)</button>
+      <button data-act="uninstall" class="danger"><span class="mk mk-red" data-i18n-skip>O</span>Uninstall: put the game folder back</button>
+    </div>
     </div>
 
     <!-- DF-FH-BANNER (Oct 22): Forever Hunts teaser, a picture only (no link yet). DF-FH-LIGHT: moving sun shafts and dust over it (fh-banner.js) -->
@@ -153,9 +182,9 @@
   <h1 class="page-title">Forever</h1>
   <p class="lead">One world for everyone: open hunts up to 8, hosts that hand over without a loading-screen-to-menu, fresh seasonal characters. Press Play Forever and the director puts you in a world with room, or has this PC host one.</p>
   <div id="fv-missing" class="card" hidden>
-    <div class="card-head"><h2 id="fv-missing-title">Forever is not set up on this PC</h2><span class="pill">Beta</span></div>
+    <div class="card-head"><h2 id="fv-missing-title">Infinite is not set up on this PC</h2><span class="pill">Beta</span></div>
     <p id="fv-missing-text"></p>
-    <div class="hm-inline"><button class="primary-sm" id="fv-setup">Set up Forever</button></div>
+    <div class="hm-inline"><button class="primary-sm" id="fv-setup">Set up Infinite</button></div>
   </div>
   <!-- DF25: Forever 2.5 - region, rating, play. Shown when network.json names a 2.5 director; the v2 blocks (.fv-v2) hide. -->
   <div id="fv25" hidden>
@@ -195,14 +224,14 @@
       </div>
     </div>
     <div class="fv25-play-wrap">
-      <button class="primary fv25-play" id="fv25-play">Play Forever</button>
-      <button class="ghost fv25-stop" id="fv25-stop" hidden>Stop Forever</button>
+      <button class="primary fv25-play" id="fv25-play">Play Infinite</button>
+      <button class="ghost fv25-stop" id="fv25-stop" hidden>Stop Infinite</button>
     </div>
     <div class="fv25-status-row">
       <div class="hm-status"><span class="hm-dot" id="fv25-dot" aria-hidden="true"></span><div class="hm-status-text"><div class="hm-state" id="fv25-state">Not playing</div><div class="hm-sub" id="fv25-sub"></div></div></div>
     </div>
     <div class="fv25-tabs">
-      <button class="fv25-tab on" id="fv25-tab-how" type="button">How Forever works</button>
+      <button class="fv25-tab on" id="fv25-tab-how" type="button">How Infinite works</button>
       <button class="fv25-tab" id="fv25-tab-lb" type="button">Key leaderboard <span class="small" id="fv25-lb-sub"></span></button>
     </div>
     <div class="fv25-pane" id="fv25-pane-how">
@@ -251,9 +280,9 @@
       <p class="small">Want to help host hunts? The check takes about 20 seconds, measures this PC and your line, and shows you the numbers first. Nothing is sent until you press Send.</p>
       <div class="hm-inline"><button class="ghost hm-small" id="fv-check">Run the host check</button><button class="ghost hm-small" id="fv-again" hidden>Run again</button><button class="primary-sm" id="fv-send" hidden>Send</button><button class="ghost hm-small" id="fv-clear" hidden>Stop hosting</button><button class="ghost hm-small" id="fv-more">More</button></div>
       <div class="menu" id="fv-more-menu" hidden>
-        <button data-fv="setup">Set up Forever again (fresh Forever files)</button>
-        <button data-fv="folder">Open the Forever folder (logs, files)</button>
-        <button data-fv="cleanup">Close anything Forever left running (fixes "tar exit 1")</button>
+        <button data-fv="setup"><span class="mk mk-gold" data-i18n-skip>P</span>Set up Infinite again (fresh Infinite files)</button>
+        <button data-fv="folder"><span class="mk mk-teal" data-i18n-skip>Q</span>Open the Infinite folder (logs, files)</button>
+        <button data-fv="cleanup"><span class="mk mk-gold" data-i18n-skip>R</span>Close anything Infinite left running (fixes "tar exit 1")</button>
         <button data-act="check">Check the 1.14.7 game files (repairs missing or damaged files)</button>
         <button data-act="setup">Run 1.14.7 set-up again</button>
         <button data-act="pkgrepair">Repair the 1.14.7 launcher files (puts the server files back)</button>
@@ -272,7 +301,7 @@
     <p class="small">Every host who ran a world: time hosted, players helped, player-minutes on their PC, hunts run, takeovers caught.</p>
     <div class="fv-lb" id="fv-lb"></div>
   </div>
-  <details class="hm-log-box"><summary>Forever log</summary><pre class="hm-log" id="fv-log" data-i18n-skip></pre></details>
+  <details class="hm-log-box"><summary>Infinite log</summary><pre class="hm-log" id="fv-log" data-i18n-skip></pre></details>
 </section>
 
 <section class="page" id="page-host" hidden>
@@ -339,12 +368,13 @@
 <!-- ============================================================ Seasons & mods -->
 <!-- ============================================================ Friends (friends.js / friends.css) -->
 <section class="page" id="page-seasons" hidden>
-  <h1 class="page-title">Seasons</h1>
-  <p class="lead">Pick the Hunt Pass you want to play on. Every season keeps its own level, so you can switch and come back to where you were.</p>
-  <div class="season-tabs" id="season-vtabs" role="tablist"></div>
+  <h1 class="page-title">Hunt Pass</h1>
+  <p class="lead">Pick the Hunt Pass you want to play on. Every pass keeps its own level, so you can switch and come back to where you were.</p>
+  <div class="gv-label">Game version</div>
+  <div class="season-tabs ver-tabs" id="season-vtabs" role="tablist"></div>
   <div id="season-none" class="card" hidden>
-    <div class="card-head"><h2>No seasons for this version yet</h2><span class="pill">Planned</span></div>
-    <p>Seasons are ready for 1.6.2 first. Other versions get theirs through a server-file update, with no new launcher needed.</p>
+    <div class="card-head"><h2>No Hunt Pass for this version yet</h2><span class="pill">Planned</span></div>
+    <p>Hunt Passes are ready for 1.6.2 first. Other versions get theirs through a server-file update, with no new launcher needed.</p>
   </div>
   <div id="season-body" hidden>
     <div class="season-now">
@@ -358,7 +388,7 @@
     <p class="action-note" id="season-note" aria-live="polite"></p>
     <div class="season-filters" id="season-filters" role="group" aria-label="Show"></div>
     <div class="season-list" id="season-list"></div>
-    <p class="small">The game's own Hunt Pass screen always says "Time Strike": 1.6.2 can only show its own pass. The levels and rewards are the season you picked here. A few original rewards (account unlocks, loot boxes) cannot be given offline; the rewards list marks them.</p>
+    <p class="small">The game's own Hunt Pass screen always says "Time Strike": 1.6.2 can only show its own pass. The levels and rewards are the pass you picked here. A few original rewards (account unlocks, loot boxes) cannot be given offline; the rewards list marks them.</p>
   </div>
 </section>
 
@@ -375,7 +405,7 @@
     <p class="action-note" id="event-note" aria-live="polite"></p>
     <h2 class="list-head">Ramsgate event</h2>
     <div class="season-list" id="event-list"></div>
-    <h2 class="list-head">Season decorations</h2>
+    <h2 class="list-head">Decorations</h2>
     <div class="season-list" id="dressing-list"></div>
     <p class="small">"Experimental" means the decorations are in the game files and switch on the same way as Springtide, but nobody has seen them in game yet. If one looks wrong or Ramsgate will not load, pick "No event" / "Time Strike" again. Frostfall's Ramsgate decorations are not in 1.6.2's files, so they cannot be offered here.</p>
   </div>
@@ -385,7 +415,8 @@
 <section class="page" id="page-rules" hidden>
   <h1 class="page-title">Game Rules</h1>
   <p class="lead">Play it your way: level faster or slower, get more loot, craft for free. Your picks are kept and apply the next time you press Play. They never touch your save on their own, so you can change them any time.</p>
-  <div class="season-tabs" id="rule-vtabs" role="tablist" aria-label="Version"></div>
+  <div class="gv-label">Game version</div>
+  <div class="season-tabs ver-tabs" id="rule-vtabs" role="tablist" aria-label="Version"></div>
   <div class="ver-banner" id="rule-vbanner"></div>
   <div id="rule-none" class="card" hidden>
     <div class="card-head"><h2 id="rule-none-title">No Game Rules for this version yet</h2><span class="pill">Planned</span></div>
@@ -400,10 +431,46 @@
 </section>
 
 <!-- ============================================================ Inventory -->
+<!-- ============================================================ Builds (DF-BUILDS v2, Nov 6: a loadout from the game's own gear data; never writes a save) -->
+<section class="page" id="page-builds" hidden data-i18n-skip>
+  <div class="builds-head"><div><h1 class="page-title" id="build-title">Builds</h1><p class="lead" id="build-subtitle">Put a loadout together, see the perks it adds up to, save it, share it as a code. A link from reforged.dauntless-builder.com pastes straight in.</p></div>
+    <div class="builds-toolbar"><label id="build-version-label">Version</label><select id="build-version" class="hm-select"><option value="1.14.7">1.14.7</option><option value="1.6.2">1.6.2</option></select><label id="build-character-label">Character</label><select id="build-character" class="hm-select"></select><button class="ghost" id="build-refresh">Refresh inventory</button></div></div>
+  <div class="builds-tabs"><button class="builds-tab is-active" data-build-tab="editor" id="build-tab-editor" type="button">Builder</button><button class="builds-tab" data-build-tab="catalog" id="build-tab-catalog" type="button">Catalog</button><button class="builds-tab" data-build-tab="mine" id="build-tab-mine" type="button">My builds</button></div>
+  <p id="build-message" class="builds-status" aria-live="polite"></p>
+  <p id="build-data-note" class="builds-status" hidden></p>
+  <div id="build-panel-editor">
+    <div class="builds-namerow"><input id="build-name" placeholder="Build name" maxlength="90" autocomplete="off" spellcheck="false"><input id="build-notes" placeholder="Notes (what it is for)" maxlength="280" autocomplete="off"><button class="primary-sm" id="build-save" type="button">Save build</button><button class="ghost" id="build-share" type="button">Copy share code</button><button class="ghost" id="build-clear" type="button">Clear</button></div>
+    <div class="builds-fill builds-import"><input id="build-import-text2" placeholder="Paste a reforged.dauntless-builder.com link (or a share code) and press Import" autocomplete="off" spellcheck="false"><button class="ghost" id="build-import2" type="button">Import</button></div>
+    <div class="builds-fill"><span class="builds-fill-label">Fill empty slots:</span><select id="build-fill-weapon" class="hm-select"></select><select id="build-fill-element" class="hm-select"></select><label class="builds-check"><input type="checkbox" id="build-allow-missing"> allow gear this character does not own</label><button class="ghost" id="build-fill" type="button">Fill</button><span id="build-fill-note" class="small"></span></div>
+    <div class="builds-loadout">
+      <div class="builds-col" id="build-col-weapon"></div>
+      <div class="builds-col" id="build-col-armour"></div>
+      <div class="builds-col builds-summary" id="build-summary"></div>
+    </div>
+  </div>
+  <div id="build-panel-catalog" hidden>
+    <div class="builds-fill"><input id="build-catalog-search" placeholder="Search gear, behemoth, element, perk" autocomplete="off" spellcheck="false"><select id="build-catalog-kind" class="hm-select"></select><label class="builds-check"><input type="checkbox" id="build-catalog-owned"> owned only</label><span id="build-catalog-count" class="small"></span></div>
+    <div id="build-catalog-list" class="builds-list"></div>
+  </div>
+  <div id="build-panel-mine" hidden>
+    <div class="builds-fill"><input id="build-import-text" placeholder="Paste a reforged.dauntless-builder.com link or a share code" autocomplete="off" spellcheck="false"><button class="ghost" id="build-import" type="button">Import</button></div>
+    <div id="build-mine-list" class="builds-list"></div>
+  </div>
+  <div class="builds-picker" id="build-picker" hidden>
+    <div class="builds-picker-box">
+      <div class="builds-picker-head"><h2 id="build-picker-title">Pick</h2><button class="ghost hm-small" id="build-picker-close" type="button">Close</button></div>
+      <div class="builds-fill"><input id="build-picker-search" placeholder="Search" autocomplete="off" spellcheck="false"><select id="build-picker-kind" class="hm-select" hidden></select></div>
+      <div id="build-picker-list" class="builds-list"></div>
+    </div>
+  </div>
+  <p class="builds-disclaimer">This page never writes to a game save. Builds are kept on this PC; a share code is text you paste anywhere.</p>
+</section>
+
 <section class="page" id="page-items" hidden>
   <h1 class="page-title">Inventory</h1>
   <p class="lead">Add or remove currencies, tokens and keys in your save. Close the game first. A backup of your save is made every time you save here.</p>
-  <div class="season-tabs" id="item-vtabs" role="tablist" aria-label="Version"></div>
+  <div class="gv-label">Game version</div>
+  <div class="season-tabs ver-tabs" id="item-vtabs" role="tablist" aria-label="Version"></div>
   <div class="ver-banner" id="item-vbanner"></div>
   <div id="item-none" class="card" hidden>
     <div class="card-head"><h2 id="item-none-title">No inventory editing for this version yet</h2><span class="pill" id="item-none-pill">Planned</span></div>
@@ -449,7 +516,8 @@
 <section class="page" id="page-mods" hidden>
   <h1 class="page-title">Mods</h1>
   <p class="lead">Play with UE4SS mods: Lua and Blueprint mods made by the community. Turn on Modded mode, put mods in the mods folder, and pick which ones run. Changes apply the next time you press Play.</p>
-  <div class="season-tabs" id="mods-vtabs" role="tablist" aria-label="Version"></div>
+  <div class="gv-label">Game version</div>
+  <div class="season-tabs ver-tabs" id="mods-vtabs" role="tablist" aria-label="Version"></div>
   <div class="ver-banner" id="mods-vbanner"></div>
   <div id="mods-none" class="card" hidden>
     <div class="card-head"><h2 id="mods-none-title">No mods for this version yet</h2><span class="pill">Planned</span></div>
@@ -553,19 +621,18 @@
 
 <!-- ============================================================ Help -->
 <section class="page" id="page-help" hidden>
-  <h1 class="page-title">How this works</h1>
-  <ol class="help-steps">
-    <li><strong>Game files.</strong> Press Download and the launcher fetches that exact build from Epic's servers (11 to 15 GB; you need about twice that free while it runs). Already have the game? "More" lets you point at the folder instead.</li>
-    <li><strong>Set-up.</strong> A black window opens and asks one or two questions (press Enter for the defaults). It installs Node.js if needed, puts two files into the game folder (originals are kept, never deleted) and makes your offline account.</li>
-    <li><strong>Play.</strong> Starts the local backend and the hidden game servers (about a minute), then the game. Closing the game closes the rest.</li>
-  </ol>
-  <h2 class="h2">If something goes wrong</h2>
+  <h1 class="page-title">Send my logs</h1>
+  <p class="lead">Something went wrong? Send your logs to the Dauntless Forever team. Your PC name and Windows user name are blanked out before anything leaves this PC.</p>
+  <div class="card">
+    <div class="hm-inline"><button class="primary-sm" id="help-report">Send my logs to the Dauntless Forever team</button></div>
+    <p class="small">The same as More, then L, on the Play page. Say what happened and roughly when; the logs of the version you have selected go with it.</p>
+  </div>
+  <h2 class="h2">Quick answers</h2>
   <ul class="help-list">
     <li>Stuck, or "a Dauntless process is running": press "Stop everything", then Play again.</li>
-    <li>"The game folder is missing files": the game was repaired or updated. Press Set up again; it only fixes what is missing.</li>
+    <li>"The game folder is missing files": the game was repaired or updated. Press More, then B (Run set-up again); it only fixes what is missing.</li>
     <li>If Windows asks whether Node.js or Dauntless may use the network, click Cancel. Everything stays on your PC.</li>
     <li>Windows SmartScreen on first start: "More info" then "Run anyway". The launcher is not signed; signing costs money the project does not spend.</li>
-    <li>Asking for help: "More" then "Get the logs", and send the two zips. Your PC name and user name are blanked out in them.</li>
   </ul>
   <p class="small">Fan project, solo play, unofficial. Built on <a href="#" data-url="https://github.com/SyST3MDeV/Undaunted">Undaunted</a> (AGPL-3.0). Download tool: <a href="#" data-url="https://github.com/meszmate/manifest">meszmate/manifest</a> (MIT). Dauntless belongs to its owners; this includes no game files.</p>
 </section>
@@ -690,5 +757,9 @@
 <script src="player.js"></script>
 <script src="hostmode.js"></script>
 <script src="forever.js"></script>
+<script src="builds-data-1147.js"></script>
+<script src="builds-data-162.js"></script>
+<script src="builds-dbnames.js"></script>
+<script src="builds.js"></script>
 </body>
 </html>

@@ -478,11 +478,19 @@ function ensureStarterItems(inv) {
     if (!inv.instancedItems.some((i) => i.catalogId === id)) inv.instancedItems.push({ catalogId: id, instanceId: id, updateVersion: 1 });
   }
 }
+// DF-ZEROSTACK: a stack that reaches 0 stays in the inventory, and the game goes on offering the item: the Middleman
+// listed a cell the player no longer had, and the fusion was then refused with "Not enough cells or fusion currency"
+// while the screen showed nothing. An empty stack means the same as no stack, so it is not handed out on a read.
+function dropEmptyStacks(inv) {
+  const empty = (i) => i && typeof i.quantity === 'number' && i.quantity <= 0;
+  if (Array.isArray(inv.stackedItems) && inv.stackedItems.some(empty)) inv.stackedItems = inv.stackedItems.filter((i) => !empty(i));
+}
 function inventoryOf(player, characterId) {
   const id = characterId || (player.characters[0] && player.characters[0].id) || 'none';
   if (!player.inventory[id]) player.inventory[id] = { stackedItems: [], instancedItems: [] };
   ensureStarterItems(player.inventory[id]);
   stripStaffTitles(player.inventory[id]);   // DF-STAFFTITLES
+  dropEmptyStacks(player.inventory[id]);    // DF-ZEROSTACK
   return player.inventory[id];
 }
 function applyInventory(inv, body) {
