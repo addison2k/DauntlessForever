@@ -130,13 +130,13 @@
         <button class="ghost" id="btn-stop" hidden>Stop everything</button>
         <button class="ghost" id="btn-cancel" hidden>Cancel download</button>
       </div>
-      <label class="host-opt" id="host-opt" hidden><input type="checkbox" id="opt-randoms"><span><span class="opt-name">Allow randoms</span><span class="opt-sub">Play online players can join you</span></span></label>
       <!-- DF-INFINITE v3: "Now playing" over the button whose game is running (app.js renderHostButton) -->
-      <div class="action-caps" id="action-caps"><span id="cap-solo">Now playing</span><span id="cap-host">Now playing</span><span id="cap-inf" class="inf-only">Now playing</span></div>
-      <div class="action-subs" id="action-subs"><span>Your local Slayer</span><span>Your local Slayer, with friends</span><span class="inf-only">Shared world. Saved online.</span></div>
+      <div class="action-caps" id="action-caps"><span id="cap-solo">Now playing</span><span id="cap-host">Now playing</span><span id="cap-inf" class="inf-only">Now playing</span><span id="cap-online" class="online-only">Now playing</span></div>
+      <div class="action-subs" id="action-subs"><span>Your local Slayer</span><span><span class="sub-host">Your local Slayer, with friends</span><span class="sub-host-link">With friends, or <button class="link sub-link" id="btn-online-link" type="button">join an open game</button></span></span><span class="inf-only">Shared world. Saved online.</span><span class="online-only">Join anyone's open game</span></div>
       <!-- DF-INFINITE v4: Light hosting (and anything else about hosting) folds under the Host button -->
       <div class="host-opts-wrap" id="host-opts-wrap" hidden><button class="host-opts-btn" id="host-opts-btn" type="button" title="Host options" aria-label="Host options"><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.8 1.8M16.7 16.7l1.8 1.8M5.5 18.5l1.8-1.8M16.7 7.3l1.8-1.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
         <div class="host-opts" id="host-opts" hidden>
+    <label class="host-opt" id="host-opt" hidden><input type="checkbox" id="opt-randoms"><span><span class="opt-name">Allow randoms</span><span class="opt-sub">Players using Play online can join your game</span></span></label>
     <label class="host-opt" id="host-light-opt" hidden><input type="checkbox" id="opt-light"><span><span class="opt-name">Light hosting</span><span class="opt-sub">For older PCs: the server only runs while your game is open</span></span></label>
         </div>
       </div>

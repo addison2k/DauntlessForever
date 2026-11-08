@@ -413,3 +413,19 @@ body.host-opts-on #btn-host { padding-right: 46px; }
 #play-dock { height: 118px; }
 .action-side, body.inf-on.sel-1147 .action-side { position: absolute; right: 40px; bottom: calc(100% + 8px); grid-row: auto; z-index: 7; }
 .action-row > .host-opt, body.inf-on.sel-1147 .action-row > .host-opt { display: none; }
+/* ---- DF-ONLINE-BACK (Nov 8): Play online returns. A full button in the third slot when that slot is free; on 1.14.7 with Infinite a link under Host with friends ---- */
+#btn-online { grid-column: 3; grid-row: 2; width: 100%; justify-content: center; }
+body:not(.online-btn-on) .online-only { display: none; }
+.action-subs .sub-host-link { display: none; }
+body.online-link-on .action-subs .sub-host { display: none; }
+body.online-link-on .action-subs .sub-host-link { display: inline; }
+.action-subs .sub-link { padding: 0; font: inherit; color: var(--aether); text-decoration: underline; text-underline-offset: 3px; background: none; border: 0; cursor: pointer; }
+.action-subs .sub-link:disabled { color: var(--ink-3); cursor: default; text-decoration: none; }
+#host-opts .host-opt { display: flex; }
+#host-opts .host-opt[hidden] { display: none; }
+#host-opts .host-opt + .host-opt { margin-top: 8px; }
+
+/* ---- DF-DOCK-WIDE (Nov 8): the bottom bar on the Play page reaches the right edge of the window (to the Friends panel). ---- */
+/* Only the background is drawn wider; the buttons, captions and the gear stay where they were. */
+.content:has(> #page-play:not([hidden])) { overflow-x: hidden; }
+#play-dock::after { content: ""; position: absolute; top: -1px; bottom: 0; left: 100%; width: 100vw; background: var(--bg-2); border-top: 1px solid var(--line-2); box-shadow: 0 -14px 28px rgba(0,0,0,.45); clip-path: inset(-60px 0 0 0); pointer-events: none; }

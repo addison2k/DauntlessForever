@@ -485,12 +485,12 @@ function renderHostButton() {
   // DF-INFINITE v3: "Now playing" over the running button (Infinite's state comes from forever.js as a body class)
   { const inf = document.body.classList.contains('inf-playing'), hosting = hostingThis || !!hm;
     const cap = (id, on) => { const e = $(id); if (e) e.classList.toggle('now', !!on); };
-    cap('cap-host', hosting); cap('cap-inf', inf && v.id === '1.14.7'); cap('cap-solo', st.busy === 'play' && !hosting && !(inf && v.id === '1.14.7')); }
+    cap('cap-online', !!(soc && soc.search && soc.search.version === v.id)); cap('cap-host', hosting); cap('cap-inf', inf && v.id === '1.14.7'); cap('cap-solo', st.busy === 'play' && !hosting && !(inf && v.id === '1.14.7')); }
   // Light hosting: under the Host button, only where Host Mode can run this version
   const lo = $('host-light-opt'), lbox = $('opt-light');
   const canHM = !!(hostCan && hostCan.has(v.id));
   lo.hidden = hb.hidden || !canHM;
-  { const hw = $('host-opts-wrap'); if (hw) hw.hidden = lo.hidden; document.body.classList.toggle('host-opts-on', !lo.hidden); }   // DF-INFINITE v4: the Host options gear shows only when there is an option in it
+  { const ro = $('host-opt'), any = !lo.hidden || !!(ro && !ro.hidden && !hb.hidden); const hw = $('host-opts-wrap'); if (hw) hw.hidden = !any; document.body.classList.toggle('host-opts-on', any); }   // DF-INFINITE v4: the Host options gear shows only when there is an option in it
   lbox.checked = lightHost; lbox.disabled = hostingThis || !!hm;
   lo.classList.toggle('off', hostingThis || !!hm);
   lo.title = t('Off (recommended): your server starts first and stays up until you press Stop hosting, so friends can always get in. On: the old way, lighter on your PC; the server stops when you close the game.');
@@ -523,11 +523,19 @@ function renderOnline(v, soc, st, run, hostingThis) {
   const search = soc && soc.search;
   const mine = !!(search && search.version === v.id);
   const off = !v.canHost || !!(soc && soc.offlineMode);
-  ob.hidden = true;   // DF-INFINITE (Nov 6): Play online is off the page (Infinite is the shared world); the search code stays as it was
+  // DF-ONLINE-BACK (Nov 8): Play online is back. Its own button in the third slot where that slot is free (1.6.2, or 1.14.7
+  // when Infinite is not offered); on 1.14.7 with Infinite the third slot is Play Infinite, so Play online is the link
+  // "join an open game" under Host with friends. Same search either way.
+  const infHere = v.id === '1.14.7' && document.body.classList.contains('inf-on');
+  const link = $('btn-online-link');
+  ob.hidden = off || infHere;
+  document.body.classList.toggle('online-btn-on', !ob.hidden);
+  document.body.classList.toggle('online-link-on', !off && infHere);
   ob.classList.toggle('on', mine);
   const lbl = ob.querySelector('.lbl');
   lbl.textContent = !mine ? t('Play online') : search.phase === 'asking' ? t('Joining') : search.phase === 'hosting' ? t('Starting') : t('Searching {n}', { n: search.left });
   ob.disabled = !mine && (st.key !== 'ready' || run.length > 0 || !!search || !!(soc && soc.onlineOff) || !(soc && soc.signedIn));
+  if (link) { link.disabled = ob.disabled; link.textContent = mine ? lbl.textContent + ' (stop)' : t('join an open game'); }
   ob.title = st.key !== 'ready' && !mine ? t('Ready once the game is downloaded and set up') : soc && soc.onlineOff ? tm(soc.onlineOff) : mine ? t('Click to stop looking')
     : !(soc && soc.signedIn) ? t('Signing you in to the online service...') : t('Play {version} with anyone online: joins a game that is open to everyone, or hosts one', { version: v.id });
   // the note under the buttons says what the search is doing, and goes away when it is over
@@ -538,7 +546,7 @@ function renderOnline(v, soc, st, run, hostingThis) {
     n.textContent = onlineNote; n.className = 'action-note';
   } else if (onlineNote) { if (n.textContent === onlineNote) n.textContent = ''; onlineNote = ''; }
   // Allow randoms: shown with the Host button; fixed while hosting (it applies when hosting starts)
-  opt.hidden = true;   // DF-INFINITE: Allow randoms only mattered to Play online
+  opt.hidden = off;   // DF-ONLINE-BACK: Allow randoms lives in the Host options gear
   const box = $('opt-randoms');
   box.checked = !!(soc && soc.allowRandoms);
   box.disabled = hostingThis;
@@ -1206,6 +1214,7 @@ function wire() {
     const r = await L.socialHost(v.id);
     if (r && r.ok === false) { n.textContent = tm(r.error) || t('Could not start hosting.'); n.className = 'action-note err'; hb.disabled = false; }
   });
+  { const ol = $('btn-online-link'); if (ol) ol.addEventListener('click', () => $('btn-online').click()); }   // DF-ONLINE-BACK: the link under Host with friends
   $('btn-online').addEventListener('click', async () => {
     const v = versions.find(x => x.id === selected); if (!v) return;
     const soc = window.dfSocial || {};

@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.4.9",
+                     "version":  "0.4.10",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "New Meta page under Builds: the top build for every weapon, and a Community board where you post builds, filter by weapon and upvote. Hover any perk or cell to see what it does at +1 to +6.",
+                     "notes":  "Play online is back. The bottom bar on the Play page now reaches the edge of the window.",
                      "date":  "2026-11-08",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.9.asar",
-                                 "sha256":  "090c6fa8fcfc78c1c37188801bbc6a3dd4f694657f475254ff35efa955a8efae",
-                                 "size":  19807299,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.10.asar",
+                                 "sha256":  "32daf8f3a5688e2d7da25ff8cb4625462cc113ba4d238d7fef40dfedb2bf39b0",
+                                 "size":  20071607,
                                  "minShell":  "0.2.4"
                              }
                  }
