@@ -1,0 +1,21 @@
+{
+  "id": "1.3.1",
+  "name": "Dauntless 1.3.1",
+  "build": "210792",
+  "released": "Summer 2020",
+  "era": "Before Reforged",
+  "blurb": "Summer 2020: the Ramsgate before Reforged, the old hunt boards and the original progression. Offline package in the works.",
+  "works": [],
+  "notWorking": [],
+  "exeRel": "Archon/Binaries/Win64/Dauntless-Win64-Shipping.exe",
+  "exeSha256": "0CE696CC1F7BBFFC88D574F6A02D3FA99B591936D789BDF481967DB22745381B",
+  "download": {
+    "manifestUrl": "https://raw.githubusercontent.com/addison2k/DauntlessManifestArchive/main/manifests/Windows/Dauntless_1.3.1.210792.manifest",
+    "manifestSha1": "",
+    "downloadGB": 0,
+    "installedGB": 0,
+    "files": 0,
+    "folderName": "Dauntless_1.3.1"
+  },
+  "package": null
+}

@@ -1,0 +1,21 @@
+{
+  "id": "1.5.4",
+  "name": "Dauntless 1.5.4",
+  "build": "259586",
+  "released": "December 2020",
+  "era": "Reforged",
+  "blurb": "Winter 2020: the very first Reforged build. Offline package coming soon.",
+  "works": [],
+  "notWorking": [],
+  "exeRel": "Archon/Binaries/Win64/Dauntless-Win64-Shipping.exe",
+  "exeSha256": "",
+  "download": {
+    "manifestUrl": "https://raw.githubusercontent.com/addison2k/DauntlessManifestArchive/main/manifests/Windows/Dauntless_1.5.4.259586.manifest",
+    "manifestSha1": "18680f431b1bed1258c283aae8a2244ddef1fdb8",
+    "downloadGB": 11.59,
+    "installedGB": 12.09,
+    "files": 442,
+    "folderName": "Dauntless_1.5.4"
+  },
+  "package": null
+}

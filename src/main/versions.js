@@ -41,6 +41,24 @@ function loadRegistry() {
       out.push(v);
     } catch (e) { console.error('bad version.json', f, e.message); }
   }
+  // DF-REG-ASAR (Nov 8): the folder above is frozen at the installer's date, and small launcher updates never touch it,
+  // so an install from before a version was added to the registry never shows its tab (1.3.1, Nov 8). The asar carries a
+  // copy of every package-less entry (src\main\registry\<id>\version.json); any id the folder lacks is taken from there.
+  // Entries with a package stay bundle-only: a package needs its files beside it. Nothing here overrides the folder.
+  try {
+    const extra = path.join(__dirname, 'registry');
+    for (const id of fs.readdirSync(extra)) {
+      if (out.some(v => v.id === id)) continue;
+      const f = path.join(extra, id, 'version.json');
+      if (!fs.existsSync(f)) continue;
+      try {
+        const v = JSON.parse(fs.readFileSync(f, 'utf8'));
+        if (v.package) continue;
+        v.bundledDir = path.join(extra, id); v.dataDir = path.join(versionsDataDir(), id); v.bundledPackageVersion = '';
+        out.push(v);
+      } catch (e) { console.error('bad registry entry', f, e.message); }
+    }
+  } catch {}
   // oldest first, by numeric version (a timeline, top to bottom)
   out.sort((a, b) => cmpVersion(a.id, b.id));
   return out;

@@ -1,0 +1,21 @@
+{
+  "id": "2.1.1",
+  "name": "Dauntless 2.1.1",
+  "build": "682875",
+  "released": "December 2024",
+  "era": "Awakening",
+  "blurb": "The final era: Awakening, the last version of Dauntless before the servers closed. An offline package is being worked on.",
+  "works": [],
+  "notWorking": [],
+  "exeRel": "Archon/Binaries/Win64/Dauntless-Win64-Shipping.exe",
+  "exeSha256": "",
+  "download": {
+    "manifestUrl": "https://raw.githubusercontent.com/addison2k/DauntlessManifestArchive/main/manifests/Windows/Dauntless_2.1.1.682875.manifest",
+    "manifestSha1": "2406ba6b70410692acbad2dbbcd9090e0349576e",
+    "downloadGB": 13.86,
+    "installedGB": 14.45,
+    "files": 832,
+    "folderName": "Dauntless_2.1.1"
+  },
+  "package": null
+}

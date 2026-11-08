@@ -1,0 +1,21 @@
+{
+  "id": "1.10.5",
+  "name": "Dauntless 1.10.5",
+  "build": "365075",
+  "released": "2022",
+  "era": "Reforged",
+  "blurb": "2022: the Reforged years in full swing. Offline package coming soon.",
+  "works": [],
+  "notWorking": [],
+  "exeRel": "Archon/Binaries/Win64/Dauntless-Win64-Shipping.exe",
+  "exeSha256": "",
+  "download": {
+    "manifestUrl": "https://raw.githubusercontent.com/addison2k/DauntlessManifestArchive/main/manifests/Windows/Dauntless_1.10.5.365075.manifest",
+    "manifestSha1": "a31648745d9e41016aaa6ed9a16d1eabab85ec7d",
+    "downloadGB": 14.56,
+    "installedGB": 15.10,
+    "files": 606,
+    "folderName": "Dauntless_1.10.5"
+  },
+  "package": null
+}

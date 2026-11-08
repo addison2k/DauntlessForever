@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.4.7",
+                     "version":  "0.4.8",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "Play Infinite is on the Play page now (the Forever Beta tab is gone): region and PC rating sit above the play bar, the play bar stays at the bottom and the badge shows Ready / Connecting / Playing Infinite / Connection failed. More menu lines are lettered A to R and colour coded, so support can say More, then F. 1.3.1 shows as a greyed version tab. Seasons is now Hunt Pass. Help is now Send my logs. Game Rules, Hunt Pass and Inventory pick between 1.6.2 and 1.14.7 only. New Builds tab: the 1.14.7 gear with icons, perks, cell slots and rank-3 cells, bonded weapons and weapon parts, summed perks, save and share codes, and import of reforged.dauntless-builder.com build links. A new loading screen for Infinite.",
-                     "date":  "2026-11-07",
+                     "notes":  "The 1.3.1 tab shows on every install (greyed until its package is ready); nothing else changed.",
+                     "date":  "2026-11-08",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.7.asar",
-                                 "sha256":  "8272a551b614197c0295ffbd9728c78524ab13acd6b50fa689b7e15f6bd26c9e",
-                                 "size":  19190246,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.8.asar",
+                                 "sha256":  "3409101d5d161529dba2a3f306b2580f660321e2222431e0e329aaf0c80ca80e",
+                                 "size":  19215539,
                                  "minShell":  "0.2.4"
                              }
                  }
