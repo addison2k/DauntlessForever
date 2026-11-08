@@ -13,6 +13,8 @@ Addison2k:
 Built on the work of others:
   - Undaunted by gwog and contributors (AGPL-3.0), https://github.com/SyST3MDeV/Undaunted : the approach of running
     the retail game as its own server, the original server DLL, loader and backend that the 1.6.2 port is based on.
+  - Dauntless Revived (AGPL-3.0), https://github.com/mixutin/dauntless-revived : the in-game chat server and parts
+    of the party code in the 1.14.7 backend, credited in those files.
   - MinHook by Tsuda Kageyu (BSD-2-Clause).
   - manifest by meszmate (MIT, see resources\tools\LICENSE.txt).
   - Dauntless is a trademark of its owners. This project is not affiliated with them and includes no game files.
@@ -24,3 +26,25 @@ WHAT THE LICENCE ASKS OF ANYONE WHO REUSES THIS
     - say that you changed it, and when;
     - give everyone who gets it the complete source of your version, under the same licence.
   Taking this work into a closed or source-less program, or removing the credits, is not allowed.
+
+NAME, BRANDING AND ARTWORK
+  The AGPL-3.0 licence covers the CODE. It does not grant any rights to the Dauntless Forever name, logo, icons,
+  artwork, UI design or any other branding, and no such rights are granted here. AGPL-3.0 section 7 expressly
+  allows declining to grant rights under trademark law, so this reservation takes nothing away from your rights
+  to the code.
+
+  You are free to fork, change and redistribute this project under the AGPL. If you do, please:
+    - give your fork its own name: do not call it Dauntless Forever, do not use a name that could be mistaken
+      for it, and do not use the logo, the launcher icon or the artwork;
+    - do not imply this project endorses yours, or that yours is an official version, a successor, or run by
+      the same people;
+    - do not use the dauntlessforever.com domain, the Discord, or any Dauntless Forever account names to
+      promote or distribute your fork;
+    - keep the credits, which the licence asks of you anyway.
+
+  Code you add to a fork is yours and you may license your own additions as the AGPL allows, but the name and
+  the look are not part of what you receive.
+
+CONTRIBUTIONS
+  By contributing to this project you agree that your contribution may be distributed under AGPL-3.0-only, and
+  that the project may also license it under other terms in future.
