@@ -97,7 +97,7 @@ $huntFailedFile = Join-Path $Root 'data\server_hunt_failed.json'; $lastFailed = 
 # DF-PARTY-STAY-1147 (Oct 25): the game must not leave or kick party members it wrongly thinks are offline
 # (tools\party-stay-1147.ps1). Tried every 6 s while the game starts, for up to 10 minutes; logs\party-stay.log
 $partyStayDone = $false; $partyStayTries = 0; $partyStayLog = Join-Path $Root 'logs\party-stay.log'
-try { . (Join-Path $PSScriptRoot 'party-stay-1147.ps1') } catch { $partyStayDone = $true }
+$partyStayDone = $true   # DF-AVCLEAN (Nov 10): the loader makes this change itself since Oct 26; the script is gone (antivirus)
 while (-not $p.WaitForExit(2000)) {
     if (-not $partyStayDone -and ($partyStayTries++ % 3) -eq 0) {
         try { $partyStayDone = DfPartyStay $startTime $partyStayLog } catch { }

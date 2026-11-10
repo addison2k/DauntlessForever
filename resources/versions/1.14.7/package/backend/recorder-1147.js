@@ -1304,7 +1304,12 @@ const routes = [
     let srv = city ? liveServer(SERVER_FILE) : huntServer(cdPlace);
     if (srv && !city && srv.id !== cdPlace) srv = null;                       // a server for an earlier destination
     const out = { candidateId: cd.id, candidateStatusPeriodMillis: srv ? 10000 : 3000, gameMode: cd.gameMode, huntId: cd.huntId, playerStates: { [p.accountId]: {} } };
-    if (srv) out.serverInfo = { buildId: cd.buildId, gameSessionId: cd.gameSessionId, host: (PUBLIC_HOST && (!srv.host || srv.host === '127.0.0.1')) ? PUBLIC_HOST : (srv.host || '127.0.0.1'), port: srv.port + (PUBLIC_HOST ? PUBLIC_PORT_OFFSET : 0) };
+    // DF-HOSTLOOP-1147 (Nov 10; Exiseze, reports 680 + 681): only joiners get the public address (relay or LAN IP) and its
+    // port offset. The host's own game asks from 127.0.0.1 (joiners come from the LAN address or, through the online
+    // gateway, from 127.0.0.2: guestRequest, DF-HOSTGUARD-1147) and goes straight to the server on its own PC, instead
+    // of out to the relay and back (about 100 ms on a 52 ms relay). Host and port use the same flag.
+    const viaPublic = !!PUBLIC_HOST && guestRequest(c.req);
+    if (srv) out.serverInfo = { buildId: cd.buildId, gameSessionId: cd.gameSessionId, host: (viaPublic && (!srv.host || srv.host === '127.0.0.1')) ? PUBLIC_HOST : (srv.host || '127.0.0.1'), port: srv.port + (viaPublic ? PUBLIC_PORT_OFFSET : 0) };
     const waited = Math.round((Date.now() - (cd.asked || Date.now())) / 1000);
     // DF-FIX4: tools\server-1147.ps1 says why the hunt server failed; the game then stops searching right away
     let why = '';
