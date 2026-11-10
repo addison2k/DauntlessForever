@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-11-10",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-10.zip",
-                         "sha256":  "c2be45004ed64b69cdea676f5333a278b9bccb9e2b177fc15ee53828b65f1e38",
+                         "packageVersion":  "2026-11-10.2",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-10.2.zip",
+                         "sha256":  "73e16a4a31673b0b723ec07ac6e91df9b46847a7c81f9bc3b7292a8e16341ea3",
                          "date":  "2026-11-10",
-                         "note":  "Frostfall, Silver Sword, Honest Ozz\u0027s Event Store, Stylist2k"
+                         "note":  "Silver Sword parts can be picked up again on every island"
                      }
                  ],
     "launcher":  {
