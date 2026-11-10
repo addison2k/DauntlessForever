@@ -33,6 +33,11 @@
           "name": "Provy",
           "role": "Contributor",
           "what": "1.6.2: Provy Health Bars, the behemoth health and shield bars mod (Mods page)."
+        },
+        {
+          "name": "Cybervortex",
+          "role": "Contributor",
+          "what": "1.14.7: tracked the periodic rubberbanding in hunts to a server stall during the regular snapshot and timed it, which led to the snapshot stall fix."
         }
       ]
     },
