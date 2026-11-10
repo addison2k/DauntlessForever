@@ -10,7 +10,7 @@ $ConfigFile = Join-Path $Root 'config.json'
 $ExeHash      = 'F3F95FBF22709EF077A11632ED95D675B7209B7E0172D9ECB9BA7D02A1FBB66B'   # Dauntless 1.14.7, CL 647472
 $EpicEosHash  = 'CBC0E5C922CEB88A9FA99121008AE9CD76244B17753701D9D25C6B596EA2FBFC'   # Epic's EOSSDK-Win64-Shipping.dll
 $StandInHash  = '4113C9EEBFBAC08532B6566A48F69E4F64A6B8E18A18AAFBA43F62F8F7DFDF70'   # bin\EOSSDK-Win64-Shipping.dll (offline sign-in)
-$LoaderHash   = '2CB0F74017099408FFD923D81B50050D2F4B6698DF7A35284413AA189E78742D'    # bin\dxgi.dll (null RHI for server copies Oct 24; crash guard 3 Oct 24; boss bar crash fix Oct 21; in-game text chat Oct 21; server loader: fix5 + KombatKing's equipment fix R1 + owner-only replication; client: significance guard, cheap checks Oct 21)
+$LoaderHash   = '5AE44DC32C2521DB40F9E964551C7680586A5A9E9FEE95E270F72A9011B916C5'    # bin\dxgi.dll (null RHI for server copies Oct 24; crash guard 3 Oct 24; boss bar crash fix Oct 21; in-game text chat Oct 21; server loader: fix5 + KombatKing's equipment fix R1 + owner-only replication; client: significance guard, cheap checks Oct 21)
 # Quest text fix by KombatKing (AGPL-3.0, source\QuestDialogue1147-R2-source.zip): adds the missing "Unspecified"
 # addressee lines to the game's own text, so quests and dialogue show real sentences. Copied into Archon\Content\Paks.
 $QuestPakName = 'zzzzzzzzzzzzzzzz_QuestDialogueFallback1147_P.pak'
@@ -29,7 +29,11 @@ $GamePaks = @(
     # KombatKing's Item Expiry R1 (AGPL-3.0, source\KombatKing-1147-Oct18-source.zip): Season 11A potions and the Springtide egg token do not expire
     [pscustomobject]@{ Name = 'zzzzzzzzzzzzzzzz_ItemExpiry1147_P.pak'; Hash = 'C71F64758B7B70DC523DA66FCEC47319B330CC8D72E425AC94265FF4C15C029D'; Old = @(); What = 'Item expiry fix (KombatKing)' },
     # DF-STORE-RAMS-ICON (Oct 25): currency_table row id_currency_event_01 (the Rams store's price label) with the Rams icon and name
-    [pscustomobject]@{ Name = 'zzzzzzzzzzzzzzzz_RamsStore1147_P.pak'; Hash = '0AD4AE2278F13FA5C27BCE4A1B2090DBC1957D2FE26D1B45A9CD5C2C6B2C97AB'; Old = @(); What = 'Rams store price icon' }
+    [pscustomobject]@{ Name = 'zzzzzzzzzzzzzzzz_RamsStore1147_P.pak'; Hash = '0AD4AE2278F13FA5C27BCE4A1B2090DBC1957D2FE26D1B45A9CD5C2C6B2C97AB'; Old = @(); What = 'Rams store price icon' },
+    # DF-EVENTSTORE-PICS-1147 (Nov 10): UI/Store/StoreItemsTable with picture rows for Honest Ozz's Event Store and Stylist2k's shop
+    [pscustomobject]@{ Name = 'zzzzzzzzzzzzzzzz_EventStore1147_P.pak'; Hash = 'AF8C9C2B0618E57F2A84CE492B4337883FAEE775178CB31893708CF156DE0DED'; Old = @(); What = 'Event store and Stylist2k shop pictures' },
+    # DF-STYLIST-1147 (Nov 10): the Stylist2k town vendor (her own NPC, name card and shop door) and the Reward Cache screen without its advert column
+    [pscustomobject]@{ Name = 'zzzzzzzzzzzzzzzz_Stylist1147_P.pak'; Hash = '52ACB03CF433551E014797322DC4295311A238B84BAF26CA8DBE90EF55EDC9E3'; Old = @(); What = 'Stylist2k vendor and her shop screen' }
 )
 $ExeRel       = 'Archon\Binaries\Win64\Dauntless-Win64-Shipping.exe'
 $CapturesUrl  = 'https://github.com/EisigesEis/DauntlessEndpointDocumentation/archive/refs/heads/main.zip'

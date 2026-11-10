@@ -1,0 +1,4 @@
+# DF-VENDOR-1147: actors the town server places. One per line: <class path> <x> <y> <z> <yaw> [scale] [controller path]
+# Stylist2k on the candle stage, and her shop door (no star, no door mesh, E above her name) on the same spot.
+/Game/Character/npc/stylist2k/npc_stylist2k_bp.npc_stylist2k_bp_C 1095.3 5764.3 17.8 -130.1
+/Game/Character/npc/stylist2k/stylist_vault_bp.stylist_vault_bp_C 1095.3 5764.3 17.8 -130.1

@@ -1,0 +1,1501 @@
+{
+ "_note": "DF-EVENTSTORE-1147: Honest Ozz's Event Store. One shelf per event; a shelf is open while the Events page has its schedule id on. Prices are in that event's coin. Edit prices here.",
+ "shelves": [
+  {
+   "event": "EVENT_FROSTFALL",
+   "coin": "CURRENCY_EVENT_FROSTFALL",
+   "label": "id_currency_event_frostfall",
+   "skuPrefix": "eventstore_frostfall_",
+   "offers": [
+    {
+     "sku": "single_toy_gift_ff2020_green",
+     "catalogId": "TY_GIFT_FROSTFALL2020_GREEN",
+     "name": "Frostfall Gift",
+     "quantity": 1,
+     "price": 10,
+     "repeatable": true
+    },
+    {
+     "sku": "single_toy_gift_ff2020_red",
+     "catalogId": "TY_GIFT_FROSTFALL2020_RED",
+     "name": "Exquisite Frostfall Gift",
+     "quantity": 1,
+     "price": 20,
+     "repeatable": true
+    },
+    {
+     "sku": "single_toy_gift_ff2020_cauldron",
+     "catalogId": "TY_GIFT_FROSTFALL2020_CAULDRON",
+     "name": "Frostfall Cauldron",
+     "quantity": 1,
+     "price": 10,
+     "repeatable": true
+    },
+    {
+     "sku": "single_toy_firework_ff2020",
+     "catalogId": "TY_FIREWORK_FROSTFALL2020",
+     "name": "Frostfall Beacon",
+     "quantity": 10,
+     "price": 10,
+     "repeatable": true
+    },
+    {
+     "sku": "single_toy_xform_ff2020_snowman",
+     "catalogId": "TY_XFORM_FROSTFALLFALL2020_SNOWMAN",
+     "name": "Adorable Snowperson",
+     "quantity": 5,
+     "price": 10,
+     "repeatable": true
+    },
+    {
+     "catalogId": "TY_EMOTE_FROSTFALL2020_CHEERS",
+     "name": "Winter Warmer",
+     "quantity": 1,
+     "price": 10,
+     "repeatable": true
+    },
+    {
+     "catalogId": "AR_FROST17_HELM",
+     "name": "Frostfall Crown",
+     "quantity": 1,
+     "price": 75,
+     "repeatable": false
+    },
+    {
+     "sku": "sku_ar_goldenbells_helm_00",
+     "catalogId": "AR_GOLDENBELLS_HELM",
+     "name": "Frostfall Bells",
+     "quantity": 1,
+     "price": 75,
+     "repeatable": false
+    },
+    {
+     "sku": "single_armour_frostfall_sweater_chest_00",
+     "catalogId": "AR_FROSTFALL_SWEATER_CHEST_00",
+     "name": "Two Gnashers Gnashing",
+     "quantity": 1,
+     "price": 75,
+     "repeatable": false
+    },
+    {
+     "sku": "single_armour_frostfall_sweater_chest_01",
+     "catalogId": "AR_FROSTFALL_SWEATER_CHEST_01",
+     "name": "Three Rams a-Ramming",
+     "quantity": 1,
+     "price": 75,
+     "repeatable": false
+    },
+    {
+     "sku": "single_armour_frostfall_sweater_chest_02",
+     "catalogId": "AR_FROSTFALL_SWEATER_CHEST_02",
+     "name": "Twelve Flakes a-Falling",
+     "quantity": 1,
+     "price": 75,
+     "repeatable": false
+    },
+    {
+     "sku": "single_armour_frostfall_sweater_chest_03",
+     "catalogId": "AR_FROSTFALL_SWEATER_CHEST_03",
+     "name": "Nine Pups a-Puppin'",
+     "quantity": 1,
+     "price": 75,
+     "repeatable": false
+    },
+    {
+     "sku": "bundle_1p_armour_frostfall",
+     "name": "Iron Nikola Set",
+     "items": [
+      {
+       "catalogId": "AR_FROSTFALL_HELM_01",
+       "quantity": 1
+      },
+      {
+       "catalogId": "AR_FROSTFALL_CHEST_01",
+       "quantity": 1
+      },
+      {
+       "catalogId": "AR_FROSTFALL_ARMS_01",
+       "quantity": 1
+      },
+      {
+       "catalogId": "AR_FROSTFALL_LEGS_01",
+       "quantity": 1
+      }
+     ],
+     "price": 250,
+     "repeatable": false
+    },
+    {
+     "sku": "single_weapon_frostfall_mittens_strikers",
+     "catalogId": "WP_AC_FROSTFALL_MITTENS_00",
+     "name": "Frostfall Mittens",
+     "quantity": 1,
+     "price": 75,
+     "repeatable": false
+    },
+    {
+     "catalogId": "AC_HEAD_FROSTFALL_00",
+     "name": "Frostfall Crown",
+     "quantity": 1,
+     "price": 50,
+     "repeatable": false
+    },
+    {
+     "sku": "single_emote_frost18_goodcheer",
+     "catalogId": "EM_PLAYER_EVENT_FROST17_000",
+     "name": "Be Of Good Cheer!",
+     "quantity": 1,
+     "price": 50,
+     "repeatable": false
+    },
+    {
+     "sku": "single_emote_frost18_snowball",
+     "catalogId": "EM_PLAYER_EVENT_FROST17_001",
+     "name": "Let It Snowball",
+     "quantity": 1,
+     "price": 50,
+     "repeatable": false
+    },
+    {
+     "catalogId": "EM_PLAYER_EVENT_FROST17_002",
+     "name": "Stay Frosty",
+     "quantity": 1,
+     "price": 50,
+     "repeatable": false
+    },
+    {
+     "catalogId": "EM_PLAYER_EVENT_FROST18_000",
+     "name": "For The Queen",
+     "quantity": 1,
+     "price": 50,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_FABRIC_EVENT_FROST17_00",
+     "name": "Frostfall Snow Shield",
+     "quantity": 1,
+     "price": 50,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_FABRIC_EVENT_FROST17_01",
+     "name": "Frostfall Queen's Shield",
+     "quantity": 1,
+     "price": 50,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_FABRIC_EVENT_FROST18_00",
+     "name": "Frostfall Firs",
+     "quantity": 1,
+     "price": 50,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_FABRIC_EVENT_FROST18_01",
+     "name": "Frostfall Fringe",
+     "quantity": 1,
+     "price": 50,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_FABRIC_EVENT_FROST18_02",
+     "name": "Frostfall Icicles",
+     "quantity": 1,
+     "price": 50,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_MESH_EVENT_FROST17_00",
+     "name": "Frostfall Flagstaff",
+     "quantity": 1,
+     "price": 50,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_ANIMATION_EVENT_FROST17_00",
+     "name": "Frostfall Banner Plant",
+     "quantity": 1,
+     "price": 50,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_ANIMATION_EVENT_FROSTFALL_00",
+     "name": "Spirit of Ice",
+     "quantity": 1,
+     "price": 50,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_STANDARD_FROSTFALL_00",
+     "name": "Flagstaff of the Frostwarden-General",
+     "quantity": 1,
+     "price": 50,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_SIGIL_EVENT_FROST17_00",
+     "name": "Frostfall Corona",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_SIGIL_EVENT_FROST17_01",
+     "name": "Frostfall Snow Crystal",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_SIGIL_EVENT_FROST18_00",
+     "name": "Frostfall Bells",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_SIGIL_EVENT_FROST18_01",
+     "name": "Frostfall Candy Cane",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_SIGIL_EVENT_FROST18_02",
+     "name": "Frostfall Shrike",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_SIGIL_EVENT_FROST18_03",
+     "name": "Frostfall Mead",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_SIGIL_EVENT_FROST18_04",
+     "name": "Frostfall Present",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_SIGIL_EVENT_FROST18_05",
+     "name": "Frostfall Snowflakes",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_SIGIL_EVENT_FROST18_06",
+     "name": "Frostfall Snowman",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_SIGIL_EVENT_FROST18_07",
+     "name": "Frostfall Stocking",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "BNC_SIGIL_EVENT_FROST18_08",
+     "name": "Frostfall Wreath",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "QI_FLARE_FROST17_00",
+     "name": "Frostfall Corona",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "QI_FLARE_FROST17_01",
+     "name": "Frostfall Snow Crystal",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "QI_FLARE_FROST18_00",
+     "name": "Frostfall Bells",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "QI_FLARE_FROST18_01",
+     "name": "Frostfall Candy Cane",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "QI_FLARE_FROST18_02",
+     "name": "Frostfall Shrike",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "QI_FLARE_FROST18_03",
+     "name": "Frostfall Mead",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "QI_FLARE_FROST18_04",
+     "name": "Frostfall Present",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "QI_FLARE_FROST18_05",
+     "name": "Frostfall Snowflakes",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "QI_FLARE_FROST18_06",
+     "name": "Frostfall Snowman",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "QI_FLARE_FROST18_07",
+     "name": "Frostfall Stocking",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "QI_FLARE_FROST18_08",
+     "name": "Frostfall Wreath",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "QI_FLARE_FROST18_09",
+     "name": "Frostfall Crown",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "QI_FLARE_FROST18_10",
+     "name": "Spirit of Frostfall",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "TITLE_FROST17_01",
+     "name": "Cold Warrior",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "TITLE_FROST17_02",
+     "name": "The Chill",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "TITLE_FROST17_03",
+     "name": "Frosty",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "TITLE_FROST17_04",
+     "name": "Frostfall's Finest",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "TITLE_FROST18_00",
+     "name": "The Frostslayer",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "TITLE_FROST18_01",
+     "name": "Silver Champion",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "TITLE_FROST18_02",
+     "name": "Gift of Nikola",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    },
+    {
+     "catalogId": "TITLE_FROSTFALL_00",
+     "name": "Frostfall Champion",
+     "quantity": 1,
+     "price": 25,
+     "repeatable": false
+    }
+   ]
+  },
+  {
+   "_note": "DF-STYLIST-1147: Stylist2k's shop = the Reward Cache screen (seasonal_store_screen_bps, asks for season_store). Its tabs come from seasonal_store_view_model: FEATURED season_store_feature (hairstyles), STYLE tab_season_style (hair colours), GENERAL season_store_general (face paints); cat_item_* gives the type line. Always open, priced and charged in Rams (label id_currency_event_01). Each offer unlocks an account entitlement.",
+   "tags": [
+    "season_store"
+   ],
+   "coin": "CURRENCY_NOTES",
+   "coinName": "Rams",
+   "label": "id_currency_event_01",
+   "skuPrefix": "stylist2k_",
+   "offers": [
+    {
+     "entitlement": "ent_cchs_blackcat",
+     "name": "Black Cat",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchs_edge_of_distress",
+     "name": "Edge of Distress",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "sku": "bundle_mega_hp08b_punk",
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchs_berserk",
+     "name": "Berserker",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "sku": "bundle_theme_berserker",
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchs_emotional_baggage",
+     "name": "Emotional Baggage",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchs_hp11a_alchemist_29",
+     "name": "Unkempt",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchs_hp11a_alchemist_30",
+     "name": "Gallant",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchs_hp11b_engineer_31",
+     "name": "Trailblazer",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchs_hp12a_frostwarden_32",
+     "name": "Frostwarden",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchs_hp12b_magical_33",
+     "name": "Royal Braid",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchs_hp13a_ancient_34",
+     "name": "Hair_34",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchs_hp13a_ancient_35",
+     "name": "Hair_35",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchs_hp13b_divine_36",
+     "name": "Time-Tussled",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchs_hp13b_divine_37",
+     "name": "Battlesmith",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchs_hp14a_ranger_38",
+     "name": "Hair_38",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchs_hp14a_ranger_39",
+     "name": "Hair_39",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchs_hp14b_protector_40",
+     "name": "Hair_40",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchs_hp14b_protector_41",
+     "name": "Hair_41",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchs_rose",
+     "name": "Bloomknots",
+     "kind": "Hairstyle",
+     "price": 25000,
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_endurance",
+     "name": "Endurance",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "bundle_theme_enduringforce_discount",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_defiance",
+     "name": "Defiance",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "bundle_theme_defiantmight_discount",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_vigilance",
+     "name": "Vigilance",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "prestige_ent_cchd_vigilance",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp07a_00",
+     "name": "Eternal",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "single_dye_hairtint_00",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp07a_01",
+     "name": "Infinite",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "single_dye_hairtint_01",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp07a_02",
+     "name": "Undying",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "single_dye_hairtint_02",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp07b_00",
+     "name": "Ultraviolent",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "single_dye_hairtint_03",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_blackcat",
+     "name": "New Moon",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "bundle_theme_blackcat",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_berserk",
+     "name": "Crimson Legend",
+     "kind": "Hair colour",
+     "price": 20000,
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "cchd_hero",
+     "name": "Stormbreak",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "prestige_ent_cchd_hero",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_fuchsia_reactor",
+     "name": "Fuchsia Reactor",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "single_dye_hairtint_04",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_atomic_sky",
+     "name": "Atomic Sky",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "sku_ent_cchd_hp08b_punk_01",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp09a_assassins_00",
+     "name": "Verdant",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "prestige_ent_cchd_hp09a_assassins_00",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp09a_assassins_01",
+     "name": "Monarchy",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "bundle_hairtint_springtime",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp09a_assassins_02",
+     "name": "Majesty",
+     "kind": "Hair colour",
+     "price": 20000,
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp09a_assassins_03",
+     "name": "Lustrous",
+     "kind": "Hair colour",
+     "price": 20000,
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp09a_assassins_04",
+     "name": "Mariner",
+     "kind": "Hair colour",
+     "price": 20000,
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp09a_assassins_05",
+     "name": "Rebellion",
+     "kind": "Hair colour",
+     "price": 20000,
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_event_spring_00",
+     "name": "Renewal",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "single_dye_hairtint_spring",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp09b_commando_00",
+     "name": "Galvanize",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "sku_ent_cchd_hp09b_commando_00",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp09a_assassins_07",
+     "name": "Conflagration",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "sku_ent_cchd_hp09a_assassins_07",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp10a_celestial_00",
+     "name": "Infinitude",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "sku_ent_cchd_hp10a_celestial_00",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp10b_raiders_00",
+     "name": "Perfection",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "sku_ent_cchd_hp10b_raiders_00",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp11a_alchemist_00",
+     "name": "Symbiosis",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "sku_ent_cchd_hp11a_alchemist_00",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp11b_engineer_00",
+     "name": "Sunrise",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "sku_ent_cchd_hp11b_engineer_00",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp12a_frostwarden_00",
+     "name": "Winter White",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "sku_ent_cchd_hp12a_frostwarden_00",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp12a_frostwarden_01",
+     "name": "Polar Grey",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "sku_ent_cchd_hp12a_frostwarden_01",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp12b_magical_00",
+     "name": "Aurora",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "sku_ent_cchd_hp12b_magical_00",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp13a_ancient_00",
+     "name": "Timeworn",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "sku_ent_cchd_hp13a_ancient_00",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp13b_divine_00",
+     "name": "Zenith",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "sku_ent_cchd_hp13b_divine_00",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp15b_grind_00",
+     "name": "Krolachi Steel",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "sku_ent_cchd_hp15b_grind_00",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp15b_grind_01",
+     "name": "Forge Ember",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "sku_ent_cchd_hp15b_grind_01",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "ent_cchd_hp15b_grind_02",
+     "name": "Wintergreen",
+     "kind": "Hair colour",
+     "price": 20000,
+     "sku": "sku_ent_cchd_hp15b_grind_02",
+     "tags": [
+      "tab_season_style",
+      "cat_item_hair_tint"
+     ]
+    },
+    {
+     "entitlement": "character_facepaint_masked",
+     "name": "Masked",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "single_character_facepaint_masked",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "character_facepaint_harlequin",
+     "name": "Harlequin",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_character_facepaint_harlequin",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "character_facepaint_furious",
+     "name": "Furious",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "single_character_facepaint_furious",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "character_facepaint_stalker",
+     "name": "Stalker",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "single_character_facepaint_stalker",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "character_facepaint_feral",
+     "name": "Feral",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_character_facepaint_feral",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "character_facepaint_enlightened",
+     "name": "Enlightened",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_character_facepaint_enlightened",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "character_facepaint_frostfall",
+     "name": "Frostfall",
+     "kind": "Face paint",
+     "price": 15000,
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "character_facepaint_autumnfox",
+     "name": "Foxy",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "bundle_theme_autumn_fox",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ccfp_birdofparadise",
+     "name": "Bird of Paradise",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "bundle_theme_birdsofparadise",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ccfp_bonecarver",
+     "name": "Bonecarver",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "bundle_theme_bonecarver",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ccfp_ultramonk",
+     "name": "Adamant",
+     "kind": "Face paint",
+     "price": 15000,
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ccfp_grease_paint",
+     "name": "Glaredown",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "bundle_theme_monk_s7a",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ccfp_nighthunter",
+     "name": "Witch's Mark",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ccfp_nighthunter",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ccfp_blackcat",
+     "name": "Moon Cat",
+     "kind": "Face paint",
+     "price": 15000,
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_berserk",
+     "name": "Berserker Rage",
+     "kind": "Face paint",
+     "price": 15000,
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ccfp_hero",
+     "name": "Masque of Taurus",
+     "kind": "Face paint",
+     "price": 15000,
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_stardust",
+     "name": "Stardust",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp08b_punk_00",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp09a_assassins_01",
+     "name": "Hawkvision",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "bundle_hp09a_assassins_royal",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp09a_assassins_00",
+     "name": "Incognito",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp09a_assassins_00",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp09a_assassins_03",
+     "name": "Firestar",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp09a_assassins_03",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp09b_commando_00",
+     "name": "Skirmish Stripes",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp09b_commando_00",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp09b_commando_01",
+     "name": "Covert Command",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp09b_commando_01",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp09b_commando_02",
+     "name": "Matrix Ranger",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "bundle_hp09b_commando_00",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_event_spring_00",
+     "name": "Springtide",
+     "kind": "Face paint",
+     "price": 15000,
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp10a_celestial_00",
+     "name": "Wicked Ends",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "bundle_theme_umbraleclipse",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp10a_celestial_01",
+     "name": "Stargazer",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "bundle_theme_starlight",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp10a_celestial_02",
+     "name": "Forward Thinker",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp10a_celestial_02",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp10b_raiders_00",
+     "name": "Shadow Stalker",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp10b_raiders_00",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp10b_raiders_01",
+     "name": "Brawler",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp10b_raiders_01",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp11a_alchemist_02",
+     "name": "Alchemancy",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp11a_alchemist_02",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp11a_alchemist_01",
+     "name": "Thornguard",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp11a_alchemist_01",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp11a_alchemist_00",
+     "name": "Terraweaver",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp11a_alchemist_00",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp11b_engineer_00",
+     "name": "Firesight",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp11b_engineer_00",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp11b_engineer_01",
+     "name": "Aspect of War",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp11b_engineer_01",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp11b_engineer_02",
+     "name": "Freckles",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp11b_engineer_02",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp12a_frostwarden_00",
+     "name": "Warden's Oath",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp12a_frostwarden_00",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp12a_frostwarden_01",
+     "name": "Warden's Duty",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp12a_frostwarden_01",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp12a_frostwarden_02",
+     "name": "Dueling Scar",
+     "kind": "Face paint",
+     "price": 15000,
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp12b_magical_00",
+     "name": "The Frostmark",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp12b_magical_00",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp12b_magical_01",
+     "name": "Frostmask",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp12b_magical_01",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp13a_ancient_00",
+     "name": "Radiant Insight",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp13a_ancient_00",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp13b_divine_00",
+     "name": "47",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp13b_divine_00",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_hp13b_radiant_00",
+     "name": "Forever Ember",
+     "kind": "Face paint",
+     "price": 15000,
+     "sku": "sku_ent_ccfp_hp13b_radiant_00",
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccfp_unseen_00",
+     "name": "Awakened Unseen",
+     "kind": "Face paint",
+     "price": 15000,
+     "tags": [
+      "season_store_general",
+      "cat_item_face_paint"
+     ]
+    },
+    {
+     "entitlement": "ent_ccbd_hp11b_engineer_15",
+     "name": "Journeyman",
+     "kind": "Beard",
+     "price": 25000,
+     "tags": [
+      "season_store_feature",
+      "cat_item_hair_style"
+     ]
+    }
+   ]
+  }
+ ]
+}

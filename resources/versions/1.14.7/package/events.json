@@ -1,0 +1,36 @@
+{
+ "_comment": [
+  "Ramsgate events for 1.14.7 (DF-EVENTS-1147, Nov 9). The launcher's Events page writes the choice to data/city_events.txt.",
+  "Its on= list holds two kinds of names. Feature flags (city_event_*_bpff ...) go to the town as ?OverridenFeaturesOn= (tools/server-1147.ps1):",
+  "decorations, the event stall with event Ozz, Linnea. schedule:<ID> entries go to backend/events1147.js, which makes that event run now in the",
+  "seasonal event schedule; the game turns on every quest whose EventId matches. tested=false: in the game files and switched the same way, not yet",
+  "played through. Infinite has its own install and is not changed by this page."
+ ],
+ "events": [
+  { "key": "none", "title": "No event", "blurb": "Ramsgate as 1.14.7 shipped it.", "on": [], "tested": true },
+  { "key": "frostfall2022", "title": "Frostfall 2022: The Silver Sword",
+    "blurb": "Snow and Frostfall decorations in Ramsgate, event Ozz with the five Frostfall quests, Linnea Silver with the Silver Sword quest chain (Slayer level 11 and a crafted Hypothermica), and Snowball Fight island events on Coldrunner Key and the Snowblind Waste.",
+    "on": ["enable_city_event_frostfall_bpff", "city_event_stall_bpff", "city_linnea_bpff", "schedule:EVENT_FROSTFALL", "schedule:SILVER_SWORD", "schedule:Frostfall_Snowball_Fight", "schedule:event_id_public_frostwolf_frostfall", "schedule:event_id_public_shoutout_frostfall"],
+    "tested": false },
+  { "key": "darkharvest", "title": "Dark Harvest",
+    "blurb": "Ramsgate dressed for Dark Harvest, the event stall, and the Dark Harvest quests and rumours.",
+    "on": ["city_event_dark_harvest_bpff", "city_event_stall_bpff", "schedule:EVENT_DARKHARVEST"], "tested": false },
+  { "key": "ramsgiving", "title": "Ramsgiving",
+    "blurb": "The event stall and the Ramsgiving quests. The game files have no Ramsgiving decorations for Ramsgate.",
+    "on": ["city_event_stall_bpff", "schedule:EVENT_RAMSGIVING"], "tested": false },
+  { "key": "springtide", "title": "Springtide",
+    "blurb": "Ramsgate dressed for spring, the event stall, and the Springtide quests.",
+    "on": ["city_event_Springtide_bpff", "city_event_stall_bpff", "schedule:EVENT_SPRINGTIDE"], "tested": false },
+  { "key": "saintsbond", "title": "Saint's Bond",
+    "blurb": "The festival of friendship and hearts: Ramsgate decorations, the event stall, and the Saint's Bond quests.",
+    "on": ["city_event_SaintsBond_bpff", "city_event_stall_bpff", "schedule:EVENT_SAINTSBOND"], "tested": false },
+  { "key": "anniversary", "title": "Anniversary",
+    "blurb": "The anniversary quests. No Ramsgate decorations.",
+    "on": ["schedule:Event_Anniversary_Evergreen"], "tested": false },
+  { "key": "stall", "title": "Event stall", "blurb": "Only the event vendor's stall in the plaza.", "on": ["city_event_stall_bpff"], "tested": false }
+ ],
+ "dressings": [
+  { "key": "default", "title": "As shipped", "blurb": "The decorations 1.14.7 shipped with.", "flag": null, "tested": true }
+ ],
+ "huntPassFlags": []
+}

@@ -94,7 +94,32 @@ $driverIni = @"
 [Core.System]
 HangsAreFatal=False
 "@
+# DF-VENDOR-1147 (Nov 10): town NPCs the loader places (Stylist2k). The loader reads data\vendor.txt; the package's
+# list is tools\vendor-1147.txt and is copied over it at every start, so an update reaches the town.
+$vendorSrc = Join-Path $PSScriptRoot "vendor-1147.txt"
+if (Test-Path -LiteralPath $vendorSrc) {
+    try { New-Item -ItemType Directory -Force $dataDir | Out-Null; Copy-Item -LiteralPath $vendorSrc -Destination (Join-Path $dataDir "vendor.txt") -Force } catch { }
+}
+# DF-CITYEVENTS-1147 (Nov 9): Ramsgate event dressings. data\city_events.txt lines on=a,b / off=c (same as 1.6.2) name
+# feature flags; they reach the town as ?OverridenFeaturesOn= / ?OverridenFeaturesOff= in LocalMapOptions. Short names
+# become /Game/Features/HuntPass/<n>.<n>_C. No file = no options = exactly as before.
+$cityOpts = ""
+$cityFile = Join-Path $dataDir "city_events.txt"
+if (Test-Path -LiteralPath $cityFile) {
+    $cityOn = @(); $cityOff = @()
+    foreach ($cityLine in [System.IO.File]::ReadAllLines($cityFile)) {
+        if ($cityLine -match "^\s*on\s*=\s*(.*)$") { $cityOn += ($Matches[1] -split ",") }
+        elseif ($cityLine -match "^\s*off\s*=\s*(.*)$") { $cityOff += ($Matches[1] -split ",") }
+    }
+    $cityFull = { param($n) $n = "$n".Trim(); if ($n -notmatch "^[A-Za-z0-9_/.]+$") { return $null }; if ($n -notmatch "/") { return "/Game/Features/HuntPass/$n.$($n)_C" }; return $n }
+    $cityOnF = @($cityOn | ForEach-Object { & $cityFull $_ } | Where-Object { $_ })
+    $cityOffF = @($cityOff | ForEach-Object { & $cityFull $_ } | Where-Object { $_ })
+    if ($cityOnF.Count) { $cityOpts += "?OverridenFeaturesOn=" + ($cityOnF -join ",") }
+    if ($cityOffF.Count) { $cityOpts += "?OverridenFeaturesOff=" + ($cityOffF -join ",") }
+    if ($cityOpts) { Write-Host "Ramsgate events: $cityOpts" }
+}
 $engineIni = "; Written by server-1147.ps1 on every start.`r`n[/Script/EngineSettings.GameMapsSettings]`r`nGameDefaultMap=$Map`r`nServerDefaultMap=$Map`r`nGlobalDefaultGameMode=$GameMode`r`n`r`n" + $driverIni
+if ($cityOpts) { $engineIni = $engineIni.Replace("GlobalDefaultGameMode=$GameMode", "GlobalDefaultGameMode=$GameMode`r`nLocalMapOptions=$cityOpts") }   # DF-CITYEVENTS-1147
 [System.IO.File]::WriteAllText((Join-Path $srvCfg "Engine.ini"), $engineIni, [System.Text.Encoding]::ASCII)
 
 $srvLog = Join-Path $logDir "server_$Port.log"

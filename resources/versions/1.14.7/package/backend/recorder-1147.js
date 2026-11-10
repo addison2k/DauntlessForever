@@ -456,6 +456,7 @@ const J = (obj, note) => ({ status: 200, json: obj, note });
 const TEXT = (text, note) => ({ status: 200, text, note });
 const NOT_FOUND = { status: 404 };
 // Reply taken from a capture file, optionally adjusted; an empty 404 if the captures are not installed.
+const events1147 = require('./events1147').create({ dataDir: DATA_DIR, log: (t) => console.log(t) });   // DF-EVENTS-1147 (Nov 9): Events page, old events run now
 const CAP = (rel, adjust) => (c) => {
   const j = loadCapture(rel);
   if (j === null) return { status: 404, note: `needs captures (${rel}): ${capCache.get(rel + ':error') || 'missing'}` };
@@ -1340,7 +1341,7 @@ const routes = [
   // must stay ended: when it is presented as still running, the game server tries to draw weekly challenges for
   // a week far past the season's table and never comes back from that (run of Oct 11, 13:08: player kicked).
   ['progression', 'GET', /^\/progression\/config\/?$/, CAP('Progression/Config.json')],
-  ['progression', 'GET', /^\/game_tuning\/seasonal_event_schedule\/?$/, CAP('Progression/Game Tuning/GetEventSchedule.md')],
+  ['progression', 'GET', /^\/game_tuning\/seasonal_event_schedule\/?$/, CAP('Progression/Game Tuning/GetEventSchedule.md', (j) => events1147.schedule(j))],   // DF-EVENTS-1147: chosen events run now
   ['progression', 'GET', /^\/game_tuning\/huntpass_xp_config\/?$/, CAP('Progression/Game Tuning/GetHPXPConfig.md')],
   ['progression', 'GET', /^\/game_tuning\/bounty_game_data\/?$/, CAP('Progression/Game Tuning/Bounty/GetData.md')],
   ['progression', 'GET', /^\/game_tuning\/bounty_game_data_daily\/?$/, CAP('Progression/Game Tuning/Bounty/GetDailyChallenges.md')],
@@ -1520,7 +1521,8 @@ const bounties1147 = require('./bounties1147').create({playerFor,bearerOf,sessio
 const equipment1147 = require('./equipment1147').create({playerFor,bearerOf,sessions,getPlayers:()=>Object.values(state.players||{}),saveState,next:c=>bounties1147.handle(c)});
 const dyes1147 = require('./dyes1147').create({playerFor,bearerOf,sessions,inventoryOf,saveState,next:c=>equipment1147.handle(c)});
 const storeRams1147 = require('./store-rams1147').create({playerFor,bearerOf,sessions,inventoryOf,saveState,loadCapture,next:c=>dyes1147.handle(c)}); // DF-STORE-RAMS-1147
-const transmogDrops1147 = require('./transmog-drops1147').create({playerFor,bearerOf,sessions,next:c=>storeRams1147.handle(c)}); // DF-TRANSMOG-DROPS-1147
+const eventStore1147 = require('./eventstore1147').create({playerFor,bearerOf,sessions,inventoryOf,saveState,chosenEvents:()=>events1147.chosen(),next:c=>storeRams1147.handle(c)}); // DF-EVENTSTORE-1147 (Nov 9): Honest Ozz's Event Store
+const transmogDrops1147 = require('./transmog-drops1147').create({playerFor,bearerOf,sessions,next:c=>eventStore1147.handle(c)}); // DF-TRANSMOG-DROPS-1147
 const modes1147 = require('./modes1147').create({playerFor,bearerOf,sessions,getPlayers:()=>Object.values(state.players||{}),saveState,next:c=>transmogDrops1147.handle(c)});
 
 

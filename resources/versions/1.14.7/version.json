@@ -42,7 +42,7 @@
                  },
     "package":  {
                     "dir":  "package",
-                    "packageVersion":  "2026-11-07",
+                    "packageVersion":  "2026-11-10",
                     "setup":  "tools/setup.ps1",
                     "uninstallArgs":  [
                                           "-Uninstall"
@@ -66,7 +66,7 @@
                                            },
                                            {
                                                "rel":  "Archon/Binaries/Win64/dxgi.dll",
-                                               "sha256":  "2CB0F74017099408FFD923D81B50050D2F4B6698DF7A35284413AA189E78742D"
+                                               "sha256":  "5AE44DC32C2521DB40F9E964551C7680586A5A9E9FEE95E270F72A9011B916C5"
                                            },
                                            {
                                                "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_QuestDialogueFallback1147_P.pak",
@@ -95,6 +95,14 @@
                                            {
                                                "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_RamsStore1147_P.pak",
                                                "sha256":  "0AD4AE2278F13FA5C27BCE4A1B2090DBC1957D2FE26D1B45A9CD5C2C6B2C97AB"
+                                           },
+                                           {
+                                               "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_EventStore1147_P.pak",
+                                               "sha256":  "AF8C9C2B0618E57F2A84CE492B4337883FAEE775178CB31893708CF156DE0DED"
+                                           },
+                                           {
+                                               "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_Stylist1147_P.pak",
+                                               "sha256":  "52ACB03CF433551E014797322DC4295311A238B84BAF26CA8DBE90EF55EDC9E3"
                                            }
                                        ],
                     "setupDoneFiles":  [

@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-11-07",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-07.zip",
-                         "sha256":  "5bd96585cc5646060cd0c2893f61a9b1afd494b1f45149cca8ade008067f2410",
-                         "date":  "2026-11-07",
-                         "note":  "Rubberband fix: no more hard pull-backs in hunts. Falling forever fixed: a player who falls off the map is put back where they last stood. Game log on by default for reports. Middleman: re-rolling a +3 cell costs 20 Aetherdust instead of 2,000 Rams and shows the Aetherdust icon (BitSents). The game no longer offers items you have none of."
+                         "packageVersion":  "2026-11-10",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-10.zip",
+                         "sha256":  "c2be45004ed64b69cdea676f5333a278b9bccb9e2b177fc15ee53828b65f1e38",
+                         "date":  "2026-11-10",
+                         "note":  "Frostfall, Silver Sword, Honest Ozz\u0027s Event Store, Stylist2k"
                      }
                  ],
     "launcher":  {
