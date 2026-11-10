@@ -20,7 +20,8 @@ offline or online with other people. No game files are shipped here; the game co
 | Build | Era | Status |
 |---|---|---|
 | **1.6.2** | Reforged (early 2021) | **Ready**: solo, online and Host Mode. The most stable. |
-| **1.14.7** | Last pre-Awakening build (April 2024) | **Ready**: solo, online, Host Mode and **Forever Beta**. The most content. |
+| **1.14.7** | Last pre-Awakening build (April 2024) | **Ready**: solo, online, Host Mode and **Infinite**. The most content. |
+| 1.3.1 | Before Reforged (summer 2020) | Coming soon: the old Ramsgate, hunt boards and original progression |
 | 1.12.0 | Late Reforged (October 2022) | Coming soon |
 | 2.1.1 | Awakening (December 2024) | Coming soon |
 
@@ -29,10 +30,10 @@ copy a Slayer between them whenever you like.
 
 ---
 
-## Forever Beta
+## Infinite
 
-A shared, always-on Dauntless world on 1.14.7. Open the launcher, press Play, and you are in a Ramsgate with
-everyone else. No hosting, no waiting for a friend to come online, nothing to set up.
+A shared, always-on Dauntless world on 1.14.7. Pick 1.14.7 in the launcher, press **Play Infinite**, and you are in a
+Ramsgate with everyone else. No hosting, no waiting for a friend to come online, nothing to set up.
 
 **Your Slayer lives on the server.** Not in a file on your PC. Nothing to back up, nothing to lose, and you can play
 from any PC you install the launcher on. It is a fresh Slayer: your solo and Host Mode characters stay exactly as
@@ -42,7 +43,8 @@ they are and are never touched.
 back an hour later and it is where you left it.
 
 **Pick your region.** North America, Europe, Australia, or Any for whichever is busiest right now. Each region has
-its own Ramsgate, and the launcher shows your ping to each one before you choose. You can change region whenever.
+its own Ramsgate, and the launcher shows your ping to each one before you choose. Picking your own region gives the
+smoothest town; you can change it whenever.
 
 **Hunts run on players' PCs.** Not on one big rented box. The launcher measures your connection and your PC once,
 and machines with room to spare quietly host hunts for everyone. That is the whole reason this costs nothing to
@@ -51,8 +53,8 @@ notice; if it is busy or short on memory, it will not be asked.
 
 **Still no port forwarding.** Nothing to change on your router, ever, whether you are hosting a hunt or joining one.
 
-It is a beta, it is worked on daily, and things do break. When they do, see "If something goes wrong" below. Problem
-reports with logs attached are what fixes the beta, and most of what has been fixed so far came from one.
+It is worked on daily, and things do break. When they do, see "If something goes wrong" below. Problem reports with
+logs attached are what fixes it, and most of what has been fixed so far came from one.
 
 ---
 
@@ -62,8 +64,9 @@ reports with logs attached are what fixes the beta, and most of what has been fi
 - **Host with friends**: one click opens your game to your friends through the Dauntless Forever relays
   (US East, US Central, Europe, Australia and Japan; the nearest is picked for you). No router settings,
   nothing to install.
-- **Play online**: joins a game that is open to everyone, or hosts one if nobody is on. **Allow randoms** opens your
-  own hosted game to Play online players.
+- **Play online**: joins a game that is open to everyone, or hosts one if nobody is on. On 1.6.2 it is its own button;
+  on 1.14.7 it is the "join an open game" link under Host with friends. **Allow randoms** (in the Host options gear)
+  opens your own hosted game to Play online players.
 - **Your character comes with you** when you join someone, and is saved home every few minutes while you play.
 - **Parties**: invite, party hunts, Return with Party.
 - **Chat**: text chat in game, and voice chat in the launcher (push to talk or voice activation).
@@ -111,8 +114,8 @@ for 1.6.2 and 1.14.7: weapons, armour, lanterns, cells and perks, shareable with
 
 Already have the game folder from somewhere else? More > "Use a game folder I already have".
 
-For **Forever Beta**: install 1.14.7, open the **Forever** tab, pick a region, rate your PC once when it asks, and
-press **Play Forever**.
+For **Infinite**: install 1.14.7, pick your region, rate your PC once when it asks, and press **Play Infinite** on the
+Play page.
 
 **Needs**: Windows 10 or 11 (64-bit), and free space for the game, about twice its size while it downloads.
 Node.js, DirectX and the Visual C++ runtime are included or installed by set-up.
@@ -148,7 +151,7 @@ the game is offered 1536x864 instead of 1920x1080. Right-click `Dauntless-Win64-
 `Archon\Binaries\Win64`, Properties, Compatibility, "Change high DPI settings", tick "Override high DPI scaling
 behaviour" and set it to **Application**.
 
-**Your character looks wrong or missing in Forever Beta.** Forever characters live on the server, so they are
+**Your character looks wrong or missing in Infinite.** Infinite characters live on the server, so they are
 almost never actually gone. Usually the PC is signing in under a new id after a reinstall. Ask on the Discord with
 your in-game name and it can be put back.
 
@@ -167,7 +170,7 @@ number. Post that number on the Discord.
 
 The report contains the launcher and game server logs, what the game did in the seconds before it broke, and your
 PC's specs. Your Windows user name, your PC name and your file paths are blanked out, and no save file or account
-key is included. Nearly every fix in the beta so far started with one of these.
+key is included. Nearly every fix so far started with one of these.
 
 ---
 
