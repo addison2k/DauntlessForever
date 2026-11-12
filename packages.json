@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-11-10.3",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-10.3.zip",
-                         "sha256":  "4da3ab955b14dd3e8c5b006791db3d19382b4ae13e5f862109f2a372adeb085a",
-                         "date":  "2026-11-10",
-                         "note":  "Hosting: your own game connects straight to your servers, no more relay lag for the host (thanks Exiseze). Two old helper scripts that antivirus flagged are gone; the loader already does their job."
+                         "packageVersion":  "2026-11-12",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-12.zip",
+                         "sha256":  "15cee21278053247be7d1cced2334aba3a3f1025be34b4cc796ee5a2c9776424",
+                         "date":  "2026-11-12",
+                         "note":  "Loot amounts on screen now follow rate events, so a 2x week shows the doubled numbers. If the loot page gets stuck open, the game closes it by itself."
                      }
                  ],
     "launcher":  {
