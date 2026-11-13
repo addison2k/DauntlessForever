@@ -42,7 +42,7 @@
                  },
     "package":  {
                     "dir":  "package",
-                    "packageVersion":  "2026-11-12.2",
+                    "packageVersion":  "2026-11-12.3",
                     "setup":  "tools/setup.ps1",
                     "uninstallArgs":  [
                                           "-Uninstall"
@@ -66,7 +66,7 @@
                                            },
                                            {
                                                "rel":  "Archon/Binaries/Win64/dxgi.dll",
-                                               "sha256":  "B8EB3E12F529E5207575268CC1DD2F9BBA4B5578A2CCD0DD31C297C2DC5A202D"
+                                               "sha256":  "2F25D9494AB07EC2E99711F55DA935FFE414607A3557FC46195741319F217AE3"
                                            },
                                            {
                                                "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_QuestDialogueFallback1147_P.pak",
@@ -103,6 +103,10 @@
                                            {
                                                "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_Stylist1147_P.pak",
                                                "sha256":  "52ACB03CF433551E014797322DC4295311A238B84BAF26CA8DBE90EF55EDC9E3"
+                                           },
+                                           {
+                                               "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_OopsAllCharrogg1147_P.pak",
+                                               "sha256":  "5C4753D577C615158EFA14E504052CDDE6A46E2289A7DCF134929AB0C8AFB2F5"
                                            }
                                        ],
                     "setupDoneFiles":  [

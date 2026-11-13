@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-11-12.2",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-12.2.zip",
-                         "sha256":  "2c04fd809d4d8dfab4883a735f5188eb4a6fe6ab39f9addb9a7724a5f7e92115",
+                         "packageVersion":  "2026-11-12.3",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-12.3.zip",
+                         "sha256":  "6ebb41f19d3b754e6d7884d633deb15604d60dbc29b160e84f81c21a1cd1942b",
                          "date":  "2026-11-12",
-                         "note":  "Abilities the hunt server refuses are now cancelled properly in your game. Fixes Tempest that never ran out after using it at the last moment (thanks jeffffffff)."
+                         "note":  "New Hunting Grounds hunt: Oops All Charrogg, right under Undervald Defile. Critical hits now show big comic-style numbers."
                      }
                  ],
     "launcher":  {

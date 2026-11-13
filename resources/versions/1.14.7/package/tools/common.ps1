@@ -10,7 +10,7 @@ $ConfigFile = Join-Path $Root 'config.json'
 $ExeHash      = 'F3F95FBF22709EF077A11632ED95D675B7209B7E0172D9ECB9BA7D02A1FBB66B'   # Dauntless 1.14.7, CL 647472
 $EpicEosHash  = 'CBC0E5C922CEB88A9FA99121008AE9CD76244B17753701D9D25C6B596EA2FBFC'   # Epic's EOSSDK-Win64-Shipping.dll
 $StandInHash  = '4113C9EEBFBAC08532B6566A48F69E4F64A6B8E18A18AAFBA43F62F8F7DFDF70'   # bin\EOSSDK-Win64-Shipping.dll (offline sign-in)
-$LoaderHash   = 'B8EB3E12F529E5207575268CC1DD2F9BBA4B5578A2CCD0DD31C297C2DC5A202D'    # bin\dxgi.dll (null RHI for server copies Oct 24; crash guard 3 Oct 24; boss bar crash fix Oct 21; in-game text chat Oct 21; server loader: fix5 + KombatKing's equipment fix R1 + owner-only replication; client: significance guard, cheap checks Oct 21)
+$LoaderHash   = '2F25D9494AB07EC2E99711F55DA935FFE414607A3557FC46195741319F217AE3'    # bin\dxgi.dll (null RHI for server copies Oct 24; crash guard 3 Oct 24; boss bar crash fix Oct 21; in-game text chat Oct 21; server loader: fix5 + KombatKing's equipment fix R1 + owner-only replication; client: significance guard, cheap checks Oct 21)
 # Quest text fix by KombatKing (AGPL-3.0, source\QuestDialogue1147-R2-source.zip): adds the missing "Unspecified"
 # addressee lines to the game's own text, so quests and dialogue show real sentences. Copied into Archon\Content\Paks.
 $QuestPakName = 'zzzzzzzzzzzzzzzz_QuestDialogueFallback1147_P.pak'
@@ -33,7 +33,9 @@ $GamePaks = @(
     # DF-EVENTSTORE-PICS-1147 (Nov 10): UI/Store/StoreItemsTable with picture rows for Honest Ozz's Event Store and Stylist2k's shop
     [pscustomobject]@{ Name = 'zzzzzzzzzzzzzzzz_EventStore1147_P.pak'; Hash = 'AF8C9C2B0618E57F2A84CE492B4337883FAEE775178CB31893708CF156DE0DED'; Old = @(); What = 'Event store and Stylist2k shop pictures' },
     # DF-STYLIST-1147 (Nov 10): the Stylist2k town vendor (her own NPC, name card and shop door) and the Reward Cache screen without its advert column
-    [pscustomobject]@{ Name = 'zzzzzzzzzzzzzzzz_Stylist1147_P.pak'; Hash = '52ACB03CF433551E014797322DC4295311A238B84BAF26CA8DBE90EF55EDC9E3'; Old = @(); What = 'Stylist2k vendor and her shop screen' }
+    [pscustomobject]@{ Name = 'zzzzzzzzzzzzzzzz_Stylist1147_P.pak'; Hash = '52ACB03CF433551E014797322DC4295311A238B84BAF26CA8DBE90EF55EDC9E3'; Old = @(); What = 'Stylist2k vendor and her shop screen' },
+    # DF-CHARR-1147 (Nov 12): Oops All Charrogg, a Hunting Grounds row under Undervald Defile (Undervald's map, only Firebrand Charrogg Heroic in pairs, night, red ash)
+    [pscustomobject]@{ Name = 'zzzzzzzzzzzzzzzz_OopsAllCharrogg1147_P.pak'; Hash = '5C4753D577C615158EFA14E504052CDDE6A46E2289A7DCF134929AB0C8AFB2F5'; Old = @(); What = 'Oops All Charrogg hunt' }
 )
 $ExeRel       = 'Archon\Binaries\Win64\Dauntless-Win64-Shipping.exe'
 $CapturesUrl  = 'https://github.com/EisigesEis/DauntlessEndpointDocumentation/archive/refs/heads/main.zip'

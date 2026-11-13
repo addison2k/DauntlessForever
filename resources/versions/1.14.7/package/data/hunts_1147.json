@@ -3088,8 +3088,8 @@
  "Adventure_Island_Experiment_Mid": {
   "maps": [
    {
-    "map": "/Game/Maps/islands/1803/frida_arid_valley_01",
-    "tod": "",
+    "map": "/Game/Maps/islands/adventure/Moss_Cave/adventure_moss_cave",
+    "tod": "/Game/World/atmospheres/blueprints/atmospheres/production/atmospheres_chrgg_00_snow_bp.atmospheres_chrgg_00_snow_bp_C",
     "w": 0
    }
   ],
