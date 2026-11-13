@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-11-12",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-12.zip",
-                         "sha256":  "15cee21278053247be7d1cced2334aba3a3f1025be34b4cc796ee5a2c9776424",
+                         "packageVersion":  "2026-11-12.2",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-12.2.zip",
+                         "sha256":  "2c04fd809d4d8dfab4883a735f5188eb4a6fe6ab39f9addb9a7724a5f7e92115",
                          "date":  "2026-11-12",
-                         "note":  "Loot amounts on screen now follow rate events, so a 2x week shows the doubled numbers. If the loot page gets stuck open, the game closes it by itself."
+                         "note":  "Abilities the hunt server refuses are now cancelled properly in your game. Fixes Tempest that never ran out after using it at the last moment (thanks jeffffffff)."
                      }
                  ],
     "launcher":  {
