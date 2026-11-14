@@ -709,6 +709,7 @@ class ChatServer {
             this.end(Remaining.reduce((Oldest, Other) => Other.LastInbound < Oldest.LastInbound ? Other : Oldest), "replaced");
         }
         Session.Resource = Resource;
+        (0, compat_1.StandInFor)(Uid);
         this.byUid.set(Uid, [...(this.byUid.get(Uid) ?? []), Session]);
         logger_1.logger.info(`chat: bound c=${Session.Id} uid=${Uid} resource=${Resource} domain=${Session.Domain} sessions=${this.byUid.get(Uid).length}`);
         this.send(Session, `<iq xmlns="${xmpp_1.NS.CLIENT}" type="result" id="${(0, xmpp_1.EscapeXml)(Id)}"><bind xmlns="${xmpp_1.NS.BIND}"><jid>${(0, xmpp_1.EscapeXml)(FullJidOf(Session))}</jid></bind></iq>`);
@@ -790,27 +791,44 @@ class ChatServer {
             Refused("size");
             return;
         }
-        if (Target === Uid) {
+        // DF-CHATFILTER-1147: a whisper on the word list, or from a player muted for it, is not delivered
+        const Filter = require("./chatfilter").Check(Uid, Body);
+        if (Filter.reason !== null) {
+            logger_1.logger.warn(`chat: word list ${Filter.reason}${Filter.muted ? " (chat muted for 10 minutes)" : ""} uid=${Uid} whisper${Filter.hide ? "" : " (log only)"}`);
+            if (Filter.hide) {
+                return;
+            }
+        }
+        const MappedTarget = (0, compat_1.RealUidFor)(Target);
+        if (Target === Uid || MappedTarget === Uid) {
             Refused("self");
             return;
         }
-        const Sessions = Target === "xmpp-admin" ? [] : (this.byUid.get(Target) ?? []);
+        const LookupUid = Target === "xmpp-admin" ? Target : (MappedTarget ?? "");
+        const Sessions = LookupUid && LookupUid !== "xmpp-admin" ? (this.byUid.get(LookupUid) ?? []) : [];
         if (Sessions.length === 0) {
             Refused("offline");
             return;
         }
         // Either player blocked the other: not delivered (the same rule as party invites)
-        if ((0, compat_1.IsBlockedEitherWay)(Uid, Target)) {
+        if ((0, compat_1.IsBlockedEitherWay)(Uid, LookupUid)) {
             Refused("blocked");
             return;
         }
         const Chosen = Sessions.filter((Other) => Other.Resource === Resource);
         const Recipients = Chosen.length > 0 ? Chosen : Sessions;
         const Text = (0, xmpp_1.EscapeXml)(Body);
+        const SenderStandIn = (0, compat_1.StandInFor)(Uid);
+        const MaskedFrom = (0, compat_1.MaskJid)(Session, SenderStandIn) || FullJidOf(Session);
         for (const Recipient of Recipients) {
-            this.send(Recipient, `<message xmlns="${xmpp_1.NS.CLIENT}" type="chat" from="${(0, xmpp_1.EscapeXml)(FullJidOf(Session))}" to="${(0, xmpp_1.EscapeXml)(FullJidOf(Recipient))}"${Id !== undefined ? ` id="${(0, xmpp_1.EscapeXml)(Id)}"` : ""}><body>${Text}</body></message>`);
+            const FromJid = Recipient.Uid === Uid ? FullJidOf(Session) : MaskedFrom;
+            let Stanza = `<message xmlns="${xmpp_1.NS.CLIENT}" type="chat" from="${(0, xmpp_1.EscapeXml)(FromJid)}" to="${(0, xmpp_1.EscapeXml)(FullJidOf(Recipient))}"${Id !== undefined ? ` id="${(0, xmpp_1.EscapeXml)(Id)}"` : ""}><body>${Text}</body></message>`;
+            if (Recipient.Uid !== Uid) {
+                Stanza = (0, compat_1.ScrubStanzaLeak)(Stanza, Uid, SenderStandIn);
+            }
+            this.send(Recipient, Stanza);
         }
-        logger_1.logger.info(`chat: whisper from=${Uid} to=${Target} len=${Length} delivered=${Recipients.length}`);
+        logger_1.logger.info(`chat: whisper from=${Uid} to=${LookupUid} len=${Length} delivered=${Recipients.length}`);
     }
 }
 exports.ChatServer = ChatServer;

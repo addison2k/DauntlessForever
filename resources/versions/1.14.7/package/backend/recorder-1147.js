@@ -253,6 +253,24 @@ function huntServer(id) {
     return srv;
   } catch (e) { return null; }
 }
+// DF-CHATROOMS-1147 (Nov 14): one chat room per place and stand-in ids on the wire. Idea and first working version: Cybervortex.
+const chatCompat = require('./realtime/compat');
+function playerOfChatUid(id) {
+  const raw = String(id || '').trim();
+  if (!raw) return null;
+  const want = raw.toLowerCase();
+  return Object.values(state.players || {}).find((q) => q && (q.accountId === raw || String(q.epicId || '').toLowerCase() === want)) || null;
+}
+function resolveGameSessionId(city, srv, placeId) {
+  if (city) {
+    const scope = srv
+      ? `${srv.id || ''}|${srv.host || PUBLIC_HOST || 'local'}|${srv.port || 0}|${srv.pid || 0}`
+      : 'city-pending';
+    return crypto.createHash('sha256').update('df:room:city:' + scope).digest('hex').slice(0, 32);
+  }
+  const scope = `${(srv && srv.id) || ''}|${(srv && srv.host) || PUBLIC_HOST || 'local'}|${(srv && srv.port) || 0}|${placeId || ''}`;
+  return crypto.createHash('sha256').update('df:room:hunt:' + scope).digest('hex').slice(0, 32);
+}
 const placeBase = (u) => String(u || '').replace(/\?PlayerHuntIds=[^?]*/g, '');
 // DF-FOREVERHUNTS-1147: may `me` (+ party mates not already there) join this open hunt? Room under the cap; a hunt
 // stays open until its server ends.
@@ -336,6 +354,17 @@ function epicSubOf(token) {
     const payload = JSON.parse(Buffer.from(parts[1], 'base64url').toString('utf8'));
     return payload && payload.sub ? String(payload.sub) : null;
   } catch (e) { return null; }
+}
+// DF-CHATFILTER-1147: a name on the chat word list is not taken. The player keeps the name they had, or "Slayer".
+const chatFilter1147 = require('./realtime/chatfilter');
+chatFilter1147.Configure({ dataDir: DATA_DIR });
+function cleanName1147(name, fallback) {
+  if (typeof name !== 'string' || !name) return fallback || 'Slayer';
+  if ((chatFilter1147.Mode() === 'on') && chatFilter1147.MatchName(name)) {
+    try { require('./logger').logger.warn('names: a name on the word list was refused'); } catch (e) { /* no logger */ }
+    return fallback || 'Slayer';
+  }
+  return name;
 }
 // DF-NAME-1147: the offline sign-in puts the player's name in the token too ("dn", from eos_offline.ini DisplayName,
 // which the launcher fills with its one player name). Use it as the account name, so players are not all "Slayer".
@@ -946,8 +975,15 @@ function partyPresence(p, P) {
       if (a === b) continue;
       const to = sessionsOf(b); if (!to.length) continue;
       for (const S of sessionsOf(a)) for (const T of to) {
-        for (const from of [`${S.Uid}@${S.Domain}/${S.Resource}`, `${a}@${S.Domain}/${S.Resource}`])
-          chat.send(T, `<presence xmlns="jabber:client" from="${from}" to="${T.Uid}@${T.Domain}/${T.Resource}"/>`);
+        const standIn = chatCompat.StandInFor(S.Uid);
+        for (const from of [standIn ? `${standIn}@${S.Domain}/${S.Resource}` : '', `${a}@${S.Domain}/${S.Resource}`]) {
+          if (!from) continue;
+          const stanza = chatCompat.ScrubStanzaLeak(
+            `<presence xmlns="jabber:client" from="${from}" to="${T.Uid}@${T.Domain}/${T.Resource}"/>`,
+            S.Uid, standIn || 'masked'
+          );
+          chat.send(T, stanza);
+        }
       }
     }
   } catch (e) { /* presence is a hint; the party itself never depends on it */ }
@@ -961,6 +997,11 @@ function partyPoll(p, build) {
 }
 function partyInvite(p, to, build) {
   partySeen.set(p.accountId, Date.now()); partySweep();
+  if (!isAcc(to)) {
+    const realUid = chatCompat.RealUidFor(to);
+    const target = realUid ? playerOfChatUid(realUid) : null;
+    if (target && target.accountId) to = target.accountId;
+  }
   if (!isAcc(to) || to === p.accountId || !playerOfAcc(to)) return { status: 404, json: {}, note: 'party invite: no such player on this server' };
   let P = groupOf(p.accountId);
   if (P && P.leader !== p.accountId) return { status: 403, json: {}, note: 'party invite: only the leader invites' };
@@ -1091,7 +1132,7 @@ const routes = [
     const player = getPlayer(key);
     player.epicId = epicSubOf(bearerOf(c.req)) || player.epicId || '';
     const dn = epicNameOf(bearerOf(c.req));
-    if (dn) player.username = dn;   // DF-NAME-1147
+    if (dn) player.username = cleanName1147(dn, player.username && player.username !== dn ? player.username : 'Slayer');   // DF-NAME-1147, DF-CHATFILTER-1147
     leavePlace(key);
     delete player.candidate;   // a fresh sign-in releases its previous hunt lease
     if (!guestRequest(c.req)) state.lastPlayer = key;   // DF-HOSTGUARD-1147: a joiner is never "the last player"
@@ -1131,20 +1172,35 @@ const routes = [
   ['auth', 'POST', /^\/accountinfo\/public\/?$/, (c) => {                                             // captured
     const p = playerFor(c.req);
     const asked = (c.body && c.body.accountId) || p.accountId;
-    const who = asked === p.accountId ? p : playerOfAcc(asked);   // DF-PARTY-1147: other players on this server have names too
-    return J({ accountId: asked, isSubscribed: false, language: null, linkedAccounts: [{ accountId: who ? (who.epicId || '') : '', accountType: 'epic' }], username: who && who !== p ? (who.username || null) : null });
+    let who = asked === p.accountId ? p : playerOfAcc(asked);   // DF-PARTY-1147: other players on this server have names too
+    if (!who) {
+      const realUid = chatCompat.RealUidFor(asked);
+      if (realUid) who = playerOfChatUid(realUid);
+    }
+    const linkedEpic = who && who.epicId ? (who === p ? who.epicId : chatCompat.StandInFor(who.epicId)) : '';
+    return J({ accountId: asked, isSubscribed: false, language: null, linkedAccounts: [{ accountId: linkedEpic, accountType: 'epic' }], username: who && who !== p ? (who.username || null) : null });
   }],
   ['auth', 'POST', /^\/account\/mapping\/?$/, (c) => {                                                // captured
     const p = playerFor(c.req);
     const map = {};
-    for (const id of (c.body && Array.isArray(c.body.ids) ? c.body.ids : [])) if (id === p.epicId) map[id] = { accountId: p.accountId, accountType: 'phoenix' };
+    const selfEpic = String(p.epicId || '').toLowerCase();
+    for (const id of (c.body && Array.isArray(c.body.ids) ? c.body.ids : [])) {
+      if (typeof id !== 'string' || !id) continue;
+      if (selfEpic && id.toLowerCase() === selfEpic) {
+        map[id] = { accountId: p.accountId, accountType: 'phoenix' };
+        continue;
+      }
+      const realUid = chatCompat.RealUidFor(id);
+      const target = realUid ? playerOfChatUid(realUid) : null;
+      if (target && target.accountId) map[id] = { accountId: target.accountId, accountType: 'phoenix' };
+    }
     return J({ accountMappings: map, sourceAccountType: (c.body && c.body.srcAccountType) || 'epic' });
   }],
 
   ['dauntless', 'GET', /^\/character\/?$/, (c) => { const p = playerFor(c.req); return J(p.characters.map((ch) => charOut(p, ch))); }],
   ['dauntless', 'PUT', /^\/character\/?$/, (c) => {
     const p = playerFor(c.req);
-    const name = (c.body && typeof c.body.name === 'string' && c.body.name) || 'Slayer';
+    const name = cleanName1147((c.body && typeof c.body.name === 'string' && c.body.name) || 'Slayer', 'Slayer');   // DF-CHATFILTER-1147
     const ch = { id: newId(), name, updateVersion: 0, data: null, created: today() };
     p.characters.push(ch); saveState();
     return J(charOut(p, ch));
@@ -1277,9 +1333,12 @@ const routes = [
     } else leavePlace(me);
     const prevPlaceId = p.candidate && p.candidate.city === false ? p.candidate.id : null;
     const prevType = p.candidate && p.candidate.city === false ? p.candidate.gameType : null;   // DF-PARTY-ENDSCREEN
-    p.candidate = { id: joinId || ('local1$' + crypto.randomBytes(16).toString('hex')), gameMode: b.gameMode || 'CITY', gameType: b.gameType || null,
+    const candId = joinId || ('local1$' + crypto.randomBytes(16).toString('hex'));
+    const candPlace = fhPlaceId || candId;
+    const candSrv = dest.city ? liveServer(SERVER_FILE) : huntServer(candPlace);
+    p.candidate = { id: candId, gameMode: b.gameMode || 'CITY', gameType: b.gameType || null,
       huntId: Array.isArray(b.hunts) && b.hunts.length ? b.hunts[0] : null, playerHuntId: b.playerHuntId || null, gauntletLevel: b.gameType === 'GAUNTLET' ? b.gauntlet_level : null,
-      buildId: b.buildId || '647472_rel-1.14.7_shipping', gameSessionId: crypto.randomBytes(16).toString('hex'),
+      buildId: b.buildId || '647472_rel-1.14.7_shipping', gameSessionId: resolveGameSessionId(dest.city, candSrv, candPlace),
       city: dest.city, url: dest.url || null, label: dest.label, asked: Date.now(), placeId: fhPlaceId || undefined };   // DF-FOREVERHUNTS-1147
     // DF-PARTY-HOME: the leader's way home is offered to the party. DF-PARTY-ENDSCREEN (Oct 22): not after an escalation
     // or a trial. Those end on the game's own results screen: the members' games did not take the trip there, left the
@@ -1310,14 +1369,15 @@ const routes = [
     if (follow && follow.city !== false && p.candidate && p.candidate.id !== follow.id) {   // DF-PARTY-HOME: back to Ramsgate with the leader
       leavePlace(keyFor(c.req));
       p.candidate = { id: follow.id, gameMode: 'CITY', gameType: null, huntId: null, playerHuntId: null, buildId: follow.buildId,
-        gameSessionId: crypto.randomBytes(16).toString('hex'), city: true, url: null, label: 'Ramsgate (with the party)', asked: Date.now() };
+        gameSessionId: resolveGameSessionId(true, liveServer(SERVER_FILE), follow.id), city: true, url: null, label: 'Ramsgate (with the party)', asked: Date.now() };
       saveState(); partyLog(`${p.accountId} goes back to Ramsgate with the leader`);
     }
     if (follow && follow.city === false && !busyElse && (!p.candidate || p.candidate.id !== follow.id)) {
       const me = keyFor(c.req);
       if (p.candidate && p.candidate.city === false) leavePlace(me);
+      const followPlace = follow.placeId || follow.id;
       p.candidate = { id: follow.id, gameMode: follow.gameMode, gameType: follow.gameType, huntId: follow.huntId, playerHuntId: follow.playerHuntId,
-        buildId: follow.buildId, gameSessionId: crypto.randomBytes(16).toString('hex'), city: false, url: follow.url, label: follow.label + ' (with the party)', asked: Date.now() };
+        buildId: follow.buildId, gameSessionId: resolveGameSessionId(false, huntServer(followPlace), followPlace), city: false, url: follow.url, label: follow.label + ' (with the party)', asked: Date.now(), placeId: follow.placeId || undefined };
       const fpl = places.get(follow.id);
       if (fpl) fpl.owners.add(me);
       else addPlace({ id: follow.id, url: follow.url, base: placeBase(follow.url), label: follow.label, at: Date.now(), owners: new Set([me, keyOfAcc(groupOf(p.accountId).leader)].filter(Boolean)) }, false);
@@ -1336,7 +1396,7 @@ const routes = [
     // gateway, from 127.0.0.2: guestRequest, DF-HOSTGUARD-1147) and goes straight to the server on its own PC, instead
     // of out to the relay and back (about 100 ms on a 52 ms relay). Host and port use the same flag.
     const viaPublic = !!PUBLIC_HOST && guestRequest(c.req);
-    if (srv) out.serverInfo = { buildId: cd.buildId, gameSessionId: cd.gameSessionId, host: (viaPublic && (!srv.host || srv.host === '127.0.0.1')) ? PUBLIC_HOST : (srv.host || '127.0.0.1'), port: srv.port + (viaPublic ? PUBLIC_PORT_OFFSET : 0) };
+    if (srv) out.serverInfo = { buildId: cd.buildId, gameSessionId: resolveGameSessionId(city, srv, cdPlace), host: (viaPublic && (!srv.host || srv.host === '127.0.0.1')) ? PUBLIC_HOST : (srv.host || '127.0.0.1'), port: srv.port + (viaPublic ? PUBLIC_PORT_OFFSET : 0) };
     const waited = Math.round((Date.now() - (cd.asked || Date.now())) / 1000);
     // DF-FIX4: tools\server-1147.ps1 says why the hunt server failed; the game then stops searching right away
     let why = '';
@@ -1626,16 +1686,15 @@ function startChat() {
     const compat = require('./realtime/compat');
     // Chat knows a player by the sign-in id (EOS EpicAccountId, lower-case): the game's rooms and nicknames use it,
     // and the loader logs the game's chat connection in with it. The account id is accepted too.
-    const chatPlayer = (id) => { const want = String(id || '').toLowerCase(); return Object.values(state.players || {}).find((p) => p && (p.accountId === id || String(p.epicId || '').toLowerCase() === want)) || null; };
     compat.bind({
-      playerByAccount: chatPlayer,
+      playerByAccount: playerOfChatUid,
       accountFromToken: (token) => {
         let key = sessions.get(token) || null;
         if (!key && epicSubOf(token)) key = playerKeyFromEpicToken(token);
         const p = key && state.players[key];
         return p ? (String(p.epicId || '').toLowerCase() || p.accountId) : null;
       },
-      partyIdOf: (id) => { const p = chatPlayer(id); if (!p) return null; const P = groupOf(p.accountId); return P ? P.id : (p.partyId || null); },
+      partyIdOf: (id) => { const p = playerOfChatUid(id); if (!p) return null; const P = groupOf(p.accountId); return P ? P.id : (p.partyId || null); },
     });
     chatHub = new (require('node:events').EventEmitter)();
     // data\chat_trace.txt: log every chat frame (tokens, passwords and message text are blanked by the chat server)

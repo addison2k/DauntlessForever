@@ -6,6 +6,8 @@ exports.FullJid = FullJid;
 exports.BodyLength = BodyLength;
 exports.TakeMessageToken = TakeMessageToken;
 const logger_1 = require("../logger");
+const compat_1 = require("./compat");
+const chatfilter_1 = require("./chatfilter");   // DF-CHATFILTER-1147
 const chatnick_1 = require("./chatnick");
 const xmpp_1 = require("./xmpp");
 // Chat rooms (multi-user chat) the way the 1.4.4 client needs them (docs/findings/chat.md, "Rooms").
@@ -90,10 +92,23 @@ class MucService {
         return this.rooms.size;
     }
     // ---- Stanzas ----
+    shownIdentity(Nick, Sender, Recipient) {
+        if (!Recipient || Sender.Uid === Recipient.Uid) {
+            return { Nick, Jid: FullJid(Sender), StandIn: "" };
+        }
+        const StandIn = (0, compat_1.StandInFor)(Sender.Uid);
+        return {
+            Nick: (0, compat_1.MaskNickname)(Nick, Sender.Uid, StandIn),
+            Jid: (0, compat_1.MaskJid)(Sender, StandIn) || FullJid(Sender),
+            StandIn,
+        };
+    }
     occupantPresence(Room, Nick, Occupant, To, Options = {}) {
         const Statuses = `${Options.Self ? `<status code="110"/>` : ""}${Options.Evicted ? `<status code="307"/>` : ""}`;
-        return `<presence xmlns="${xmpp_1.NS.CLIENT}"${Options.Unavailable ? ` type="unavailable"` : ""} from="${(0, xmpp_1.EscapeXml)(`${Room.Jid}/${Nick}`)}" to="${(0, xmpp_1.EscapeXml)(FullJid(To))}">`
-            + `<x xmlns="${xmpp_1.NS.MUC_USER}"><item affiliation="none" role="${Options.Unavailable ? "none" : "participant"}" jid="${(0, xmpp_1.EscapeXml)(FullJid(Occupant))}"/>${Statuses}</x></presence>`;
+        const Shown = this.shownIdentity(Nick, Occupant, To);
+        const Stanza = `<presence xmlns="${xmpp_1.NS.CLIENT}"${Options.Unavailable ? ` type="unavailable"` : ""} from="${(0, xmpp_1.EscapeXml)(`${Room.Jid}/${Shown.Nick}`)}" to="${(0, xmpp_1.EscapeXml)(FullJid(To))}">`
+            + `<x xmlns="${xmpp_1.NS.MUC_USER}"><item affiliation="none" role="${Options.Unavailable ? "none" : "participant"}" jid="${(0, xmpp_1.EscapeXml)(Shown.Jid)}"/>${Statuses}</x></presence>`;
+        return Occupant.Uid !== To.Uid ? (0, compat_1.ScrubStanzaLeak)(Stanza, Occupant.Uid, Shown.StandIn) : Stanza;
     }
     // A refused join: the error presence, one log line per session, room class and reason every 10 minutes
     // (never keyed on the client's own text), and one dropped stanza toward the session's abuse limit
@@ -314,9 +329,13 @@ class MucService {
             this.messageError(Session, RoomJid, Id);
             return;
         }
-        const From = (0, xmpp_1.EscapeXml)(`${Room.Jid}/${Nick}`);
+        // DF-CHATFILTER-1147: a message on the word list, or from a player muted for it, is shown to its sender only
+        const Filter = chatfilter_1.Check(Session.Uid, Body);
+        if (Filter.reason !== null) {
+            logger_1.logger.warn(`chat: word list ${Filter.reason}${Filter.muted ? " (chat muted for 10 minutes)" : ""} uid=${Session.Uid} room=${Room.Local}${Filter.hide ? "" : " (log only)"}`);
+        }
         const Text = (0, xmpp_1.EscapeXml)(Body);
-        const Recipients = [...Room.Occupants.keys()].filter((Recipient) => Recipient === Session || Recipient.Uid !== Session.Uid);
+        const Recipients = Filter.hide ? [Session] : [...Room.Occupants.keys()].filter((Recipient) => Recipient === Session || Recipient.Uid !== Session.Uid);
         const Blockers = this.host.Access.BlockersAmong(Session.Uid, Recipients.map((Recipient) => Recipient.Uid));
         let Delivered = 0;
         let Blocked = 0;
@@ -330,7 +349,13 @@ class MucService {
                 Blocked++;
                 continue;
             }
-            this.host.Send(Recipient, `<message xmlns="${xmpp_1.NS.CLIENT}" type="groupchat"${Id !== undefined ? ` id="${(0, xmpp_1.EscapeXml)(Id)}"` : ""} from="${From}" to="${(0, xmpp_1.EscapeXml)(FullJid(Recipient))}"><body>${Text}</body></message>`);
+            const Shown = this.shownIdentity(Nick, Session, Recipient);
+            const From = (0, xmpp_1.EscapeXml)(`${Room.Jid}/${Shown.Nick}`);
+            let Stanza = `<message xmlns="${xmpp_1.NS.CLIENT}" type="groupchat"${Id !== undefined ? ` id="${(0, xmpp_1.EscapeXml)(Id)}"` : ""} from="${From}" to="${(0, xmpp_1.EscapeXml)(FullJid(Recipient))}"><body>${Text}</body></message>`;
+            if (Recipient.Uid !== Session.Uid) {
+                Stanza = (0, compat_1.ScrubStanzaLeak)(Stanza, Session.Uid, Shown.StandIn);
+            }
+            this.host.Send(Recipient, Stanza);
             Delivered++;
         }
         logger_1.logger.info(`chat: message room=${Room.Local} uid=${Session.Uid} len=${Length} to=${Delivered}${Blocked > 0 ? ` blocked=${Blocked}` : ""}`);

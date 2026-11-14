@@ -1,0 +1,115 @@
+# Dauntless Forever chat word list (expanded DF-CHATFILTER-1147). One entry per line. '#' starts a comment.
+#   word      whole word only (also catches w0rd, w.o.r.d, wooord, words)
+#   *word     anywhere, even inside a longer word. Only for words that are never innocent.
+#   two words a phrase
+# Hate slurs only. Ordinary swearing is not on this list. Add your own in data\chat-blocklist.txt,
+# and words that must never match in data\chat-allowlist.txt.
+# Expanded with additional common hate terms from typical game filters (H1Z1/PS2 era and modern).
+
+# race and ethnicity
+*nigger
+*nigga
+nigg
+niglet
+coon
+coons
+chink
+chinks
+chinky
+gook
+gooks
+spic
+spick
+spics
+wetback
+wetbacks
+beaner
+beaners
+kike
+kyke
+kikes
+raghead
+ragheads
+towelhead
+towelheads
+sandnigger
+sandniggers
+paki
+pakis
+jigaboo
+jigaboos
+porchmonkey
+porchmonkeys
+zipperhead
+zipperheads
+wop
+wops
+redskin
+redskins
+darkie
+darkies
+pickaninny
+pickaninnies
+gypo
+gypos
+honky
+honkey
+honkies
+wog
+wogs
+jap
+japs
+golliwog
+spearchucker
+timbernigger
+whigger
+wigger
+wigga
+ching chong
+ching-chong
+camel jockey
+cameljockey
+curry muncher
+currymuncher
+wagon burner
+wagonburner
+mayo monkey
+mayonnaise monkey
+white power
+whitepower
+# religion
+heil hitler
+sieg heil
+gas the jews
+hitler did nothing wrong
+swastika
+# sexuality and gender
+*faggot
+fag
+fagg
+fags
+dyke
+dykes
+tranny
+trannies
+trannie
+shemale
+shemales
+# disability
+retard
+*retarded
+retards
+mongoloid
+mongoloids
+# threats and harassment
+kys
+kill yourself
+kill urself
+go kill yourself
+# additional common variants / phrases
+sand nigger
+sand-nigger
+towel head
+towel-head
+rag head
+rag-head
