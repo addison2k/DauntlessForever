@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-11-13.2",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-13.2.zip",
-                         "sha256":  "630e961f2fde0a4ed4e5e31ecef122f2f7852232c4331cda5dbd9e61056e83c0",
-                         "date":  "2026-11-13",
-                         "note":  "Fixes a case where a Slayer could stay on their feet after being knocked out in a hunt."
+                         "packageVersion":  "2026-11-14",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-14.zip",
+                         "sha256":  "b2939d2d5ae26f0f42a27bf96d1ec05471d9c11312952e5078283335fe78df99",
+                         "date":  "2026-11-14",
+                         "note":  "Forged in Fury: Collect 5 Discoveries on the Blazeworks now counts every discovery. If you were stuck at 1 of 5, just start the game: the quest shows what you found and can be turned in"
                      }
                  ],
     "launcher":  {

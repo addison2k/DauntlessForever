@@ -494,6 +494,21 @@ function inventoryOf(player, characterId) {
   dropEmptyStacks(player.inventory[id]);    // DF-ZEROSTACK
   return player.inventory[id];
 }
+// DF-LORETOKEN-1147 repair: before the fix below a Slayer kept ONE Blazeworks discovery token however many discoveries
+// they picked up, and with the token and the discovery marks in the save the game does not let them pick the
+// discoveries up again. When the inventory is read, the token is topped up to the number of Blazeworks discoveries
+// the Slayer has found (never more than 5, never lowered), so "Collect 5 Discoveries" reads what they really did.
+function loreTokenRepair1147(player, inv) {
+  const TOKEN = 'TOKEN_LORE_NODES_ISLAND_U_00';
+  if (!player || !inv || !Array.isArray(inv.instancedItems) || !player.encountered || typeof player.encountered !== 'object') return 0;
+  const found = new Set();
+  for (const list of Object.values(player.encountered)) if (Array.isArray(list)) for (const id of list) if (typeof id === 'string' && /^LORE_NODES_ISLAND_U_\d+$/.test(id)) found.add(id);
+  const want = Math.min(found.size, 5);
+  const have = inv.instancedItems.filter((x) => x && x.catalogId === TOKEN).length;
+  if (!have || have >= want) return 0;   // no token at all: the Slayer has not picked one up on this save, leave it alone
+  for (let i = have; i < want; i++) inv.instancedItems.push({ catalogId: TOKEN, updateVersion: 0, instanceId: crypto.randomUUID().replace(/-/g, '').toUpperCase() });
+  return want - have;
+}
 function applyInventory(inv, body) {
   body = freePlatinum1147.inventory(body);
   body = huntpass1147.inventory(inv, body);
@@ -525,6 +540,16 @@ function applyInventory(inv, body) {
     if (typeof item.updateVersion !== 'number') item.updateVersion = 1;
     const existing = inv.instancedItems.find(x => x.instanceId === item.instanceId);
     if (existing && existing.catalogId !== item.catalogId) throw quality.httpError(409, 'Equipment instanceId belongs to another item');
+    // DF-LORETOKEN-1147 (Nov 14, Forged in Fury stuck at 1 of 5): every discovery on an island hands out the SAME token
+    // (the Blazeworks: TOKEN_LORE_NODES_ISLAND_U_00, sent with its catalog id as the instance id) and the quest counts
+    // how many of it the Slayer holds (quest data: ObjectiveData_CollectItems, that item, Amount 5). Kept as one
+    // instance the count never passed 1. Each pickup is now its own instance. A resent request never gets here: it
+    // is answered from its transaction id.
+    if (existing && item.instanceId === item.catalogId && /^TOKEN_LORE_NODES_/.test(item.catalogId)
+        && inv.instancedItems.filter((x) => x.catalogId === item.catalogId).length < 16) {
+      item.instanceId = crypto.randomUUID().replace(/-/g, '').toUpperCase();
+      inv.instancedItems.push(item); created.push(item); continue;
+    }
     if (existing) { created.push(existing); continue; }
     inv.instancedItems.push(item); created.push(item);
   }
@@ -1151,8 +1176,10 @@ const routes = [
   }],
   ['dauntless', 'GET', /^\/inventory\/([^/]*)\/([^/]*)\/?$/, (c) => {
     const p = playerFor(c.req);
-    const inv = inventoryOf(p, c.match[2]); saveState();
-    return J(inv);
+    const inv = inventoryOf(p, c.match[2]);
+    const fixed = loreTokenRepair1147(p, inv);   // DF-LORETOKEN-1147
+    saveState();
+    return J(inv, fixed ? `Blazeworks discovery tokens topped up by ${fixed} (Forged in Fury repair)` : undefined);
   }],
   // "Has this character's inventory been migrated to this game version?" - nothing to migrate.
   ['dauntless', 'POST', /^\/inventory\/([A-Z2-7]{26})\/([^/]+)\/?$/, () => J({ code: 'NONE', message: '' })],   // captured

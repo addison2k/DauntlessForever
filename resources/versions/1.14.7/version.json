@@ -42,7 +42,7 @@
                  },
     "package":  {
                     "dir":  "package",
-                    "packageVersion":  "2026-11-13.2",
+                    "packageVersion":  "2026-11-14",
                     "setup":  "tools/setup.ps1",
                     "uninstallArgs":  [
                                           "-Uninstall"
