@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-11-13",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-13.zip",
-                         "sha256":  "424d6febc89210bbb6ebad4d0770148b68aabbf0899c3c288a21f85cf4a3fdac",
+                         "packageVersion":  "2026-11-13.2",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-13.2.zip",
+                         "sha256":  "630e961f2fde0a4ed4e5e31ecef122f2f7852232c4331cda5dbd9e61056e83c0",
                          "date":  "2026-11-13",
-                         "note":  "Crit numbers now have settings in the game: Options \u003e Gameplay has 7 new rows (style, size, tilt, hang time and more). Comic crit numbers are OFF until you turn on Crit Numbers there."
+                         "note":  "Fixes a case where a Slayer could stay on their feet after being knocked out in a hunt."
                      }
                  ],
     "launcher":  {
