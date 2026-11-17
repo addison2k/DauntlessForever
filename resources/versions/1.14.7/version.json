@@ -1,136 +1,136 @@
 {
-    "id":  "1.14.7",
-    "name":  "Dauntless 1.14.7",
-    "build":  "647472",
-    "released":  "April 9, 2024",
-    "era":  "Last pre-Awakening build",
-    "blurb":  "The last build before Awakening: the full 2023 Ramsgate, every weapon line as it was, and the Hunting Grounds as most players remember them.",
-    "works":  [
-                  "Slayer copy no longer brings 1.6.2\u0027s Middleman token over: it made 1.14.7 refuse your inventory and send you back to the menu. Saves that already have it are repaired when you press Play",
-                  "Sign in offline, Ramsgate, NPCs and quests (quest progress is saved)",
-                  "Modded mode (test): UE4SS mods and a Boss Health Bar (behemoth and part health) from the launcher\u0027s Mods page: Get UE4SS, then Modded mode On",
-                  "Quest and dialogue text (fix by KombatKing)",
-                  "Hunt quests (kills on the right island count)",
-                  "Potions, lanterns, Omnicells and weapon specials (equipment fix by KombatKing, test build)",
-                  "Training grounds, sprint, attacking",
-                  "Hunts (tested: the first Embermane hunt)",
-                  "Online with friends: the launcher\u0027s Friends page, Play online and Host Mode (and ONLINE - HOST / LAN - JOIN by hand)",
-                  "Parties: invite a player in Ramsgate (Q on them); the party follows the leader into the training grounds and hunts (test)",
-                  "KombatKing\u0027s All-in-One R1: Fountain gift and free supplies pack, Middleman slots and 7-minute fusion, Trials store, Hunt Pass seasons and a 400-tier Mega pass, bounties, power surge saving, War Hammer reload",
-                  "Sparkforge reforge: weapon back to level 1, reforge badge, Aetherheart right away",
-                  "Test (KombatKing): Game Rules up to 5x, one free All Dyes pack, Gauntlet access and extra Trials destinations (no Gauntlet rewards yet)",
-                  "KombatKing\u0027s Oct 18 fixes (test): bigger Trials shop (72 items: mods, specials, Omnicells), potions and the Springtide egg no longer expire, loadout saving and switching fixed, old logs cleaned up, Free platinum game rule",
-                  "Trials Quick Retry (Mods page, off by default): a spare copy of the trial warms up while you play, so Retry is instant on the host PC (about 4 GB of free RAM)",
-                  "Intel Arc and other GPUs whose D3D11 driver crashes the game at start: put DXVK\u0027s dxgi.dll next to the game exe as dxgi_chain.dll (and its d3d11.dll beside it); the loader uses it instead of Windows\u0027 DXGI (issue #4)",
-                  "Hunts that cannot start now say why (reserved UDP ports, a port in use, the server copy closed by an antivirus, timeout) in the game and under the launcher\u0027s Play button, instead of searching forever",
-                  "Joiners can no longer land on the host\u0027s character (host guard), and the crash guard now covers the second crash site after a behemoth dies",
-                  "Party and multiplayer fixes (test): the training grounds take 4 players, a player who left a hunt no longer keeps others stuck in Ramsgate (the airship loop), parties survive a server restart, party members can follow a running hunt after 15 minutes, a new hunt from the dojo takes the whole party, and the party goes back to Ramsgate with the leader",
-                  "Hunts run at the FPS they had before Oct 18: the crash guard\u0027s per-object checks no longer call into Windows (CPU 90-100% on hunts fixed, Oct 21)"
-              ],
-    "notWorking":  [
-                       "New characters joining a friend get stuck loading the tutorial: do the tutorial in solo play first. Hunting together as a party is new and only lightly tested. Much else may not work yet."
-                   ],
-    "exeRel":  "Archon/Binaries/Win64/Dauntless-Win64-Shipping.exe",
-    "exeSha256":  "F3F95FBF22709EF077A11632ED95D675B7209B7E0172D9ECB9BA7D02A1FBB66B",
-    "download":  {
-                     "manifestUrl":  "https://raw.githubusercontent.com/addison2k/DauntlessManifestArchive/main/manifests/Windows/Dauntless_1.14.7.647472.manifest",
-                     "manifestSha1":  "aa70748e4c0a776a991f2bac10ad342adaa31476",
-                     "downloadGB":  14.89,
-                     "installedGB":  15.39,
-                     "files":  611,
-                     "folderName":  "Dauntless_1.14.7"
-                 },
-    "package":  {
-                    "dir":  "package",
-                    "packageVersion":  "2026-11-17.3",
-                    "setup":  "tools/setup.ps1",
-                    "uninstallArgs":  [
-                                          "-Uninstall"
-                                      ],
-                    "play":  "tools/start.ps1",
-                    "stop":  {
-                                 "scripts":  [
-                                                 [
-                                                     "tools/server-1147.ps1",
-                                                     "-Stop"
-                                                 ]
-                                             ],
-                                 "pidFiles":  [
-                                                  "data/recorder.pid"
-                                              ]
-                             },
-                    "installedFiles":  [
-                                           {
-                                               "rel":  "Archon/Binaries/Win64/EOSSDK-Win64-Shipping.dll",
-                                               "sha256":  "4113C9EEBFBAC08532B6566A48F69E4F64A6B8E18A18AAFBA43F62F8F7DFDF70"
-                                           },
-                                           {
-                                               "rel":  "Archon/Binaries/Win64/dxgi.dll",
-                                               "sha256":  "78896145D93A3EF31511E72348FF346E5A8EEFD018E896AAEE37F72D6EEF3E9C"
-                                           },
-                                           {
-                                               "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_QuestDialogueFallback1147_P.pak",
-                                               "sha256":  "6F12AA1B3856D2A485851A4857150DCC072B2461128F862E3C351B796E33A00E"
-                                           },
-                                           {
-                                               "rel":  "Archon/Content/Paks/zzzzzzzz_Equipment1147_P.pak",
-                                               "sha256":  "9A2B3AF97304AE8CDD49BFC605A2E2C34657B0707A02076A0EFB6F62C7C80E65"
-                                           },
-                                           {
-                                               "rel":  "Archon/Content/Paks/zzzz_Mega1147_Middleman_P.pak",
-                                               "sha256":  "1CEAF8363951F8F3733A2E87D2AB71C7F00ED5428775CF56BADB19536A4C33CC"
-                                           },
-                                           {
-                                               "rel":  "Archon/Content/Paks/zzzz_Mega1147_HuntPass_P.pak",
-                                               "sha256":  "7D64B5DCFB133FD19FBB54142D1C0F2713C954721A9D01B981BF9A4B3C91B7B1"
-                                           },
-                                           {
-                                               "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_HammerReload1147_P.pak",
-                                               "sha256":  "F8A1449FD2C70FE915B455BEAF4428AE128D0C163AAF9A2E66554C62B2451E34"
-                                           },
-                                           {
-                                               "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_ItemExpiry1147_P.pak",
-                                               "sha256":  "C71F64758B7B70DC523DA66FCEC47319B330CC8D72E425AC94265FF4C15C029D"
-                                           },
-                                           {
-                                               "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_RamsStore1147_P.pak",
-                                               "sha256":  "0AD4AE2278F13FA5C27BCE4A1B2090DBC1957D2FE26D1B45A9CD5C2C6B2C97AB"
-                                           },
-                                           {
-                                               "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_EventStore1147_P.pak",
-                                               "sha256":  "AF8C9C2B0618E57F2A84CE492B4337883FAEE775178CB31893708CF156DE0DED"
-                                           },
-                                           {
-                                               "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_Stylist1147_P.pak",
-                                               "sha256":  "52ACB03CF433551E014797322DC4295311A238B84BAF26CA8DBE90EF55EDC9E3"
-                                           },
-                                           {
-                                               "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_OopsAllCharrogg1147_P.pak",
-                                               "sha256":  "5C4753D577C615158EFA14E504052CDDE6A46E2289A7DCF134929AB0C8AFB2F5"
-                                           }
-                                       ],
-                    "setupDoneFiles":  [
-                                           "eos/eos_offline.ini",
-                                           "captures"
-                                       ],
-                    "saveFiles":  [
-                                      "data/state.json"
-                                  ],
-                    "needsNode":  "16",
-                    "ports":  "63000-63027",
-                    "readme":  "README.txt",
-                    "online":  {
-                                   "hostScript":  "tools/online-host-1147.ps1",
-                                   "joinScript":  "tools/lan-join-1147.ps1",
-                                   "relayFile":  "data/relay-1147.json",
-                                   "statusPort":  63000,
-                                   "statusPath":  "/_recorder/ping",
-                                   "accounts":  false,
-                                   "hostPlay":  "tools/play-1147.ps1",
-                                   "huntPorts":  [
-                                                     8781,
-                                                     8787
-                                                 ]
-                               }
-                }
+ "id": "1.14.7",
+ "name": "Dauntless 1.14.7",
+ "build": "647472",
+ "released": "April 9, 2024",
+ "era": "Last pre-Awakening build",
+ "blurb": "The last build before Awakening: the full 2023 Ramsgate, every weapon line as it was, and the Hunting Grounds as most players remember them.",
+ "works": [
+  "Slayer copy no longer brings 1.6.2's Middleman token over: it made 1.14.7 refuse your inventory and send you back to the menu. Saves that already have it are repaired when you press Play",
+  "Sign in offline, Ramsgate, NPCs and quests (quest progress is saved)",
+  "Modded mode (test): UE4SS mods and a Boss Health Bar (behemoth and part health) from the launcher's Mods page: Get UE4SS, then Modded mode On",
+  "Quest and dialogue text (fix by KombatKing)",
+  "Hunt quests (kills on the right island count)",
+  "Potions, lanterns, Omnicells and weapon specials (equipment fix by KombatKing, test build)",
+  "Training grounds, sprint, attacking",
+  "Hunts (tested: the first Embermane hunt)",
+  "Online with friends: the launcher's Friends page, Play online and Host Mode (and ONLINE - HOST / LAN - JOIN by hand)",
+  "Parties: invite a player in Ramsgate (Q on them); the party follows the leader into the training grounds and hunts (test)",
+  "KombatKing's All-in-One R1: Fountain gift and free supplies pack, Middleman slots and 7-minute fusion, Trials store, Hunt Pass seasons and a 400-tier Mega pass, bounties, power surge saving, War Hammer reload",
+  "Sparkforge reforge: weapon back to level 1, reforge badge, Aetherheart right away",
+  "Test (KombatKing): Game Rules up to 5x, one free All Dyes pack, Gauntlet access and extra Trials destinations (no Gauntlet rewards yet)",
+  "KombatKing's Oct 18 fixes (test): bigger Trials shop (72 items: mods, specials, Omnicells), potions and the Springtide egg no longer expire, loadout saving and switching fixed, old logs cleaned up, Free platinum game rule",
+  "Trials Quick Retry (Mods page, off by default): a spare copy of the trial warms up while you play, so Retry is instant on the host PC (about 4 GB of free RAM)",
+  "Intel Arc and other GPUs whose D3D11 driver crashes the game at start: put DXVK's dxgi.dll next to the game exe as dxgi_chain.dll (and its d3d11.dll beside it); the loader uses it instead of Windows' DXGI (issue #4)",
+  "Hunts that cannot start now say why (reserved UDP ports, a port in use, the server copy closed by an antivirus, timeout) in the game and under the launcher's Play button, instead of searching forever",
+  "Joiners can no longer land on the host's character (host guard), and the crash guard now covers the second crash site after a behemoth dies",
+  "Party and multiplayer fixes (test): the training grounds take 4 players, a player who left a hunt no longer keeps others stuck in Ramsgate (the airship loop), parties survive a server restart, party members can follow a running hunt after 15 minutes, a new hunt from the dojo takes the whole party, and the party goes back to Ramsgate with the leader",
+  "Hunts run at the FPS they had before Oct 18: the crash guard's per-object checks no longer call into Windows (CPU 90-100% on hunts fixed, Oct 21)"
+ ],
+ "notWorking": [
+  "New characters joining a friend get stuck loading the tutorial: do the tutorial in solo play first. Hunting together as a party is new and only lightly tested. Much else may not work yet."
+ ],
+ "exeRel": "Archon/Binaries/Win64/Dauntless-Win64-Shipping.exe",
+ "exeSha256": "F3F95FBF22709EF077A11632ED95D675B7209B7E0172D9ECB9BA7D02A1FBB66B",
+ "download": {
+  "manifestUrl": "https://raw.githubusercontent.com/addison2k/DauntlessManifestArchive/main/manifests/Windows/Dauntless_1.14.7.647472.manifest",
+  "manifestSha1": "aa70748e4c0a776a991f2bac10ad342adaa31476",
+  "downloadGB": 14.89,
+  "installedGB": 15.39,
+  "files": 611,
+  "folderName": "Dauntless_1.14.7"
+ },
+ "package": {
+  "dir": "package",
+  "packageVersion": "2026-11-17.4",
+  "setup": "tools/setup.ps1",
+  "uninstallArgs": [
+   "-Uninstall"
+  ],
+  "play": "tools/start.ps1",
+  "stop": {
+   "scripts": [
+    [
+     "tools/server-1147.ps1",
+     "-Stop"
+    ]
+   ],
+   "pidFiles": [
+    "data/recorder.pid"
+   ]
+  },
+  "installedFiles": [
+   {
+    "rel": "Archon/Binaries/Win64/EOSSDK-Win64-Shipping.dll",
+    "sha256": "4113C9EEBFBAC08532B6566A48F69E4F64A6B8E18A18AAFBA43F62F8F7DFDF70"
+   },
+   {
+    "rel": "Archon/Binaries/Win64/dxgi.dll",
+    "sha256": "F0CD3491FDA6D8B89AF5976E9D306E35EF78765C120A503D12559F47E2250D15"
+   },
+   {
+    "rel": "Archon/Content/Paks/zzzzzzzzzzzzzzzz_QuestDialogueFallback1147_P.pak",
+    "sha256": "6F12AA1B3856D2A485851A4857150DCC072B2461128F862E3C351B796E33A00E"
+   },
+   {
+    "rel": "Archon/Content/Paks/zzzzzzzz_Equipment1147_P.pak",
+    "sha256": "9A2B3AF97304AE8CDD49BFC605A2E2C34657B0707A02076A0EFB6F62C7C80E65"
+   },
+   {
+    "rel": "Archon/Content/Paks/zzzz_Mega1147_Middleman_P.pak",
+    "sha256": "1CEAF8363951F8F3733A2E87D2AB71C7F00ED5428775CF56BADB19536A4C33CC"
+   },
+   {
+    "rel": "Archon/Content/Paks/zzzz_Mega1147_HuntPass_P.pak",
+    "sha256": "7D64B5DCFB133FD19FBB54142D1C0F2713C954721A9D01B981BF9A4B3C91B7B1"
+   },
+   {
+    "rel": "Archon/Content/Paks/zzzzzzzzzzzzzzzz_HammerReload1147_P.pak",
+    "sha256": "F8A1449FD2C70FE915B455BEAF4428AE128D0C163AAF9A2E66554C62B2451E34"
+   },
+   {
+    "rel": "Archon/Content/Paks/zzzzzzzzzzzzzzzz_ItemExpiry1147_P.pak",
+    "sha256": "C71F64758B7B70DC523DA66FCEC47319B330CC8D72E425AC94265FF4C15C029D"
+   },
+   {
+    "rel": "Archon/Content/Paks/zzzzzzzzzzzzzzzz_RamsStore1147_P.pak",
+    "sha256": "0AD4AE2278F13FA5C27BCE4A1B2090DBC1957D2FE26D1B45A9CD5C2C6B2C97AB"
+   },
+   {
+    "rel": "Archon/Content/Paks/zzzzzzzzzzzzzzzz_EventStore1147_P.pak",
+    "sha256": "AF8C9C2B0618E57F2A84CE492B4337883FAEE775178CB31893708CF156DE0DED"
+   },
+   {
+    "rel": "Archon/Content/Paks/zzzzzzzzzzzzzzzz_Stylist1147_P.pak",
+    "sha256": "52ACB03CF433551E014797322DC4295311A238B84BAF26CA8DBE90EF55EDC9E3"
+   },
+   {
+    "rel": "Archon/Content/Paks/zzzzzzzzzzzzzzzz_OopsAllCharrogg1147_P.pak",
+    "sha256": "5C4753D577C615158EFA14E504052CDDE6A46E2289A7DCF134929AB0C8AFB2F5"
+   }
+  ],
+  "setupDoneFiles": [
+   "eos/eos_offline.ini",
+   "captures"
+  ],
+  "saveFiles": [
+   "data/state.json"
+  ],
+  "needsNode": "16",
+  "ports": "63000-63027",
+  "readme": "README.txt",
+  "online": {
+   "hostScript": "tools/online-host-1147.ps1",
+   "joinScript": "tools/lan-join-1147.ps1",
+   "relayFile": "data/relay-1147.json",
+   "statusPort": 63000,
+   "statusPath": "/_recorder/ping",
+   "accounts": false,
+   "hostPlay": "tools/play-1147.ps1",
+   "huntPorts": [
+    8781,
+    8787
+   ]
+  }
+ }
 }
