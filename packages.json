@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.4.10",
+                     "version":  "0.4.11",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "Play online is back. The bottom bar on the Play page now reaches the edge of the window.",
-                     "date":  "2026-11-08",
+                     "notes":  "Play solo turns into Stop solo while your game is running. Send my logs has an optional Discord name box so we can answer you there. The Mods page shows reviewed mods from mods.dauntlessforever.com. The Inventory page links to the item list.",
+                     "date":  "2026-11-17",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.10.asar",
-                                 "sha256":  "32daf8f3a5688e2d7da25ff8cb4625462cc113ba4d238d7fef40dfedb2bf39b0",
-                                 "size":  20071607,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.11.asar",
+                                 "sha256":  "39df077e1282bfa95641d25603ca78017db0f7312c983e6f49e2cb19361667f5",
+                                 "size":  21715555,
                                  "minShell":  "0.2.4"
                              }
                  }

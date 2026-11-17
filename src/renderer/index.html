@@ -486,6 +486,8 @@
 <section class="page" id="page-items" hidden>
   <h1 class="page-title">Inventory</h1>
   <p class="lead">Add or remove currencies, tokens and keys in your save. Close the game first. A backup of your save is made every time you save here.</p>
+  <!-- DF-ITEMSLINK (Nov 17): players keep asking where the item list is -->
+  <p class="small items-link">Looking for an item's name or ID? Every item and cosmetic is listed at <a href="#" data-url="https://items.dauntlessforever.com/">items.dauntlessforever.com</a> (from the 1.6.2 game files): search by name and copy the command that adds it.</p>
   <div class="gv-label">Game version</div>
   <div class="season-tabs ver-tabs" id="item-vtabs" role="tablist" aria-label="Version"></div>
   <div class="ver-banner" id="item-vbanner"></div>
@@ -557,6 +559,11 @@
       </div>
     </div>
     <div class="rule-foot"><button class="ghost" id="mods-folder">Open the mods folder</button></div>
+    <div id="cmods" hidden>
+      <h2 class="list-head">From the mods page</h2>
+      <p class="small">Reviewed mods from mods.dauntlessforever.com. Every line of each one is on that page: press Read the code before you install. The launcher checks each mod's fingerprint and writes nothing if it does not match.</p>
+      <div class="season-list" id="cmods-list"></div>
+    </div>
     <h2 class="list-head">Your mods</h2>
     <div class="season-list" id="mods-list"></div>
     <p class="small">Put each mod's folder inside the mods folder (it has a Scripts folder or a dlls folder in it), then switch it on here. Mods are never deleted by the launcher. Your mods only change your own game; a joiner's mods never change your server or anyone's save. Mods are made by other people: only use ones you trust.</p>
@@ -732,7 +739,10 @@
   <h2 id="report-title">Send my logs</h2>
   <p id="report-text">Sends this version's logs to the Dauntless Forever team with your name and what happened. Your PC name and Windows user name are blanked out in them.</p>
   <label class="report-label" for="report-name">Your name (so we know who to answer)</label>
-  <div class="fr-line"><input id="report-name" class="fr-input" maxlength="40" autocomplete="off" spellcheck="false" placeholder="Your name or Discord name"></div>
+  <div class="fr-line"><input id="report-name" class="fr-input" maxlength="40" autocomplete="off" spellcheck="false" placeholder="Your name"></div>
+  <!-- DF-REPORTDISCORD (Nov 16): optional, so the team can find the player on Discord -->
+  <label class="report-label" for="report-discord">Discord name (optional, so we can answer you there)</label>
+  <div class="fr-line"><input id="report-discord" class="fr-input" maxlength="40" autocomplete="off" spellcheck="false" placeholder="yourname"></div>
   <label class="report-label" for="report-reason">What happened?</label>
   <textarea id="report-reason" class="fr-input report-reason" maxlength="2000" rows="5" placeholder="For example: the game froze when I opened crafting, after about 10 minutes of playing"></textarea>
   <p class="action-note" id="report-msg" aria-live="polite"></p>

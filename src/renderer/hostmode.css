@@ -429,3 +429,8 @@ body.online-link-on .action-subs .sub-host-link { display: inline; }
 /* Only the background is drawn wider; the buttons, captions and the gear stay where they were. */
 .content:has(> #page-play:not([hidden])) { overflow-x: hidden; }
 #play-dock::after { content: ""; position: absolute; top: -1px; bottom: 0; left: 100%; width: 100vw; background: var(--bg-2); border-top: 1px solid var(--line-2); box-shadow: 0 -14px 28px rgba(0,0,0,.45); clip-path: inset(-60px 0 0 0); pointer-events: none; }
+
+/* ---- DF-SOLOSTOP (Nov 16): while a solo game runs the Play solo button reads Stop solo, drawn as an outline like Stop Infinite. ---- */
+.action-main .primary.stop-solo { background: transparent; color: var(--brass); border: 2px solid var(--brass); box-shadow: none; }
+.action-main .primary.stop-solo:hover { background: rgba(0, 0, 0, .25); color: var(--brass-2); border-color: var(--brass-2); }
+.action-main .primary.stop-solo::before { display: none; }
