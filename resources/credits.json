@@ -37,7 +37,7 @@
         {
           "name": "Cybervortex",
           "role": "Contributor",
-          "what": "1.14.7: tracked the periodic rubberbanding in hunts to a server stall during the regular snapshot and timed it, which led to the snapshot stall fix."
+          "what": "1.14.7: tracked the periodic rubberbanding in hunts to a server stall during the regular snapshot and timed it, which led to the snapshot stall fix. Also the idea and first working version of shared chat: one chat room per town and per hunt, with players' real sign-in ids hidden from everyone else."
         }
       ]
     },
