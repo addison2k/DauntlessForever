@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.4.11",
+                     "version":  "0.4.12",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "Play solo turns into Stop solo while your game is running. Send my logs has an optional Discord name box so we can answer you there. The Mods page shows reviewed mods from mods.dauntlessforever.com. The Inventory page links to the item list.",
+                     "notes":  "Fixed the item list line overlapping the Game version label on the Inventory page.",
                      "date":  "2026-11-17",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.11.asar",
-                                 "sha256":  "29aa613d2cb5d5b37b26373096e2038848ca163a20d0e38d227873e5f3f81346",
-                                 "size":  21715706,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.12.asar",
+                                 "sha256":  "d1d3ae62acf0550c5361a32bddd09bedb485d2bcafd0fab5e3087c470c13128e",
+                                 "size":  21756419,
                                  "minShell":  "0.2.4"
                              }
                  }

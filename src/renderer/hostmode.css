@@ -434,3 +434,8 @@ body.online-link-on .action-subs .sub-host-link { display: inline; }
 .action-main .primary.stop-solo { background: transparent; color: var(--brass); border: 2px solid var(--brass); box-shadow: none; }
 .action-main .primary.stop-solo:hover { background: rgba(0, 0, 0, .25); color: var(--brass-2); border-color: var(--brass-2); }
 .action-main .primary.stop-solo::before { display: none; }
+
+/* ---- DF-ITEMSLINK (Nov 17): the item list line on the Inventory page sits under the lead with the lead's own gap below it, ---- */
+/* because .gv-label pulls itself 10px up into that gap (styles.css) and overlapped the line. */
+#page-items .lead:has(+ .items-link) { margin-bottom: 10px; }
+#page-items .items-link { margin: 0 0 24px; }
