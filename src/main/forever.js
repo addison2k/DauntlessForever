@@ -501,6 +501,7 @@ async function play(mode, worldHost) {
   if (S.helper && S.phase === 'hosting' && mode === 'fresh') return playAway();   // Host Mode is up: your game goes where the people are (your own world when that is it)
   if (S.phase !== 'off') throw new Error('Forever is already running. Stop it first.');
   const why = missing(); if (why) throw new Error(why);
+  const loader = foreignLoader25(); if (loader) throw new Error(loader);   // DF-NOMODS-INF
   // 'helper': host a world for others with no game on this PC (Forever Host Mode); the world is a fresh one
   S.helper = mode === 'helper'; S.helperOnly = mode === 'helper'; S.autoPlay = false;
   S.mode = mode === 'fresh' || mode === 'helper' ? 'fresh' : 'any'; S.error = ''; S.phase = 'asking'; S.role = null; S.world = null; push();
@@ -1265,9 +1266,37 @@ function syncGameFolder25(why) {
     if (bad.length) log('game folder: could not update ' + bad.join(', ') + ' (press Set up on the 1.14.7 tile if this stays)', true);
   } catch (e) { log('game folder check: ' + e.message, true); }
 }
+// DF-NOMODS-INF (Nov 18): Infinite is standard rules for everyone. The launcher never loads UE4SS there (writeForeverMods),
+// but a mod loader put in by hand (UE4SS's dwmapi.dll, an ASI loader, ReShade...) sits next to the game exe under the name
+// of a Windows file the game loads, and Windows loads it into the game AND every server copy. Infinite does not start
+// while one is there. Only these names can load by themselves: any other dll in the folder (old dxgi backups, tools)
+// does nothing unless something injects it, so it is left alone. Modded mode moves an old dwmapi.dll aside (ue4ss.cjs).
+// xinput1_3.dll ships with the game (Microsoft XInput 9.18.944): only a different file under that name counts.
+const LOADER_NAMES25 = ['dwmapi.dll', 'dinput8.dll', 'version.dll', 'winmm.dll', 'winhttp.dll', 'wininet.dll', 'dsound.dll',
+  'd3d9.dll', 'd3d11.dll', 'd3d12.dll', 'opengl32.dll', 'xinput1_4.dll', 'xinput9_1_0.dll'];
+const XINPUT13_SHA25 = '756CAD002E1553CFA1A91EBE8C1B9380FFABE0B4B1916C4A4DB802396DDFBEF8';
+function foreignLoader25() {
+  try {
+    const cfg = readJson(path.join(P.versionsDataDir(), '1.14.7', 'config.json'), null);
+    const game = cfg && typeof cfg.GameDir === 'string' ? cfg.GameDir : '';
+    if (!game) return '';
+    const win64 = path.join(game, 'Archon', 'Binaries', 'Win64');
+    let names; try { names = fs.readdirSync(win64); } catch { return ''; }
+    const found = names.filter(n => LOADER_NAMES25.includes(n.toLowerCase()));
+    const xi = names.find(n => n.toLowerCase() === 'xinput1_3.dll');
+    if (xi) {
+      let h = ''; try { h = crypto.createHash('sha256').update(fs.readFileSync(path.join(win64, xi))).digest('hex').toUpperCase(); } catch {}
+      if (h && h !== XINPUT13_SHA25) found.push(xi);
+    }
+    if (!found.length) return '';
+    log('Infinite: not started, mod loader file(s) in the game folder ' + win64 + ': ' + found.join(', '), true);
+    return 'Infinite does not run with mods. These files next to the game load mods or tools into it: ' + found.join(', ') + ' (in ' + win64 + '). Delete them or move them out of that folder, then press Play again. Mods from the Mods page do not need them.' + (xi && found.includes(xi) ? ' xinput1_3.dll is a game file: do not just delete it, put the game\'s own copy back (the 1.14.7 download has it).' : '');
+  } catch (e) { return ''; }
+}
 async function play25() {
   if (S.phase !== 'off') throw new Error('Forever is already running. Stop it first.');
   const why = missing(); if (why) throw new Error(why);
+  const loader = foreignLoader25(); if (loader) throw new Error(loader);   // DF-NOMODS-INF
   syncGameFolder25('before Play');   // DF25-GAMEFILES
   if (!readScore25()) throw new Error('Rate this PC first. Every player needs a score: without one you cannot join or open a hunt.');   // Addison, Oct 31: everyone rates
   S.helper = false; S.helperOnly = false; S.autoPlay = false; S.wantWorld = null; S.mode = 'fresh'; S.error = ''; S.phase = 'asking'; S.role = null; S.world = null; S.is25 = true; S.town = null; push();

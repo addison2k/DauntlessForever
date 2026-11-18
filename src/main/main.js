@@ -899,7 +899,7 @@ ipcMain.handle('mods:act', async (_e, id, action, a, b) => {
 });
 // DF-CMODS (Nov 10): reviewed mods from mods.dauntlessforever.com, installed into the same UE4SS Mods folder and switched
 // on through the same mods.txt as the Mods page (main/community.js). Only approved code, checked against its SHA-256.
-require('./community').init({ social: require('./social'), byId: (id) => byId(id), runModsTool: (v, args) => runModsTool(v, args), log: (t) => log(t) });
+require('./community').init({ social: require('./social'), byId: (id) => byId(id), runModsTool: (v, args) => runModsTool(v, args), log: (t) => log(t), isRunning: (id) => R.isRunning(id) || R.isRunning(id + ':host') });   // DF-CMODFOLDER: game running (solo or Host Mode)
 // DF-BUILDS (Nov 6): read-only catalogs + the local build library (main/builds.js); never opens a save for writing
 const BUILDS = require('./builds');
 ipcMain.handle('builds:catalog', (_e, id) => BUILDS.catalog(byId(id)));

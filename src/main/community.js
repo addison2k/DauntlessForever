@@ -82,10 +82,46 @@ function inside(dir, rel) {
   const full = path.resolve(dir, ...rel.split('/'));
   return full.startsWith(path.resolve(dir) + path.sep) ? full : null;
 }
-// The folder a mod goes in: its name and id, in the characters tools\ue4ss.cjs accepts ([\w .-]).
-function folderName(title, id) {
-  const t = String(title || '').replace(/[^\w .-]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 40).replace(/[. ]+$/, '');
-  return (t || 'Mod') + ' - ' + id;
+// The folder a mod goes in. DF-CMODFOLDER (Nov 18): NO spaces. UE4SS 3.0.1 removes every space from a mods.txt line before
+// it looks the mod up, so "PotionTweaks - id : 1" looked for "PotionTweaks-id" and the mod never started. The folder is
+// the mod's title alone when that name is free (the name its author tested with: some mods find their files by it),
+// else title-id, else title-id-2..9. Characters: [\w.-] only.
+function folderBase(title) {
+  const t = String(title || '').replace(/[^\w.-]+/g, '-').replace(/-{2,}/g, '-').replace(/^[-.]+/, '').slice(0, 40).replace(/[-.]+$/, '');
+  return t && t.toLowerCase() !== 'shared' && !RESERVED.test(t.split('.')[0]) ? t : 'Mod';
+}
+function folderName(title, id) { return folderBase(title) + '-' + id; }
+function pickFolder(modsDir, title, id) {
+  const b = folderBase(title), names = [b, b + '-' + id];
+  for (let n = 2; n <= 9; n++) names.push(b + '-' + id + '-' + n);
+  return names.find(n => !fs.existsSync(path.join(modsDir, n))) || null;
+}
+// A mod installed before DF-CMODFOLDER sits in a folder with spaces and never starts. Renamed to a name without them,
+// and its mods.txt line follows it (same on/off). Not while the game runs (its files are in use then). Never throws.
+function fixFolders(v, modsDir) {
+  let n = 0;   // how many were renamed (the Mods page draws its list again then)
+  try {
+    if (ctx.isRunning && ctx.isRunning(v.id)) return 0;
+    const mine = installed(modsDir);
+    for (const id of Object.keys(mine)) {
+      const old = mine[id].folder; if (!/\s/.test(old)) continue;
+      const to = pickFolder(modsDir, mine[id].title, id); if (!to) continue;
+      try { fs.renameSync(path.join(modsDir, old), path.join(modsDir, to)); }
+      catch (e) { ctx.log(`Community mods: could not rename "${old}" to "${to}" (${e.code || e.message}); tried again next time.`); continue; }
+      try {
+        const list = path.join(modsDir, 'mods.txt');
+        if (fs.existsSync(list)) {
+          const esc = old.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const re = new RegExp('^(\\s*)' + esc + '(\\s*:\\s*[01]\\s*)$');
+          const lines = fs.readFileSync(list, 'utf8').split(/\r?\n/);
+          let hit = false; const outL = lines.map(l => { const m = re.exec(l); if (!m) return l; hit = true; return m[1] + to + m[2]; });
+          if (hit) writeAtomic(list, outL.join('\r\n'));
+        }
+      } catch (e) { ctx.log(`Community mods: renamed "${old}" to "${to}" but could not update mods.txt (${e.message}). Switch it on again under Your mods.`); continue; }
+      n++; ctx.log(`Community mods: renamed "${old}" to "${to}" (UE4SS cannot start a mod whose folder name has spaces)`);
+    }
+  } catch (e) { ctx.log('Community mods: folder check: ' + e.message); }
+  return n;
 }
 function readMarker(dir) {
   try {
@@ -117,10 +153,11 @@ async function status(versionId, fresh) {   // fresh: the Mods page was just ope
   const v = ctx.byId(versionId); if (!v) return { ok: false, error: 'Unknown version.' };
   const ms = await ctx.runModsTool(v, ['status']);
   if (!ms || !ms.ok) return { ok: false, error: (ms && ms.error) || 'The mods helper did not answer.' };
+  const renamed = ms.installed && ms.folder ? fixFolders(v, ms.folder) : 0;   // DF-CMODFOLDER
   const mine = ms.installed && ms.folder ? installed(ms.folder) : {};
   let mods = null;
-  try { mods = await list(versionId, !!fresh); } catch (e) { return { ok: true, cap: false, why: e.message, installed: mine, ue4ss: !!ms.installed, on: !!ms.on }; }
-  return { ok: true, cap: true, base: base(), mods, installed: mine, ue4ss: !!ms.installed, on: !!ms.on };
+  try { mods = await list(versionId, !!fresh); } catch (e) { return { ok: true, cap: false, why: e.message, installed: mine, ue4ss: !!ms.installed, on: !!ms.on, renamed }; }
+  return { ok: true, cap: true, base: base(), mods, installed: mine, ue4ss: !!ms.installed, on: !!ms.on, renamed };
 }
 async function install(versionId, modId) {
   if (!/^[a-z0-9]{6,16}$/.test(String(modId || ''))) return { ok: false, error: 'Unknown mod.' };
@@ -129,6 +166,7 @@ async function install(versionId, modId) {
   if (!ms || !ms.ok) return { ok: false, error: (ms && ms.error) || 'The mods helper did not answer.' };
   if (!ms.installed || !ms.folder) return { ok: false, error: 'Get UE4SS first (the button above). Mods go in the folder that comes with it.' };
   const modsDir = ms.folder;
+  fixFolders(v, modsDir);   // DF-CMODFOLDER: an older install with spaces in its folder is renamed first
 
   // 1. what the list says, asked fresh
   let entry;
@@ -157,14 +195,9 @@ async function install(versionId, modId) {
 
   // 4. where it goes: its own folder from before, or a new one that is not somebody else's
   const before = installed(modsDir)[modId];
-  let folder = before ? before.folder : folderName(entry.title, modId);
-  if (!before) {
-    for (let n = 2; fs.existsSync(path.join(modsDir, folder)); n++) {
-      if (n > 9) return { ok: false, error: 'There is already a folder with this mod\'s name in the mods folder. Nothing was installed.' };
-      folder = folderName(entry.title, modId) + '-' + n;
-    }
-  }
-  if (!/^[\w .-]{1,80}$/.test(folder)) return { ok: false, error: 'Could not name the mod\'s folder. Nothing was installed.' };
+  let folder = before ? before.folder : pickFolder(modsDir, entry.title, modId);   // DF-CMODFOLDER
+  if (!folder) return { ok: false, error: 'There is already a folder with this mod\'s name in the mods folder. Nothing was installed.' };
+  if (!/^[\w.-]{1,80}$/.test(folder)) return { ok: false, error: 'Could not name the mod\'s folder. Nothing was installed.' };
   const dir = path.join(modsDir, folder);
   const targets = files.map(f => ({ f, full: inside(dir, f.path) }));
   if (targets.some(t => !t.full)) return { ok: false, error: 'A file would land outside the mod\'s folder. Nothing was installed.' };
@@ -202,4 +235,4 @@ function init(c) {
   ipcMain.handle('community:status', (_e, versionId, fresh) => status(versionId, fresh).catch(e => ({ ok: false, error: e.message })));
   ipcMain.handle('community:install', (_e, versionId, modId) => install(versionId, modId).catch(e => ({ ok: false, error: e.message })));
 }
-module.exports = { init, status, install, installed, checkPath, folderName, _setCtx: (c) => { ctx = c; cache.clear(); } };
+module.exports = { init, status, install, installed, checkPath, folderName, pickFolder, fixFolders, _setCtx: (c) => { ctx = c; cache.clear(); } };

@@ -761,6 +761,7 @@ async function renderCommunityMods(d, act) {
   const fresh = cmodsFresh; cmodsFresh = false;
   let c = null; try { c = await L.communityStatus(ver, fresh); } catch {}
   if (my !== cmodsSeq || ver !== modsVer) return;   // a newer render took over
+  if (c && c.renamed > 0) { renderMods(); return; }   // DF-CMODFOLDER: old mod folders were just renamed; draw the list again with their new names
   const inst = (c && c.ok && c.installed) || {};
   // "Your mods" rows: a mod from the mods page shows its own name, not its folder's
   for (const x of Object.values(inst)) {
