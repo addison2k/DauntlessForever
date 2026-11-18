@@ -897,6 +897,9 @@ ipcMain.handle('mods:act', async (_e, id, action, a, b) => {
   }
   return { ok: false, error: 'Unknown action.' };
 });
+// DF-CMODS (Nov 10): reviewed mods from mods.dauntlessforever.com, installed into the same UE4SS Mods folder and switched
+// on through the same mods.txt as the Mods page (main/community.js). Only approved code, checked against its SHA-256.
+require('./community').init({ social: require('./social'), byId: (id) => byId(id), runModsTool: (v, args) => runModsTool(v, args), log: (t) => log(t) });
 // DF-BUILDS (Nov 6): read-only catalogs + the local build library (main/builds.js); never opens a save for writing
 const BUILDS = require('./builds');
 ipcMain.handle('builds:catalog', (_e, id) => BUILDS.catalog(byId(id)));
@@ -1037,10 +1040,11 @@ ipcMain.handle('game:check', async (_e, id) => {
 // friends service, and the dashboard lists them for download (report.js).
 const RPT = require('./report');
 let reportBusy = false;
-ipcMain.handle('report:send', async (_e, id, name, reason) => {
+ipcMain.handle('report:send', async (_e, id, name, reason, discord) => {   // DF-REPORTDISCORD (Nov 16): discord is optional
   const v = byId(id); if (!v) return { ok: false, error: 'unknown version' };
   const S = require('./social');
   name = String(name || '').trim(); reason = String(reason || '').trim();
+  discord = String(discord || '').trim().slice(0, 40);   // DF-REPORTDISCORD
   if (reason.length < 3) return { ok: false, error: 'Say what happened (a few words is fine).' };
   if (!S.identity()) return { ok: false, error: 'The launcher is not signed in to the online service yet. If Offline Forever mode is on in Settings, turn it off, wait a moment, then send again.' };
   if (reportBusy) return { ok: false, error: 'Already sending your logs.' };
@@ -1056,7 +1060,7 @@ ipcMain.handle('report:send', async (_e, id, name, reason) => {
     } catch {}
     const { zip, files } = RPT.collect(v, info);
     log('report', id, `${files} files, ${zip.length} bytes`);
-    const r = await S.call('POST', '/v1/report', { name: name.slice(0, 40), reason: reason.slice(0, 2000), version: v.id, pkg: info.pkg,
+    const r = await S.call('POST', '/v1/report', { name: name.slice(0, 40), reason: reason.slice(0, 2000), discord, version: v.id, pkg: info.pkg,
       launcher: info.launcher, zip: zip.toString('base64') }, false, 240000);
     log('report', id, 'sent as #' + r.report);
     return { ok: true, report: r.report, kb: Math.round(zip.length / 1024) };

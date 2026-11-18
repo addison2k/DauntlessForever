@@ -79,6 +79,8 @@ contextBridge.exposeInMainWorld('launcher', {
   buildsLocal: invoke('builds:local'),
   modsStatus: invoke('mods:status'),
   modsAct: invoke('mods:act'),
+  communityStatus: invoke('community:status'),     // DF-CMODS: (versionId) { ok, cap, mods, installed, ue4ss, on, base }
+  communityInstall: invoke('community:install'),   // DF-CMODS: (versionId, modId) { ok, folder, version, updated, switchedOn } | { ok: false, error }
   setItems: invoke('items:set'),
   gearItems: invoke('items:gear'),
   patchNotes: invoke('patchnotes:list'),

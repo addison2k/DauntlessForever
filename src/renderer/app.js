@@ -43,7 +43,7 @@ function drawPage(name) {
   if (name === 'events') renderEvents();
   if (name === 'rules') renderRules();
   if (name === 'items') renderItems(true);
-  if (name === 'mods') renderMods();
+  if (name === 'mods') { cmodsFresh = true; renderMods(); }   // DF-CMODS: opening the page asks the mods page again
   if (name === 'slayer') renderSlayer();
   if (name === 'patches') renderPatches();
 }
@@ -485,7 +485,16 @@ function renderHostButton() {
   // DF-INFINITE v3: "Now playing" over the running button (Infinite's state comes from forever.js as a body class)
   { const inf = document.body.classList.contains('inf-playing'), hosting = hostingThis || !!hm;
     const cap = (id, on) => { const e = $(id); if (e) e.classList.toggle('now', !!on); };
-    cap('cap-online', !!(soc && soc.search && soc.search.version === v.id)); cap('cap-host', hosting); cap('cap-inf', inf && v.id === '1.14.7'); cap('cap-solo', st.busy === 'play' && !hosting && !(inf && v.id === '1.14.7')); }
+    cap('cap-online', !!(soc && soc.search && soc.search.version === v.id)); cap('cap-host', hosting); cap('cap-inf', inf && v.id === '1.14.7'); cap('cap-solo', st.busy === 'play' && !hosting && !(inf && v.id === '1.14.7'));
+    // DF-SOLOSTOP (Nov 16): a solo game is running: the Play solo button reads "Stop solo" and stops it (like Stop Infinite);
+    // the separate "Stop everything" button is not needed then. Hosting, Host Mode, a friend's game, Play online: unchanged.
+    const p = $('btn-primary');
+    const solo = st.busy === 'play' && !hosting && !(inf && v.id === '1.14.7') && !run.some(r => r.id === v.id + ':join') && !(soc && soc.search && soc.search.version === v.id);
+    if (p) {
+      p.classList.toggle('stop-solo', solo);
+      if (solo) { p.textContent = t('Stop solo'); p.disabled = false; $('btn-stop').hidden = true; }
+    }
+  }
   // Light hosting: under the Host button, only where Host Mode can run this version
   const lo = $('host-light-opt'), lbox = $('opt-light');
   const canHM = !!(hostCan && hostCan.has(v.id));
@@ -682,7 +691,7 @@ async function renderMods() {
   const supported = new Set(found.map(x => x.v.id));
   modsVer = pickVersion(all, modsVer, supported);
   const cur = found.find(x => x.v.id === modsVer);
-  versionPicker('mods-vtabs', 'mods-vbanner', all, modsVer, supported, (id) => { modsVer = id; modsNote = null; modsErr = false; renderMods(); },
+  versionPicker('mods-vtabs', 'mods-vbanner', all, modsVer, supported, (id) => { modsVer = id; modsNote = null; modsErr = false; cmodsFresh = true; renderMods(); },
     cur ? t('Mods for <b>Dauntless {version}</b>. Every version keeps its own mods.', { version: esc(modsVer) }) : t('Mods are not available for Dauntless {version} yet.', { version: esc(modsVer || '') }));
   const d = cur && cur.d, ok = d && d.ok;
   $('mods-none').hidden = !!ok; $('mods-body').hidden = !ok;
@@ -727,7 +736,7 @@ async function renderMods() {
   let toolsHead = false;
   for (const m of shown) {
     if (m.builtin && !toolsHead) { toolsHead = true; list.insertAdjacentHTML('beforeend', `<div class="season-row"><div class="season-kind"><b>${esc(t('Comes with UE4SS'))}</b> ${esc(t('(tools for mod makers; leave them as they are if you are not sure)'))}</div></div>`); }
-    const row = document.createElement('div'); row.className = 'season-row rule-row' + (m.on ? ' active' : '');
+    const row = document.createElement('div'); row.className = 'season-row rule-row' + (m.on ? ' active' : ''); row.dataset.mod = m.name;
     row.innerHTML = `<div><div class="season-name">${esc(m.title || m.name)}</div><div class="season-kind">${esc(m.about ? m.about : m.scripts ? (m.builtin ? t('UE4SS tool') : t('Mod')) : t('This folder has no Scripts or dlls folder, so UE4SS may not load it.'))}</div>${Array.isArray(m.keys) && m.keys.length ? `<div class="season-kind mod-keys">${esc(t('Keys'))}: ${m.keys.map((k) => `<b>${esc(k[0])}</b> ${esc(k[1])}`).join(' &middot; ')}</div>` : ''}</div>
       <div class="rule-choices" role="group" aria-label="${esc(m.name)}"></div>`;
     const host = row.querySelector('.rule-choices');
@@ -738,6 +747,84 @@ async function renderMods() {
       host.appendChild(b);
     }
     list.appendChild(row);
+  }
+  renderCommunityMods(d, act);
+}
+
+// ---------------------------------------------------------------- DF-CMODS: reviewed mods from mods.dauntlessforever.com
+// main/community.js does the work: only approved code, checked against its fingerprint, into the same Mods folder, switched
+// on through the same mods.txt. This section only shows while the mods page answers, so it can ship before the site is up.
+let cmodsSeq = 0; var cmodsFresh = true;   // var: drawPage may use it before this line has run. fresh: ask the site again (page opened, version changed); otherwise its 60 s list will do
+async function renderCommunityMods(d, act) {
+  const box = $('cmods'); if (!box || !L.communityStatus) return;
+  const my = ++cmodsSeq, ver = modsVer;
+  const fresh = cmodsFresh; cmodsFresh = false;
+  let c = null; try { c = await L.communityStatus(ver, fresh); } catch {}
+  if (my !== cmodsSeq || ver !== modsVer) return;   // a newer render took over
+  const inst = (c && c.ok && c.installed) || {};
+  // "Your mods" rows: a mod from the mods page shows its own name, not its folder's
+  for (const x of Object.values(inst)) {
+    const row = Array.from(document.querySelectorAll('#mods-list .season-row')).find(r => r.dataset.mod === x.folder);
+    if (!row) continue;
+    const n = row.querySelector('.season-name'), k = row.querySelector('.season-kind');
+    if (n && x.title) n.textContent = x.title;
+    if (k) k.textContent = t('From the mods page, version {n}.', { n: x.version });
+  }
+  if (!c || !c.ok || !c.cap) { box.hidden = true; return; }
+  box.hidden = false;
+  const list = $('cmods-list'); list.innerHTML = '';
+  const offered = new Set(c.mods.map(m => m.id));
+  const isOn = (folder) => !!((d.mods || []).find(m => m.name === folder) || {}).on;
+  const fp = (sha) => String(sha || '').slice(0, 16).replace(/(.{4})(?=.)/g, '$1 ');
+  const read = (id) => L.openUrl(c.base + '/m/' + id);
+  const mkRow = (name, kind, meta) => {
+    const row = document.createElement('div'); row.className = 'season-row rule-row';
+    const left = document.createElement('div');
+    const a = document.createElement('div'); a.className = 'season-name'; a.textContent = name; left.appendChild(a);
+    const b = document.createElement('div'); b.className = 'season-kind'; b.textContent = kind; left.appendChild(b);
+    if (meta) { const m = document.createElement('div'); m.className = 'season-kind'; m.textContent = meta; left.appendChild(m); }
+    const right = document.createElement('div'); right.className = 'rule-choices';
+    row.appendChild(left); row.appendChild(right); list.appendChild(row);
+    return right;
+  };
+  const btn = (host, cls, label, onClick, title) => {
+    const b = document.createElement('button'); b.className = cls; b.textContent = label;
+    if (title) b.title = title;
+    if (onClick) b.onclick = onClick; else b.disabled = true;
+    host.appendChild(b); return b;
+  };
+  // pulled since it was installed: the launcher never deletes it, so it says so and offers the switch
+  for (const [id, x] of Object.entries(inst)) {
+    if (offered.has(id)) continue;
+    const host = mkRow(x.title || x.folder, t('No longer approved on the mods page. Switch it off unless you know why it was taken down.'), null);
+    host.parentElement.classList.add('active');
+    host.parentElement.querySelector('.season-kind').classList.add('action-note', 'err');
+    btn(host, 'ghost', t('Read why'), () => read(id));
+    if (isOn(x.folder)) btn(host, 'primary-sm', t('Switch off'), () => act('mod', x.folder, 'off', t('{name} off: applies the next time you press Play.', { name: x.title || x.folder })));
+  }
+  if (!c.mods.length) { mkRow(t('Nothing approved for {version} yet.', { version: ver }), t('Approved mods show up here as soon as a reviewer passes them.'), null); return; }
+  for (const m of c.mods) {
+    const have = inst[m.id];
+    const meta = [t('Version {n}', { n: m.version }), t('fingerprint {fp}', { fp: fp(m.sha256) }), m.likes ? t('{n} likes', { n: m.likes }) : ''].filter(Boolean).join(', ');
+    const host = mkRow(m.title, (m.author ? t('by {name}', { name: m.author }) + '. ' : '') + m.summary, meta);
+    btn(host, 'ghost', t('Read the code'), () => read(m.id));
+    const install = async () => {
+      if (modsBusy) return; modsBusy = true;
+      const note = $('mods-note'); note.textContent = t('Installing {name}...', { name: m.title }); note.classList.remove('err');
+      let r; try { r = await L.communityInstall(ver, m.id); } catch (e) { r = { ok: false, error: String(e && e.message || e) }; }
+      modsBusy = false;
+      if (!r || !r.ok) { modsNote = tm(r && r.error) || t('Could not install it.'); modsErr = true; }
+      else {
+        modsNote = (r.updated ? t('{name} updated to version {n}.', { name: r.title, n: r.version }) : t('{name} installed and switched on.', { name: r.title }))
+          + (r.warn ? ' ' + tm(r.warn) : '') + (!d.on ? ' ' + t('Turn on Modded mode to use it.') : ' ' + t('It applies the next time you press Play.'));
+        modsErr = false;
+      }
+      renderMods();
+    };
+    if (!d.installed) btn(host, 'primary-sm', t('Install'), null, t('Get UE4SS first'));
+    else if (!have) btn(host, 'primary-sm', t('Install'), install);
+    else if (have.version < m.version) btn(host, 'primary-sm', t('Update to version {n}', { n: m.version }), install);
+    else btn(host, 'ghost', t('Installed'), null);
   }
 }
 
@@ -1051,6 +1138,7 @@ function renderLog(id) {
 
 // ---------------------------------------------------------------- actions
 async function primary() {
+  if ($('btn-primary').classList.contains('stop-solo')) { $('btn-stop').click(); return; }   // DF-SOLOSTOP: the same question and stop as "Stop everything"
   const v = versions.find(x => x.id === selected); if (!v || !v.hasPackage) return;
   const st = stateOf(v);
   if (st.key === 'busy') return;
@@ -1356,8 +1444,9 @@ function wire() {
     $('report-title').textContent = t('Send my {version} logs', { version: v.name });
     const msg = $('report-msg'); msg.textContent = ''; msg.className = 'action-note';
     $('report-send').disabled = false; $('report-send').hidden = false; $('report-cancel').textContent = t('Cancel');
-    $('report-reason').disabled = false; $('report-name').disabled = false;
+    $('report-reason').disabled = false; $('report-name').disabled = false; $('report-discord').disabled = false;   // DF-REPORTDISCORD
     if (!$('report-name').value) { try { const p = await L.playerGet(); $('report-name').value = (p && p.name) || ''; } catch {} }
+    if (!$('report-discord').value) { try { $('report-discord').value = localStorage.getItem('df.reportDiscord') || ''; } catch {} }   // DF-REPORTDISCORD: what this player typed last time
     if (!$('dlg-report').open) $('dlg-report').showModal();
     setTimeout(() => $('report-reason').focus(), 30);
   }
@@ -1366,15 +1455,17 @@ function wire() {
     const v = reportFor; if (!v) return;
     const reason = $('report-reason').value.trim(), msg = $('report-msg');
     if (reason.length < 3) { msg.textContent = t('Say what happened (a few words is fine).'); msg.className = 'action-note err'; $('report-reason').focus(); return; }
-    $('report-send').disabled = true; $('report-reason').disabled = true; $('report-name').disabled = true;
+    $('report-send').disabled = true; $('report-reason').disabled = true; $('report-name').disabled = true; $('report-discord').disabled = true;
     msg.className = 'action-note'; msg.textContent = t('Packing and sending your logs...');
-    const r = await L.sendReport(v.id, $('report-name').value.trim(), reason);
+    const discord = $('report-discord').value.trim();   // DF-REPORTDISCORD: optional, any style of Discord name, never checked here
+    try { localStorage.setItem('df.reportDiscord', discord); } catch {}
+    const r = await L.sendReport(v.id, $('report-name').value.trim(), reason, discord);
     if (r && r.ok) {
       msg.textContent = t('Sent. Your report number is #{n}. Mention it on Discord so we can find it.', { n: r.report });
       $('report-reason').value = ''; $('report-send').hidden = true; $('report-cancel').textContent = t('Close');
     } else {
       msg.textContent = t('Could not send the logs: {error}', { error: tm(r && r.error) || '?' }); msg.className = 'action-note err';
-      $('report-send').disabled = false; $('report-reason').disabled = false; $('report-name').disabled = false;
+      $('report-send').disabled = false; $('report-reason').disabled = false; $('report-name').disabled = false; $('report-discord').disabled = false;
     }
   });
   $('btn-log-clear').addEventListener('click', () => { if (selected) { logs[selected] = []; renderDetail(); } });

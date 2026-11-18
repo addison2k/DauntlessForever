@@ -10,22 +10,22 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-11-14.2",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-14.2.zip",
-                         "sha256":  "ce76a4c923ba077f7f0c69c10abecfa016bdf47a7e33bd84a0a24587682d97d6",
-                         "date":  "2026-11-14",
-                         "note":  "Chat: everyone in the same town or hunt now shares one chat room, and other players no longer see your sign-in id (idea and first version by Cybervortex). New: a word filter for chat and for player names"
+                         "packageVersion":  "2026-11-18",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-18.zip",
+                         "sha256":  "ce588f985292c92f2406a95aca5de539d66b770e4eb4034371904256de15a52f",
+                         "date":  "2026-11-18",
+                         "note":  "Crit numbers: style picker with names, sliders that save, opacity, part/stagger/wound crit colours, Fel fixed; crit styles are shared with your hunt; Behemoth Health Bar option (Options \u003e Gameplay, off by default)."
                      }
                  ],
     "launcher":  {
-                     "version":  "0.4.10",
+                     "version":  "0.4.13",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "Play online is back. The bottom bar on the Play page now reaches the edge of the window.",
-                     "date":  "2026-11-08",
+                     "notes":  "Download screen: the note no longer covers Cancel download, and the download progress line shows again",
+                     "date":  "2026-11-17",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.10.asar",
-                                 "sha256":  "32daf8f3a5688e2d7da25ff8cb4625462cc113ba4d238d7fef40dfedb2bf39b0",
-                                 "size":  20071607,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.13.asar",
+                                 "sha256":  "843f9075b6a0c407ffdbf0122ccce11b3d8750e1d3cb83133a5f93a76a15b879",
+                                 "size":  21797849,
                                  "minShell":  "0.2.4"
                              }
                  }

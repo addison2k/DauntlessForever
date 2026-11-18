@@ -10,7 +10,7 @@ $ConfigFile = Join-Path $Root 'config.json'
 $ExeHash      = 'F3F95FBF22709EF077A11632ED95D675B7209B7E0172D9ECB9BA7D02A1FBB66B'   # Dauntless 1.14.7, CL 647472
 $EpicEosHash  = 'CBC0E5C922CEB88A9FA99121008AE9CD76244B17753701D9D25C6B596EA2FBFC'   # Epic's EOSSDK-Win64-Shipping.dll
 $StandInHash  = '4113C9EEBFBAC08532B6566A48F69E4F64A6B8E18A18AAFBA43F62F8F7DFDF70'   # bin\EOSSDK-Win64-Shipping.dll (offline sign-in)
-$LoaderHash   = '5B929D5E2B721CB463D6AC5F6B10CBB53C92DE698E667A9E4D1F22AD64AC1257'    # bin\dxgi.dll (loadout inline search and rename)
+$LoaderHash   = '0F3EC762FC86E01BCA65122D6C33AE1A4B75E9E11FDA64BEA4F3FD8AF9D635FA'    # bin\dxgi.dll (null RHI for server copies Oct 24; crash guard 3 Oct 24; boss bar crash fix Oct 21; in-game text chat Oct 21; server loader: fix5 + KombatKing's equipment fix R1 + owner-only replication; client: significance guard, cheap checks Oct 21)
 # Quest text fix by KombatKing (AGPL-3.0, source\QuestDialogue1147-R2-source.zip): adds the missing "Unspecified"
 # addressee lines to the game's own text, so quests and dialogue show real sentences. Copied into Archon\Content\Paks.
 $QuestPakName = 'zzzzzzzzzzzzzzzz_QuestDialogueFallback1147_P.pak'

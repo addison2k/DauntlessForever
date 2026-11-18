@@ -429,3 +429,19 @@ body.online-link-on .action-subs .sub-host-link { display: inline; }
 /* Only the background is drawn wider; the buttons, captions and the gear stay where they were. */
 .content:has(> #page-play:not([hidden])) { overflow-x: hidden; }
 #play-dock::after { content: ""; position: absolute; top: -1px; bottom: 0; left: 100%; width: 100vw; background: var(--bg-2); border-top: 1px solid var(--line-2); box-shadow: 0 -14px 28px rgba(0,0,0,.45); clip-path: inset(-60px 0 0 0); pointer-events: none; }
+
+/* ---- DF-SOLOSTOP (Nov 16): while a solo game runs the Play solo button reads Stop solo, drawn as an outline like Stop Infinite. ---- */
+.action-main .primary.stop-solo { background: transparent; color: var(--brass); border: 2px solid var(--brass); box-shadow: none; }
+.action-main .primary.stop-solo:hover { background: rgba(0, 0, 0, .25); color: var(--brass-2); border-color: var(--brass-2); }
+.action-main .primary.stop-solo::before { display: none; }
+
+/* ---- DF-ITEMSLINK (Nov 17): the item list line on the Inventory page sits under the lead with the lead's own gap below it, ---- */
+/* because .gv-label pulls itself 10px up into that gap (styles.css) and overlapped the line. */
+#page-items .lead:has(+ .items-link) { margin-bottom: 10px; }
+#page-items .items-link { margin: 0 0 24px; }
+
+/* ---- DF-NOTESIDE (Nov 17): the note over the bar (e.g. "You can keep using the launcher...") stops short of Cancel download / Stop everything, so it never covers them ---- */
+#play-dock:has(.action-side > button:not([hidden])) .action-note { right: 250px; }
+#play-dock:has(.action-side > #btn-stop:not([hidden])):has(.action-side > #btn-cancel:not([hidden])) .action-note { right: 410px; }
+/* DF-NOTESIDE: while downloading, room under the progress bar for the note and the button, so they no longer cover the GB / speed / time-left line */
+body:has(#play-dock .action-note:not(:empty)) #progress:not([hidden]), body:has(.action-side > button:not([hidden])) #progress:not([hidden]) { margin-bottom: 52px; }
