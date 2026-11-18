@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.4.12",
+                     "version":  "0.4.13",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "Fixed the item list line overlapping the Game version label on the Inventory page.",
+                     "notes":  "Download screen: the note no longer covers Cancel download, and the download progress line shows again",
                      "date":  "2026-11-17",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.12.asar",
-                                 "sha256":  "d1d3ae62acf0550c5361a32bddd09bedb485d2bcafd0fab5e3087c470c13128e",
-                                 "size":  21756419,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.13.asar",
+                                 "sha256":  "843f9075b6a0c407ffdbf0122ccce11b3d8750e1d3cb83133a5f93a76a15b879",
+                                 "size":  21797849,
                                  "minShell":  "0.2.4"
                              }
                  }

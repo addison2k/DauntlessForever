@@ -439,3 +439,9 @@ body.online-link-on .action-subs .sub-host-link { display: inline; }
 /* because .gv-label pulls itself 10px up into that gap (styles.css) and overlapped the line. */
 #page-items .lead:has(+ .items-link) { margin-bottom: 10px; }
 #page-items .items-link { margin: 0 0 24px; }
+
+/* ---- DF-NOTESIDE (Nov 17): the note over the bar (e.g. "You can keep using the launcher...") stops short of Cancel download / Stop everything, so it never covers them ---- */
+#play-dock:has(.action-side > button:not([hidden])) .action-note { right: 250px; }
+#play-dock:has(.action-side > #btn-stop:not([hidden])):has(.action-side > #btn-cancel:not([hidden])) .action-note { right: 410px; }
+/* DF-NOTESIDE: while downloading, room under the progress bar for the note and the button, so they no longer cover the GB / speed / time-left line */
+body:has(#play-dock .action-note:not(:empty)) #progress:not([hidden]), body:has(.action-side > button:not([hidden])) #progress:not([hidden]) { margin-bottom: 52px; }
