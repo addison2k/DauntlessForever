@@ -42,7 +42,7 @@
                  },
     "package":  {
                     "dir":  "package",
-                    "packageVersion":  "2026-11-18",
+                    "packageVersion":  "2026-11-18.2",
                     "setup":  "tools/setup.ps1",
                     "uninstallArgs":  [
                                           "-Uninstall"
@@ -66,7 +66,7 @@
                                            },
                                            {
                                                "rel":  "Archon/Binaries/Win64/dxgi.dll",
-                                               "sha256":  "0F3EC762FC86E01BCA65122D6C33AE1A4B75E9E11FDA64BEA4F3FD8AF9D635FA"
+                                               "sha256":  "5C9B54047C317C6A8577E0CC52FF8FDFE083B0EC250BCF6D129FE2144230080F"
                                            },
                                            {
                                                "rel":  "Archon/Content/Paks/zzzzzzzzzzzzzzzz_QuestDialogueFallback1147_P.pak",

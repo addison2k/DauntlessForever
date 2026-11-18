@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-11-18",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-18.zip",
-                         "sha256":  "ce588f985292c92f2406a95aca5de539d66b770e4eb4034371904256de15a52f",
+                         "packageVersion":  "2026-11-18.2",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-18.2.zip",
+                         "sha256":  "44e85fbc5396d220641f96ac910edec28b8e83fb95d7407520b3e121f05a35fe",
                          "date":  "2026-11-18",
-                         "note":  "Crit numbers: style picker with names, sliders that save, opacity, part/stagger/wound crit colours, Fel fixed; crit styles are shared with your hunt; Behemoth Health Bar option (Options \u003e Gameplay, off by default)."
+                         "note":  "Behemoth Health Bar: when more than one behemoth is in the fight, up to 3 more name and health bars stack under the first."
                      }
                  ],
     "launcher":  {
