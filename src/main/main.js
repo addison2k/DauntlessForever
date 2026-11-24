@@ -900,6 +900,12 @@ ipcMain.handle('mods:act', async (_e, id, action, a, b) => {
 // DF-CMODS (Nov 10): reviewed mods from mods.dauntlessforever.com, installed into the same UE4SS Mods folder and switched
 // on through the same mods.txt as the Mods page (main/community.js). Only approved code, checked against its SHA-256.
 require('./community').init({ social: require('./social'), byId: (id) => byId(id), runModsTool: (v, args) => runModsTool(v, args), log: (t) => log(t), isRunning: (id) => R.isRunning(id) || R.isRunning(id + ':host') });   // DF-CMODFOLDER: game running (solo or Host Mode)
+// DF-LINK (Nov 24): Discord link and recover, move code (main/account.js). Shown only when the Friends service has the routes.
+require('./account').init({ social: require('./social'), runner: R, log: (t) => log('account', t),
+  busy: () => { try { if (require('./hostmode').isWanted()) return true; } catch {} try { const f = require('./forever').publicState(); if (f && f.phase && f.phase !== 'off') return true; } catch {} return false; } });
+// DF-BACKUP (Nov 24): Back up my saves / Restore from a backup (main/backup.js)
+require('./backup').init({ social: require('./social'), runner: R, registry: () => registry, win: () => win, log: (t) => log('backup', t),
+  busy: () => { try { if (require('./hostmode').isWanted()) return true; } catch {} try { const f = require('./forever').publicState(); if (f && f.phase && f.phase !== 'off') return true; } catch {} return false; } });
 // DF-BUILDS (Nov 6): read-only catalogs + the local build library (main/builds.js); never opens a save for writing
 const BUILDS = require('./builds');
 ipcMain.handle('builds:catalog', (_e, id) => BUILDS.catalog(byId(id)));

@@ -566,3 +566,16 @@ html:not([lang="en"]) .nav-new { padding: 1px 5px; font-size: 10px; }
 .action-main .primary::before { content: ""; width: 0; height: 0; border-left: 13px solid currentColor; border-top: 8px solid transparent; border-bottom: 8px solid transparent; }
 .action-main .primary:disabled::before { display: none; }
 .action-main .host-btn { flex: 1 1 0; min-width: 0; font-family: var(--display); font-size: 20px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 16px 24px; border-radius: 8px; border-width: 1.5px; }
+
+/* ---- DF-LINK (Nov 24): Settings > Discord and moving PCs; the move code box ---- */
+#dlg-link .fr-input { max-width: none; width: 100%; box-sizing: border-box; }
+.link-code-box { margin: 14px 0 4px; padding: 16px 18px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--bg); text-align: center; }
+.link-acct { font-size: 18px; font-weight: 600; user-select: text; }
+.link-code { font-family: Consolas, monospace; font-size: 40px; font-weight: 700; letter-spacing: 4px; margin: 6px 0 4px; color: var(--brass-2); user-select: text; }
+.link-code-box .setting-sub { word-break: normal; }
+#set-link-note.link-err { color: var(--ember); }
+/* DF-BACKUP: Settings > Back up and restore */
+#dlg-bak .fr-input { max-width: none; width: 100%; box-sizing: border-box; }
+#dlg-bak .bak-check { display: flex; gap: 8px; align-items: flex-start; margin: 10px 0; font-size: 13px; cursor: pointer; }
+#dlg-bak .bak-check input { margin-top: 2px; flex-shrink: 0; }
+#dlg-bak .setting-sub { margin: 6px 0; }

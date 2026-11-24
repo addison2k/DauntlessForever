@@ -84,6 +84,22 @@ contextBridge.exposeInMainWorld('launcher', {
   setItems: invoke('items:set'),
   gearItems: invoke('items:gear'),
   patchNotes: invoke('patchnotes:list'),
+  // DF-LINK: Discord link and recover, move code (main/account.js). Answers are { ok } or { ok: false, code, ... }
+  accountLink: invoke('account:link'),            // opens the browser, waits: { ok, discordName, replaced, playerIdRefused }
+  accountRecover: invoke('account:recover'),      // opens the browser, waits: { ok, name, current, same, hasPlayerId }
+  accountCancel: invoke('account:cancel'),
+  accountCopyUrl: invoke('account:copyUrl'),
+  accountResume: invoke('account:resume'),
+  accountClearOthers: invoke('account:clearOthers'),
+  accountUnlink: invoke('account:unlink'),
+  accountMoveCode: invoke('account:moveCode'),    // { ok, code, expiresIn, account, playerIdRefused }
+  accountMoveClaim: invoke('account:moveClaim'),  // (account, code) { ok, name, current, same, hasPlayerId }
+  accountAdopt: invoke('account:adopt'),          // writes what recover / moveClaim brought: { ok, name, hasPlayerId }
+  accountDrop: invoke('account:drop'),
+  backupCreate: invoke('backup:create'),
+  backupPick: invoke('backup:pick'),
+  backupRestore: invoke('backup:restore'),
+  backupDrop: invoke('backup:drop'),
   // one player name for every version and the Friends page (main/player.js)
   playerGet: invoke('player:get'),
   playerSet: invoke('player:set'),

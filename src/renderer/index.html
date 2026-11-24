@@ -48,6 +48,7 @@
     </a>
     <a class="side-link" id="lnk-patreon" data-url="" hidden><span class="nav-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M8 2.5 13.5 8 8 13.5 2.5 8z" fill="currentColor"/></svg></span>Support on Patreon</a>
     <div class="side-meta"><span id="side-ver">Dauntless Forever</span> - <a href="#" id="lnk-source" data-url="https://github.com/addison2k/DauntlessForever">source</a></div>
+    <div class="side-meta" id="side-linked" data-i18n-skip hidden></div>
   </div>
 </aside>
 
@@ -576,6 +577,9 @@
   <div class="settings">
     <div class="setting"><div><div class="setting-name">Player name</div><div class="setting-sub"><span id="set-name"></span>, used in every version and on the Friends page</div></div><button class="ghost" id="set-name-change">Change</button></div>
     <div class="setting" id="set-acct-row"><div style="min-width: 0"><div class="setting-name">Friends account</div><div class="setting-sub" id="set-acct" style="word-break: normal">Checking...</div><div class="setting-sub" id="set-acct-report" data-i18n-skip hidden style="word-break: normal; white-space: pre-line; font-family: Consolas, monospace; font-size: 12px; margin-top: 8px"></div></div><span style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end; flex-shrink: 0"><button class="ghost" id="set-acct-check">Check connection</button><button class="ghost" id="set-acct-copy" hidden>Copy report</button><button class="ghost" id="set-acct-reset">Reset account</button></span></div>
+    <!-- DF-LINK (Nov 24): Discord link, move code, get the account back (renderer/account.js). Hidden until the Friends service has the routes. -->
+    <div class="setting" id="set-link-row" hidden><div style="min-width: 0"><div class="setting-name">Discord and moving PCs</div><div class="setting-sub" id="set-link" style="word-break: normal"></div><div class="setting-sub" id="set-link-note" aria-live="polite" style="word-break: normal"></div></div><span style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end; flex-shrink: 0"><button class="ghost" id="set-link-discord">Link Discord</button><button class="ghost" id="set-link-move">Move to another PC</button><button class="ghost" id="set-link-back">Get my account back</button><button class="ghost" id="set-link-others" hidden>Sign out my other PCs</button></span></div>
+    <div class="setting" id="set-bak-row"><div style="min-width: 0"><div class="setting-name">Back up and restore</div><div class="setting-sub" style="word-break: normal">Copy your saves and your account to a USB stick or another PC, or bring a backup back.</div></div><span style="display: flex; flex-direction: column; gap: 8px; align-items: flex-end; flex-shrink: 0"><button class="ghost" id="set-bak-make">Back up my saves</button><button class="ghost" id="set-bak-restore">Restore from a backup</button></span></div>
     <div class="setting" id="set-fv-row"><div style="min-width: 0"><div class="setting-name">Forever server</div><div class="setting-sub" id="set-fv" style="word-break: normal">Not checked yet.</div><div class="setting-sub" id="set-fv-report" data-i18n-skip hidden style="word-break: normal; white-space: pre-line; font-family: Consolas, monospace; font-size: 12px; margin-top: 8px"></div></div><button class="ghost" id="set-fv-check">Check Forever</button></div>
     <div class="setting"><div><div class="setting-name">Downloaded games go to</div><div class="setting-sub" id="set-games"></div></div><button class="ghost" id="set-games-pick">Change folder</button></div>
     <div class="setting"><div><div class="setting-name">Launcher data (saves, settings, logs)</div><div class="setting-sub" id="set-data"></div></div><button class="ghost" id="set-data-open">Open folder</button></div>
@@ -763,6 +767,40 @@
   </div>
 </dialog>
 
+<!-- DF-LINK: one box for every step of link, move and recover (renderer/account.js fills it) -->
+<dialog id="dlg-link">
+  <h2 id="link-title"></h2>
+  <p id="link-text"></p>
+  <div id="link-code-box" class="link-code-box" hidden>
+    <div class="link-acct" id="link-acct" data-i18n-skip></div>
+    <div class="link-code" id="link-code" data-i18n-skip></div>
+    <div class="setting-sub" id="link-left"></div>
+  </div>
+  <div id="link-form" hidden>
+    <label class="report-label" for="link-in-acct">Account name with its number, like slayer77#1234</label>
+    <div class="fr-line"><input id="link-in-acct" class="fr-input" maxlength="30" autocomplete="off" spellcheck="false" data-i18n-skip></div>
+    <label class="report-label" for="link-in-code">The 6-digit code the old PC shows</label>
+    <div class="fr-line"><input id="link-in-code" class="fr-input" maxlength="7" inputmode="numeric" autocomplete="off" spellcheck="false" data-i18n-skip></div>
+  </div>
+  <p class="action-note" id="link-msg" aria-live="polite"></p>
+  <div class="dlg-actions">
+    <button class="ghost" id="link-cancel">Close</button>
+    <button class="ghost" id="link-b1" hidden></button>
+    <button class="primary small-btn" id="link-ok" hidden></button>
+  </div>
+</dialog>
+
+<dialog id="dlg-bak">
+  <h2 id="bak-title"></h2>
+  <p id="bak-text"></p>
+  <div id="bak-body"></div>
+  <p class="action-note" id="bak-msg" aria-live="polite"></p>
+  <div class="dlg-actions">
+    <button class="ghost" id="bak-cancel">Close</button>
+    <button class="primary small-btn" id="bak-ok" hidden></button>
+  </div>
+</dialog>
+
 <dialog id="dlg-confirm">
   <h2 id="confirm-title"></h2>
   <p id="confirm-text"></p>
@@ -782,6 +820,8 @@
 <script src="friends.js"></script>
 <script src="voice.js"></script>
 <script src="player.js"></script>
+<script src="account.js"></script>
+<script src="backup.js"></script>
 <script src="hostmode.js"></script>
 <script src="forever.js"></script>
 <script src="builds-data-1147.js"></script>

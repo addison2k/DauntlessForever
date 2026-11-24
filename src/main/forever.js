@@ -1295,6 +1295,7 @@ function foreignLoader25() {
 }
 async function play25() {
   if (S.phase !== 'off') throw new Error('Forever is already running. Stop it first.');
+  if (ctx.social && ctx.social.movedText && ctx.social.movedText()) throw new Error(ctx.social.movedText());   // DF-LINK: this launcher was moved to another PC
   const why = missing(); if (why) throw new Error(why);
   const loader = foreignLoader25(); if (loader) throw new Error(loader);   // DF-NOMODS-INF
   syncGameFolder25('before Play');   // DF25-GAMEFILES

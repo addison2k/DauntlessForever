@@ -95,6 +95,7 @@ async function start(versionId, how) {
   if (social.offlineMode()) throw new Error('Offline Forever mode is on (Settings). Host Mode needs the online service.');
   if (!social.onlineOn()) throw new Error(social.onlineOffMessage());
   if (!social.identity()) throw new Error('Still signing you in to the online service. Try again in a moment.');
+  if (social.movedText && social.movedText()) throw new Error(social.movedText());   // DF-LINK: this launcher was moved to another PC
   const st = await ctx.status(id);
   if (!st || st.game !== 'ok' || st.setup !== 'ready') throw new Error(`Dauntless ${id} is not ready yet: download it and let set-up finish on the Play page first.`);
   const busy = ctx.runner.anyRunning().filter(r => r.kind === 'play' || r.kind === 'host' || r.kind === 'join' || r.kind === 'setup');

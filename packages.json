@@ -18,14 +18,14 @@
                      }
                  ],
     "launcher":  {
-                     "version":  "0.4.14",
+                     "version":  "0.4.15",
                      "url":  "https://github.com/addison2k/DauntlessForever/releases/tag/v0.2.10",
-                     "notes":  "Mods from the mods page now start (no spaces in their folder names; old installs are renamed when you open the Mods page). Infinite does not start while a mod loader file is next to the game.",
-                     "date":  "2026-11-18",
+                     "notes":  "New in Settings: Back up and restore. One file with your saves, builds, chats and your account, for a USB stick or another PC.",
+                     "date":  "2026-11-24",
                      "app":  {
-                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.14.asar",
-                                 "sha256":  "f5198f6c667c31dc75ef533a7a7b9f916a306b241ad9528f5ed55d64423d3fc1",
-                                 "size":  22175935,
+                                 "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/app-0.4.15.asar",
+                                 "sha256":  "227bfa9a11629f9409f2318369a39cbe9d7cfc3bdf956cbd1620eeca5e53034a",
+                                 "size":  16043015,
                                  "minShell":  "0.2.4"
                              }
                  }

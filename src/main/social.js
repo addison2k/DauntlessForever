@@ -49,6 +49,29 @@ let hostModeHooks = null;  // hostmode.js: { refuse(fromId, isFriend) -> reason|
 
 const socialFile = () => path.join(P.dataRoot(), 'social.json');
 const networkCacheFile = () => path.join(P.dataRoot(), 'network.json');
+// DF-LINK (Nov 24), TEST ONLY: a file social-url.txt in the data folder with one https:// address makes this launcher
+// use that Friends service instead of the one in network.json (the same idea as forever-director25.txt). With it the
+// plain fallback is off (the fallback address is the LIVE service), and an account file made for another service is
+// kept aside as social.json.kept-<date> so this launcher signs up fresh on the test service. No file = no change.
+const socialUrlFile = () => path.join(P.dataRoot(), 'social-url.txt');
+let overrideUrl = '';
+function applySocialOverride() {
+  let u = '';
+  if (!process.env.DL_DATA_DIR) { overrideUrl = ''; return; }   // DF-LINK: test launchers only (their bat sets DL_DATA_DIR); a player's launcher never reads social-url.txt
+  try { u = fs.readFileSync(socialUrlFile(), 'utf8').replace(/^\uFEFF/, '').trim().split(/\r?\n/)[0].trim().replace(/\/+$/, ''); } catch {}
+  if (!/^https:\/\/[A-Za-z0-9.-]+(:\d+)?$/.test(u)) { overrideUrl = ''; return; }
+  if (overrideUrl !== u) { try { ctx.log('Friends: TEST address in use (social-url.txt): ' + u); } catch {} }
+  overrideUrl = u;
+  network = Object.assign({}, network, { social: Object.assign({}, network.social, { url: u }) });
+  try {
+    const me = readJson(socialFile(), null);
+    if (me && me.id && String(me.server || '').replace(/\/+$/, '') !== u) {
+      const kept = socialFile() + '.kept-' + new Date().toISOString().replace(/[:.]/g, '-');
+      fs.renameSync(socialFile(), kept);
+      try { ctx.log('Friends: the account file was for another service; kept as ' + path.basename(kept) + ', signing up on the test service'); } catch {}
+    }
+  } catch {}
+}
 function readJson(f, dflt) { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch { return dflt; } }
 function writeJson(f, o) { P.ensureDir(path.dirname(f)); fs.writeFileSync(f, JSON.stringify(o, null, 2)); }
 const identity = () => readJson(socialFile(), null);
@@ -73,6 +96,7 @@ async function loadNetwork() {
     const fresh = JSON.parse(await getText(NETWORK_URL + '?t=' + Date.now()));
     if (validNetwork(fresh)) { network = fresh; writeJson(networkCacheFile(), fresh); }
   } catch { /* offline or not published yet: cached or built-in */ }
+  applySocialOverride();   // DF-LINK: test only
   return network;
 }
 // network.json can switch online play off for everyone ("online": {"enabled": false, "message": "..."}), e.g. while the
@@ -119,7 +143,7 @@ const connectionFailed = (e) => !!e && !e.status;
 function usingPlain() { return /^https:/i.test(network.social.url) && Date.now() < plainUntil; }
 async function call(method, apiPath, body, unsigned, timeoutMs) {
   const secure = network.social.url;
-  if (!/^https:/i.test(secure)) return callAt(secure, method, apiPath, body, unsigned, timeoutMs);
+  if (!/^https:/i.test(secure) || overrideUrl) return callAt(secure, method, apiPath, body, unsigned, timeoutMs);   // DF-LINK: no plain fallback on a test address
   if (Date.now() < plainUntil) {
     try { return await callAt(fallbackBase(), method, apiPath, body, unsigned, timeoutMs); }
     catch (e) { if (!connectionFailed(e)) throw e; plainUntil = 0; }   // the plain one is gone now (another network): back to secure
@@ -154,7 +178,7 @@ function callAt(base, method, apiPath, body, unsigned, timeoutMs) {
         let j = {}, bad = false; try { j = b ? JSON.parse(b) : {}; } catch { bad = true; }
         if (res.statusCode >= 200 && res.statusCode < 300 && !bad) resolve(j);
         else if (bad && res.statusCode >= 200 && res.statusCode < 400) { const e = new Error('a web page answered instead of the friends service (internet provider or network filter)'); e.status = res.statusCode; reject(e); }
-        else { const e = new Error(j.error || ('HTTP ' + res.statusCode)); e.status = res.statusCode; reject(e); }
+        else { const e = new Error(j.error || ('HTTP ' + res.statusCode)); e.status = res.statusCode; e.body = j; reject(e); }   // DF-LINK: e.body (triesLeft, movedAt)
       });
     });
     req.on('timeout', () => { const e = new Error('the friends service did not answer'); e.code = 'TIMEOUT'; req.destroy(e); });
@@ -162,6 +186,36 @@ function callAt(base, method, apiPath, body, unsigned, timeoutMs) {
     req.end(data);
   });
 }
+
+// ------------------------------------------------------------------ DF-LINK (Nov 24): account link and move (main/account.js)
+// callSecure: for the routes that carry a secret (link, recover, move, rotate, and the confirm call). It needs an
+// https base address and never uses the plain fallback: a launcher whose network.json did not load is on the
+// built-in plain address and cannot send these at all.
+const SECURE_TEXT = 'This network blocks the secure connection, so this cannot be done here. Try another network.';
+async function callSecure(method, apiPath, body, unsigned, timeoutMs) {
+  const base = network.social.url;
+  const no = () => Object.assign(new Error(SECURE_TEXT), { code: 'SECURE' });
+  if (!/^https:\/\//i.test(base)) throw no();
+  try { return await callAt(base, method, apiPath, body, unsigned, timeoutMs); }
+  catch (e) { if (connectionFailed(e) && e.status !== -1) throw no(); if (e.body && e.body.error === 'secure-only') throw no(); throw e; }
+}
+// What the service says about this account's link: { cap, discordName, playerId } or null when it has no such routes.
+let linkInfo = null, linkAskedAt = 0;
+const linkState = () => (linkInfo && linkInfo.cap ? { cap: true, discordName: linkInfo.discordName || null, playerId: !!linkInfo.playerId, devices: Number.isInteger(linkInfo.devices) ? linkInfo.devices : 0 } : null);   // devices = known PCs (DF-LINK2)
+async function readLink(force) {
+  if (!force) {
+    if (state && state.link) { linkInfo = state.link; return; }   // the heartbeat answer carries it
+    if (Date.now() - linkAskedAt < 30 * 60 * 1000) return;
+  }
+  linkAskedAt = Date.now();
+  try { const st = await call('GET', '/v1/state'); linkInfo = (st && st.link) || null; if (state && st) state.link = st.link; push(); } catch {}
+}
+// This launcher's account was moved to another PC: the service answers 401 { error: 'moved', movedAt } to the real old
+// PC only. Kept in launcher.json so it is known at the next start too; cleared by the first call that works again.
+const MOVED_TEXT = 'This launcher was moved to another PC. Use Settings > Discord and moving PCs to get it back here.';
+const movedAway = () => { try { return settings.load().movedAway || ''; } catch { return ''; } };
+const movedText = () => (movedAway() ? MOVED_TEXT : '');
+function setMoved(at) { const v = at ? String(at) : ''; if (movedAway() !== v) { settings.update(s => { if (v) s.movedAway = v; else delete s.movedAway; }); try { ctx.log(v ? 'Friends: this launcher was moved to another PC (' + v + ')' : 'Friends: this launcher is signed in again'); } catch {} } }
 
 // ------------------------------------------------------------------ what this PC is doing
 // What the launcher last found: hosting only counts while this PC's backend answers (a relay.json left behind by a
@@ -281,7 +335,7 @@ async function applyName(name) {
     ctx.log(`Friends: signed up as ${r.name}`);
   } else if (me.name !== name) {
     const r = await call('POST', '/v1/name', { name });
-    me.name = r.me.name; writeJson(socialFile(), me);
+    me.name = r.me.name; delete me.keepName; writeJson(socialFile(), me);
     if (r.friends) state = Object.assign(state || {}, r);
   } else return;
   push();
@@ -309,6 +363,7 @@ function publicState() {
     inGameWith: gameWith && ctx.runner.isRunning(gameWith.version + ':join') ? { name: gameWith.hostName, version: gameWith.version, public: !!gameWith.public } : null,
     chat: chatState(),   // DF-CHAT: { cap, unread: { friendId: n }, open: friendId|null }
     board: boardState(),   // DF-BOARD: { cap } - is the build rankings board there at all
+    link: linkState(), moved: movedAway(), testUrl: overrideUrl, knownPc: (() => { try { return require('./account').known(); } catch { return false; } })(),   // DF-LINK
   };
 }
 // ------------------------------------------------------------------ DF-CHAT (Oct 29): friend-to-friend text in the Friends panel
@@ -421,7 +476,7 @@ async function poll() {
     }
     // the player name changed while the friends service could not be reached: catch up
     const pn = require('./player').get();
-    if (pn && identity().name !== pn) { try { await applyName(pn); } catch {} }
+    if (pn && identity().name !== pn && !identity().keepName) { try { await applyName(pn); } catch {} }   // DF-LINK: keepName = a moved or recovered name the launcher's own rule does not allow; never renamed behind the player's back
     // friends see "Hosting" (and a Join button) only once this PC's backend answers: no Join into a game still starting
     let h = hostingVersion();
     if (h && !(await backendUp(h.v))) {
@@ -442,6 +497,8 @@ async function poll() {
       launcher: launcherVersion(),
     });
     lastError = '';
+    setMoved('');   // DF-LINK
+    try { await readLink(false); require('./account').tick(); } catch {}   // DF-LINK: link state, late player id
     guestSideClosing();
     for (const r of state.joinRequests || []) answerJoin(r);
     if (waitingJoin) {
@@ -458,14 +515,15 @@ async function poll() {
       }
     }
   } catch (e) {
-    lastError = e.status === 401 ? 'Your friends account was not recognised by the server. Settings > Friends account can check why and fix it.' : e.message;
+    if (e.status === 401 && e.body && e.body.error === 'moved') { setMoved(e.body.movedAt || new Date().toISOString()); lastError = MOVED_TEXT; }   // DF-LINK
+    else lastError = e.status === 401 ? 'Your friends account was not recognised by the server. Settings > Friends account can check why and fix it.' : e.message;
   } finally {
     try { await chatPollUnread(); chatNotify(); } catch {}   // DF-CHAT
     try { await boardPollHealth(); } catch {}   // DF-BOARD: is the build board there at all
     push();
     // in someone's game: a little more often, so a host closing reaches this PC in time to save the character home
     const inGame = gameWith && ctx.runner.isRunning(gameWith.version + ':join');
-    pollTimer = setTimeout(poll, (waitingJoin || chatOpen) ? FAST_POLL_MS : (inGame ? 10000 : POLL_MS));   // DF-CHAT: fast while a conversation is open
+    pollTimer = setTimeout(poll, movedAway() ? 5 * 60 * 1000 : (waitingJoin || chatOpen) ? FAST_POLL_MS : (inGame ? 10000 : POLL_MS));   // DF-CHAT: fast while a conversation is open. DF-LINK: slow once moved away
   }
 }
 
@@ -843,9 +901,10 @@ function init(c) {
     waitingJoin = { reqId: r.reqId, host: hostId, hostName: f.name, version: f.version, since: Date.now() };
     setTimeout(poll, 500);
   }));
-  ipcMain.handle('social:host', act(async (versionId) => { startHost(versionId, allowRandoms()); }));
+  ipcMain.handle('social:host', act(async (versionId) => { if (movedText()) throw new Error(MOVED_TEXT); startHost(versionId, allowRandoms()); }));   // DF-LINK
   // Play online: runs in the background (the state shows the search); errors before it starts come back here
   ipcMain.handle('social:playOnline', act(async (versionId) => {
+    if (movedText()) throw new Error(MOVED_TEXT);   // DF-LINK
     checkPlayOnline(versionId);
     playOnline(versionId).catch((e) => { lastError = e.message; push(); });
   }));
@@ -924,4 +983,7 @@ module.exports = { init, shutdown, loadNetwork, getNetwork: () => network, call,
   hostingVersion: () => { const h = hostingVersion(); return h && hostingNow === h.v.id ? h : null; },
   guests: () => (hostingNow && state && state.guests) || [], friendsCount: () => ((state && state.friends) || []).length,
   closingIn: () => (closing ? Math.max(0, Math.ceil((closing.until - Date.now()) / 1000)) : 0), relayPing: () => relayPing, relayPings: () => relayPings,
-  regionName: (ip) => { const r = relayList().find(x => x.host === ip); return r ? String(r.name || r.id || ip) : ''; }, push: () => push(), poll: () => poll() };
+  regionName: (ip) => { const r = relayList().find(x => x.host === ip); return r ? String(r.name || r.id || ip) : ''; }, push: () => push(), poll: () => poll(),
+  // DF-LINK (account.js)
+  callSecure, linkState, readLink, setLink: (l) => { linkInfo = l || null; }, movedAway, movedText, setMoved, socialFile, SECURE_TEXT,
+  forgetState: (st) => { state = (st && st.me) ? st : null; lastError = ''; } };
