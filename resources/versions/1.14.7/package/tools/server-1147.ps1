@@ -104,14 +104,16 @@ if (Test-Path -LiteralPath $vendorSrc) {
 # feature flags; they reach the town as ?OverridenFeaturesOn= / ?OverridenFeaturesOff= in LocalMapOptions. Short names
 # become /Game/Features/HuntPass/<n>.<n>_C. No file = no options = exactly as before.
 # DF-SERVERPERF-1147 (Nov 13): idle server copies sleep (D1147_IDLEFPS) and the game's own replication graph sends
-# (D1147_REPGRAPH). Both on unless data\server-perf.txt has a line "idle=off" or "graph=off". A value that is already
+# (D1147_REPGRAPH). Idle sleep is on unless data\server-perf.txt has a line "idle=off". The graph is OFF unless that file
+# has a line "graph=on" (Nov 25, report 1012: a hunt did not finish loading with the graph sending). A value that is already
 # set in the environment is left alone.
-$perfIdle = $true; $perfGraph = $true
+$perfIdle = $true; $perfGraph = $false
 $perfFile = Join-Path $dataDir "server-perf.txt"
 if (Test-Path -LiteralPath $perfFile) {
     foreach ($perfLine in [System.IO.File]::ReadAllLines($perfFile)) {
         if ($perfLine -match "^\s*idle\s*=\s*off\s*$") { $perfIdle = $false }
         if ($perfLine -match "^\s*graph\s*=\s*off\s*$") { $perfGraph = $false }
+        if ($perfLine -match "^\s*graph\s*=\s*on\s*$") { $perfGraph = $true }
     }
 }
 if (-not $env:D1147_IDLEFPS) { if ($perfIdle) { $env:D1147_IDLEFPS = "10" } else { $env:D1147_IDLEFPS = "0" } }

@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-11-25",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-25.zip",
-                         "sha256":  "c13f9910a48354a8cabe27eb8c286142c2d28f9c502198824d7d152a3f832194",
+                         "packageVersion":  "2026-11-25.2",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-25.2.zip",
+                         "sha256":  "9470259d417bf6b560ffebf91a9348dc6d1d2c3169ed3da1dc44cf1568f0239b",
                          "date":  "2026-11-25",
-                         "note":  "Hunt servers on your PC run lighter: idle server copies rest and the game\u0027s own replication graph sends updates."
+                         "note":  "Fix: hunts that would not finish loading since this morning\u0027s update."
                      }
                  ],
     "launcher":  {
