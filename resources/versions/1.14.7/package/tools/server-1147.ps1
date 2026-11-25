@@ -103,6 +103,22 @@ if (Test-Path -LiteralPath $vendorSrc) {
 # DF-CITYEVENTS-1147 (Nov 9): Ramsgate event dressings. data\city_events.txt lines on=a,b / off=c (same as 1.6.2) name
 # feature flags; they reach the town as ?OverridenFeaturesOn= / ?OverridenFeaturesOff= in LocalMapOptions. Short names
 # become /Game/Features/HuntPass/<n>.<n>_C. No file = no options = exactly as before.
+# DF-SERVERPERF-1147 (Nov 13): idle server copies sleep (D1147_IDLEFPS) and the game's own replication graph sends
+# (D1147_REPGRAPH). Both on unless data\server-perf.txt has a line "idle=off" or "graph=off". A value that is already
+# set in the environment is left alone.
+$perfIdle = $true; $perfGraph = $true
+$perfFile = Join-Path $dataDir "server-perf.txt"
+if (Test-Path -LiteralPath $perfFile) {
+    foreach ($perfLine in [System.IO.File]::ReadAllLines($perfFile)) {
+        if ($perfLine -match "^\s*idle\s*=\s*off\s*$") { $perfIdle = $false }
+        if ($perfLine -match "^\s*graph\s*=\s*off\s*$") { $perfGraph = $false }
+    }
+}
+if (-not $env:D1147_IDLEFPS) { if ($perfIdle) { $env:D1147_IDLEFPS = "10" } else { $env:D1147_IDLEFPS = "0" } }
+if (-not $env:D1147_REPGRAPH) { if ($perfGraph) { $env:D1147_REPGRAPH = "1" } else { $env:D1147_REPGRAPH = "0" } }
+$perfGraphOn = ($env:D1147_REPGRAPH -eq "1")
+$perfFlag = "/Script/Archon.ReplicationGraphFeature"
+Write-Host ("Server performance: idle sleep D1147_IDLEFPS=" + $env:D1147_IDLEFPS + ", replication graph D1147_REPGRAPH=" + $env:D1147_REPGRAPH)
 $cityOpts = ""
 $cityFile = Join-Path $dataDir "city_events.txt"
 if (Test-Path -LiteralPath $cityFile) {
@@ -117,6 +133,10 @@ if (Test-Path -LiteralPath $cityFile) {
     if ($cityOnF.Count) { $cityOpts += "?OverridenFeaturesOn=" + ($cityOnF -join ",") }
     if ($cityOffF.Count) { $cityOpts += "?OverridenFeaturesOff=" + ($cityOffF -join ",") }
     if ($cityOpts) { Write-Host "Ramsgate events: $cityOpts" }
+}
+if ($perfGraphOn -and $cityOpts -notmatch "ReplicationGraphFeature") {   # DF-SERVERPERF-1147: the graph's feature flag for the town
+    if ($cityOpts -match "OverridenFeaturesOn=") { $cityOpts = $cityOpts.Replace("OverridenFeaturesOn=", "OverridenFeaturesOn=" + $perfFlag + ",") }
+    else { $cityOpts = "?OverridenFeaturesOn=" + $perfFlag + $cityOpts }
 }
 $engineIni = "; Written by server-1147.ps1 on every start.`r`n[/Script/EngineSettings.GameMapsSettings]`r`nGameDefaultMap=$Map`r`nServerDefaultMap=$Map`r`nGlobalDefaultGameMode=$GameMode`r`n`r`n" + $driverIni
 if ($cityOpts) { $engineIni = $engineIni.Replace("GlobalDefaultGameMode=$GameMode", "GlobalDefaultGameMode=$GameMode`r`nLocalMapOptions=$cityOpts") }   # DF-CITYEVENTS-1147
@@ -226,6 +246,10 @@ function Start-Hunt($w, [int]$port, [bool]$isSpare) {
     # no game mode is set, so the map brings its own
     $u = "$($w.url)"; $q = $u.IndexOf("?"); $hMap = $u; $hOpts = ""
     if ($q -ge 0) { $hMap = $u.Substring(0, $q); $hOpts = $u.Substring($q) }
+    if ($perfGraphOn -and $hOpts -notmatch "ReplicationGraphFeature") {   # DF-SERVERPERF-1147: the graph's feature flag for this hunt
+        if ($hOpts -match "OverridenFeaturesOn=") { $hOpts = $hOpts.Replace("OverridenFeaturesOn=", "OverridenFeaturesOn=" + $perfFlag + ",") }
+        else { $hOpts = $hOpts + "?OverridenFeaturesOn=" + $perfFlag }
+    }
     $hIni = "; Written by server-1147.ps1 for a hunt server.`r`n[/Script/EngineSettings.GameMapsSettings]`r`nGameDefaultMap=$hMap`r`nServerDefaultMap=$hMap`r`nLocalMapOptions=$hOpts`r`n`r`n" + $driverIni
     [System.IO.File]::WriteAllText((Join-Path $hCfg "Engine.ini"), $hIni, [System.Text.Encoding]::ASCII)
     $log = Join-Path $logDir "server_$port.log"

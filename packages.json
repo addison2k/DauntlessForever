@@ -10,11 +10,11 @@
                      },
                      {
                          "id":  "1.14.7",
-                         "packageVersion":  "2026-11-18.2",
-                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-18.2.zip",
-                         "sha256":  "44e85fbc5396d220641f96ac910edec28b8e83fb95d7407520b3e121f05a35fe",
-                         "date":  "2026-11-18",
-                         "note":  "Behemoth Health Bar: when more than one behemoth is in the fight, up to 3 more name and health bars stack under the first."
+                         "packageVersion":  "2026-11-25",
+                         "url":  "https://github.com/addison2k/DauntlessForever/releases/download/packages/1.14.7-2026-11-25.zip",
+                         "sha256":  "c13f9910a48354a8cabe27eb8c286142c2d28f9c502198824d7d152a3f832194",
+                         "date":  "2026-11-25",
+                         "note":  "Hunt servers on your PC run lighter: idle server copies rest and the game\u0027s own replication graph sends updates."
                      }
                  ],
     "launcher":  {
