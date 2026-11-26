@@ -13,12 +13,6 @@
       "controlPort": 7000
     },
     {
-      "id": "useast",
-      "name": "US East",
-      "host": "13.140.234.113",
-      "controlPort": 7000
-    },
-    {
       "id": "eu",
       "name": "EU (London)",
       "host": "94.72.96.110",
