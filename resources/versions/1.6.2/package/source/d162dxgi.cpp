@@ -1,4 +1,4 @@
-// Dauntless Forever - Dauntless 1.6.2 loader (dxgi.dll), milestone "162-fix5"
+// Dauntless Forever - Dauntless 1.6.2 loader (dxgi.dll), milestone "162-fix6"
 // Copyright (C) 2026 Addison2k. https://github.com/addison2k/DauntlessForever
 // Licence: AGPL-3.0-only. Keep this notice: the licence requires it.
 //
@@ -11,6 +11,7 @@
 // the 1.14.7 25H2 crash; the fix below is the 1.14.7 loader's dxgi forwarding (milestone 2c-fix5, in use since Oct 13):
 // all 20 dxgi exports, the system DLL loaded on the first call (not in DllMain) with retries and fallbacks, a safe answer
 // for anything missing, and the compatibility-shim re-entry guard. Step 2 is unchanged.
+// 162-fix6: a dxgi_chain.dll next to the game exe is used as the real DXGI before System32 (DXVK for Intel Arc, issue #6).
 // Notes are written to %LOCALAPPDATA%\d162_dxgi.log only when something is unusual.
 #include <windows.h>
 #include <stdio.h>
@@ -82,6 +83,25 @@ static HMODULE try_load_system_dxgi(char* how, size_t howLen, DWORD* errs) {
     UINT n = GetSystemDirectoryW(sys, MAX_PATH);
     if (!n || n >= MAX_PATH) { errs[0] = errs[1] = errs[2] = GetLastError(); return 0; }
     wcscat(sys, L"\\dxgi.dll");
+    // 0. a DXGI of the player's choosing next to the game exe: dxgi_chain.dll (for example DXVK's dxgi.dll renamed,
+    //    with its d3d11.dll beside the exe). GitHub issue #6 (Voidhydra678), same as the 1.14.7 loader for issue #4:
+    //    Intel Arc's D3D11 driver crashes the game at start, DXVK does not. Nothing changes when the file is not there.
+    {
+        wchar_t chain[MAX_PATH + 32];
+        DWORD cn = GetModuleFileNameW(0, chain, MAX_PATH);
+        if (cn && cn < MAX_PATH) {
+            wchar_t* slash = wcsrchr(chain, L'\\');
+            if (slash) {
+                wcscpy(slash + 1, L"dxgi_chain.dll");
+                if (GetFileAttributesW(chain) != INVALID_FILE_ATTRIBUTES) {
+                    SetLastError(0);
+                    HMODULE c = usable(LoadLibraryExW(chain, 0, LOAD_WITH_ALTERED_SEARCH_PATH), self);
+                    if (c) { snprintf(how, howLen, "dxgi_chain.dll next to the exe"); return c; }
+                    errs[0] = GetLastError();
+                }
+            }
+        }
+    }
     // 1. the system DLL by its full path
     SetLastError(0);
     HMODULE m = usable(LoadLibraryExW(sys, 0, 0), self);
@@ -180,7 +200,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE inst, DWORD reason, LPVOID) {
         // as the original loader: UndauntedInternalServer.dll from the game folder (the exe's folder is searched first)
         if (!LoadLibraryA("UndauntedInternalServer.dll")) {
             char msg[120];
-            snprintf(msg, sizeof(msg), "loader 162-fix5: UndauntedInternalServer.dll did not load (error %lu)", (unsigned long)GetLastError());
+            snprintf(msg, sizeof(msg), "loader 162-fix6: UndauntedInternalServer.dll did not load (error %lu)", (unsigned long)GetLastError());
             dxgi_note(msg);
         }
     }
